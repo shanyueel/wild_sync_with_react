@@ -26,16 +26,16 @@ const Navbar = ({ className }) => {
         </ul>
         <div className="c-navbar__icons">
           <div className="o-navbar__icon">
-            <input name="navbar-icons" type="checkbox" id="o-navbar__search_icon"></input>
-            <label for="o-navbar__search_icon"><SearchIcon /></label>
+            <input name="navbar-icons" type="checkbox" id="o-navbar__search-icon"></input>
+            <label for="o-navbar__search-icon"><SearchIcon /></label>
           </div>
           <div className="o-navbar__icon">
-            <input name="navbar-icons" type="checkbox" id="o-navbar__list_icon"></input>
-            <label for="o-navbar__list_icon"><ListIcon /></label>
+            <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon"></input>
+            <label for="o-navbar__list-icon"><ListIcon /></label>
           </div>
           <div className="o-navbar__icon">
-            <input name="navbar-icons" type="checkbox" id="o-navbar__user_icon"></input>
-            <label for="o-navbar__user_icon"><UserIcon /></label>
+            <input name="navbar-icons" type="checkbox" id="o-navbar__user-icon"></input>
+            <label for="o-navbar__user-icon"><UserIcon /></label>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@ const StyledNavbar = styled(Navbar)`
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: auto 1rem;
 
       .c-navbar__title{
@@ -175,7 +175,7 @@ const StyledNavbar = styled(Navbar)`
         }
       }
 
-      &:has(#o-navbar__search_icon:checked){
+      &:has(#o-navbar__search-icon:checked){
         .o-navbar__searchbar{
           transition: transform .3s ease-out;
           transform: scale(1,1);
@@ -183,7 +183,7 @@ const StyledNavbar = styled(Navbar)`
         }
       }
 
-      &:has(#o-navbar__list_icon:checked){
+      &:has(#o-navbar__list-icon:checked){
         .c-navbar__list{
           transition: transform .4s ease-out;
           transform: scale(1,1);

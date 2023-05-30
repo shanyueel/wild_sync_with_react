@@ -7,3 +7,23 @@ h1 {
   align-self: center;
   font-weight: 500;
 }
+
+h2 {
+  font-size: 1.2rem;
+  align-self: center;
+  font-weight: 500;
+}
+
+.l-web-container{
+  position: relative;
+  max-width: 1400px;
+  min-height: calc(100vh - 4rem);
+  margin: 4rem auto 0;
+  padding: 1rem;  
+}
+
+.l-web-container--footer{
+  @extend .l-web-container;
+
+  margin-bottom: -12rem;
+}

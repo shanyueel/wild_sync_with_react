@@ -1,10 +1,14 @@
 import StyledNavbar from "components/StlyedNavbar"
+import StyledFooter from "components/StyledFooter"
 
 const LoginPage = ()=>{
   return(
     <>
       <StyledNavbar />
-      <h1>this is login page.</h1>
+      <div className="l-web-container">
+        <h1>this is login page.</h1>
+      </div>
+      <StyledFooter/>
     </>
 
   )

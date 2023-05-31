@@ -1,7 +1,21 @@
-const HomePage = () => {
+import StyledNavbar from "components/StlyedNavbar"
+import StyledFooter from "components/StyledFooter"
+import { Fragment } from "react"
+import styled from "styled-components"
+
+const HomePage = ({className}) => {
   return(
-    <h1>this is homePage.</h1>
+    <Fragment className={className}>
+      <StyledNavbar/ >
+      <div className="l-web-container">
+        
+      </div>
+      <StyledFooter/ >
+    </Fragment>
   )
 }
 
-export default HomePage
+const StyledHomePage = styled(HomePage)`
+`
+
+export default StyledHomePage

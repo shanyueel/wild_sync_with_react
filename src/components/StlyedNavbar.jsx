@@ -7,6 +7,8 @@ import { ReactComponent as ListIcon } from "assets/icons/ListIcon.svg"
 import { ReactComponent as UserIcon } from "assets/icons/UserIcon.svg"
 
 const Navbar = ({ className }) => {
+  
+  
   return(
     <div className={className}>
       <div className="l-navbar">
@@ -27,15 +29,15 @@ const Navbar = ({ className }) => {
         <div className="c-navbar__icons">
           <div className="o-navbar__icon">
             <input name="navbar-icons" type="checkbox" id="o-navbar__search-icon"></input>
-            <label for="o-navbar__search-icon"><SearchIcon /></label>
+            <label htmlFor="o-navbar__search-icon"><SearchIcon /></label>
           </div>
           <div className="o-navbar__icon">
             <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon"></input>
-            <label for="o-navbar__list-icon"><ListIcon /></label>
+            <label htmlFor="o-navbar__list-icon"><ListIcon /></label>
           </div>
           <div className="o-navbar__icon">
             <input name="navbar-icons" type="checkbox" id="o-navbar__user-icon"></input>
-            <label for="o-navbar__user-icon"><UserIcon /></label>
+            <label htmlFor="o-navbar__user-icon"><UserIcon /></label>
           </div>
         </div>
       </div>
@@ -124,6 +126,7 @@ const StyledNavbar = styled(Navbar)`
         width: 100%;
         background-color: ${({theme})=> theme.backgroundColor.default};
         transform: scale(1,0);
+        z-index: 1;
         
         li{
           display: flex;

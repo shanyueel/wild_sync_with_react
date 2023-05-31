@@ -9,9 +9,9 @@ import StyledButton from "components/StyledButton"
 import StyledTextLink from "components/StyledTextLink"
 
 import {ReactComponent as WildSyncLogo} from "assets/icons/WildSyncLogo.svg"
-import loginImage from "assets/images/loginImage.png"
+import registerImage from "assets/images/loginImage.png"
 
-const LoginPage = ({className})=>{
+const RegisterPage = ({className})=>{
   const dispatch = useDispatch();
   dispatch(setPathname())
 
@@ -19,20 +19,23 @@ const LoginPage = ({className})=>{
     <div className={className}>
       <StyledNavbar />
       <div className="l-web-container">
-        <div className="l-login-area">
-          <div className="l-login-area__main">
-            <div className="l-login-area__title">
-              <WildSyncLogo className="o-login-area__logo"/>
-              <h1 className="o-login-area__brand">Wild Sync</h1>
+        <div className="l-register-area">
+          <div className="l-register-area__main">
+            <div className="l-register-area__title">
+              <WildSyncLogo className="o-register-area__logo"/>
+              <h1 className="o-register-area__brand">Wild Sync</h1>
             </div>
-            <div className="l-login-area__input">
+            <div className="l-register-area__input">
               <StyledTextInput title='信箱' placeholder="請輸入信箱"/>
+              <StyledTextInput title='暱稱' placeholder="請輸入暱稱"/>
               <StyledTextInput title='密碼' placeholder="請輸入密碼"/>
-              <StyledButton className="o-login-area__button" title="登入"/>
-              <StyledTextLink className="o-login-area__register-link" text="尚未註冊?" destination="/register" />
+              <StyledTextInput title='確認密碼' placeholder="請再次輸入密碼"/>
+              
+              <StyledButton className="o-register-area__button" title="註冊"/>
+              <StyledTextLink className="o-register-area__login-link" text="已經註冊過?" destination="/login" />
             </div>
           </div>
-          <div className="l-login-area__image">
+          <div className="l-register-area__image">
           </div>
         </div>
       </div>
@@ -42,50 +45,48 @@ const LoginPage = ({className})=>{
   )
 }
 
-const StyledLoginPage = styled(LoginPage)`
-  .l-login-area{
+const StyledRegisterPage = styled(RegisterPage)`
+  .l-register-area{
     position: fixed;
-    top: 50%;
+    top: 52%;
     left: 50%;
-    transform: translate(-50%,-50%);
     width: 90%;
-    height: 34rem;
+    height: 32rem;
     margin: 0 auto;
     border-radius: .5rem;
+    transform: translate(-50%,-50%);
 
-    
-    .l-login-area__main{
-      padding: 4rem 2.5rem;
+    .l-register-area__main{
+      padding: 0 2rem 2rem;
 
-      .l-login-area__title{
+      .l-register-area__title{
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.25rem;
 
-        .o-login-area__logo{
-          width: 8rem;
-          fill: ${({theme}) => theme.color.default};
+        .o-register-area__logo{
+            width: 7rem;
+            fill: ${({theme}) => theme.color.default};
         }
-        .o-login-area__brand{
-          margin-top: 1rem;
-          font-size: 2rem;
+        .o-register-area__brand{
+          margin-top: .5rem;
+          font-size: 1.75rem;
           color: ${({theme}) => theme.color.default};
         }
       }
 
-      .l-login-area__input{
+      .l-register-area__input{
         display: flex;
         flex-direction: column;
         gap: 1rem;
         align-items: center;
 
-        .o-login-area__button{
-          margin-top: 1.5rem;
+        .o-register-area__button{
+          margin-top: .75rem;
         }
 
-        .o-login-area__register-link{
-          margin-top: 1.5rem;
+        .o-register-area__login-link{
           line-height: 2rem;
           color: ${({theme})=>theme.color.default};
           text-decoration: underline;
@@ -93,29 +94,27 @@ const StyledLoginPage = styled(LoginPage)`
       }
     }
     
-    .l-login-area__image{
+    .l-register-area__image{
       display: none;
     }
   }
 
   @media screen and (min-width: 768px) {
-    .l-login-area{
+    .l-register-area{
       display: flex;
       height: 36rem;
+      top: 50%;
       width: 85%;
       box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
       background-color: ${({theme}) => theme.backgroundColor.default};
-      .l-login-area__main{
+      .l-register-area__main{
         width: 45%;
-
-        .l-login-area__title{
-          margin-bottom: 2.5rem;
-        }
+        padding-top: 2.25rem;
       }
 
-      .l-login-area__image{
+      .l-register-area__image{
         width:55%;
-        background-image: url(${loginImage});
+        background-image: url(${registerImage});
         background-size: cover;
         background-position: center;
         display: block;
@@ -125,14 +124,16 @@ const StyledLoginPage = styled(LoginPage)`
   }
 
   @media screen and (min-width: 1024px) {
-    .l-login-area{
+    .l-register-area{
       width: 80%;
       height: 40rem;
       max-width: 1120px;
 
-
+      .l-register-area__main{
+        padding-top: 3.5rem;
+      }
     }
   }
 `
 
-export default StyledLoginPage
+export default StyledRegisterPage

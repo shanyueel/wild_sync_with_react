@@ -1,5 +1,6 @@
 *{
   box-sizing: border-box;
+  color: #272727;
 }
 
 h1 {
@@ -19,7 +20,9 @@ h2 {
   max-width: 1400px;
   min-height: calc(100vh - 4rem);
   margin: 4rem auto 0;
-  padding: 1rem;  
+  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .l-web-container--footer{

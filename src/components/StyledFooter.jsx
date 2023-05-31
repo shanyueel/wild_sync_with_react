@@ -1,16 +1,20 @@
+import clsx from "clsx"
 import styled from "styled-components"
 import StyledTextLink from "./StyledTextLink"
+import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 import {ReactComponent as WildSyncLogo} from "assets/icons/WildSyncLogo.svg"
 import {ReactComponent as LineIcon} from "assets/icons/LineIcon.svg"
 import {ReactComponent as MailIcon} from "assets/icons/MailIcon.svg"
 import {ReactComponent as LinkedInIcon} from "assets/icons/LinkedInIcon.svg"
-import { Link } from "react-router-dom"
 
 const Footer = ({className}) =>{
+  const { pathname } = useSelector((state)=> state.pathname)
+
   return(
     <div className={className}>
-      <div className="c-footer__content">
+      <div className={clsx('c-footer__content',{'--hidden': pathname === '/login' || pathname === '/register'})}>
         <div className="c-footer__nav-area">
           <ul className="c-footer__nav-list">
             <li className="o-footer__nav-item"><StyledTextLink text="關於Wild Sync" destination="/about" /></li>
@@ -118,10 +122,13 @@ const StyledFooter = styled(Footer)`
     bottom:0;
     width: 100%;
     height: 2rem;
-    color: white;
-    background-color: #272727;
+    background-color: ${({theme})=> theme.color.black};
     text-align: center;
     line-height: 2rem;
+
+    p{
+      color: white;
+    }
   }
 
   @media screen and (min-width: 768px) {
@@ -178,6 +185,7 @@ const StyledFooter = styled(Footer)`
         }
 
         .o-footer__brand{
+          color: white;
           font-size: 2.5rem;
           margin-left: 1rem;
         }
@@ -187,6 +195,10 @@ const StyledFooter = styled(Footer)`
       justify-content: space-between;
       align-items: flex-end;
       height: 6rem;
+      
+      .o-footer__contact-title{
+        color: white;
+      }
     }
     }
 
@@ -200,7 +212,13 @@ const StyledFooter = styled(Footer)`
     }
   }
 
+  .--hidden{
+    display: none;
+  }
 
+  &:has(.--hidden){
+    background-color: transparent;
+  }
 `
 
 export default StyledFooter

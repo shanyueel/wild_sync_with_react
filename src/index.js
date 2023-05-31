@@ -6,9 +6,11 @@ import { Provider } from 'react-redux';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import pathnameSlice from 'reducers/pathnameSlice';
+
 const store = configureStore({
   reducer:{
-
+    pathname: pathnameSlice
   }
 })
 

@@ -2,7 +2,6 @@ import clsx from "clsx"
 import styled from "styled-components"
 import StyledTextLink from "./StyledTextLink"
 import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
 
 import {ReactComponent as WildSyncLogo} from "assets/icons/WildSyncLogo.svg"
 import {ReactComponent as LineIcon} from "assets/icons/LineIcon.svg"
@@ -10,7 +9,7 @@ import {ReactComponent as MailIcon} from "assets/icons/MailIcon.svg"
 import {ReactComponent as LinkedInIcon} from "assets/icons/LinkedInIcon.svg"
 
 const Footer = ({className}) =>{
-  const { pathname } = useSelector((state)=> state.pathname)
+  const pathname = window.location.pathname
 
   return(
     <div className={className}>
@@ -37,18 +36,17 @@ const Footer = ({className}) =>{
             <Link className="o-footer__contact-icon" to="/contact"><LinkedInIcon /></Link>
           </div>
         </div>
-
       </div>
       <div className="c-footer__license">
           <p>Wild Sync © 2023 Co., LTD. All rights reserved.</p>
       </div>
+
     </div>
   )
 }
 
 const StyledFooter = styled(Footer)`
-  position: absolute;
-  bottom: 0;
+  position: relative;
   display: flex;
   justify-content: center;
   width: 100vw;
@@ -56,12 +54,11 @@ const StyledFooter = styled(Footer)`
 
 
   .c-footer__content{
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100vw;
-    padding-bottom: 2rem;
+    margin: 0 auto 2rem;
     color: white;
     
     .c-footer__nav-area{
@@ -92,20 +89,22 @@ const StyledFooter = styled(Footer)`
       .o-footer__contact-title{
         font-size: 1.25rem;
         margin-bottom: 1rem;
+        color: white;
       }
 
       .c-footer__contact-icons{
         display: flex;
         gap: 1.5rem;
+        
         .o-footer__contact-icon{
           display: flex;
           justify-content: center;
           align-items: center;
           width: 3rem;
           height: 3rem;
-          background-color: white;
           border-radius: 50%;
-
+          background-color: white;
+          
           svg{
             width: 1.5rem;
             fill: ${({theme})=> theme.color.default}
@@ -113,35 +112,38 @@ const StyledFooter = styled(Footer)`
         }
       }
     }
-
-
-    }
+  }
 
   .c-footer__license{
     position: absolute;
-    bottom:0;
-    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
     height: 2rem;
     background-color: ${({theme})=> theme.color.black};
     text-align: center;
     line-height: 2rem;
-
+    
     p{
       color: white;
     }
   }
 
-  @media screen and (min-width: 768px) {
-    height: 11rem;
 
+
+  @media screen and (min-width: 768px) {
 
     .c-footer__content{
-      position: relative;
-      height: 9rem;
-      padding: .5rem 1rem;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: 27rem auto 12rem;
+      grid-template-rows: 3rem 3rem;
+      grid-template-areas: 
+      'nav . contact'
+      'title . contact';
+      height: 8rem;
+      padding: .75rem 1rem 2rem;
+      align-items: center;
       
       .c-footer__nav-area{
         width: auto;
@@ -159,10 +161,10 @@ const StyledFooter = styled(Footer)`
             &::after{
               position: absolute;
               right: -10px;
-              content: '';
               width: 2px;
               height: 1.25rem;
               border-radius: .5rem;
+              content: '';
               background-color: white;
             }
 
@@ -174,32 +176,39 @@ const StyledFooter = styled(Footer)`
       }
 
       .c-footer__title{
-        position: absolute;
-        bottom: 2rem;
-        left: 1rem;
         display: flex;
         align-items: center;
-        margin-top: 1.5rem;
+        grid-area: title;
+
         .o-footer__logo{
-          height: 2.5rem;
+          height: 2.25rem;
         }
 
         .o-footer__brand{
+          margin-left: .5rem;
           color: white;
-          font-size: 2.5rem;
-          margin-left: 1rem;
+          font-size: 2rem;
         }
       }
 
-    .c-footer__contact-area{
-      justify-content: space-between;
-      align-items: flex-end;
-      height: 6rem;
-      
-      .o-footer__contact-title{
-        color: white;
+      .c-footer__contact-area{
+        grid-area: contact;
+        justify-content: space-between;
+        align-items: flex-end;
+        height: 5rem;
+        margin-bottom:  0;
+
+        
+        
+        .o-footer__contact-title{
+          font-size: 1.25rem;
+          margin-bottom: 0;
+        }
       }
-    }
+
+      .c-footer__license{
+        grid-area: license;
+      }
     }
 
 
@@ -207,8 +216,7 @@ const StyledFooter = styled(Footer)`
 
   @media screen and (min-width: 1400px) {
     .c-footer__content{
-      max-width: 1400px;
-      margin: 0 auto;
+      padding: .75rem calc((100vw - 1400px) / 2 + 1rem) 2rem;
     }
   }
 

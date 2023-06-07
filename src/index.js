@@ -6,20 +6,18 @@ import { Provider } from 'react-redux';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import pathnameSlice from 'reducers/pathnameSlice';
 
-const store = configureStore({
-  reducer:{
-    pathname: pathnameSlice
-  }
-})
+// const store = configureStore({
+//   reducer:{
+//   }
+// })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
+    {/* <Provider store={store}> */}
       <App />
-    </Provider>
+    {/* </Provider> */}
   </React.StrictMode>
 );
 

@@ -56,6 +56,7 @@ const StyledNavbar = styled(Navbar)`
     height: 4rem;
     border-bottom: 1px solid #E0E0E0;
     background-color: white;
+    z-index: 1;
 
     .l-navbar{
       display: flex;
@@ -199,7 +200,7 @@ const StyledNavbar = styled(Navbar)`
       .l-navbar{
         display: grid;
         width: 100%;
-        grid-template-columns: 10rem 16rem 1fr 5rem;
+        grid-template-columns: 10.5rem 16rem 1fr 5rem;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 1rem;
@@ -254,7 +255,7 @@ const StyledNavbar = styled(Navbar)`
     @media screen and (min-width: 1024px){
       .l-navbar{
         display: grid;
-        grid-template-columns: 10rem 16rem 1fr 2rem;
+        grid-template-columns: 10.5rem 16rem 1fr 2rem;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 2rem;

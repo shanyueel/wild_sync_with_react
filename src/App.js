@@ -9,11 +9,13 @@ import RegisterPage from 'pages/RegisterPage';
 const theme = {
   color:{
     default: "#3F6F41",
+    secondary: "#6FAE71",
     black: "#272727",
     alert: "#D0342C"
   },
   backgroundColor:{
-    default: '#F0F0F0'
+    default: '#F0F0F0',
+    secondary: '#ADADAD'
   }
 }
 

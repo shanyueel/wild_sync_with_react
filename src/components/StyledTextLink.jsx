@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import { Link } from "react-router-dom";
 
 const TextLink = ({ className, text, destination }) => {
@@ -8,10 +8,17 @@ const TextLink = ({ className, text, destination }) => {
 }
 
 const StyledTextLink = styled(TextLink)`
+  font-size: 1.25rem;
   color: white;
 
   &:hover{
     text-shadow: 0 0 1.5px white;
+  }
+
+  ${props=>
+    props.sm && css`
+      font-size: 1rem;
+    `
   }
 `
 

@@ -24,6 +24,8 @@ const StyledTextInput = styled(TextInput)`
   .c-input-labels{
     display: flex;
     justify-content: space-between;
+    font-size: 1rem;
+    margin-bottom: .25rem;
 
     label{
       color: ${({theme})=> theme.color.default};

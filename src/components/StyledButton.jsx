@@ -13,7 +13,7 @@ const  StyledButton = styled(Button)`
   border-radius: .5rem;
   color: white;
   width: 100%;
-  height: 2rem;
+  height: 2.25rem;
   text-align: center;
 
   &:hover{

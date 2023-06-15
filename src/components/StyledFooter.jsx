@@ -146,15 +146,15 @@ const StyledFooter = styled(Footer)`
       align-items: center;
       
       .c-footer__nav-area{
-        width: auto;
+        width: fit-content;
         grid-area: nav;
         .c-footer__nav-list{
-          width: auto;
+          width: fit-content;
           display: flex;
           gap: 20px;
           .o-footer__nav-item{
             position: relative;
-            width: auto;
+            width: fit-content;
             color: white;
             border-bottom: none;
 

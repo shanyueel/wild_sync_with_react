@@ -1,10 +1,12 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { Link } from "react-router-dom";
 
 import {ReactComponent as FlameIcon} from "assets/icons/FlameIcon.svg"
 
-const ActivityCard = ({className}) => {
+
+const ActivityCard = ({className, rowDisplay}) => {
   return(
-    <div className={className}>
+    <Link to="/activity/1" className={className}>
       <img className="o-activity__image" src="https://clutchpoints.com/_next/image?url=https%3A%2F%2Fwp.clutchpoints.com%2Fwp-content%2Fuploads%2F2023%2F06%2Ffinals.jpg&w=3840&q=75" alt="activity cover" />
       <div className="l-activity-card__info">
         <h3 className="o-activity-card__title">NBA總冠軍派對</h3>
@@ -21,12 +23,12 @@ const ActivityCard = ({className}) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
 const StyledActivityCard = styled(ActivityCard)`
-  width: 100%;
+  width: fit-content;
   overflow: hidden;
   border-radius: 1rem;
   background-color: ${({theme})=>theme.backgroundColor.default};
@@ -40,6 +42,8 @@ const StyledActivityCard = styled(ActivityCard)`
 
   .l-activity-card__info{
     padding: 1rem;
+    width: fit-content;
+    
 
     .o-activity-card__title{
       font-weight: 700;
@@ -93,6 +97,8 @@ const StyledActivityCard = styled(ActivityCard)`
 
   @media screen and (min-width: 480px) {
     .l-activity-card__info{
+      width: 100%;
+
       h3{
         font-size: 1.25rem;
       }
@@ -102,6 +108,26 @@ const StyledActivityCard = styled(ActivityCard)`
       }
     }
   }
+
+  ${props => props.rowDisplay && css`
+    width: 100%;
+    display: flex;
+    background-color: ${({theme})=>theme.backgroundColor.default};
+
+    .o-activity__image{
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 1rem 0 0 1rem;
+    }
+
+    .l-activity-card__info{
+      padding: 0;
+      height: fit-content;
+      margin: auto 1.5rem;
+    }
+  `}
+  
 `
 
 export default StyledActivityCard

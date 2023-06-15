@@ -5,11 +5,13 @@ import './App.css';
 import LoginPage from 'pages/LoginPage';
 import HomePage from 'pages/HomePage';
 import RegisterPage from 'pages/RegisterPage';
+import ActivityPage from 'pages/ActivityPage';
 
 const theme = {
   color:{
     default: "#3F6F41",
     secondary: "#6FAE71",
+    grey: "#7B7B7B",
     black: "#272727",
     alert: "#D0342C"
   },
@@ -28,6 +30,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/activity/:id" element={<ActivityPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

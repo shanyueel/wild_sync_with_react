@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const OthersTable = ({className,isMediumLayout}) => {
+const OthersTable = ({className}) => {
 
   return(
     <>

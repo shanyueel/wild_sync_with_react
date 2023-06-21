@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import styled from "styled-components"
 import StyledTextLink from "./StyledTextLink"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 import {ReactComponent as WildSyncLogo} from "assets/icons/WildSyncLogo.svg"
 import {ReactComponent as LineIcon} from "assets/icons/LineIcon.svg"
@@ -9,7 +9,8 @@ import {ReactComponent as MailIcon} from "assets/icons/MailIcon.svg"
 import {ReactComponent as LinkedInIcon} from "assets/icons/LinkedInIcon.svg"
 
 const Footer = ({className}) =>{
-  const pathname = window.location.pathname
+  const location = useLocation()
+  const pathname = location.pathname
 
   return(
     <div className={className}>
@@ -216,7 +217,7 @@ const StyledFooter = styled(Footer)`
 
   @media screen and (min-width: 1400px) {
     .c-footer__content{
-      padding: .75rem calc((100vw - 1400px) / 2 + 1rem) 2rem;
+      padding: .75rem calc((100vw - 1200px) / 2 + 1rem) 2rem;
     }
   }
 

@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { ReactComponent as WildSyncLogo } from "assets/icons/WildSyncLogo.svg"
 import { ReactComponent as SearchIcon } from "assets/icons/SearchIcon.svg"
@@ -7,7 +7,11 @@ import { ReactComponent as ListIcon } from "assets/icons/ListIcon.svg"
 import { ReactComponent as UserIcon } from "assets/icons/UserIcon.svg"
 
 const Navbar = ({ className }) => {
-  
+  const navigate = useNavigate()
+
+  const handleSearch = () => {
+    navigate(`/activity/search`)
+  }
   
   return(
     <div className={className}>
@@ -18,7 +22,7 @@ const Navbar = ({ className }) => {
         </Link>
         <div className="o-navbar__searchbar">
           <input placeholder="登山路線、露營地、潛水處"/>
-          <button><SearchIcon /></button>
+          <button onClick={handleSearch}><SearchIcon /></button>
         </div>
         <ul className="c-navbar__list">
           <li className="o-navbar__item">活動內容</li>
@@ -63,7 +67,7 @@ const StyledNavbar = styled(Navbar)`
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      max-width: 1400px;
+      max-width: 1200px;
       margin: auto 1rem;
 
       .c-navbar__title{

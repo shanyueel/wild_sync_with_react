@@ -2,10 +2,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import './App.css';
 
+import BasicLayout from 'pages/BasicLayout';
 import LoginPage from 'pages/LoginPage';
 import HomePage from 'pages/HomePage';
 import RegisterPage from 'pages/RegisterPage';
 import ActivityPage from 'pages/ActivityPage';
+import SearchActivityPage from 'pages/ActivitySearchPage';
+import UserPage from 'pages/UserPage'
+
 
 const theme = {
   color:{
@@ -27,10 +31,18 @@ function App() {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/" element={<HomePage />} />
-          <Route path="/activity/:id" element={<ActivityPage />} />
+          <Route path="/" element={<BasicLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+            <Route path="/activity">
+              <Route path=":id" element={<ActivityPage />}/>
+              <Route path="search" element={<SearchActivityPage />} />
+            </Route>
+            <Route path="/user">
+              <Route path=":id" element={<UserPage />}/>
+            </Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

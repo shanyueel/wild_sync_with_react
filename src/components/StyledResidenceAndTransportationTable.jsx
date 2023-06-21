@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux"
 import styled from "styled-components"
 
-const ResidenceAndTransportationTable = ({className,isMediumLayout}) => {
+const ResidenceAndTransportationTable = ({className}) => {
+  const environmentParams = useSelector((state) => state.environment)
+  const isMediumLayout = environmentParams.windowSize === "medium" || environmentParams.windowSize === "large"
 
   return(
     <>

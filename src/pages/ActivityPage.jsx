@@ -1,7 +1,6 @@
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 
-import StyledNavbar from "components/StyledNavbar"
-import StyledFooter from "components/StyledFooter"
 import StyledButton from "components/StyledButton"
 import StyledUserInfo from "components/StyledUserInfo"
 import StyledActivityTable from "components/StyledActivityTable"
@@ -9,15 +8,14 @@ import StyledResidenceAndTransportationTable from "components/StyledResidenceAnd
 import StyledOthersTable from "components/StyledOthersTable"
 import StyledMessageCard from "components/StyledMessageCard"
 import StyledMessageReply from "components/StyledMessageReply"
-import StyledActivityCard from "components/StyledActivityCard"
 import StyledActivityBasicInfo from "components/StyledActivityBasicInfo"
+import StyledActivityHistory from "components/StyledActivityHistory"
 
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as ClockIcon} from "assets/icons/ClockIcon.svg"
 import {ReactComponent as FlameIcon} from "assets/icons/FlameIcon.svg"
 import {ReactComponent as ParticipationIcon} from "assets/icons/ParticipationIcon.svg"
-import { useEffect, useState } from "react"
 
 const ActivityPage = ({ className }) => {
   const [isLargeLayout, setIsLargeLayout] = useState(false)
@@ -54,9 +52,7 @@ const ActivityPage = ({ className }) => {
 
 
   return(
-    <div className={className}>
-      <StyledNavbar/>
-      <div className="l-web-container">
+      <div className={className}>
         <div className="l-web-container__main l-activity">
           <div className="l-activity-header">
             <ReturnIcon className="o-activity-header__return"/>
@@ -64,7 +60,7 @@ const ActivityPage = ({ className }) => {
           </div>
           <div className="l-activity-body">
             <img className="o-activity-cover" src="https://www.ysnp.gov.tw/UploadPlugin?file=i%2BifzMiqxoOGxT%2FVr25SKzsDjCs7OItEOJlnGmQ4RxicJgsIU04Z4eAK80tRn%2FwR6XmMRuJgAVD2G9JaZXVLDA%3D%3D" alt="activity-cover" />
-            <h2 className="o-activity-title">麟趾山-鹿林山健行活動</h2>
+            <h2 className="o-activity-title">麟趾-鹿林山健行</h2>
             <div className="l-activity-location">
               <LocationIcon /><h3>南投縣信義鄉</h3>
             </div>
@@ -126,26 +122,16 @@ const ActivityPage = ({ className }) => {
         </div>
 
         <div className="l-web-container__side">
-          <div className="l-activity-history">
-            <h2 className="o-activity-history__title">瀏覽紀錄</h2>
-            <div className="l-activity-history__body">
-              <div className="c-activity-history__cards">
-                <StyledActivityCard className="o-activity-history__card" rowDisplay={isLargeLayout} />
-                <StyledActivityCard className="o-activity-history__card" rowDisplay={isLargeLayout} />
-                <StyledActivityCard className="o-activity-history__card" rowDisplay={isLargeLayout} />
-                <StyledActivityCard className="o-activity-history__card" rowDisplay={isLargeLayout} />
-                <StyledActivityCard className="o-activity-history__card" rowDisplay={isLargeLayout} />
-              </div>
-            </div>
-          </div>
+          <StyledActivityHistory />
         </div>
       </div>
-      <StyledFooter/>
-    </div>
   )
 }
 
 const StyledActivityPage = styled(ActivityPage)`
+  width: 100%;
+  height: 100%;
+  
   .l-activity-header{
     display: flex;
     align-items: center;
@@ -333,34 +319,11 @@ const StyledActivityPage = styled(ActivityPage)`
     }
   }
 
-  .l-activity-history{
-
-    .o-activity-history__title{
-      margin-bottom: 1rem;
-      color: ${({theme})=> theme.color.default};
-      font-weight: 700;
-    }
-
-    .l-activity-history__body{
-      margin-bottom: 3rem;
-      padding-bottom: 2rem;
-      overflow-x: scroll;
-
-      .c-activity-history__cards{
-        display: flex;
-        width: fit-content;
-        gap: 1rem;
-      }
-    }
-  }
-
   @media screen and (min-width: 1024px) {
-    .l-web-container{
       display: flex;
       justify-content: space-between;
 
-      &__main{
-        width: 70%;
+      .l-web-container__main{
 
         .l-activity-body{
           margin-top: 0;
@@ -372,9 +335,7 @@ const StyledActivityPage = styled(ActivityPage)`
         }
       }
 
-      &__side{
-        width: 27.5%;
-        padding-top: 4rem;
+      .l-web-container__side{
 
         .l-activity-history__body{
           width: 100%;
@@ -398,7 +359,6 @@ const StyledActivityPage = styled(ActivityPage)`
           }
         }
       }
-    }
   } 
 `
 

@@ -1,23 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
-import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import store from 'reducers/reduxToolkitInit'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 
-// const store = configureStore({
-//   reducer:{
-//   }
-// })
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <Provider store={store}> */}
+    <Provider store={store}>
       <App />
-    {/* </Provider> */}
+    </Provider>
   </React.StrictMode>
 );
 

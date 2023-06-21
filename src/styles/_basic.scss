@@ -27,20 +27,43 @@ h3{
 }
 
 h4{
-  font-size: .8rem;
+  font-size: 0.8rem;
   align-self: center;
   font-weight: 500;
 }
 
-h4{
-  font-size: 0.75rem;
+h5{
+  font-size: 0.8rem;
   align-self: center;
-  font-weight: 500;
+  font-weight: 400;
+}
+
+table{
+  width: 100%;
+}
+
+td{
+    vertical-align: middle;
+    padding: .75rem .75rem;
+    border: 1.5px solid #3F6F41;
+}
+
+.c-table-key {
+  text-align: center;
+  width: 9rem;
+  font-weight: 700;
+  color: #3F6F41;
+  background-color: #F0F0F0;
+}
+
+.c-table-content {
+  background-color: white;
+  white-space: pre-wrap;
 }
 
 .l-web-container{
   position: relative;
-  max-width: 1400px;
+  max-width: 1200px;
   min-height: calc(100vh - 14rem);
   margin: 4rem auto 0;
   padding: 0 1rem;
@@ -54,6 +77,22 @@ h4{
 .l-web-container--license-only{
   @extend .l-web-container;
 
-  min-height: calc(100vh - 4rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 4rem);
   padding-bottom: 2rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .l-web-container{
+    &__main {
+        width: 70%;
+      }
+    
+    &__side {
+      width: 27.5%;
+      padding-top: 4rem;
+    }
+  }
 }

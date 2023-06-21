@@ -1,9 +1,7 @@
-import StyledNavbar from "components/StyledNavbar"
-import StyledFooter from "components/StyledFooter"
-import StyledImageSlider from "components/StyledImageSlider"
-import StyledActivityCard from "components/StyledActivityCard"
 import styled from "styled-components"
 
+import StyledImageSlider from "components/StyledImageSlider"
+import StyledActivityCard from "components/StyledVerticalActivityCard"
 import StyledPeriodSelector from "components/StyledPeriodSelector"
 import StyledButton from "components/StyledButton"
 
@@ -57,11 +55,12 @@ const HomePage = ({className}) => {
     }
   ]
 
+
+  
+  
   
   return(
-    <div className={className}>
-      <StyledNavbar/ >
-      <div className="l-web-container" >
+      <div className={className} >
         <StyledImageSlider sliderImages={sliderImage}/>
 
         <div className="l-popular-places">
@@ -143,16 +142,10 @@ const HomePage = ({className}) => {
           </div>
         </div>
       </div>
-      <StyledFooter/ >
-    </div>
     )
 }
 
 const StyledHomePage = styled(HomePage)`
-  width: 100%;
-  height: 100%;
-
-  .l-web-container{
     .l-popular-places{
       width: 100%;
       display: flex;
@@ -238,6 +231,10 @@ const StyledHomePage = styled(HomePage)`
         align-items: center;
         width: 90%;
 
+        .c-activities-filters__location{
+          cursor: pointer;
+        }
+
         .c-activities-filters__others{
           & > input{
             display: none;
@@ -254,6 +251,7 @@ const StyledHomePage = styled(HomePage)`
           label{
             color: ${({theme})=>theme.color.default};
             font-weight: 700;
+            cursor: pointer;
           }
           .c-activities-filters__others-modal{
             display: none;
@@ -324,13 +322,10 @@ const StyledHomePage = styled(HomePage)`
         gap: 1rem;
         margin-top: 1rem;
       }
-
-
     }
-  }
+  
 
   @media screen and (min-width: 768px) {
-    .l-web-container{
       .l-popular-places{
         margin-top: 28rem;
 
@@ -347,10 +342,8 @@ const StyledHomePage = styled(HomePage)`
         }
       }
     }
-  }
 
   @media screen and (min-width: 1024px) {
-    .l-web-container{
       .l-popular-places{
         .c-popular-places__list{
           grid-template-columns: repeat(6,100px);
@@ -358,17 +351,12 @@ const StyledHomePage = styled(HomePage)`
           gap: 6rem;
         }
       }
-
-
       .l-activities{
         .l-activities__card-list{
-          grid-template-columns: repeat(4,1fr);
-          gap: 1.5rem;
+          /* grid-template-columns: repeat(4,1fr);
+          gap: 1.5rem; */
         }
       }
-    }
-    
-
   }
 `
 

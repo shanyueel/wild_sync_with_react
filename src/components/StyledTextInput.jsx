@@ -29,7 +29,7 @@ const StyledTextInput = styled(TextInput)`
 
     label{
       color: ${({theme})=> theme.color.default};
-      font-weight: 500;
+      font-weight: 700;
     }
 
     .o-input-warning{
@@ -39,17 +39,7 @@ const StyledTextInput = styled(TextInput)`
 
 
   input{
-    height: 2.25rem;
-    width: 100%;
     margin-top: .5rem;
-    padding: .2rem .75rem;
-    border: 1px solid ${({theme})=> theme.color.default};
-    border-radius: .5rem;
-    font-size: 1rem;
-
-    &:hover{
-      border: 2px solid ${({theme})=> theme.color.default};
-    }
   }
 
 `

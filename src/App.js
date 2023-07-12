@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import Modal from 'react-modal';
 import './App.css';
 
 import BasicLayout from 'pages/BasicLayout';
@@ -9,6 +10,8 @@ import RegisterPage from 'pages/RegisterPage';
 import ActivityPage from 'pages/ActivityPage';
 import SearchActivityPage from 'pages/ActivitySearchPage';
 import UserPage from 'pages/UserPage'
+import ActivityPageDiscussionListArea from 'pages/ActivityPageDiscussionListArea';
+import ActivityPageDiscussionArea from 'pages/ActivityPageDiscussionArea'
 
 
 const theme = {
@@ -25,6 +28,8 @@ const theme = {
   }
 }
 
+Modal.setAppElement('#root');
+
 function App() {
 
   return (
@@ -35,13 +40,19 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
-            <Route path="/activity">
-              <Route path=":id" element={<ActivityPage />}/>
+            <Route path="activity">
+              <Route path=":id" element={<ActivityPage />} >
+                <Route index element={<ActivityPageDiscussionListArea />} />
+                <Route path='chatroom/:id' element={<ActivityPageDiscussionArea />}/>
+              </Route>
               <Route path="search" element={<SearchActivityPage />} />
             </Route>
-            <Route path="/user">
-              <Route path=":id" element={<UserPage />}/>
-            </Route>
+            <Route path="user/:id" element={<UserPage />} />
+            <Route path="guide"/>
+            <Route path="rules"/>
+            <Route path="faq"/>
+            <Route path="contact"/>
+            <Route path="about"/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -11,7 +11,7 @@ const ActivitySearchPage = ({ className }) => {
         <div className="l-search-settings">
           <div className="l-search-settings__searchbar">
             <input type="text" placeholder="登山路線、露營地、潛水處"/>
-            <StyledButton title="搜尋"/>
+            <StyledButton>搜尋</StyledButton>
           </div>
           <table className="l-search-settings__options">
             <tbody>

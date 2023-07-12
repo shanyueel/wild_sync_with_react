@@ -1,12 +1,27 @@
 import styled from "styled-components"
 
 import StyledImageSlider from "components/StyledImageSlider"
-import StyledActivityCard from "components/StyledVerticalActivityCard"
+import StyledVerticalActivityCard from "components/StyledVerticalActivityCard"
+import StyledHorizontalActivityCard from "components/StyledHorizontalActivityCard"
 import StyledPeriodSelector from "components/StyledPeriodSelector"
 import StyledButton from "components/StyledButton"
+import StyledPagination from "components/StyledPagination"
+import { Link } from "react-router-dom"
+
+import {ReactComponent as GridIcon} from "assets/icons/GridIcon.svg"
+import {ReactComponent as ListIcon} from "assets/icons/ListIcon.svg"
+import { useState } from "react"
+
 
 
 const HomePage = ({className}) => {
+  const [activitiesDisplay, setActivityDisplay] = useState("grid")
+
+  const onDisplayClicked = (e) => {
+    if(e.target.id === "activities-grid-display") setActivityDisplay("grid")
+    if(e.target.id === "activities-list-display") setActivityDisplay("list")
+  }
+
   const sliderImage = [
     {
       title: "picture1",
@@ -55,51 +70,158 @@ const HomePage = ({className}) => {
     }
   ]
 
+  const activitiesTypes = [
+    {
+      id: "hiking-type",
+      title: "登山"
+    },
+    {
+      id: "camping-type",
+      title: "露營"
+    },
+    {
+      id: "cycling-type",
+      title: "單車"
+    },
+    {
+      id: "diving-type",
+      title: "潛水"
+    },
+    {
+      id: "others-type",
+      title: "其他"
+    }
+  ]
 
-  
-  
-  
+  const activitiesAreas = [
+    {
+      id: "KEL",
+      title: "基隆"
+    },
+    {
+      id: "TPE",
+      title: "台北"
+    },
+    {
+      id: "NTPC",
+      title: "新北"
+    },
+    {
+      id: "TYN",
+      title: "桃園"
+    },
+    {
+      id: "HSZ",
+      title: "新竹"
+    },
+    {
+      id: "ZMI",
+      title: "苗栗"
+    },
+    {
+      id: "TXG",
+      title: "台中"
+    },
+    {
+      id: "CHW",
+      title: "彰化"
+    },
+    {
+      id: "NTC",
+      title: "南投"
+    },
+    {
+      id: "YUN",
+      title: "雲林"
+    },
+    {
+      id: "CYI",
+      title: "嘉義"
+    },
+    {
+      id: "TNN",
+      title: "台南"
+    },
+    {
+      id: "KHH",
+      title: "高雄"
+    },
+    {
+      id: "PIF",
+      title: "屏東"
+    },
+    {
+      id: "ILA",
+      title: "宜蘭"
+    },
+    {
+      id: "HUN",
+      title: "花蓮"
+    },
+    {
+      id: "TTT",
+      title: "台東"
+    },
+    {
+      id: "PEH",
+      title: "澎湖"
+    },
+    {
+      id: "GNI",
+      title: "綠島"
+    },
+    {
+      id: "KYD",
+      title: "蘭嶼"
+    },
+    {
+      id: "KNH",
+      title: "金門"
+    },
+    {
+      id: "MFK",
+      title: "馬祖"
+    },
+  ]
+
   return(
       <div className={className} >
         <StyledImageSlider sliderImages={sliderImage}/>
 
         <div className="l-popular-places">
-          <h1 className="l-popular-places__title">熱門活動地點</h1>
-          <div className="c-popular-places__list">
+          <h1 className="o-popular-places__title">熱門活動地點</h1>
+          <div className="l-popular-places__container">
             {popularPlaces.map((popularPlace)=>{ 
               return(
-                <div className="c-popular-place" key={popularPlace.id}>
+                <Link to="/activity/search" className="c-popular-place" key={popularPlace.id}>
                   <img className="o-popular-place__circle" src={popularPlace.image} alt={popularPlace.title} />
                   <h2 className="o-popular-place__name">{popularPlace.title}</h2>
-                </div>
+                </Link>
               )})}
           </div>
         </div>
         
         <div className="l-activities">
-          <h1 className="o-activities__title">最新活動</h1>
-          <ul className="c-activities__nav-list">
-            <li className="o-activities__nav-item --selected">登山</li>
-            <li className="o-activities__nav-item">單車</li>
-            <li className="o-activities__nav-item">露營</li>
-            <li className="o-activities__nav-item">潛水</li>
-            <li className="o-activities__nav-item">其他</li>
+          <h1 className="o-activities__title">活動列表</h1>
+          <ul className="c-activities__types-options">
+            <li className="o-activities__type"><input type="radio" name="activities-type" id="all-type" defaultChecked />
+            <label htmlFor="all-type">不限</label></li>
+            {activitiesTypes.map((activitiesType)=>{
+              return(
+                <li className="o-activities__type" key={activitiesType.id}>
+                  <input type="radio" name="activities-type" id={activitiesType.id}/>
+                  <label htmlFor={activitiesType.id}>{activitiesType.title}</label>
+                </li>
+              )
+            })}
           </ul>
-          <div className="c-activities-filters">
-            <select className="c-activities-filters__location">
-              <option id="TPE">台北</option>
-              <option>台中</option>
-              <option>台南</option>
-            </select>
-            <div className="c-activities-filters__others">
-              <input id="o-activities-filter__checkbox" type="checkbox"/>
-              <label htmlFor="o-activities-filter__checkbox" >篩選器 ▼</label>
-              <div className="c-activities-filters__others-modal">
-                <div className="c-activities-filters__date">
-                  <h3 className="o-activities-filters__title">活動日期</h3>
-                  <StyledPeriodSelector />
-                </div>
 
+          <div className="l-activities-settings">         
+
+            <div className="l-activities-filters">
+              <input id="o-activities-filter__checkbox" type="checkbox"/>
+              <label htmlFor="o-activities-filter__checkbox" >▼ 篩選器</label>
+              <div className="l-activities-filters__modal">
                 <div className="c-activities-filters__order">
                   <h3 className="o-activities-filters__title">排序依據</h3>
                   <select className="c-activities-filters__selector">
@@ -109,111 +231,181 @@ const HomePage = ({className}) => {
                   </select>
                 </div>
 
-                <div className="c-activities-filters__length">
+                <div className="c-activities-filters__area">
+                  <h3 className="o-activities-filters__title">活動位置</h3>
+                  <ul className="c-activities-filters__checkbox-list">
+                    { activitiesAreas.map((activitiesArea)=>{
+                      return(
+                      <li className="c-activities-checkbox-item" key={activitiesArea.id}>
+                        <input type="checkbox" className="o-activities-checkbox" name="activities-area" id={`${activitiesArea.id}-area`} />
+                        <label htmlFor={`${activitiesArea.id}-area`}>{activitiesArea.title}</label>
+                      </li>
+                      )
+                    }) }
+                  </ul>
+                </div>
 
+                <div className="c-activities-filters__date">
+                  <h3 className="o-activities-filters__title">活動日期</h3>
+                  <StyledPeriodSelector />
+                </div>
+
+                <div className="c-activities-filters__length">
                   <h3 className="o-activities-filters__title">活動時長</h3>
-                  <div className="c-activities-filters__checkbox-list">
-                    <div className="o-activities-checkbox">
-                    <input name="activities-length" type="checkbox" id="hours" /><label htmlFor="hours" >3小時內</label>
-                    </div>
-                    <div className="o-activities-checkbox">
-                      <input name="activities-length" type="checkbox" id="half-day" /><label htmlFor="half-day" >半天</label>
-                    </div>
-                    <div className="o-activities-checkbox">
-                      <input name="activities-length" type="checkbox" id="all-day" /><label htmlFor="all-day" >全天</label>
-                    </div>
-                    <div className="o-activities-checkbox">
-                      <input name="activities-length" type="checkbox" id="overnight" /><label htmlFor="overnight">2天以上</label>
-                    </div>
-                  </div>
+                  <ul className="c-activities-filters__checkbox-list">
+                    <li className="c-activities-checkbox-item">
+                    <input name="activities-length" type="checkbox" id="hours" /><label htmlFor="hours">短時</label>
+                    </li>
+                    <li className="c-activities-checkbox-item">
+                      <input name="activities-length" type="checkbox" id="half-day" /><label htmlFor="half-day">半天</label>
+                    </li>
+                    <li className="c-activities-checkbox-item">
+                      <input name="activities-length" type="checkbox" id="all-day" /><label htmlFor="all-day">全天</label>
+                    </li>
+                    <li className="c-activities-checkbox-item">
+                      <input name="activities-length" type="checkbox" id="overnight" /><label htmlFor="overnight">多天數</label>
+                    </li>
+                  </ul>
 
                 </div>
 
-                <StyledButton className="o-activities-filters__button" title="篩選" />
+                <StyledButton className="o-activities-filters__button">篩選</StyledButton>
 
               </div>
             </div>
+
+            <div className="c-activities-display">
+              <h3 className="o-activities-display__title">顯示方式</h3>   
+              <div className="c-activities-display__option">
+                <input type="radio" name="activities-display" id="activities-grid-display" onClick={onDisplayClicked} defaultChecked/>
+                <label htmlFor="activities-grid-display"><GridIcon/></label>
+              </div>
+              <div className="c-activities-display__option">
+                <input type="radio" name="activities-display" id="activities-list-display" onClick={onDisplayClicked} />
+                <label htmlFor="activities-list-display"><ListIcon/></label>
+              </div>
+            </div>
+
           </div>
-          <div className="l-activities__card-list">
-            <StyledActivityCard />
-            <StyledActivityCard />
-            <StyledActivityCard />
-            <StyledActivityCard />
+
+          <div className="l-activities__container">
+            {activitiesDisplay === "grid" &&
+              <div className="l-activities__container--grid">
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledVerticalActivityCard className="c-activities__card"/>
+                {/* <i></i><i></i><i></i><i></i><i></i>                 */}
+              </div>
+            }
+
+            {activitiesDisplay === "list" &&
+              <div className="l-activities__container--list">
+                <StyledHorizontalActivityCard />
+                <StyledHorizontalActivityCard />
+                <StyledHorizontalActivityCard />
+                <StyledHorizontalActivityCard />
+                <StyledHorizontalActivityCard />
+                <StyledHorizontalActivityCard />
+                <StyledHorizontalActivityCard />
+                <StyledHorizontalActivityCard />                
+              </div>
+            }
+
           </div>
+          
+          <StyledPagination className="c-activities__pagination"/>
+
         </div>
       </div>
     )
 }
 
 const StyledHomePage = styled(HomePage)`
-    .l-popular-places{
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-top: 24rem;
+  .l-popular-places{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24rem;
 
-      .l-popular-places__title{
-        margin-bottom: 2.5rem;
-        font-weight: 700;
-        color: ${({theme})=> theme.color.default}
-      }
+    .o-popular-places__title{
+      margin-bottom: 2.5rem;
+      font-weight: 700;
+      color: ${({theme})=> theme.color.default}
+    }
 
-      .c-popular-places__list{
-         display: grid;
-         grid-template-columns: repeat(2,100px);
-         grid-template-rows: repeat(3,140px);
-         grid-gap: 2.5rem 5rem;
+    .l-popular-places__container{
+        display: grid;
+        grid-template-columns: repeat(2,100px);
+        grid-template-rows: repeat(3,140px);
+        grid-gap: 2.5rem 5rem;
 
-        .c-popular-place{
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+      .c-popular-place{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-          .o-popular-place__circle{
-            width: 6.25rem;
-            height: 6.25rem;
-            border-radius: 50%;
-            background-color: ${({theme})=>theme.color.default};
-            cursor: pointer;
-          }
+        .o-popular-place__circle{
+          width: 6.25rem;
+          height: 6.25rem;
+          border-radius: 50%;
+          background-color: ${({theme})=>theme.color.default};
+          cursor: pointer;
+        }
 
-          .o-popular-place__name{
-            margin-top: 1rem;
-            font-weight: 700;
-          }
+        .o-popular-place__name{
+          margin-top: 1rem;
+          font-weight: 700;
         }
       }
     }
+  }
 
-    .l-activities{
+  .l-activities{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top:2.5rem;
+    margin-bottom: 5rem;
+    border-top: 2px solid ${({theme})=> theme.backgroundColor.default};
+    width: 100%;
+    
+    .o-activities__title{
+      margin-top: 2rem;
+    }
+
+    .c-activities__types-options{
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top:2.5rem;
-      margin-bottom: 5rem;
-      border-top: 2px solid ${({theme})=> theme.backgroundColor.default};
-      
-      .o-activities__title{
-        margin-top: 2rem;
-      }
+      justify-content: space-around;
+      margin: 1rem 0;
+      padding: .25rem;
+      font-size: 1rem;
+      line-height: 2rem;
+      border-bottom: 1.25px solid ${({theme})=> theme.backgroundColor.default};
 
-      .c-activities__nav-list{
-        display: flex;
-        gap: .75rem;
-        margin: 1rem 0;
-        padding: .25rem;
-        font-size: 1rem;
-        line-height: 2rem;
-        border-bottom: 1.25px solid ${({theme})=> theme.backgroundColor.default};
+      .o-activities__type{
+        input{
+          display: none;
+        }
 
-        .o-activities__nav-item{
-          width: 3rem;
+        label{
+          width: fit-content;
           text-align: center;
           cursor: pointer;
+          padding: 0 .5rem;
+        }
 
-          &.--selected{
+        &:has(input:checked){
+          label{
             border-radius: 1rem;
             color: white;
             background-color: ${({theme}) => theme.color.default};
@@ -223,52 +415,52 @@ const StyledHomePage = styled(HomePage)`
           }
         }
       }
+    }
 
-      .c-activities-filters{
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 90%;
+    .l-activities-settings{
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 90%;
+      height: 1.5rem;
 
-        .c-activities-filters__location{
-          cursor: pointer;
-        }
+      .l-activities-filters{
+        #o-activities-filter__checkbox{
+          display: none;
 
-        .c-activities-filters__others{
-          & > input{
-            display: none;
-
-            &:checked{
-              & ~ .c-activities-filters__others-modal{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-              }
-            }
-          }
-
-          label{
+          +label{
             color: ${({theme})=>theme.color.default};
             font-weight: 700;
             cursor: pointer;
           }
-          .c-activities-filters__others-modal{
-            display: none;
-            position: absolute;
-            right:0;
-            top: -1;
-            width: 100%;
-            max-width: 432px;
-            margin-top: 1rem;
-            background-color: ${({theme})=>theme.backgroundColor.default};
-            padding: 1.5rem 1rem;
-            border-radius: .5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
-            
-            .c-activities-filters__date,
-            .c-activities-filters__length,
-            .c-activities-filters__order{
+
+          &:checked ~ .l-activities-filters__modal{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+        }
+
+        .l-activities-filters__modal{
+          position: absolute;
+          left:0;
+          top:-1;
+          display: none;
+          width: 100%;
+          max-width: 432px;
+          margin-top: 1rem;
+          background-color: ${({theme})=>theme.backgroundColor.default};
+          padding: 1.5rem 1rem;
+          border-radius: .5rem;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+          z-index: 1;
+          
+          .c-activities-filters{
+            &__area,
+            &__date,
+            &__length,
+            &__order{
               display: flex;
               flex-direction: column;
               align-items: center;
@@ -286,77 +478,145 @@ const StyledHomePage = styled(HomePage)`
                 text-align: center;
                 height: 1.5rem;
                 border-radius: .25rem;
+                border: none;
+                font-size: 1rem;
+                font-weight: 700;
+                color: ${({theme})=>theme.color.default};
               }
 
               .c-activities-filters__checkbox-list{
-                display: flex;
-                justify-content: space-between;
+                display: grid;
+                grid-template-columns: repeat(4,1fr);
+                grid-auto-rows: 2rem;
+                
                 width: 100%;
 
-                .o-activities-checkbox{
+                .c-activities-checkbox-item{
+                  display: flex;
+                  align-items: center;
+
                   label{
+                    font-size: 1rem;
                     font-weight: 500;
                     margin-left: .25rem;
                   }
                 }
               }
             }
-
           }
         }
+      }
+
+      .c-activities-display{
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        fill: ${({theme})=>theme.backgroundColor.secondary};
         
-        select{
-          border: none;
-          font-size: 1rem;
+        .o-activities-display__title{
+          padding-right: .5rem;
+          margin-right: .5rem;
+          border-right: 1px solid ${({theme}) => theme.color.default};
           font-weight: 700;
-          color: ${({theme})=>theme.color.default};
+          color: ${({theme})=>theme.color.default}
         }
 
+        .c-activities-display__option{
+          input{
+            display: none;
+          }
 
+          label{
+            display: block;
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
+          }
+
+          &:has(input:checked){
+            label{
+              fill: ${({theme})=>theme.color.default};
+            }
+          }
+        }
       }
 
-      .l-activities__card-list{
-        width: 90%;
+    }
+
+    .l-activities__container{
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+      width: 90%;
+
+      &--grid{
         display: grid;
-        grid-template-columns: repeat(2,1fr);
-        gap: 1rem;
-        margin-top: 1rem;
+        grid-template-columns: repeat(2, 9.5rem);
+        grid-auto-rows: 18rem;
+        width: fit-content;
+        gap: 1.25rem;
+        margin: 2rem auto 0;
+      }
+
+      &--list{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
       }
     }
-  
+
+    .c-activities__pagination{
+      margin-top: 2.5rem;
+    }
+  }
+
+
+  @media screen and (min-width: 480px) {
+    .l-activities .l-activities__container--grid{
+      grid-template-columns: repeat(2, 12rem);
+      grid-auto-rows: 21rem;
+    }
+  }
+
+  @media screen and (min-width:718px) {
+    .l-activities .l-activities__container--grid{
+      grid-template-columns: repeat(3, 12rem);
+    }
+  }
 
   @media screen and (min-width: 768px) {
-      .l-popular-places{
-        margin-top: 28rem;
+    .l-popular-places{
+      margin-top: 28rem;
 
-        .c-popular-places__list{
-          grid-template-columns: repeat(3,100px);
-          grid-template-rows: repeat(2,140px);
-        }
-      }
-      
-      .l-activities{
-        .l-activities__card-list{
-          grid-template-columns: repeat(3,1fr);
-          grid-gap: 1.25rem;
-        }
+      .l-popular-places__container{
+        grid-template-columns: repeat(3,100px);
+        grid-template-rows: repeat(2,140px);
       }
     }
 
+  }
+
+  @media screen and (min-width:952px) {
+    .l-activities .l-activities__container--grid{
+      grid-template-columns: repeat(4, 12rem);
+    }
+  }
+
   @media screen and (min-width: 1024px) {
-      .l-popular-places{
-        .c-popular-places__list{
-          grid-template-columns: repeat(6,100px);
-          grid-template-rows: 140px;  
-          gap: 6rem;
-        }
+    .l-popular-places{
+      .l-popular-places__container{
+        grid-template-columns: repeat(6,100px);
+        grid-template-rows: 140px;  
+        gap: 6rem;
       }
-      .l-activities{
-        .l-activities__card-list{
-          /* grid-template-columns: repeat(4,1fr);
-          gap: 1.5rem; */
-        }
-      }
+    }
+  }
+
+  @media screen and (min-width:1190px) {
+    .l-activities .l-activities__container--grid{
+      grid-template-columns: repeat(5, 12rem);
+    }
   }
 `
 

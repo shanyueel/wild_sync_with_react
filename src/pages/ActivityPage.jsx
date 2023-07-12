@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import styled from "styled-components"
 
 import StyledButton from "components/StyledButton"
 import StyledUserInfo from "components/StyledUserInfo"
-import StyledActivityTable from "components/StyledActivityTable"
+import StyledHikingTable from "components/StyledHikingTable"
 import StyledResidenceAndTransportationTable from "components/StyledResidenceAndTransportationTable"
 import StyledOthersTable from "components/StyledOthersTable"
-import StyledMessageCard from "components/StyledMessageCard"
-import StyledMessageReply from "components/StyledMessageReply"
 import StyledActivityBasicInfo from "components/StyledActivityBasicInfo"
 import StyledActivityHistory from "components/StyledActivityHistory"
 
@@ -16,12 +15,30 @@ import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as ClockIcon} from "assets/icons/ClockIcon.svg"
 import {ReactComponent as FlameIcon} from "assets/icons/FlameIcon.svg"
 import {ReactComponent as ParticipationIcon} from "assets/icons/ParticipationIcon.svg"
+import {ReactComponent as ChatIcon} from "assets/icons/ChatIcon.svg"
+import { Outlet } from "react-router-dom"
 
 const ActivityPage = ({ className }) => {
-  const [isLargeLayout, setIsLargeLayout] = useState(false)
-  const [isMediumLayout, setIsMediumLayout] = useState(false)
-
+  const [attendance, setAttendance] = useState(true)
+  const expired = false
+  const [btnContent, setBtnContent] = useState("報名")
   const [ActiveTable, setActiveTable] = useState("detail")
+  const environmentParams = useSelector((state) => state.environment)
+  const isMediumLayout = environmentParams.windowSize === "medium" || environmentParams.windowSize === "large"
+  useEffect(()=>{
+    if((expired && attendance) || (!expired && attendance)){
+      setBtnContent("報名成功")
+    }else if(expired && !attendance){
+      setBtnContent("報名截止")
+    }else {
+      setBtnContent("報名")
+    }
+  },[expired,attendance])
+
+
+  const handleReturn = () => {
+    window.history.back()
+  }
   
   const handleTableNavbarClick = (e) => {
     if(e.target.matches('#activity-detail')){
@@ -35,28 +52,16 @@ const ActivityPage = ({ className }) => {
     }
   }
 
-  useEffect(()=>{
-    const handleResize = () => {
-      setIsLargeLayout( window.innerWidth >= 1024 )
-      setIsMediumLayout( window.innerWidth >= 768 )
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    handleResize()
-
-    return () =>{
-      window.removeEventListener('resize', handleResize)
-    }
-  },[isLargeLayout,isMediumLayout])
-
+  const handleAttendClick = () => {
+    setAttendance(!attendance)
+  }
 
   return(
       <div className={className}>
         <div className="l-web-container__main l-activity">
           <div className="l-activity-header">
-            <ReturnIcon className="o-activity-header__return"/>
-            <StyledUserInfo detailed />
+            <ReturnIcon className="o-activity-header__return" onClick={handleReturn}/>
+            <StyledUserInfo/>
           </div>
           <div className="l-activity-body">
             <img className="o-activity-cover" src="https://www.ysnp.gov.tw/UploadPlugin?file=i%2BifzMiqxoOGxT%2FVr25SKzsDjCs7OItEOJlnGmQ4RxicJgsIU04Z4eAK80tRn%2FwR6XmMRuJgAVD2G9JaZXVLDA%3D%3D" alt="activity-cover" />
@@ -67,6 +72,8 @@ const ActivityPage = ({ className }) => {
             <div className="l-activity-time">
               <ClockIcon /><h3>2023.07.01 08:00 - 2023.07.02 18:00</h3>
             </div>
+
+            <p className="o-activity-introduction">快來參加我們的登山活動！一起征服麟趾山和鹿林山的壯麗峰巒吧！無論你是新手還是經驗豐富的登山者，都歡迎加入我們的隊伍。盡情享受大自然的美景，與同好們一同挑戰極限！</p>
 
 
             <div className="l-activity-stats">
@@ -79,7 +86,7 @@ const ActivityPage = ({ className }) => {
             </div>
 
             <div className="l-activity-application">
-              <StyledButton title="報名"/>
+              <StyledButton outlined={!attendance} disabled={expired} onClick={handleAttendClick} >{ btnContent }</StyledButton>
               <h4 className="o-activity-deadline">- 申請截止日：2023年06月24日 (六) 23:59 -</h4>
             </div>
 
@@ -87,42 +94,36 @@ const ActivityPage = ({ className }) => {
             
             <div className="l-activity-tables">
               <div className="c-activity-tables__navbar" onClick={handleTableNavbarClick} >
-                <div className="c-activity-tables__nav-item">
-                  <input name="activity-tables__navbar" id="activity-detail" type="radio" defaultChecked/>
-                  <label htmlFor="activity-detail">路徑資訊</label>
-                </div>
-                <div className="c-activity-tables__nav-item">
-                  <input name="activity-tables__navbar" id="activity-residence-and-transportation" type="radio"/>
-                  <label htmlFor="activity-residence-and-transportation">交通 / 住宿</label>
-                </div>
-                <div className="c-activity-tables__nav-item">
-                  <input name="activity-tables__navbar" id="activity-others" type="radio"/>
-                  <label htmlFor="activity-others">行程 & 其他</label>
-                </div>
+                <label htmlFor="activity-detail" className="c-activity-tables__nav-item">
+                  <input name="activity-tables__navbar" id="activity-detail" type="radio" defaultChecked/>路徑資訊
+                </label>
+                <label htmlFor="activity-residence-and-transportation" className="c-activity-tables__nav-item">
+                  <input name="activity-tables__navbar" id="activity-residence-and-transportation" type="radio"/>交通 / 住宿
+                </label>
+                <label htmlFor="activity-others" className="c-activity-tables__nav-item">
+                  <input name="activity-tables__navbar" id="activity-others" type="radio"/>行程 & 其他
+                </label>
               </div>
               <div className="l-activity-tables__container">
-                {ActiveTable === "detail" && <StyledActivityTable className="o-activity-detail-table" isMediumLayout={isMediumLayout}/>}
+                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" isMediumLayout={isMediumLayout}/>}
                 {ActiveTable === "residence-transportation" && <StyledResidenceAndTransportationTable className="o-activity-residence-and-transportation-table" isMediumLayout={isMediumLayout}/>}
                 {ActiveTable === "others" && <StyledOthersTable isMediumLayout={isMediumLayout}/>}
               </div> 
             </div>
           </div>
-
-          <div className="l-activity-discussion">
-            <h2 className="o-activity-discussion__title">留言</h2>
-            <div className="c-activity-discussion__body">
-              <StyledMessageCard />
-              <StyledMessageCard />
-            </div>
-            <hr />
-            <StyledMessageReply className="o-activity-discussion__reply-input"/>
-          </div>
-
+          
+          <StyledActivityHistory />
 
         </div>
 
         <div className="l-web-container__side">
-          <StyledActivityHistory />
+          <div className="c-activity-discussion__icon">
+            <input type="checkbox" id="activity-discussion"/>
+            <label htmlFor="activity-discussion"><ChatIcon  /></label>
+          </div>
+          <div className="l-activity-discussion">
+            <Outlet />
+          </div>
         </div>
       </div>
   )
@@ -142,6 +143,7 @@ const StyledActivityPage = styled(ActivityPage)`
       height: 1.5rem;
       margin-right: 1rem;
       fill: ${({theme})=>theme.color.default};
+      cursor: pointer;
     }
   }
 
@@ -187,6 +189,12 @@ const StyledActivityPage = styled(ActivityPage)`
         height: 1rem;
         height: 1rem;
       }
+    }
+
+    .o-activity-introduction{
+      margin-top: .75rem;
+      line-height: 1.25rem;
+      color: ${({theme})=> theme.color.black};
     }
 
     .l-activity-stats{
@@ -240,26 +248,24 @@ const StyledActivityPage = styled(ActivityPage)`
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: ${({theme})=> theme.backgroundColor.default};
           font-size: 1rem;
           font-weight: 700;
           border-radius: .25rem .25rem 0 0;
+          color: ${({theme})=> theme.color.default};
+          background-color: ${({theme})=> theme.backgroundColor.default};
+          cursor: pointer;
 
           input{
             display: none;
           }
 
           label{
-            color: ${({theme})=> theme.color.default};
-            cursor: pointer;
+
           }
 
           &:has(input:checked){
             background-color: ${({theme})=> theme.color.default};
-            
-            label{
-              color: white;
-            }
+              color: white;            
 
             &::after{
               position: absolute;
@@ -276,48 +282,66 @@ const StyledActivityPage = styled(ActivityPage)`
       }
 
       .l-activity-tables__container{
-        padding: 1.5rem 2rem;
+        padding: 1.5rem 1rem;
         background-color: ${({theme})=>theme.color.default};
         border-radius: 0 0 .25rem .25rem;
       }
     }
   }
 
-  
+  .c-activity-discussion__icon{
+    position: fixed;
+    bottom: 2.5rem;
+    right: 2rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${({theme})=> theme.color.default};
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+    z-index: 1;
+    
+
+    input{
+      display: none;
+    }
+
+    svg{
+      fill: white;
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+    }
+
+    &:has(input:checked){
+      display: none;
+
+      & ~ .l-activity-discussion{
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+  }
 
   .l-activity-discussion{
+    display: none;
+    position: fixed;
+    top: 4rem;
+    left: 0;
+    bottom: 0;
+    right: 0; 
     margin-bottom: 3rem;
-
-    .o-activity-discussion__title{
-      color: ${({theme})=> theme.color.default};
-      font-weight: 700;
-    }
-    
-    .c-activity-discussion__body{
-      display: flex;
-      flex-direction: column;
-      gap: .75rem;
-      margin-top: 1rem;
-    }
-    
-    hr{
-      margin: .75rem 0;
-    }
-
-    .c-activity-discussion__reply-input{
-      position: relative;
-      
-      &::before{
-        content: "";
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 1px;
-        background-color: red;
-      }
-
-    }
+    background-color: rgb(255,255,255,0.9);
+    width: 100%;
+    height: calc(100vh - 4rem) ;
+    padding: 1rem 1rem 3rem;
+    z-index: 1;
   }
+
+  
 
   @media screen and (min-width: 1024px) {
       display: flex;
@@ -336,29 +360,21 @@ const StyledActivityPage = styled(ActivityPage)`
       }
 
       .l-web-container__side{
+        .c-activity-discussion__icon{
+          display: none;
+        }
 
-        .l-activity-history__body{
-          width: 100%;
-          height: fit-content;
-          overflow-x: hidden;
-          margin-bottom: 0;
-          padding-bottom: 0;
+        .l-activity-discussion{
+          padding: 0;
+          display: block;
+          position: static;
 
-          .c-activity-history__cards{
-            width: 100%;
-            flex-direction: column;
-
-            .o-activity-history__card{
-              height: 10rem;
-              width: 100%;
-
-              .l-activity-card__info{
-                width: 100%;
-              }
-            }
-          }
+          height: calc(100vh - 10rem);
         }
       }
+
+
+
   } 
 `
 

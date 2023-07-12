@@ -5,7 +5,7 @@ import {ReactComponent as FlameIcon} from "assets/icons/FlameIcon.svg"
 import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 
 
-const VerticalActivityCard = ({className, detailed}) => {
+const VerticalActivityCard = ({className, detailed, small}) => {
   return(
     <div className={className}>
       
@@ -42,7 +42,7 @@ const VerticalActivityCard = ({className, detailed}) => {
 
 const StyledVerticalActivityCard = styled(VerticalActivityCard)`
   position: relative;
-  width: 10rem;
+  width: 9.5rem;
   height: 18rem;
   border-radius: 1rem;
   background-color: ${({theme})=>theme.backgroundColor.default};
@@ -57,7 +57,7 @@ const StyledVerticalActivityCard = styled(VerticalActivityCard)`
   }
 
   .l-activity-card__info{
-    padding: 1rem;
+    padding: 1rem .5rem;
     width: 100%;
     height: 4rem;
     
@@ -98,7 +98,6 @@ const StyledVerticalActivityCard = styled(VerticalActivityCard)`
       .o-activity-card__holder-activeness{
         display: flex;
         align-items: center;
-        margin: 0 .5rem;
         
         svg{
           width: 1.25rem;
@@ -118,11 +117,12 @@ const StyledVerticalActivityCard = styled(VerticalActivityCard)`
     top: .75rem;
     right: .5rem;
     border-radius: 50%;
-    padding: .25rem;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: white;
+    width: 1.5rem;
+    height: 1.5rem;
     
     
     input[type="checkbox"]{
@@ -133,21 +133,23 @@ const StyledVerticalActivityCard = styled(VerticalActivityCard)`
     svg{
       width: 1rem;
       height: 1rem;
-      fill: transparent;
+      fill: none;
       stroke: ${({theme})=>theme.color.alert};
       stroke-width: 50;
       cursor: pointer;
+      viewport-fit: contain;
     }
 
     &:has(input:checked) label{
       svg{
         fill: ${({theme})=>theme.color.alert};
+        stroke: none;
       }
     }
   }
 
   @media screen and (min-width: 480px) {
-    width: 12.5rem;
+    width: 12rem;
     height: 21rem;
 
     .o-activity__image{
@@ -166,14 +168,17 @@ const StyledVerticalActivityCard = styled(VerticalActivityCard)`
       }
     }
 
-    .o-activity-card__favorite-button{
+    /* .o-activity-card__favorite-button{
       svg{
-        width: 1.25rem;
-        height: 1.25rem;
-        stroke-width: 40;
+        width: 1rem;
+        height: 1rem;
+        viewport-fit: contain;
       }
-    }
-  }  
+    } */
+  } 
+  
+  ${props => props.small && css`
+  `}
 `
 
 export default StyledVerticalActivityCard

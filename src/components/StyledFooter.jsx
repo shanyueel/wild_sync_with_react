@@ -72,7 +72,10 @@ const StyledFooter = styled(Footer)`
           width: 100%;
           padding: 1rem 0;
           border-bottom: 1px solid white;
-          font-size: 1.25rem;
+
+          a{
+            font-size: 1rem;
+          }
         }
       }
     }
@@ -88,21 +91,21 @@ const StyledFooter = styled(Footer)`
       margin: 1rem 0;
 
       .o-footer__contact-title{
-        font-size: 1.25rem;
+        font-size: 1rem;
         margin-bottom: 1rem;
         color: white;
       }
 
       .c-footer__contact-icons{
         display: flex;
-        gap: 1.5rem;
+        gap: 2rem;
         
         .o-footer__contact-icon{
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 3rem;
-          height: 3rem;
+          width: 2.5rem;
+          height: 2.5rem;
           border-radius: 50%;
           background-color: white;
           
@@ -138,11 +141,11 @@ const StyledFooter = styled(Footer)`
     .c-footer__content{
       display: grid;
       grid-template-columns: 27rem auto 12rem;
-      grid-template-rows: 3rem 3rem;
+      grid-template-rows: 2.5rem 3rem;
       grid-template-areas: 
       'nav . contact'
       'title . contact';
-      height: 8rem;
+      height: 7.5rem;
       padding: .75rem 1rem 2rem;
       align-items: center;
       
@@ -182,28 +185,28 @@ const StyledFooter = styled(Footer)`
         grid-area: title;
 
         .o-footer__logo{
-          height: 2.25rem;
+          height: 1.75rem;
         }
 
         .o-footer__brand{
           margin-left: .5rem;
           color: white;
-          font-size: 2rem;
+          font-size: 1.75rem;
         }
       }
 
       .c-footer__contact-area{
         grid-area: contact;
+        display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: flex-end;
-        height: 5rem;
-        margin-bottom:  0;
+        margin: 0;
+        height: 100%;
+        padding-top: 1rem;
 
-        
-        
         .o-footer__contact-title{
-          font-size: 1.25rem;
-          margin-bottom: 0;
+          margin: 0;
         }
       }
 

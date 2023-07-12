@@ -1,16 +1,27 @@
 import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { useState } from "react"
 
 import { ReactComponent as WildSyncLogo } from "assets/icons/WildSyncLogo.svg"
 import { ReactComponent as SearchIcon } from "assets/icons/SearchIcon.svg"
 import { ReactComponent as ListIcon } from "assets/icons/ListIcon.svg"
 import { ReactComponent as UserIcon } from "assets/icons/UserIcon.svg"
+import StyledActivityCreateModal from "modals/StyledActivityCreateModal"
+
 
 const Navbar = ({ className }) => {
   const navigate = useNavigate()
+  const [isActivityCreateModalOpen, setIsActivityCreateModalOpen] = useState(false)
+  const environmentParams = useSelector((state) => state.environment)
+  const isMediumLayout = environmentParams.windowSize === "large" || environmentParams.windowSize === "medium"
 
   const handleSearch = () => {
     navigate(`/activity/search`)
+  }
+
+  const handleCreateClick = () => {
+    setIsActivityCreateModalOpen(true)
   }
   
   return(
@@ -21,28 +32,28 @@ const Navbar = ({ className }) => {
           <h1 className="o-navbar__brand">Wild Sync</h1>
         </Link>
         <div className="o-navbar__searchbar">
-          <input placeholder="登山路線、露營地、潛水處"/>
+          <input type='search' placeholder="登山路線、營地、潛水處"/>
           <button onClick={handleSearch}><SearchIcon /></button>
         </div>
         <ul className="c-navbar__list">
-          <li className="o-navbar__item">活動內容</li>
-          <li className="o-navbar__item">貼文分享</li>
-          <li className="o-navbar__item">新手上路</li>
-          <li className="o-navbar__item">關於我們</li>
+          <Link to="/activity/search"><li className="o-navbar__item">活動列表</li></Link>
+          <Link to="/guide"><li className="o-navbar__item">新手上路</li></Link>
+          <Link to="/about"><li className="o-navbar__item">關於我們</li></Link>
         </ul>
         <div className="c-navbar__icons">
           <div className="o-navbar__icon">
-            <input name="navbar-icons" type="checkbox" id="o-navbar__search-icon"></input>
+            <input name="navbar-icons" type="checkbox" id="o-navbar__search-icon"/>
             <label htmlFor="o-navbar__search-icon"><SearchIcon /></label>
           </div>
           <div className="o-navbar__icon">
-            <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon"></input>
+            <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon"/>
             <label htmlFor="o-navbar__list-icon"><ListIcon /></label>
           </div>
-          <div className="o-navbar__icon">
-            <input name="navbar-icons" type="checkbox" id="o-navbar__user-icon"></input>
-            <label htmlFor="o-navbar__user-icon"><UserIcon /></label>
-          </div>
+          <Link to="/user/1" className="o-navbar__icon">
+            <label><UserIcon  /></label>
+          </Link>
+          <button className="o-navbar__create-btn" onClick={handleCreateClick}>{isMediumLayout? "+ 建立活動" : "+"}</button>
+          <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
         </div>
       </div>
     </div>
@@ -60,7 +71,7 @@ const StyledNavbar = styled(Navbar)`
     height: 4rem;
     border-bottom: 1px solid #E0E0E0;
     background-color: white;
-    z-index: 1;
+    z-index: 5;
 
     .l-navbar{
       display: flex;
@@ -68,7 +79,7 @@ const StyledNavbar = styled(Navbar)`
       align-items: center;
       width: 100%;
       max-width: 1200px;
-      margin: auto 1rem;
+      margin: auto .75rem;
 
       .c-navbar__title{
         display: flex;
@@ -81,6 +92,7 @@ const StyledNavbar = styled(Navbar)`
         .o-navbar__brand{
           margin-left: .5rem;
           color: ${({theme})=> theme.color.default};
+          font-weight: 500;
         }
       }
 
@@ -150,35 +162,59 @@ const StyledNavbar = styled(Navbar)`
       }
 
       .c-navbar__icons{
+        display: block;
         display: grid;
-        grid-template-columns:repeat(3,2rem);
+        grid-template-columns:repeat(4, 2rem);
         grid-template-rows: 2rem;
-        grid-gap: 1rem;
-        fill: ${({theme})=> theme.color.default};
+        grid-gap: .5rem;
+        justify-content: center;
+        align-content: center;
         
-        input{
-          display: none;
-        }
-        
-        label{
-          width: 100%;
-          height: 100%;
-          
+        .o-navbar__icon{
+          input{
+            display: none;
+          }
 
-          svg{
+          label{
+            width: 100%;
+            height: 100%;
+            
+            svg{
+              width: 1.25rem;
+              height: 1.25rem;
+              margin: 0.375rem;
+              fill: ${({theme})=> theme.color.default};
+            }
+
+            &:hover{
+              cursor: pointer;
+            }
+          }
+
+          &:nth-child(3) label svg{
             width: 1.5rem;
             height: 1.5rem;
             margin: 0.25rem;
           }
+        }
+
+        .o-navbar__create-btn{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 1.75rem;
+          height: 1.75rem;
+          margin: auto;
+          border-radius: 8px;
+          color: ${({theme})=> theme.color.default};
+          background-color: white;
+          border: 1.5px solid ${({theme})=> theme.color.default};
+          font-weight: 700;
+          cursor: pointer;
 
           &:hover{
-            cursor: pointer;
-            
-            svg{
-              stroke:${({theme})=> theme.color.default};
-              stroke-width: 1px;
-              stroke-opacity: 0.5;
-            }
+            color: white;
+            background-color: ${({theme})=> theme.color.default};
           }
         }
       }
@@ -204,7 +240,7 @@ const StyledNavbar = styled(Navbar)`
       .l-navbar{
         display: grid;
         width: 100%;
-        grid-template-columns: 10.5rem 16rem 1fr 5rem;
+        grid-template-columns: 10.5rem 16rem 1fr 12rem;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 1rem;
@@ -245,10 +281,14 @@ const StyledNavbar = styled(Navbar)`
 
         .c-navbar__icons{
           grid-area: icons;
-          grid-template-columns:repeat(2,2rem);
+          grid-template-columns:repeat(2,2rem) 6rem;
           
           .o-navbar__icon:first-child{
             display: none;
+          }
+
+          .o-navbar__create-btn{
+            width: 6rem;
           }
         }
       }
@@ -259,7 +299,7 @@ const StyledNavbar = styled(Navbar)`
     @media screen and (min-width: 1024px){
       .l-navbar{
         display: grid;
-        grid-template-columns: 10.5rem 16rem 1fr 2rem;
+        grid-template-columns: 10.5rem 16rem 1fr 9rem;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 2rem;
@@ -284,6 +324,9 @@ const StyledNavbar = styled(Navbar)`
         }
 
         .c-navbar__icons{
+          grid-template-columns:2rem 6rem;
+          gap: .75rem;
+          
           .o-navbar__icon:nth-child(2){
             display: none;
           }

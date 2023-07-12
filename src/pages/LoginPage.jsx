@@ -18,7 +18,7 @@ const LoginPage = ({className})=>{
         <div className="l-login-area__input">
           <StyledTextInput title='信箱' placeholder="請輸入信箱"/>
           <StyledTextInput title='密碼' placeholder="請輸入密碼"/>
-          <StyledButton className="o-login-area__button" title="登入"/>
+          <StyledButton className="o-login-area__button">登入</StyledButton>
           <StyledTextLink sm className="o-login-area__register-link" text="尚未註冊?" destination="/register" />
         </div>
       </div>
@@ -88,10 +88,10 @@ const StyledLoginPage = styled(LoginPage)`
 
       .l-login-area__main{
         width: 45%;
-        padding: 2.5rem;
+        padding: 1rem 2rem;
         
         .l-login-area__title{
-          margin: 3.5rem 0 2.5rem;
+          margin-bottom: 2rem;
         }
 
         .l-login-area__input{

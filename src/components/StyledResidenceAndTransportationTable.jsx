@@ -134,7 +134,7 @@ const ResidenceAndTransportationTable = ({className}) => {
                 <td className="o-activity-table__content">無</td>
             </tr>
             <tr>
-              <td className="o-activity-table__divide" colSpan={2}></td>
+              <td className="o-activity-table__divide-sm" colSpan={2}></td>
             </tr>
             <tr>
                 <td className="o-activity-table__key">住宿日期</td>
@@ -193,8 +193,13 @@ const StyledResidenceAndTransportationTable = styled(ResidenceAndTransportationT
     white-space: pre-wrap;
   }
 
-  .o-activity-table__divide{
-    height: .5rem;
+  .o-activity-table__divide-lg{
+    height: 1rem;
+    padding: 0;
+  }
+
+  .o-activity-table__divide-sm{
+    height: .25rem;
     padding: 0;
   }
 

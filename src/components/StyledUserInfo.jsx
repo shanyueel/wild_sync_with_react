@@ -3,10 +3,10 @@ import styled, { css } from "styled-components"
 
 const UserInfo = ({className, message}) => {
   return(
-    <Link to="/user" className={className}>
+    <Link to="/user/1" className={className}>
       <img className="o-user-avatar" src={require("assets/images/userDefaultImage.png")} alt="holder-avatar"/>
       <div className="c-user-info">
-        <h2 className="o-user-info__name">Daisy</h2>
+        <h2 className="o-user-info__name">Daisy</h2>  
         <h4 className="o-user-info__time">3小時前</h4>
         <h4 className="o-user-info__detail">台中市 - 26 - 工程師</h4>
       </div>

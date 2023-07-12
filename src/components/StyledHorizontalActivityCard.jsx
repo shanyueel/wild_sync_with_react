@@ -158,6 +158,7 @@ const StyledHorizontalActivityCard = styled(HorizontalActivityCard)`
     svg{
       width: 1rem;
       height: 1rem;
+      padding: .2rem;
       fill: transparent;
       stroke: ${({theme})=>theme.color.alert};
       stroke-width: 50;

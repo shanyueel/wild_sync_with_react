@@ -1,5 +1,5 @@
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useEffect, useRef } from "react"
+import { useDispatch } from "react-redux"
 import { Outlet, useLocation } from "react-router-dom"
 
 import StyledNavbar from "components/StyledNavbar"
@@ -10,6 +10,7 @@ import { setWindowSize } from "reducers/environmentSlice"
 const BasicLayout = () => {
   const dispatch = useDispatch()
   const location = useLocation()
+  const activitiesRef = useRef(null)
 
   const pathname = location.pathname
   const licenseOnly = (pathname === "/login") || (pathname === "/register")
@@ -26,11 +27,11 @@ useEffect(() => {
   return () => {
     window.removeEventListener("resize", handleResize);
   };
-}, []);
+});
   
   return(
     <>
-      <StyledNavbar/>
+      <StyledNavbar activitiesRef={activitiesRef} />
       <div className={licenseOnly?"l-web-container--license-only":"l-web-container"}>
         <Outlet />
       </div>

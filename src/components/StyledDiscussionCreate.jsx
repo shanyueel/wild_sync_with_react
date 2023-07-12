@@ -3,17 +3,17 @@ import styled from "styled-components";
 import StyledUserInfo from "./StyledUserInfo";
 import StyledButton from "./StyledButton";
 
-const MessageReply = ({ className }) => {
+const DiscussionCreate = ({ className }) => {
   return(
     <div className={className}>
       <StyledUserInfo className="o-message-reply__user-info"/>
       <textarea className="o-message-reply__input" placeholder="請輸入內文"/>
-      <StyledButton className="o-message-reply__button" title="留言"/>
+      <StyledButton className="o-message-reply__button">開啟討論</StyledButton>
     </div>
   )
 }
 
-const StyledMessageReply = styled(MessageReply)`
+const StyledDiscussionCreate = styled(DiscussionCreate)`
   display: flex;
   flex-direction: column;
   padding: .75rem 1rem;
@@ -30,10 +30,7 @@ const StyledMessageReply = styled(MessageReply)`
   .o-message-reply__input{
     width: 100%;
     height: 5rem;
-    resize: none;
     margin-bottom: .5rem;
-    border-radius: .25rem;
-    padding: .5rem;
   }
 
   .o-message-reply__button{
@@ -43,4 +40,4 @@ const StyledMessageReply = styled(MessageReply)`
   }
 `
 
-export default StyledMessageReply
+export default StyledDiscussionCreate

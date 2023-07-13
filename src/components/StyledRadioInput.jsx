@@ -17,7 +17,7 @@ const RadioInput = ({className, title, radioOptions, FormContent, onFormChange})
       <div className="l-radio-options">
         {radioOptions.map(radioOption =>{
           return(
-            <div className="c-radio-option">
+            <div key={radioOption.id} className="c-radio-option">
               <input id={radioOption.id} name={radioOption.name} type="radio" onChange={handleRadioChange} required />
               <label htmlFor={radioOption.id}>{radioOption.label}</label>
             </div>

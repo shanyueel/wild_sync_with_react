@@ -1,11 +1,14 @@
 import { useEffect, useRef } from "react"
 import { useDispatch } from "react-redux"
 import { Outlet, useLocation } from "react-router-dom"
+import { ToastContainer } from 'react-toastify';
 
 import StyledNavbar from "components/StyledNavbar"
 import StyledFooter from "components/StyledFooter"
 
 import { setWindowSize } from "reducers/environmentSlice"
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const BasicLayout = () => {
   const dispatch = useDispatch()
@@ -36,6 +39,18 @@ useEffect(() => {
         <Outlet />
       </div>
       <StyledFooter/>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   )
 }

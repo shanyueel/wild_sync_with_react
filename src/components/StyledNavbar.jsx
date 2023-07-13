@@ -1,20 +1,24 @@
 import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
-import { useSelector } from "react-redux"
-import { useState } from "react"
+import { useRef, useState } from "react"
+
 
 import { ReactComponent as WildSyncLogo } from "assets/icons/WildSyncLogo.svg"
 import { ReactComponent as SearchIcon } from "assets/icons/SearchIcon.svg"
 import { ReactComponent as ListIcon } from "assets/icons/ListIcon.svg"
 import { ReactComponent as UserIcon } from "assets/icons/UserIcon.svg"
+import { ReactComponent as LoginIcon } from "assets/icons/LoginIcon.svg"
+import { ReactComponent as PlusIcon } from "assets/icons/PlusIcon.svg"
+import { ReactComponent as LogoutIcon } from "assets/icons/LogoutIcon.svg"
 import StyledActivityCreateModal from "modals/StyledActivityCreateModal"
+import { logout } from "api/auth"
+import { toast } from "react-toastify"
 
 
 const Navbar = ({ className }) => {
   const navigate = useNavigate()
   const [isActivityCreateModalOpen, setIsActivityCreateModalOpen] = useState(false)
-  const environmentParams = useSelector((state) => state.environment)
-  const isMediumLayout = environmentParams.windowSize === "large" || environmentParams.windowSize === "medium"
+  const dropdownSwitchRef = useRef(null)
 
   const handleSearch = () => {
     navigate(`/activity/search`)
@@ -22,6 +26,33 @@ const Navbar = ({ className }) => {
 
   const handleCreateClick = () => {
     setIsActivityCreateModalOpen(true)
+    dropdownSwitchRef.current.checked = false
+  }
+  
+  const handleLogin = () => {
+    navigate(`/login`)
+    dropdownSwitchRef.current.checked = false
+  }
+
+  const handleLogout = async () => {
+    const { success } = await logout()
+    
+    if(success){
+      toast.success('已登出', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    
+    dropdownSwitchRef.current.checked = false
+    
+
   }
   
   return(
@@ -49,11 +80,25 @@ const Navbar = ({ className }) => {
             <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon"/>
             <label htmlFor="o-navbar__list-icon"><ListIcon /></label>
           </div>
-          <Link to="/user/1" className="o-navbar__icon">
-            <label><UserIcon  /></label>
-          </Link>
-          <button className="o-navbar__create-btn" onClick={handleCreateClick}>{isMediumLayout? "+ 建立活動" : "+"}</button>
-          <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
+
+          <div className="o-navbar__icon">
+            <input id="user-icon" type="checkbox" ref={dropdownSwitchRef}/>
+            <label htmlFor="user-icon"><UserIcon /></label>
+            <div className="l-navbar__user-dropdown">
+              <Link to="/user/1">
+                <img className="o-navbar__user-avatar" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />
+              </Link>
+              <h3>kevin1234</h3>
+              
+              <ul className="l-navbar__user-dropdown-body">
+                  <li className="c-navbar__create-account" onClick={handleCreateClick}><PlusIcon/>建立活動</li>
+                  <li className="c-navbar__logout" onClick={handleLogout}><LogoutIcon/>帳戶登出</li>
+                  <li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>
+              </ul>
+              <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -162,9 +207,10 @@ const StyledNavbar = styled(Navbar)`
       }
 
       .c-navbar__icons{
+        position: relative;
         display: block;
         display: grid;
-        grid-template-columns:repeat(4, 2rem);
+        grid-template-columns:repeat(3, 2rem);
         grid-template-rows: 2rem;
         grid-gap: .5rem;
         justify-content: center;
@@ -195,6 +241,65 @@ const StyledNavbar = styled(Navbar)`
             width: 1.5rem;
             height: 1.5rem;
             margin: 0.25rem;
+          }
+
+          .l-navbar__user-dropdown{
+            display: none;
+          }
+
+          &:has(input:checked){
+
+            .l-navbar__user-dropdown{
+              position: absolute;
+              top:2.25rem;
+              right: 1rem;
+              display: block;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: .75rem;
+              width: 10rem;
+              height: fit-content;
+              padding: .75rem;
+              border-radius: .5rem 0 .5rem .5rem;
+              background-color: ${({theme})=> theme.backgroundColor.default};
+              box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+              
+              .o-navbar__user-avatar{
+                width: 3rem;
+                height: 3rem;
+                border: 5px solid ${({theme})=> theme.color.default};
+                border-radius: 50%;
+                margin-top: .75rem;
+              }
+
+              .l-navbar__user-dropdown-body{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-top: 1px solid grey;
+                padding-top: .75rem;
+                gap: .75rem;
+
+                li{
+                  width: 6rem;
+                  height: 1.5;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  font-weight: 700;
+                  color: ${({theme})=> theme.color.default};
+                  cursor: pointer;
+                  
+                  svg{
+                    width: 1.25rem;
+                    margin-right: .5rem;
+                    fill:${({theme})=> theme.color.default};
+                  }
+                }
+              }
+            }
           }
         }
 
@@ -240,7 +345,7 @@ const StyledNavbar = styled(Navbar)`
       .l-navbar{
         display: grid;
         width: 100%;
-        grid-template-columns: 10.5rem 16rem 1fr 12rem;
+        grid-template-columns: 10.5rem 16rem 1fr 4.5rem;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 1rem;
@@ -281,7 +386,7 @@ const StyledNavbar = styled(Navbar)`
 
         .c-navbar__icons{
           grid-area: icons;
-          grid-template-columns:repeat(2,2rem) 6rem;
+          grid-template-columns:repeat(2,2rem);
           
           .o-navbar__icon:first-child{
             display: none;
@@ -299,7 +404,7 @@ const StyledNavbar = styled(Navbar)`
     @media screen and (min-width: 1024px){
       .l-navbar{
         display: grid;
-        grid-template-columns: 10.5rem 16rem 1fr 9rem;
+        grid-template-columns: 10.5rem 16rem 1fr 2rem;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 2rem;
@@ -324,7 +429,7 @@ const StyledNavbar = styled(Navbar)`
         }
 
         .c-navbar__icons{
-          grid-template-columns:2rem 6rem;
+          grid-template-columns:2rem;
           gap: .75rem;
           
           .o-navbar__icon:nth-child(2){

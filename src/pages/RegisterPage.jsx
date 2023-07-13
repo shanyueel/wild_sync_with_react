@@ -6,8 +6,51 @@ import StyledTextLink from "components/StyledTextLink"
 
 import {ReactComponent as WildSyncLogo} from "assets/icons/WildSyncLogo.svg"
 import RegisterImage from "assets/images/loginImage.png"
+import { useState } from "react"
+import { register } from "api/auth"
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const LoginPage = ({className})=>{
+  const navigate = useNavigate()
+  const [registerContent, setRegisterContent] = useState({}) 
+  const [passwordCheckError, setPasswordCheckError] = useState("")
+
+  const handleRegister = async (e) => {
+    e.preventDefault()
+
+    if(registerContent.passwordCheck !== registerContent.password) {
+      setPasswordCheckError("兩次密碼不相同")
+      setTimeout(()=>{
+        setPasswordCheckError("")
+      },3000)
+      return
+    }
+
+    const {success} = await register({
+      email:registerContent.email,
+      name: registerContent.name,
+      password:registerContent.password
+    })
+
+    if(success){
+      toast.success('註冊成功', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      setTimeout(()=>{
+        navigate(`/`)
+      },3000)
+    }
+  }
+
   return(
     <div className={className}>
       <div className="l-register-area__main">
@@ -15,14 +58,14 @@ const LoginPage = ({className})=>{
           <WildSyncLogo className="o-register-area__logo"/>
           <h1 className="o-register-area__brand">Wild Sync</h1>
         </div>
-        <div className="l-register-area__input">
-          <StyledTextInput title='設定信箱' placeholder="請輸入信箱"/>
-          <StyledTextInput title='設定暱稱' placeholder="請輸入暱稱"/>
-          <StyledTextInput title='設定密碼' placeholder="請輸入密碼"/>
-          <StyledTextInput title='確認密碼' placeholder="請再次輸入密碼"/>
-          <StyledButton className="o-register-area__button">註冊</StyledButton>
+        <form className="l-register-area__input">
+          <StyledTextInput title='設定信箱' placeholder="請輸入信箱" inputId="email" formContent={registerContent} onFormChange={setRegisterContent}/>
+          <StyledTextInput title='設定暱稱' placeholder="請輸入暱稱" inputId="name" formContent={registerContent} onFormChange={setRegisterContent}/>
+          <StyledTextInput title='設定密碼' placeholder="請輸入密碼" inputId="password" formContent={registerContent} onFormChange={setRegisterContent} password/>
+          <StyledTextInput title='確認密碼' placeholder="請再次輸入密碼" inputId="passwordCheck" formContent={registerContent} onFormChange={setRegisterContent} warning={passwordCheckError} password/>
+          <StyledButton className="o-register-area__button" onClick={handleRegister}>註冊</StyledButton>
           <StyledTextLink sm className="o-register-area__register-link" text="已經是Wild Sync會員?" destination="/login" />
-        </div>
+        </form>
       </div>
       <div className="l-register-area__image">
       </div>

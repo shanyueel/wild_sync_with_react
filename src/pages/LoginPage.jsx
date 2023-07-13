@@ -1,4 +1,9 @@
 import styled from "styled-components"
+import { useState } from "react"
+import { toast } from "react-toastify"
+import { login } from "api/auth"
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
 
 import StyledTextInput from "components/StyledTextInput"
 import StyledButton from "components/StyledButton"
@@ -7,7 +12,44 @@ import StyledTextLink from "components/StyledTextLink"
 import {ReactComponent as WildSyncLogo} from "assets/icons/WildSyncLogo.svg"
 import loginImage from "assets/images/loginImage.png"
 
+import { setCurrentUser } from "reducers/userSlice"
+
+
 const LoginPage = ({className})=>{
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const [loginContent, setLoginContent] = useState({})
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    
+    const {success, ...user} = await login({
+      email: loginContent.email,
+      password: loginContent.password
+    })
+
+    if(success){
+      dispatch(setCurrentUser(user))
+      
+      toast.success('登入成功', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      setTimeout(()=>{
+        navigate(`/`)
+      },3000)
+    }
+
+
+  }
+
   return(
     <div className={className}>
       <div className="l-login-area__main">
@@ -15,12 +57,12 @@ const LoginPage = ({className})=>{
           <WildSyncLogo className="o-login-area__logo"/>
           <h1 className="o-login-area__brand">Wild Sync</h1>
         </div>
-        <div className="l-login-area__input">
-          <StyledTextInput title='信箱' placeholder="請輸入信箱"/>
-          <StyledTextInput title='密碼' placeholder="請輸入密碼"/>
-          <StyledButton className="o-login-area__button">登入</StyledButton>
+        <form className="l-login-area__input">
+          <StyledTextInput title='信箱' placeholder="請輸入信箱" inputId="email" formContent={loginContent} onFormChange={setLoginContent} />
+          <StyledTextInput title='密碼' placeholder="請輸入密碼" inputId="password" formContent={loginContent} onFormChange={setLoginContent} password />
+          <StyledButton className="o-login-area__button" onClick={handleLogin}>登入</StyledButton>
           <StyledTextLink sm className="o-login-area__register-link" text="尚未註冊?" destination="/register" />
-        </div>
+        </form>
       </div>
       <div className="l-login-area__image">
       </div>

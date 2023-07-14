@@ -1,7 +1,9 @@
 import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
 import { useRef, useState } from "react"
+import { toast } from "react-toastify"
 
+import StyledActivityCreateModal from "modals/StyledActivityCreateModal"
 
 import { ReactComponent as WildSyncLogo } from "assets/icons/WildSyncLogo.svg"
 import { ReactComponent as SearchIcon } from "assets/icons/SearchIcon.svg"
@@ -10,15 +12,16 @@ import { ReactComponent as UserIcon } from "assets/icons/UserIcon.svg"
 import { ReactComponent as LoginIcon } from "assets/icons/LoginIcon.svg"
 import { ReactComponent as PlusIcon } from "assets/icons/PlusIcon.svg"
 import { ReactComponent as LogoutIcon } from "assets/icons/LogoutIcon.svg"
-import StyledActivityCreateModal from "modals/StyledActivityCreateModal"
+import { useDispatch, useSelector } from "react-redux"
 import { logout } from "api/auth"
-import { toast } from "react-toastify"
-
+import { resetUser } from "reducers/userSlice"
 
 const Navbar = ({ className }) => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [isActivityCreateModalOpen, setIsActivityCreateModalOpen] = useState(false)
   const dropdownSwitchRef = useRef(null)
+  const user = useSelector((state)=> state.user)
 
   const handleSearch = () => {
     navigate(`/activity/search`)
@@ -38,9 +41,11 @@ const Navbar = ({ className }) => {
     const { success } = await logout()
     
     if(success){
-      toast.success('已登出', {
+      dispatch(resetUser())
+
+      toast.success('已成功登出', {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2500,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -52,7 +57,6 @@ const Navbar = ({ className }) => {
     
     dropdownSwitchRef.current.checked = false
     
-
   }
   
   return(
@@ -88,12 +92,19 @@ const Navbar = ({ className }) => {
               <Link to="/user/1">
                 <img className="o-navbar__user-avatar" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />
               </Link>
-              <h3>kevin1234</h3>
+              <h2 className="o-navbar__user-name">{user.displayName}</h2>
               
               <ul className="l-navbar__user-dropdown-body">
-                  <li className="c-navbar__create-account" onClick={handleCreateClick}><PlusIcon/>建立活動</li>
-                  <li className="c-navbar__logout" onClick={handleLogout}><LogoutIcon/>帳戶登出</li>
-                  <li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>
+                {
+                  user.loggedIn?
+                  <>
+                    <li className="c-navbar__create-account" onClick={handleCreateClick}><PlusIcon/>建立活動</li>
+                    <li className="c-navbar__logout" onClick={handleLogout}><LogoutIcon/>帳戶登出</li>
+                  </>
+                  :<li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>
+                }
+
+                  
               </ul>
               <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
             </div>
@@ -261,7 +272,7 @@ const StyledNavbar = styled(Navbar)`
               width: 10rem;
               height: fit-content;
               padding: .75rem;
-              border-radius: .5rem 0 .5rem .5rem;
+              border-radius: .75rem 0 .75rem .75rem;
               background-color: ${({theme})=> theme.backgroundColor.default};
               box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
               
@@ -271,6 +282,11 @@ const StyledNavbar = styled(Navbar)`
                 border: 5px solid ${({theme})=> theme.color.default};
                 border-radius: 50%;
                 margin-top: .75rem;
+              }
+
+              .o-navbar__user-name{
+                color: ${({theme})=> theme.color.default};
+
               }
 
               .l-navbar__user-dropdown-body{

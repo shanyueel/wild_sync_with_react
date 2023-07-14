@@ -3,7 +3,6 @@ import { useState } from "react"
 import { toast } from "react-toastify"
 import { login } from "api/auth"
 import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
 
 import StyledTextInput from "components/StyledTextInput"
 import StyledButton from "components/StyledButton"
@@ -12,28 +11,23 @@ import StyledTextLink from "components/StyledTextLink"
 import {ReactComponent as WildSyncLogo} from "assets/icons/WildSyncLogo.svg"
 import loginImage from "assets/images/loginImage.png"
 
-import { setCurrentUser } from "reducers/userSlice"
-
 
 const LoginPage = ({className})=>{
   const navigate = useNavigate()
-  const dispatch = useDispatch();
   const [loginContent, setLoginContent] = useState({})
 
   const handleLogin = async (e) => {
     e.preventDefault()
     
-    const {success, ...user} = await login({
+    const {success} = await login({
       email: loginContent.email,
       password: loginContent.password
     })
 
     if(success){
-      dispatch(setCurrentUser(user))
-      
       toast.success('登入成功', {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2500,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,

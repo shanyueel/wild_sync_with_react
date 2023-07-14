@@ -10,8 +10,12 @@ import { useState } from "react"
 import { register } from "api/auth"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useDispatch } from "react-redux"
+import { setCurrentUser } from "reducers/userSlice"
+import { auth } from "api/firebaseConfig"
 
 const LoginPage = ({className})=>{
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [registerContent, setRegisterContent] = useState({}) 
   const [passwordCheckError, setPasswordCheckError] = useState("")
@@ -29,14 +33,14 @@ const LoginPage = ({className})=>{
 
     const {success} = await register({
       email:registerContent.email,
-      name: registerContent.name,
+      displayName: registerContent.name,
       password:registerContent.password
     })
 
-    if(success){
+    if(success){      
       toast.success('註冊成功', {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2500,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,

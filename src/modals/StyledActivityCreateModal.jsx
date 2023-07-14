@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import styled from "styled-components";
 
@@ -40,21 +40,48 @@ const typeOptions = [
 
 
 const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivityCreateModalOpen}) => {
+  const stepsRef = useRef(null)
   const [ActivityContent, setActivityContent] = useState({})
-  const [formPage, setFormPage] = useState(1);
+  const [formProgress, setFormProgress] = useState(1);
 
   const closeModal = () => {
     setIsActivityCreateModalOpen(false);
   }
 
   const onPreviousPageClick = () => {
-    setFormPage(formPage - 1)
+    setFormProgress(formProgress - 1)
   }
 
   const onNextPageClick = () => {
-    setFormPage(formPage + 1)
+    setFormProgress(formProgress + 1)
     console.log(ActivityContent)
   }
+  
+  useEffect(()=>{
+    const adjustStepDisplay = (currentFormProgress) => {
+      const steps = stepsRef?.current
+
+      let doneSteps = [0,1,2,3,4].slice(0,currentFormProgress-1)
+      let activeStep = currentFormProgress - 1
+      let undoneSteps = [0,1,2,3,4].slice(currentFormProgress,5)
+
+      doneSteps.forEach((doneStep)=>{
+        steps?.children[doneStep]?.firstElementChild?.classList.add("done")
+        steps?.children[doneStep]?.firstElementChild?.classList.remove("active")
+      })
+
+      steps?.children[activeStep]?.firstElementChild?.classList.add("active")
+
+      undoneSteps.forEach((undoneStep)=>{
+        steps?.children[undoneStep]?.firstElementChild?.classList.remove("done","active")
+      })
+    }
+    adjustStepDisplay(formProgress)
+  },[formProgress])
+
+
+  
+  
 
   return(
     <Modal
@@ -69,13 +96,13 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
       </div>
 
       <div className='l-modal__body'>
-        <div className='l-activity-create__steps'>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle done'></div>
-            <h3 className='o-activity-create__step-title'>基本資訊</h3>
-          </div>
+        <div className='l-activity-create__steps' ref={stepsRef}>
           <div className='c-activity-create__step'>
             <div className='o-activity-create__step-circle active'></div>
+            <h3 className='o-activity-create__step-title' >基本資訊</h3>
+          </div>
+          <div className='c-activity-create__step'>
+            <div className='o-activity-create__step-circle'></div>
             <h3 className='o-activity-create__step-title'>重點簡介</h3>
           </div>
           <div className='c-activity-create__step'>
@@ -93,7 +120,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
         </div>
 
         <form className='l-activity-create__form scrollbar'>
-          {formPage === 1 &&
+          {formProgress === 1 &&
             <>
               <div className='c-activity-create__cover'>
                 <img className="o-activity-create__cover-image" src={require('assets/images/userDefaultCover.jpg')} alt='activity-cover'/>
@@ -112,7 +139,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
             </>
           }
 
-          {formPage === 2 && 
+          {formProgress === 2 && 
             <>
               <div className='c-activity-create__time'>
                 <h3 className='o-activity-create__input-title'>活動時間</h3>
@@ -137,15 +164,15 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
             </>
           }
 
-          {formPage === 3 &&
+          {formProgress === 3 &&
             <StyledActivityTable inputUsed/>
           }
 
         </form>
 
         <div className='c-activity-create__pagination'>
-          <StyledButton onClick={onPreviousPageClick} disabled={formPage === 1}>前一頁</StyledButton>
-          <StyledButton onClick={onNextPageClick} >{formPage<5?"下一頁":"建立活動"}</StyledButton>
+          <StyledButton onClick={onPreviousPageClick} disabled={formProgress === 1}>前一頁</StyledButton>
+          <StyledButton onClick={onNextPageClick} >{formProgress<5?"下一頁":"建立活動"}</StyledButton>
         </div>
       </div>
 

@@ -66,10 +66,11 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
       let undoneSteps = [0,1,2,3,4].slice(currentFormProgress,5)
 
       doneSteps.forEach((doneStep)=>{
-        steps?.children[doneStep]?.firstElementChild?.classList.add("done")
         steps?.children[doneStep]?.firstElementChild?.classList.remove("active")
+        steps?.children[doneStep]?.firstElementChild?.classList.add("done")
       })
 
+      steps?.children[activeStep]?.firstElementChild?.classList.remove("done")
       steps?.children[activeStep]?.firstElementChild?.classList.add("active")
 
       undoneSteps.forEach((undoneStep)=>{

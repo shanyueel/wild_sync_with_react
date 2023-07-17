@@ -3,12 +3,18 @@ import Modal from 'react-modal';
 import styled from "styled-components";
 
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
-import {ReactComponent as UploadIcon} from "assets/icons/UploadIcon.svg"
 
-import StyledTextInput from 'components/StyledTextInput';
+import StyledTextInput from 'components/inputs/StyledTextInput';
 import StyledButton from 'components/StyledButton';
-import StyledActivityTable from 'components/StyledHikingTable';
-import StyledRadioInput from 'components/StyledRadioInput';
+import StyledRadioInput from 'components/inputs/StyledRadioInput';
+import StyledResidenceAndTransportationTable from 'components/StyledResidenceAndTransportationTable';
+import StyledHikingTable from 'components/StyledHikingTable';
+import StyledOthersTable from 'components/StyledOthersTable';
+import StyledTextArea from 'components/inputs/StyledTextArea';
+import StyledImageInput from 'components/inputs/StyledImageInput';
+import StyledRangeInput from 'components/inputs/StyledRangeInput';
+import StyledDateTimeInput from 'components/inputs/StyledDateTimeInput';
+import StyledPeriodInput from 'components/inputs/StyledPreiodInput';
 
 const typeOptions = [
   { 
@@ -38,6 +44,34 @@ const typeOptions = [
   }
 ]
 
+const difficultyOptions = [
+  { 
+    name: "difficulty",
+    label: "入門",
+    id: "beginner"
+  },
+  { 
+    name: "difficulty",
+    label: "中等",
+    id: "medium"
+  },
+  { 
+    name: "difficulty",
+    label: "進階",
+    id: "advanced"
+  },
+  { 
+    name: "difficulty",
+    label: "專家",
+    id: "expert"
+  },
+  { 
+    name: "difficulty",
+    label: "大師",
+    id: "master"
+  }
+]
+
 
 const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivityCreateModalOpen}) => {
   const stepsRef = useRef(null)
@@ -46,6 +80,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
   const closeModal = () => {
     setIsActivityCreateModalOpen(false);
+    setFormProgress(1)
   }
 
   const onPreviousPageClick = () => {
@@ -123,50 +158,105 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
         <form className='l-activity-create__form scrollbar'>
           {formProgress === 1 &&
             <>
-              <div className='c-activity-create__cover'>
-                <img className="o-activity-create__cover-image" src={require('assets/images/userDefaultCover.jpg')} alt='activity-cover'/>
-                <div className='l-activity-create__cover-control'>
-                  <div className='o-activity-create__cover-upload'><UploadIcon/></div>
-                  <div className='o-activity-create__cover-delete'><CrossIcon/></div>
-                </div>
-              </div>
-              <StyledRadioInput title="活動類型" className="c-activity-create__type-options" onFormChange={setActivityContent} FormContent={ActivityContent} radioOptions={typeOptions}/>
-              <StyledTextInput title="活動名稱" placeholder="請輸入活動名稱"/>
-              <StyledTextInput title="活動地點" placeholder="請輸入活動地點"/>
-              <div className='c-activity-create__introduction'>
-                <h3 className='o-activity-create__input-title'>活動簡介</h3>
-                <textarea placeholder='請輸入活動簡介'/>
-              </div>
+              <StyledImageInput 
+                title="活動封面照片"
+              />
+              <StyledTextInput 
+                title="活動名稱" 
+                placeholder="請輸入活動名稱" 
+                inputId="name" 
+                formContent={ActivityContent} 
+                onFormChange={setActivityContent} 
+                value={ ActivityContent.name || "" }
+              />
+              <StyledRadioInput 
+                title="活動類型" 
+                onFormChange={setActivityContent} 
+                formContent={ActivityContent} 
+                radioOptions={typeOptions}
+              />
+              <StyledTextInput 
+                title="活動地點" 
+                placeholder="請輸入活動地點" 
+                inputId="location" 
+                formContent={ActivityContent} 
+                onFormChange={setActivityContent}
+              />
+              <StyledPeriodInput 
+                title="活動期間" 
+                inputName="time" 
+                minInputId="start"
+                maxInputId="end" 
+                formContent={ActivityContent} 
+                onFormChange={setActivityContent}
+              />
+              
             </>
           }
 
           {formProgress === 2 && 
             <>
-              <div className='c-activity-create__time'>
-                <h3 className='o-activity-create__input-title'>活動時間</h3>
-                <input id="a-time-start" name="a-time-start" type="datetime-local" required /> - <input id="a-time-end" name="a-time-end" type="datetime-local" required />
-              </div>
-              <div className='c-activity-create__deadline'>
-                <h3 className='o-activity-create__input-title'>申請截止時間</h3>
-                <input id="a-time-start" name="a-time-start" type="datetime-local" required />
-              </div>
-              <div className='c-activity-create__altitude'>
-                <h3 className='o-activity-create__input-title'>活動海拔高度</h3>
-                <input type='number' placeholder='最低海拔'/> - <input type='number' placeholder='最高海拔'/>
-              </div>
-              <div className='c-activity-create__cost'>
-                <h3 className='o-activity-create__input-title'>預估費用</h3>
-                <input type='number'/>
-              </div>
-              <div className='c-activity-create__attendance-limit'>
-                <h3 className='o-activity-create__input-title'>人數限制</h3>
-                <input type='number'/>
-              </div> 
+              <StyledRadioInput 
+                title="難易程度" 
+                onFormChange={setActivityContent} 
+                formContent={ActivityContent} 
+                radioOptions={difficultyOptions}
+              />
+              <StyledTextInput 
+                numberUsed 
+                title="活動時長" 
+                placeholder="請輸入活動時長" 
+                unit="小時" 
+                inputId="outdoorLength" 
+                formContent={ActivityContent} 
+                onFormChange={setActivityContent}
+              />
+              <StyledRangeInput 
+                title="預估費用"
+                minPlaceholder="最低費用" 
+                maxPlaceholder="最高費用" 
+                unit="$" 
+                inputName="Cost"
+                minInputId="minCost"
+                maxInputId="maxCost"
+                formContent={ActivityContent}
+                onFormChange={setActivityContent}
+              />
+              <StyledTextInput 
+                numberUsed 
+                title="人數限制" 
+                placeholder="報名人數上限" 
+                unit="人" 
+                inputId="attendanceLimit" 
+                formContent={ActivityContent} 
+                onFormChange={setActivityContent}
+              />
+              <StyledDateTimeInput 
+                title="申請截止時間" 
+                inputId="deadline"
+                formContent={ActivityContent}
+                onFormChange={setActivityContent} 
+              />
+              <StyledTextArea 
+                title="活動簡介" 
+                placeholder="請輸入活動簡介" 
+                inputId="introduction" 
+                formContent={ActivityContent} 
+                onFormChange={setActivityContent} 
+              />
             </>
           }
 
           {formProgress === 3 &&
-            <StyledActivityTable inputUsed/>
+            <StyledHikingTable inputUsed/>
+          }
+
+          {formProgress === 4 &&
+            <StyledResidenceAndTransportationTable inputUsed/>
+          }
+
+          {formProgress === 5 &&
+            <StyledOthersTable inputUsed/>
           }
 
         </form>
@@ -262,7 +352,7 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
             background-color: ${({theme})=>theme.color.default};
 
             ::before{
-              content: "V";
+              content: "✔";
               color: white;
             }
           }
@@ -292,72 +382,8 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
       gap: .75rem;
       width: 100%;
       height: calc(100% - 9rem);
-      margin-top: 1rem;
+      margin-top: .75rem;
       overflow-y: scroll;
-      
-
-      .o-activity-create__input-title{
-        color: ${({theme})=> theme.color.default};
-        font-weight: 700;
-        margin-bottom: .5rem;
-      }
-
-      .c-activity-create__cover{
-        position: relative;
-
-        &::before{
-          content:"";
-          position: absolute;
-          top:0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(255,255,255, 0.5);
-          z-index: 3;
-        }
-
-        .o-activity-create__cover-image{
-          position: relative;
-          width: 100%;
-          aspect-ratio: 16 /9;
-          object-fit: cover;
-        }
-        
-        .l-activity-create__cover-control{
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          display: flex;
-          gap: 2.5rem;
-          transform: translate(-50%,-50%);
-          z-index: 5;
-
-        
-          .o-activity-create__cover-upload,
-          .o-activity-create__cover-delete{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            background-color: white;
-            cursor: pointer;
-
-            svg{
-              width: 1.25rem;
-              height: 1.25rem;
-              fill: ${({theme})=> theme.color.default}
-            }
-          }
-        }
-      }
-
-      .c-activity-create__introduction{
-        textarea{
-          height: 5rem;
-        }
-      }
 
       .c-activity-create__time{
         h3{

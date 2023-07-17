@@ -29,18 +29,9 @@ const HikingTable = ({className,inputUsed}) => {
               </td>
             </tr>
             <tr>
-                <td className="c-table-key o-activity-key">步道難度</td>
+                <td className="c-table-key o-activity-key">路徑長度</td>
                 <td className="c-table-content o-activity-content">
-                  {inputUsed?
-                    <select>
-                      <option>一星：入門</option>
-                      <option>二星：中等</option>
-                      <option>三星：進階</option>
-                      <option>四星：專家</option>
-                      <option>五星：大師</option>
-                    </select>
-                    :"★★☆☆☆"
-                  }
+                  11公里
                 </td>
                 <td className="c-table-key o-activity-key">步道走法</td>
                 <td className="c-table-content o-activity-content">
@@ -54,15 +45,9 @@ const HikingTable = ({className,inputUsed}) => {
                 </td>
             </tr>
             <tr>
-                <td className="c-table-key o-activity-key">路徑長度</td>
+                <td className="c-table-key o-activity-key">海拔高度</td>
                 <td className="c-table-content o-activity-content">
-                  {inputUsed?
-                    <div className="c-number-input__with-unit">
-                      <input type="number"/>
-                      <label>公里</label>
-                    </div>
-                    :"11公里"
-                  }
+                  2000-2500m
                 </td>
                 <td className="c-table-key o-activity-key">高度落差</td>
                 <td className="c-table-content o-activity-content">
@@ -104,8 +89,7 @@ const HikingTable = ({className,inputUsed}) => {
             <tr>
                 <td className="c-table-key o-activity-key">入園申請</td>
                 <td className="c-table-content o-activity-content">
-                  <input type="radio"/><label>是</label>
-                  <input type="radio"/><label>否</label>
+                  否
                 </td>
                 <td className="c-table-key o-activity-key">所屬園區</td>
                 <td className="c-table-content o-activity-content">玉山國家公園</td>
@@ -141,16 +125,16 @@ const HikingTable = ({className,inputUsed}) => {
               <td className="c-table-content o-activity-content">中級山步道</td>
             </tr>
             <tr>
-                <td className="c-table-key o-activity-key">步道難度</td>
-                <td className="c-table-content o-activity-content">★★☆☆☆</td>
+                <td className="c-table-key o-activity-key">路徑長度</td>
+                <td className="c-table-content o-activity-content">11公里</td>
             </tr>
             <tr>
                 <td className="c-table-key o-activity-key">步道走法</td>
                 <td className="c-table-content o-activity-content">環狀</td>
             </tr>
             <tr>
-                <td className="c-table-key o-activity-key">路徑長度</td>
-                <td className="c-table-content o-activity-content">11公里</td>
+                <td className="c-table-key o-activity-key">海拔高度</td>
+                <td className="c-table-content o-activity-content">2053-2500m</td>
             </tr>
             <tr>
                 <td className="c-table-key o-activity-key">高度落差</td>

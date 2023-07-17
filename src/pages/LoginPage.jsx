@@ -4,7 +4,7 @@ import { toast } from "react-toastify"
 import { login } from "api/auth"
 import { useNavigate } from "react-router-dom"
 
-import StyledTextInput from "components/StyledTextInput"
+import StyledTextInput from "components/inputs/StyledTextInput"
 import StyledButton from "components/StyledButton"
 import StyledTextLink from "components/StyledTextLink"
 

@@ -54,7 +54,6 @@ input{
   border: 1px solid #3F6F41;
   border-radius: .5rem;
   font-size: 1rem;
-  color:#3F6F41;
   padding: .2rem .75rem;
 
   &:hover, &:focus {
@@ -100,10 +99,23 @@ select{
   padding: .2rem .75rem;
 }
 
-.input-title{
+.c-input-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #3F6F41;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+
+  label {
     color: #3F6F41;
     font-weight: 700;
-    margin-bottom: .5rem;
+  }
+
+  .o-input-title__warning {
+    color: #D0342C;
+  font-weight: 400;
+  }
 }
 
 .ReactModal__Overlay {

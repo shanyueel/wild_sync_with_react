@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import StyledTextInput from "components/StyledTextInput"
+import StyledTextInput from "components/inputs/StyledTextInput"
 import StyledButton from "components/StyledButton"
 import StyledTextLink from "components/StyledTextLink"
 

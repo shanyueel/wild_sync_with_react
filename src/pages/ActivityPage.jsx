@@ -12,9 +12,7 @@ import StyledActivityHistory from "components/StyledActivityHistory"
 
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
-import {ReactComponent as ClockIcon} from "assets/icons/ClockIcon.svg"
-import {ReactComponent as FlameIcon} from "assets/icons/FlameIcon.svg"
-import {ReactComponent as ParticipationIcon} from "assets/icons/ParticipationIcon.svg"
+import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as ChatIcon} from "assets/icons/ChatIcon.svg"
 import { Outlet } from "react-router-dom"
 
@@ -70,20 +68,10 @@ const ActivityPage = ({ className }) => {
               <LocationIcon /><h3>南投縣信義鄉</h3>
             </div>
             <div className="l-activity-time">
-              <ClockIcon /><h3>2023.07.01 08:00 - 2023.07.02 18:00</h3>
+              <CalendarIcon /><h3>2023.07.01 08:00 - 2023.07.02 18:00</h3>
             </div>
 
             <p className="o-activity-introduction">快來參加我們的登山活動！一起征服麟趾山和鹿林山的壯麗峰巒吧！無論你是新手還是經驗豐富的登山者，都歡迎加入我們的隊伍。盡情享受大自然的美景，與同好們一同挑戰極限！</p>
-
-
-            <div className="l-activity-stats">
-              <div className="o-activity-stats__popularity">
-                <FlameIcon className="o-activity-stats__icon"/><h4 className="o-activity-stats__detail">瀏覽次數： 53次</h4>
-              </div>
-              <div className="o-activity-stats__participation">
-                <ParticipationIcon className="o-activity-stats__icon"/><h4 className="o-activity-stats__detail">報名人數： 12人</h4>
-              </div>
-            </div>
 
             <div className="l-activity-application">
               <StyledButton outlined={!attendance} disabled={expired} onClick={handleAttendClick} >{ btnContent }</StyledButton>
@@ -196,34 +184,12 @@ const StyledActivityPage = styled(ActivityPage)`
       line-height: 1.25rem;
       color: ${({theme})=> theme.color.black};
     }
-
-    .l-activity-stats{
-      display: flex;
-      gap: 1.25rem;
-      margin: .75rem 0 ;
-
-      .o-activity-stats__popularity, .o-activity-stats__participation{
-        display: flex;
-
-        svg{
-          height: 1.125rem;
-          width: 1.125rem;
-          margin-right: .375rem;
-          fill: ${({theme})=>theme.color.default};
-        }
-
-        .o-activity-stats__detail{
-          font-size: 0.875rem;
-          color: ${({theme})=>theme.color.default};
-        }
-      }
-    }
     
     .l-activity-application{
       display: flex;
       flex-direction: column;
       justify-content: center;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
 
       .o-activity-deadline{
         margin-top: .75rem;

@@ -16,6 +16,33 @@ import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as ChatIcon} from "assets/icons/ChatIcon.svg"
 import { Outlet } from "react-router-dom"
 
+const activity = {
+  name: "麟趾-鹿林山健行",
+  type: "hiking",
+  location: "南投縣信義鄉",
+  time: ["2023-07-22T08:00","2023-07-22T13:00"],
+  deadline: "2023-07-22T08:00",
+}
+
+const detail = {
+  departurePoint: "上東埔登山口",
+  trackType: "backtrack",
+  trackLength: "11",
+  altitude: [1000, 1500],
+  trackCondition: "柏油路、原始山徑、石階、木棧道",
+  belongingPark: "玉山國家公園",
+  applicationNeeded: "unNeeded",
+  trackIntroduction: "信義路五段150巷22弄→(0.05K,2分鐘)→靈雲宮→(0.5K,35分鐘)→六巨石→(0.1K, 8分鐘)→逸賢亭(象山頂)→(0.25K, 10分鐘)→打印台→(0.6K, 35分鐘)→永春崗公園",
+  trackImage: "https://farm4.static.flickr.com/3616/3368789043_3f745faa30_b.jpg"
+}
+
+const residenceAndTransportation = {
+  outbound:"1.國道三號名間交流道→台16→水里→台21→信義→和社→塔塔加遊客中心→台18線108.7K上東埔停車場。2.國道三號中埔交流道→台18→阿里山→台18線108.7K上東埔停車場。",
+  inbound:"1.嘉義出發：嘉義市搭乘嘉義縣公車至阿里山後，再雇車至塔塔加遊憩區，或於阿里山森林遊樂區內搭乘員林客運「6739日月潭─阿里山線」，於塔塔加遊憩區「上東埔」站下車，步行即達登山口。2.南投出發：搭乘員林客運「6739日月潭─阿里山線」，於「塔塔加遊客中心」下車，改由塔塔加遊客中心旁步道進入。或於「上東埔」站下車，步行即達登山口。"
+}
+
+
+
 const ActivityPage = ({ className }) => {
   const [attendance, setAttendance] = useState(true)
   const expired = false
@@ -23,7 +50,9 @@ const ActivityPage = ({ className }) => {
   const [ActiveTable, setActiveTable] = useState("detail")
   const environmentParams = useSelector((state) => state.environment)
   const isMediumLayout = environmentParams.windowSize === "medium" || environmentParams.windowSize === "large"
-  useEffect(()=>{
+  
+
+  useEffect(() => {
     if((expired && attendance) || (!expired && attendance)){
       setBtnContent("報名成功")
     }else if(expired && !attendance){
@@ -31,7 +60,9 @@ const ActivityPage = ({ className }) => {
     }else {
       setBtnContent("報名")
     }
+    //更新活動資訊
   },[expired,attendance])
+
 
 
   const handleReturn = () => {
@@ -63,9 +94,9 @@ const ActivityPage = ({ className }) => {
           </div>
           <div className="l-activity-body">
             <img className="o-activity-cover" src="https://www.ysnp.gov.tw/UploadPlugin?file=i%2BifzMiqxoOGxT%2FVr25SKzsDjCs7OItEOJlnGmQ4RxicJgsIU04Z4eAK80tRn%2FwR6XmMRuJgAVD2G9JaZXVLDA%3D%3D" alt="activity-cover" />
-            <h2 className="o-activity-title">麟趾-鹿林山健行</h2>
+            <h2 className="o-activity-title">{activity.name} <span className="o-activity-title__update-time">( 最後更新於: 2023/07/18 23:00 )</span> </h2>
             <div className="l-activity-location">
-              <LocationIcon /><h3>南投縣信義鄉</h3>
+              <LocationIcon /><h3>{activity.location}</h3>
             </div>
             <div className="l-activity-time">
               <CalendarIcon /><h3>2023.07.01 08:00 - 2023.07.02 18:00</h3>
@@ -83,7 +114,7 @@ const ActivityPage = ({ className }) => {
             <div className="l-activity-tables">
               <div className="c-activity-tables__navbar" onClick={handleTableNavbarClick} >
                 <label htmlFor="activity-detail" className="c-activity-tables__nav-item">
-                  <input name="activity-tables__navbar" id="activity-detail" type="radio" defaultChecked/>路徑資訊
+                  <input name="activity-tables__navbar" id="activity-detail" type="radio" defaultChecked/>活動細節
                 </label>
                 <label htmlFor="activity-residence-and-transportation" className="c-activity-tables__nav-item">
                   <input name="activity-tables__navbar" id="activity-residence-and-transportation" type="radio"/>交通 / 住宿
@@ -93,8 +124,8 @@ const ActivityPage = ({ className }) => {
                 </label>
               </div>
               <div className="l-activity-tables__container">
-                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" isMediumLayout={isMediumLayout}/>}
-                {ActiveTable === "residence-transportation" && <StyledResidenceAndTransportationTable className="o-activity-residence-and-transportation-table" isMediumLayout={isMediumLayout}/>}
+                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" formContent={detail}/>}
+                {ActiveTable === "residence-transportation" && <StyledResidenceAndTransportationTable className="o-activity-residence-and-transportation-table" formContent={residenceAndTransportation}/>}
                 {ActiveTable === "others" && <StyledOthersTable isMediumLayout={isMediumLayout}/>}
               </div> 
             </div>
@@ -151,6 +182,12 @@ const StyledActivityPage = styled(ActivityPage)`
       margin: .5rem 0 1rem;
       color: ${({theme})=>theme.color.default};
       font-weight: 700;
+
+      .o-activity-title__update-time{
+        color: ${({theme})=>theme.color.grey};
+        font-weight: 400;
+        font-size: .75rem;
+      }
     }
     
     .l-activity-time, .l-activity-location, .o-activity-deadline{

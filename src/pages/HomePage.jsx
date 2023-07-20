@@ -3,7 +3,7 @@ import styled from "styled-components"
 import StyledImageSlider from "components/StyledImageSlider"
 import StyledVerticalActivityCard from "components/StyledVerticalActivityCard"
 import StyledHorizontalActivityCard from "components/StyledHorizontalActivityCard"
-import StyledPeriodSelector from "components/StyledPeriodSelector"
+import StyledCalendarSelector from "components/inputs/StyledCalendarSelector"
 import StyledButton from "components/StyledButton"
 import StyledPagination from "components/StyledPagination"
 import { Link } from "react-router-dom"
@@ -247,7 +247,7 @@ const HomePage = ({className}) => {
 
                 <div className="c-activities-filters__date">
                   <h3 className="o-activities-filters__title">活動日期</h3>
-                  <StyledPeriodSelector />
+                  <StyledCalendarSelector />
                 </div>
 
                 <div className="c-activities-filters__length">

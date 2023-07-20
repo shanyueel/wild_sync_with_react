@@ -72,10 +72,11 @@ const difficultyOptions = [
   }
 ]
 
-
 const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivityCreateModalOpen}) => {
   const stepsRef = useRef(null)
   const [ActivityContent, setActivityContent] = useState({})
+  const [detailContent, setDetailContent] = useState({})
+  const [residenceAndTransportationContent, setResidenceAndTransportationContent] = useState({})
   const [formProgress, setFormProgress] = useState(1);
 
   const closeModal = () => {
@@ -89,7 +90,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
   const onNextPageClick = () => {
     setFormProgress(formProgress + 1)
-    console.log(ActivityContent)
+    console.log(ActivityContent, detailContent, residenceAndTransportationContent)
   }
   
   useEffect(()=>{
@@ -248,11 +249,19 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
           }
 
           {formProgress === 3 &&
-            <StyledHikingTable inputUsed/>
+            <StyledHikingTable 
+              inputUsed 
+              formContent={detailContent} 
+              onFormChange={setDetailContent}
+            />
           }
 
           {formProgress === 4 &&
-            <StyledResidenceAndTransportationTable inputUsed/>
+            <StyledResidenceAndTransportationTable 
+              inputUsed 
+              formContent={residenceAndTransportationContent} 
+              onFormChange={setResidenceAndTransportationContent}
+            />
           }
 
           {formProgress === 5 &&
@@ -275,7 +284,7 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
   position: relative;
   width: 90vw;
   height: 100vh;
-  max-width: 1024px;
+  max-width: 896px;
   max-height: calc(100vh - 6rem);
   margin: 5rem auto 0;
   border-radius: .5rem;
@@ -407,6 +416,10 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
       margin-top: 1rem;
       border-top: 1px solid ${({theme})=> theme.backgroundColor.secondary};
     }
+  }
+
+  @media screen and (min-width: 768px) {
+    width: 80vw;
   }
 `
 

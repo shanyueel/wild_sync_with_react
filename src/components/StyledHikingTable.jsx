@@ -1,179 +1,181 @@
-import { useSelector } from "react-redux"
 import styled from "styled-components"
+import StyledTextInput from "./inputs/StyledTextInput"
+import StyledRadioInput from "./inputs/StyledRadioInput"
+import StyledRangeInput from "./inputs/StyledRangeInput"
+import StyledTextArea from "./inputs/StyledTextArea"
+import StyledImageInput from "./inputs/StyledImageInput"
 
-const HikingTable = ({className,inputUsed}) => {
-    const environmentParams = useSelector((state) => state.environment)
-    const isMediumLayout = environmentParams.windowSize === "medium" || environmentParams.windowSize === "large"
-    
+const HikingTable = ({className, inputUsed, formContent, onFormChange}) => {
+  const trackTypeOptions = [
+    { 
+      name: "trackType",
+      label: "環狀路線",
+      id: "round"
+    },
+    { 
+      name: "trackType",
+      label: "原路折返",
+      id: "backtrack"
+    },
+    { 
+      name: "trackType",
+      label: "甲進乙出",
+      id: "one-way"
+    },
+  ]
+
+  const applicationNeededOptions = [
+    { 
+      name: "applicationNeeded",
+      label: "需要",
+      id: "needed"
+    },
+    { 
+      name: "applicationNeeded",
+      label: "不需要",
+      id: "unNeeded"
+    }
+  ]
+
   return(
     <>
-      {isMediumLayout ? 
         <table className={className}>
           <tbody>
             <tr>
               <td className="c-table-key o-activity-key">出發地點</td>
               <td className="c-table-content o-activity-content">
-                {inputUsed? 
-                  <input type="text" id="create-activity-departure" placeholder="請輸入出發地點"/> 
-                  : "上東埔停車場"}
-              </td>
-              <td className="c-table-key o-activity-key">步道類型</td>
-              <td className="c-table-content o-activity-content">
-                {inputUsed? 
-                <select>
-                  <option>郊山步道</option>
-                  <option>中級山步道</option>
-                  <option>高山步道</option>
-                </select>
-                :"中級山步道"}
-              </td>
-            </tr>
-            <tr>
-                <td className="c-table-key o-activity-key">路徑長度</td>
-                <td className="c-table-content o-activity-content">
-                  11公里
-                </td>
-                <td className="c-table-key o-activity-key">步道走法</td>
-                <td className="c-table-content o-activity-content">
-                  {inputUsed?
-                    <select>
-                      <option>環狀路線</option>
-                      <option>原路折返</option>
-                      <option>雙向進出</option>
-                    </select>
-                    :"環狀路線"}
-                </td>
-            </tr>
-            <tr>
-                <td className="c-table-key o-activity-key">海拔高度</td>
-                <td className="c-table-content o-activity-content">
-                  2000-2500m
-                </td>
-                <td className="c-table-key o-activity-key">高度落差</td>
-                <td className="c-table-content o-activity-content">
-                  {inputUsed?
-                    <div className="c-number-input__with-unit">
-                      <input type="number"/>
-                      <label>公尺</label>
-                    </div>
-                    :"283公尺"
-                  }
-                </td>
-            </tr>
-            <tr>
-                <td className="c-table-key o-activity-key">所需時間</td>
-                <td className="c-table-content o-activity-content">
-                  {inputUsed?
-                    <div className="c-time-length-input">
-                      <div className="c-number-input__with-unit">
-                        <input type="number"/>
-                        <label>小時</label>
-                      </div>
-                      <div className="c-number-input__with-unit">
-                        <input type="number"/>
-                        <label>分鐘</label>
-                      </div>
-                    </div>
-                    :"5小時30分鐘"
-                  }
-                
-                </td>
-              <td className="c-table-key o-activity-key">路面狀況</td>
-              <td className="c-table-content o-activity-content">
                 {inputUsed?
-                  <input placeholder="柏油路、原始山徑、石階、木棧道"/>
-                  :"柏油路、原始山徑、石階、木棧道"
+                 <StyledTextInput
+                  placeholder="出發地點" 
+                  inputId="departurePoint" 
+                  formContent={formContent} 
+                  onFormChange={onFormChange}
+                 />
+                 :formContent?.departurePoint
                 }
               </td>
             </tr>
             <tr>
-                <td className="c-table-key o-activity-key">入園申請</td>
-                <td className="c-table-content o-activity-content">
-                  否
-                </td>
-                <td className="c-table-key o-activity-key">所屬園區</td>
-                <td className="c-table-content o-activity-content">玉山國家公園</td>
+              <td className="c-table-key o-activity-key">步道類型</td>
+              <td className="c-table-content o-activity-content">
+                {inputUsed &&
+                 <StyledRadioInput
+                  radioOptions={trackTypeOptions}
+                  formContent={formContent} 
+                  onFormChange={onFormChange}
+                 />
+                }
+                {(!inputUsed && formContent?.trackType === "round") && "環狀路線"}
+                {(!inputUsed && formContent?.trackType === "backtrack") && "原路折返"}
+                {(!inputUsed && formContent?.trackType === "one-way") && "雙向進出"}
+              </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key" colSpan={1}>路線資訊</td>
-              <td className="c-table-content o-activity-content" colSpan={3}>
+              <td className="c-table-key o-activity-key">路徑長度</td>
+              <td className="c-table-content o-activity-content">
                 {inputUsed?
-                  <textarea />
-                  :"信義路五段150巷22弄→(0.05K,2分鐘)→靈雲宮→(0.5K,35分鐘)→六巨石→(0.1K, 8分鐘)→逸賢亭(象山頂)→(0.25K, 10分鐘)→打印台→(0.6K, 35分鐘)→永春崗公園"
+                 <StyledTextInput
+                  numberUsed
+                  placeholder="路徑長度" 
+                  inputId="trackLength"
+                  unit="公里" 
+                  formContent={formContent} 
+                  onFormChange={onFormChange}
+                 />
+                 :`${formContent?.trackLength} 公里`
                 }
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key" colSpan={4}>路徑地圖</td>
-            </tr>
-            <tr>
-              <td className="c-table-content o-activity-content" colSpan={4}>
-                <img className="o-activity-table__image" src="https://farm4.static.flickr.com/3616/3368789043_3f745faa30_b.jpg" alt="hiking map"/>
+              <td className="c-table-key o-activity-key">海拔高度</td>
+              <td className="c-table-content o-activity-content">
+                {inputUsed?
+                 <StyledRangeInput
+                  minPlaceholder="最低海拔" 
+                  maxPlaceholder="最高海拔" 
+                  unit="m" 
+                  inputName="altitude"
+                  minInputId="minAltitude" 
+                  maxInputId="maxAltitude"
+                  formContent={formContent} 
+                  onFormChange={onFormChange}
+                 />
+                 :`${formContent?.altitude[0]} - ${formContent?.altitude[1]} m`
+                }
               </td>
-            </tr>        
-          </tbody>
-        </table>
-        :
-        <table className={className}>
-          <tbody>
-            <tr>
-                <td className="c-table-key o-activity-key">出發地點</td>
-                <td className="c-table-content o-activity-content">{inputUsed? <input type="text" id="create-activity-departure" placeholder="請輸入出發地點"/>: "上東埔停車場"}</td>
-            </tr>
-            <tr>
-              <td className="c-table-key o-activity-key">步道類型</td>
-              <td className="c-table-content o-activity-content">中級山步道</td>
-            </tr>
-            <tr>
-                <td className="c-table-key o-activity-key">路徑長度</td>
-                <td className="c-table-content o-activity-content">11公里</td>
-            </tr>
-            <tr>
-                <td className="c-table-key o-activity-key">步道走法</td>
-                <td className="c-table-content o-activity-content">環狀</td>
-            </tr>
-            <tr>
-                <td className="c-table-key o-activity-key">海拔高度</td>
-                <td className="c-table-content o-activity-content">2053-2500m</td>
-            </tr>
-            <tr>
-                <td className="c-table-key o-activity-key">高度落差</td>
-                <td className="c-table-content o-activity-content">283公尺</td>
-            </tr>
-            
-            <tr>
-                <td className="c-table-key o-activity-key">所需時間</td>
-                <td className="c-table-content o-activity-content">5小時30分鐘</td>
             </tr>
             <tr>
               <td className="c-table-key o-activity-key">路面狀況</td>
-              <td className="c-table-content o-activity-content">柏油路、原始山徑、石階、木棧道</td>
+              <td className="c-table-content o-activity-content">
+                {inputUsed?
+                 <StyledTextInput
+                  placeholder="路徑狀況" 
+                  inputId="trackCondition"
+                  formContent={formContent} 
+                  onFormChange={onFormChange}
+                 />
+                 :formContent?.trackCondition
+                }
+              </td>
             </tr>
             <tr>
-                <td className="c-table-key o-activity-key">所屬園區</td>
-                <td className="c-table-content o-activity-content">玉山國家公園</td>
+              <td className="c-table-key o-activity-key">所屬園區</td>
+              <td className="c-table-content o-activity-content">
+                {inputUsed?
+                 <StyledTextInput
+                  placeholder="所屬園區( 若沒有，可填無 )"
+                  inputId="belongingPark"
+                  formContent={formContent} 
+                  onFormChange={onFormChange}
+                 />
+                 :formContent?.belongingPark
+                }
+              </td>
             </tr>
             <tr>
-                <td className="c-table-key o-activity-key">入園申請</td>
-                <td className="c-table-content o-activity-content">否</td>
+              <td className="c-table-key o-activity-key">入園申請</td>
+              <td className="c-table-content o-activity-content">
+                {inputUsed &&
+                 <StyledRadioInput
+                  radioOptions={applicationNeededOptions}
+                  formContent={formContent} 
+                  onFormChange={onFormChange}
+                 />
+                }
+                {(!inputUsed && formContent?.applicationNeeded === "needed") && "需要"}
+                {(!inputUsed && formContent?.applicationNeeded === "unNeeded") && "不需要"}
+              </td>
             </tr>
             <tr>
               <td className="c-table-key o-activity-key" colSpan={2}>路線資訊</td>
             </tr>
             <tr>
-              <td className="c-table-content o-activity-content" colSpan={2}>信義路五段150巷22弄→(0.05K,2分鐘)→靈雲宮→(0.5K,35分鐘)→六巨石→(0.1K, 8分鐘)→逸賢亭(象山頂)→(0.25K, 10分鐘)→打印台→(0.6K, 35分鐘)→永春崗公園</td>
+              <td className="c-table-content o-activity-content" colSpan={2}>
+                {inputUsed?
+                  <StyledTextArea
+                    placeholder="請輸入路線資訊" 
+                    inputId="trackIntroduction" 
+                    formContent={formContent}
+                    onFormChange={onFormChange}
+                  />
+                  :formContent?.trackIntroduction
+                }
+              </td>
             </tr>
             <tr>
               <td className="c-table-key o-activity-key" colSpan={2}>路徑地圖</td>
             </tr>
             <tr>
               <td className="c-table-content o-activity-content" colSpan={2}>
-                <img className="o-activity-table__image" src="https://farm4.static.flickr.com/3616/3368789043_3f745faa30_b.jpg" alt="hiking map"/>
+                {inputUsed?
+                  <StyledImageInput/>
+                  :<img className="o-activity-table__image" src={formContent.trackImage} alt="hiking map"/>
+                }
+                
               </td>
             </tr>        
           </tbody>
         </table>
-      }
     </>
   )
 }
@@ -189,10 +191,6 @@ const StyledHikingTable = styled(HikingTable)`
     .o-activity-key{
       width: 12rem;
       white-space: nowrap;
-    }
-    
-    .c-table-content{
-      width: calc(50vw - 12rem);
     }
   }
 `

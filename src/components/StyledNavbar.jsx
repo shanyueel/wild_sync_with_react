@@ -21,7 +21,6 @@ const Navbar = ({ className }) => {
   const navigate = useNavigate()
 
   const navIconsRef = useRef([])
-  // const dropdownSwitchRef = useRef(null)
 
   const [isActivityCreateModalOpen, setIsActivityCreateModalOpen] = useState(false)
   const user = useSelector((state)=> state.user)
@@ -106,17 +105,14 @@ const Navbar = ({ className }) => {
               <h2 className="o-navbar__user-name">{user.displayName}</h2>
               
               <ul className="l-navbar__user-dropdown-body">
-                {
-                  user.loggedIn?
+                {user.loggedIn?
                   <>
                     <li className="c-navbar__create-account" onClick={handleCreateClick}><PlusIcon/>建立活動</li>
                     <li className="c-navbar__logout" onClick={handleLogout}><LogoutIcon/>帳戶登出</li>
                   </>
-                  :<li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>
-                }
-
-                  
+                  :<li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>}
               </ul>
+              
               <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
             </div>
           </div>

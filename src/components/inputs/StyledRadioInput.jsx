@@ -34,6 +34,7 @@ const StyledRadioInput = styled(RadioInput)`
   .l-radio-options{
     display: flex;
     justify-content: space-between;
+    width: 100%;
     margin-top: .5rem;
 
     .c-radio-option{
@@ -41,8 +42,16 @@ const StyledRadioInput = styled(RadioInput)`
       align-items: center;
 
       label{
+        white-space: nowrap;
         margin-left: .25rem;
       }
+    }
+  }
+
+  @media screen and (min-width: 480px) {
+    .l-radio-options{
+      justify-content: flex-start;
+      gap: 1.5rem;
     }
   }
 

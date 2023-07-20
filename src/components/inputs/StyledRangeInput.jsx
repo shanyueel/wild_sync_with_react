@@ -1,12 +1,24 @@
+import { useState } from "react"
 import styled, { css } from "styled-components"
 
 const RangeInput = ({ className, title, minPlaceholder, maxPlaceholder, unit, inputName, minInputId, maxInputId, formContent, onFormChange, warning }) => {
+  const [range, setRange] = useState(formContent[inputName] || [undefined,undefined])
 
-  const handleTextInput = (e) => {
 
+  const handleRangeInput = (e) => {
+    let newRange;
+
+    if(e.target.id === minInputId){
+      newRange = [e.target.value, range[1]]
+    }else if(e.target.id === maxInputId){
+      newRange = [range[0], e.target.value]
+    }
+
+    setRange(newRange)
+    
     onFormChange({
       ...formContent,
-      [e.target.id]: e.target.value
+      [inputName]: newRange
     })
 
   }
@@ -19,13 +31,27 @@ const RangeInput = ({ className, title, minPlaceholder, maxPlaceholder, unit, in
       </div>
       <div className="c-input-body">
         <div className="c-input-body__min-value">
-          <input type="number" id={minInputId} name={inputName} placeholder={minPlaceholder} onChange={handleTextInput} />
-          <span className="o-input-body__unit">{unit}</span>
+          <input type="number" 
+            id={minInputId} 
+            name={inputName} 
+            placeholder={minPlaceholder} 
+            onChange={handleRangeInput} 
+            value={range[0] || ""} 
+          />
         </div>
         <div className="o-input-body__connect-line">-</div>
         <div className="c-input-body__max-value">
-          <input type="number" id={maxInputId} name={inputName} placeholder={maxPlaceholder} onChange={handleTextInput} />
-          <span className="o-input-body__unit">{unit}</span>
+          <input 
+            type="number" 
+            id={maxInputId} 
+            name={inputName} 
+            placeholder={maxPlaceholder} 
+            onChange={handleRangeInput} 
+            value={range[1] || ""}
+          />
+        </div>
+        <div className="o-input-body__unit">
+          {unit}
         </div>
 
       </div>
@@ -34,6 +60,8 @@ const RangeInput = ({ className, title, minPlaceholder, maxPlaceholder, unit, in
 }
 
 const StyledRangeInput = styled(RangeInput)`
+  width: 100%;
+
   .c-input-body{
     display: flex;
     align-items: center;
@@ -45,15 +73,19 @@ const StyledRangeInput = styled(RangeInput)`
       align-items: center;
       gap:.5rem;
 
-      .o-input-body__unit{
-        display: none;
-
-        ${props=> props.unit && css`
-          display: block;
-          color: ${({theme})=>theme.color.default};
-          font-weight: 700;
-        `}
+      input{
+        max-width: 12.5rem;
       }
+    }
+
+    .o-input-body__unit{
+      display: none;
+
+      ${props=> props.unit && css`
+        display: block;
+        color: ${({theme})=>theme.color.default};
+        font-weight: 700;
+      `}
     }
 
 

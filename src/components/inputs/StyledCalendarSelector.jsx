@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Calendar from "react-calendar";
 import { useState } from "react";
 
 
@@ -22,14 +21,7 @@ const PeriodSelector = ({className}) => {
   
   return(
     <div className={className}>
-      <Calendar
-        className="o-calendar" 
-        returnValue="range"
-        selectRange={true}
-        tileClassName="o-calender__tile"
-        hover={new Date(2017, 0, 1)}
-        onChange={handleCalendarChange}
-      />
+      Calendar
     </div>
   )
 }

@@ -33,30 +33,30 @@ Modal.setAppElement('#root');
 function App() {
 
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<BasicLayout />}>
-            <Route index element={<HomePage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
-            <Route path="activity">
-              <Route path=":id" element={<ActivityPage />} >
-                <Route index element={<ActivityPageDiscussionListArea />} />
-                <Route path='chatroom/:id' element={<ActivityPageDiscussionArea />}/>
-              </Route>
-              <Route path="search" element={<SearchActivityPage />} />
-            </Route>
-            <Route path="user/:id" element={<UserPage />} />
-            <Route path="guide"/>
-            <Route path="rules"/>
-            <Route path="faq"/>
-            <Route path="contact"/>
-            <Route path="about"/>
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<BasicLayout />}>
+                  <Route index element={<HomePage />} />
+                  <Route path="login" element={<LoginPage />} />
+                  <Route path="register" element={<RegisterPage />} />
+                  <Route path="activity">
+                    <Route path=":id" element={<ActivityPage />} >
+                      <Route index element={<ActivityPageDiscussionListArea />} />
+                      <Route path='chatroom/:id' element={<ActivityPageDiscussionArea />}/>
+                    </Route>
+                    <Route path="search" element={<SearchActivityPage />} />
+                  </Route>
+                  <Route path="user/:id" element={<UserPage />} />
+                  <Route path="guide"/>
+                  <Route path="rules"/>
+                  <Route path="faq"/>
+                  <Route path="contact"/>
+                  <Route path="about"/>
+                </Route>
+              </Routes>
+            </BrowserRouter>
+      </ThemeProvider>
   );
 }
 

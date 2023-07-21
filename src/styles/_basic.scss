@@ -100,6 +100,36 @@ select{
   padding: .2rem .75rem;
 }
 
+  .c-input-body__date-picker {
+    background-color: white;
+    border-radius: .5rem;
+
+    input {
+      height: 1rem;
+      font-size: 1rem;
+      color: #7B7B7B;
+      background-color: white;
+      padding: .6rem 1rem;
+      border-radius: .5rem;
+      max-width: 10rem;
+
+      &:hover,
+      &:focus {
+        border: none;
+      }
+    }
+
+    button svg{
+      fill: #3F6F41;
+    }
+
+    fieldset {
+      border: 1px solid #3F6F41;
+      border-radius: .5rem;
+    }
+
+  }
+
 .c-input-title {
   display: flex;
   justify-content: space-between;

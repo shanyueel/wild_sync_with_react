@@ -1,20 +1,26 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
-const PeriodInput = ({className, title, inputName, minInputId, maxInputId, formContent, onFormChange, warning }) => {
-  const [period, setPeriod] = useState(formContent[inputName] || [undefined,undefined])
+const PeriodInput = ({className, title, inputName, formContent, onFormChange, warning }) => {
+  const [period,setPeriod] = useState(formContent[inputName]||[null,null])
 
-  const handleTextInput = (e) => {
-    let newPeriod;
-
-    if(e.target.id === minInputId){
-      newPeriod = [ e.target.value, period[1] ]
-    }else if(e.target.id === maxInputId){
-      newPeriod = [ period[0], e.target.value ]
-    }
+  const handleStartInput = (newDate) => {
+    const newPeriod = [newDate, period[1]]
 
     setPeriod(newPeriod)
+    
+    onFormChange({
+      ...formContent,
+      [inputName]: newPeriod
+    })
+  }
 
+  const handleEndInput = (newDate) => {
+    const newPeriod = [period[0], newDate]
+
+    setPeriod(newPeriod)
+    
     onFormChange({
       ...formContent,
       [inputName]: newPeriod
@@ -28,9 +34,20 @@ const PeriodInput = ({className, title, inputName, minInputId, maxInputId, formC
         <label className="o-input-title__warning">{warning}</label>
       </div>
       <div className="c-input-body">
-        <input type="datetime-local" id={minInputId} name={inputName} onChange={handleTextInput} value={ period[0] || "" }/>
-        <div className="">-</div>
-        <input type="datetime-local" id={maxInputId} name={inputName} onChange={handleTextInput} value={ period[1] || "" }/>
+        <DateTimePicker
+          className="c-input-body__date-picker"
+          disablePast
+          value={period[0]} 
+          onChange={handleStartInput}
+        />
+        <div className="o-input-body__connect-line">-</div>
+        
+        <DateTimePicker 
+          className="c-input-body__date-picker" 
+          disablePast
+          value={period[1]} 
+          onChange={handleEndInput}
+        />
       </div>
     </div>
   )
@@ -47,10 +64,6 @@ const StyledPeriodInput = styled(PeriodInput)`
   @media screen and (min-width: 480px) {
     .c-input-body{
       justify-content: start;
-
-      input{
-        max-width: 12.5rem;
-      }
     }
   }
 `

@@ -52,13 +52,13 @@ const ResidenceAndTransportationTable = ({className, inputUsed, formContent, onF
           <tr>
               <td className="o-activity-table__key">住宿日期</td>
               <td className="o-activity-table__content">
-                {/* {inputUsed?
+                {inputUsed?
                   <StyledDateTimeInput 
                     inputId="date" 
                     formContent={residence} onFormChange
-
                   />
-                } */}
+                  :formContent?.date
+                }
               </td>
           </tr>
           <tr>

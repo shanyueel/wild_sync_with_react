@@ -186,8 +186,6 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
               <StyledPeriodInput 
                 title="活動期間" 
                 inputName="time" 
-                minInputId="start"
-                maxInputId="end" 
                 formContent={ActivityContent} 
                 onFormChange={setActivityContent}
               />

@@ -1,14 +1,17 @@
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { useState } from "react";
 import styled from "styled-components";
 
 const DateTimeInput = ({className, title, inputId, formContent, onFormChange, warning }) => {
-
-  const handleTextInput = (e) => {
+  const [date, setDate] = useState(formContent[inputId] || null)
+  
+  const handleDateInput = (newDate) => {
+    setDate(newDate)
 
     onFormChange({
       ...formContent,
-      [e.target.id]: e.target.value
+      [inputId]: newDate,
     })
-
   }
 
   return(
@@ -18,7 +21,13 @@ const DateTimeInput = ({className, title, inputId, formContent, onFormChange, wa
         <label className="o-input-title__warning">{warning}</label>
       </div>
       <div className="c-input-body">
-        <input type="datetime-local" id={inputId} onChange={handleTextInput} value={ formContent[inputId] || "" } />
+        {/* <input type="datetime-local" id={inputId} onChange={handleTextInput} value={ formContent[inputId] || "" } /> */}
+        <DateTimePicker
+          className="c-input-body__date-picker"
+          disablePast
+          value={date} 
+          onChange={handleDateInput}
+        />
       </div>
     </div>
   )

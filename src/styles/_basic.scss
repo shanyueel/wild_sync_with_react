@@ -38,6 +38,8 @@ h5{
   font-weight: 400;
 }
 
+/* ------ table ------*/
+
 table{
   width: 100%;
 }
@@ -48,6 +50,28 @@ td{
   border: 1.5px solid #3F6F41;
   line-height: 1.25rem;
 }
+
+.c-table-key {
+  text-align: center;
+  width: 9rem;
+  font-weight: 700;
+  color: #3F6F41;
+  background-color: #F0F0F0;
+}
+
+.c-table-content {
+  background-color: white;
+  white-space: pre-wrap;
+}
+
+@media screen and (min-width: 768px) {
+  .c-table-key {
+    width: 12rem;
+    white-space: nowrap;
+  }
+}
+
+/* ------ input ------*/
 
 input{
   width: 100%;
@@ -149,23 +173,6 @@ select{
   }
 }
 
-.ReactModal__Overlay {
-  z-index: 3;
-}
-
-.c-table-key {
-  text-align: center;
-  width: 9rem;
-  font-weight: 700;
-  color: #3F6F41;
-  background-color: #F0F0F0;
-}
-
-.c-table-content {
-  background-color: white;
-  white-space: pre-wrap;
-}
-
 .c-number-input__with-unit{
   display: flex;
   align-items: center;
@@ -180,6 +187,14 @@ select{
   gap: .25rem;
 }
 
+/* ------ modal ------*/
+
+.ReactModal__Overlay {
+  z-index: 3;
+}
+
+/* ------ scrollbar ------*/
+
 .scrollbar {
   padding-left: 6px;
 
@@ -193,6 +208,8 @@ select{
     background-color: #ADADAD;
   }
 }
+
+/* ------ container ------*/
 
 .l-web-container{
   position: relative;

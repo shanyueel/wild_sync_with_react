@@ -5,7 +5,7 @@ import StyledRangeInput from "./inputs/StyledRangeInput"
 import StyledTextArea from "./inputs/StyledTextArea"
 import StyledImageInput from "./inputs/StyledImageInput"
 
-const HikingTable = ({className, inputUsed, formContent, onFormChange}) => {
+const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
   const trackTypeOptions = [
     { 
       name: "trackType",
@@ -42,53 +42,53 @@ const HikingTable = ({className, inputUsed, formContent, onFormChange}) => {
         <table className={className}>
           <tbody>
             <tr>
-              <td className="c-table-key o-activity-key">出發地點</td>
-              <td className="c-table-content o-activity-content">
+              <td className="c-table-key">出發地點</td>
+              <td className="c-table-content">
                 {inputUsed?
                  <StyledTextInput
                   placeholder="出發地點" 
                   inputId="departurePoint" 
-                  formContent={formContent} 
-                  onFormChange={onFormChange}
+                  formContent={detailContent} 
+                  onFormChange={onDetailChange}
                  />
-                 :formContent?.departurePoint
+                 :detailContent?.departurePoint
                 }
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key">步道類型</td>
-              <td className="c-table-content o-activity-content">
+              <td className="c-table-key ">步道類型</td>
+              <td className="c-table-content">
                 {inputUsed &&
                  <StyledRadioInput
                   radioOptions={trackTypeOptions}
-                  formContent={formContent} 
-                  onFormChange={onFormChange}
+                  formContent={detailContent} 
+                  onFormChange={onDetailChange}
                  />
                 }
-                {(!inputUsed && formContent?.trackType === "round") && "環狀路線"}
-                {(!inputUsed && formContent?.trackType === "backtrack") && "原路折返"}
-                {(!inputUsed && formContent?.trackType === "one-way") && "雙向進出"}
+                {(!inputUsed && detailContent?.trackType === "round") && "環狀路線"}
+                {(!inputUsed && detailContent?.trackType === "backtrack") && "原路折返"}
+                {(!inputUsed && detailContent?.trackType === "one-way") && "雙向進出"}
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key">路徑長度</td>
-              <td className="c-table-content o-activity-content">
+              <td className="c-table-key ">路徑長度</td>
+              <td className="c-table-content">
                 {inputUsed?
                  <StyledTextInput
                   numberUsed
                   placeholder="路徑長度" 
                   inputId="trackLength"
                   unit="公里" 
-                  formContent={formContent} 
-                  onFormChange={onFormChange}
+                  formContent={detailContent} 
+                  onFormChange={onDetailChange}
                  />
-                 :`${formContent?.trackLength} 公里`
+                 :`${detailContent?.trackLength} 公里`
                 }
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key">海拔高度</td>
-              <td className="c-table-content o-activity-content">
+              <td className="c-table-key ">海拔高度</td>
+              <td className="c-table-content">
                 {inputUsed?
                  <StyledRangeInput
                   minPlaceholder="最低海拔" 
@@ -97,79 +97,79 @@ const HikingTable = ({className, inputUsed, formContent, onFormChange}) => {
                   inputName="altitude"
                   minInputId="minAltitude" 
                   maxInputId="maxAltitude"
-                  formContent={formContent} 
-                  onFormChange={onFormChange}
+                  formContent={detailContent} 
+                  onFormChange={onDetailChange}
                  />
-                 :`${formContent?.altitude[0]} - ${formContent?.altitude[1]} m`
+                 :`${detailContent?.altitude[0]} - ${detailContent?.altitude[1]} m`
                 }
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key">路面狀況</td>
-              <td className="c-table-content o-activity-content">
+              <td className="c-table-key ">路面狀況</td>
+              <td className="c-table-content">
                 {inputUsed?
                  <StyledTextInput
                   placeholder="路徑狀況" 
                   inputId="trackCondition"
-                  formContent={formContent} 
-                  onFormChange={onFormChange}
+                  formContent={detailContent} 
+                  onFormChange={onDetailChange}
                  />
-                 :formContent?.trackCondition
+                 :detailContent?.trackCondition
                 }
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key">所屬園區</td>
-              <td className="c-table-content o-activity-content">
+              <td className="c-table-key ">所屬園區</td>
+              <td className="c-table-content">
                 {inputUsed?
                  <StyledTextInput
                   placeholder="所屬園區( 若沒有，可填無 )"
                   inputId="belongingPark"
-                  formContent={formContent} 
-                  onFormChange={onFormChange}
+                  formContent={detailContent} 
+                  onFormChange={onDetailChange}
                  />
-                 :formContent?.belongingPark
+                 :detailContent?.belongingPark
                 }
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key">入園申請</td>
-              <td className="c-table-content o-activity-content">
+              <td className="c-table-key ">入園申請</td>
+              <td className="c-table-content">
                 {inputUsed &&
                  <StyledRadioInput
                   radioOptions={applicationNeededOptions}
-                  formContent={formContent} 
-                  onFormChange={onFormChange}
+                  formContent={detailContent} 
+                  onFormChange={onDetailChange}
                  />
                 }
-                {(!inputUsed && formContent?.applicationNeeded === "needed") && "需要"}
-                {(!inputUsed && formContent?.applicationNeeded === "unNeeded") && "不需要"}
+                {(!inputUsed && detailContent?.applicationNeeded === "needed") && "需要"}
+                {(!inputUsed && detailContent?.applicationNeeded === "unNeeded") && "不需要"}
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key" colSpan={2}>路線資訊</td>
+              <td className="c-table-key " colSpan={2}>路線資訊</td>
             </tr>
             <tr>
-              <td className="c-table-content o-activity-content" colSpan={2}>
+              <td className="c-table-content" colSpan={2}>
                 {inputUsed?
                   <StyledTextArea
                     placeholder="請輸入路線資訊" 
                     inputId="trackIntroduction" 
-                    formContent={formContent}
-                    onFormChange={onFormChange}
+                    formContent={detailContent}
+                    onFormChange={onDetailChange}
                   />
-                  :formContent?.trackIntroduction
+                  :detailContent?.trackIntroduction
                 }
               </td>
             </tr>
             <tr>
-              <td className="c-table-key o-activity-key" colSpan={2}>路徑地圖</td>
+              <td className="c-table-key " colSpan={2}>路徑地圖</td>
             </tr>
             <tr>
-              <td className="c-table-content o-activity-content" colSpan={2}>
+              <td className="c-table-content" colSpan={2}>
                 {inputUsed?
                   <StyledImageInput/>
-                  :<img className="o-activity-table__image" src={formContent.trackImage} alt="hiking map"/>
+                  :<img className="o-hiking-table__image" src={detailContent?.trackImage} alt="hiking map"/>
                 }
                 
               </td>
@@ -183,16 +183,11 @@ const HikingTable = ({className, inputUsed, formContent, onFormChange}) => {
 const StyledHikingTable = styled(HikingTable)`
   width: 100%;
   
-  .o-activity-table__image{
+  .o-hiking-table__image{
     width: 100%;
   }
 
-  @media screen and (min-width: 768px) {
-    .o-activity-key{
-      width: 12rem;
-      white-space: nowrap;
-    }
-  }
+
 `
 
 export default StyledHikingTable

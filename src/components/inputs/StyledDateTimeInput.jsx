@@ -21,7 +21,6 @@ const DateTimeInput = ({className, title, inputId, formContent, onFormChange, wa
         <label className="o-input-title__warning">{warning}</label>
       </div>
       <div className="c-input-body">
-        {/* <input type="datetime-local" id={inputId} onChange={handleTextInput} value={ formContent[inputId] || "" } /> */}
         <DateTimePicker
           className="c-input-body__date-picker"
           disablePast

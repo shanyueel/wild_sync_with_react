@@ -5,7 +5,8 @@ import styled from "styled-components"
 import StyledButton from "components/StyledButton"
 import StyledUserInfo from "components/StyledUserInfo"
 import StyledHikingTable from "components/StyledHikingTable"
-import StyledResidenceAndTransportationTable from "components/StyledResidenceAndTransportationTable"
+import StyledTransportationTable from "components/StyledTransportationTable"
+import StyledResidenceTable from "components/StyledResidenceTable"
 import StyledOthersTable from "components/StyledOthersTable"
 import StyledActivityBasicInfo from "components/StyledActivityBasicInfo"
 import StyledActivityHistory from "components/StyledActivityHistory"
@@ -15,6 +16,7 @@ import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as ChatIcon} from "assets/icons/ChatIcon.svg"
 import { Outlet } from "react-router-dom"
+
 
 const activity = {
   name: "麟趾-鹿林山健行",
@@ -36,7 +38,7 @@ const detail = {
   trackImage: "https://farm4.static.flickr.com/3616/3368789043_3f745faa30_b.jpg"
 }
 
-const residenceAndTransportation = {
+const transportation = {
   outbound:"1.國道三號名間交流道→台16→水里→台21→信義→和社→塔塔加遊客中心→台18線108.7K上東埔停車場。2.國道三號中埔交流道→台18→阿里山→台18線108.7K上東埔停車場。",
   inbound:"1.嘉義出發：嘉義市搭乘嘉義縣公車至阿里山後，再雇車至塔塔加遊憩區，或於阿里山森林遊樂區內搭乘員林客運「6739日月潭─阿里山線」，於塔塔加遊憩區「上東埔」站下車，步行即達登山口。2.南投出發：搭乘員林客運「6739日月潭─阿里山線」，於「塔塔加遊客中心」下車，改由塔塔加遊客中心旁步道進入。或於「上東埔」站下車，步行即達登山口。"
 }
@@ -124,8 +126,13 @@ const ActivityPage = ({ className }) => {
                 </label>
               </div>
               <div className="l-activity-tables__container">
-                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" formContent={detail}/>}
-                {ActiveTable === "residence-transportation" && <StyledResidenceAndTransportationTable className="o-activity-residence-and-transportation-table" formContent={residenceAndTransportation}/>}
+                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" detailContent={detail}/>}
+                {ActiveTable === "residence-transportation" && 
+                  <div className="o-activity-residence-and-transportation-table">
+                    <StyledTransportationTable transportationContent={transportation}/>
+                    <StyledResidenceTable formContent={transportation}/>
+                  </div>
+                  }
                 {ActiveTable === "others" && <StyledOthersTable isMediumLayout={isMediumLayout}/>}
               </div> 
             </div>
@@ -288,6 +295,12 @@ const StyledActivityPage = styled(ActivityPage)`
         padding: 1.5rem 1rem;
         background-color: ${({theme})=>theme.color.default};
         border-radius: 0 0 .25rem .25rem;
+
+        .o-activity-residence-and-transportation-table{
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
       }
     }
   }

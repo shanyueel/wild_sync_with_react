@@ -19,7 +19,13 @@ const TextInput = ({ className, title, placeholder, unit, inputId, formContent, 
         <label className="o-input-title__warning">{warning}</label>
       </div>
       <div className="c-input-body">
-        <input type={clsx({password:password},{text:!password && !numberUsed},{number:numberUsed})} id={inputId} placeholder={placeholder} onChange={handleTextInput} value={ formContent[inputId] || "" } />
+        <input 
+          id={inputId}
+          type={clsx({password:password},{text:!password && !numberUsed},{number:numberUsed})} 
+          placeholder={placeholder} 
+          onChange={ handleTextInput } 
+          value={ formContent[inputId] || "" } 
+        />
         <span className="o-input-body__unit">{unit}</span>
       </div>
     </div>

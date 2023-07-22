@@ -1,49 +1,9 @@
 import styled from "styled-components"
-import StyledTextArea from "./inputs/StyledTextArea"
-import { useState } from "react"
-import StyledDateTimeInput from "./inputs/StyledDateTimeInput"
 
-const ResidenceAndTransportationTable = ({className, inputUsed, formContent, onFormChange}) => {
-  const [residenceContent, setResidenceContent] = useState([])
+const ResidenceTable = ({className, inputUsed, residenceContent, onResidenceChange}) => {
 
   return(
     <div className={className}>
-      <table >
-        <tbody>
-          <tr>
-              <td className="o-activity-table__key" colSpan={2}>交通方式</td>
-          </tr>
-          <tr>
-            <td className="o-activity-table__key">去程交通</td>
-            <td className="o-activity-table__content">
-              {inputUsed?
-                <StyledTextArea
-                  placeholder="請輸入去程交通方式"
-                  inputId="outbound"
-                  formContent={formContent}
-                  onFormChange={onFormChange}
-                />
-                :formContent?.outbound
-              }
-            </td>
-          </tr>
-          <tr>
-            <td className="o-activity-table__key">回程交通</td>
-            <td className="o-activity-table__content">
-              {inputUsed?
-                <StyledTextArea
-                  placeholder="請輸入回程交通方式"
-                  inputId="inbound"
-                  formContent={formContent}
-                  onFormChange={onFormChange}
-                />
-                :formContent?.inbound
-              }
-              
-            </td>
-          </tr>
-        </tbody>
-      </table>
       <table>
         <tbody>
           <tr>
@@ -52,13 +12,14 @@ const ResidenceAndTransportationTable = ({className, inputUsed, formContent, onF
           <tr>
               <td className="o-activity-table__key">住宿日期</td>
               <td className="o-activity-table__content">
-                {inputUsed?
+                {/* {inputUsed?
                   <StyledDateTimeInput 
                     inputId="date" 
-                    formContent={residence} onFormChange
+                    residenceContent={residence} 
+                    onResidenceChange
                   />
-                  :formContent?.date
-                }
+                  :residenceContent?.date
+                } */}
               </td>
           </tr>
           <tr>
@@ -118,7 +79,7 @@ const ResidenceAndTransportationTable = ({className, inputUsed, formContent, onF
   )
 }
 
-const StyledResidenceAndTransportationTable = styled(ResidenceAndTransportationTable)`
+const StyledResidenceTable = styled(ResidenceTable)`
   width:100%;
   display: flex;
   flex-direction: column;
@@ -149,4 +110,4 @@ const StyledResidenceAndTransportationTable = styled(ResidenceAndTransportationT
   }
 `
 
-export default StyledResidenceAndTransportationTable
+export default StyledResidenceTable

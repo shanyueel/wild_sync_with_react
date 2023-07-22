@@ -2,7 +2,7 @@ import { useState } from "react"
 import styled, { css } from "styled-components"
 
 const RangeInput = ({ className, title, minPlaceholder, maxPlaceholder, unit, inputName, minInputId, maxInputId, formContent, onFormChange, warning }) => {
-  const [range, setRange] = useState(formContent[inputName] || [undefined,undefined])
+  const [range, setRange] = useState(formContent[inputName]|| [undefined,undefined])
 
 
   const handleRangeInput = (e) => {

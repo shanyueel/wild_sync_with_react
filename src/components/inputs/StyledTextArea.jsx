@@ -3,12 +3,11 @@ import styled from "styled-components"
 const TextArea = ({ className, title, placeholder, inputId, formContent, onFormChange, warning }) => {
   
   const handleTextArea = (e) => {
-
-    onFormChange({
+    const newForm = {
       ...formContent,
-      [e.target.id]: e.target.value
-    })
-
+      [e.target.id]: e.target.value     
+    }
+    onFormChange(newForm)
   }
 
   return(

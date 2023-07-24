@@ -1,15 +1,30 @@
 import styled from "styled-components";
 import clsx from "clsx";
 
-import StyledResidenceAndTransportationTable from "components/StyledResidenceTable";
 import StyledOthersTable from "components/StyledOthersTable";
+import { useEffect, useState } from "react";
 
 const ActivityCreateStepFive = ({ className, formContent, onFormChange}) => {
+  const [detailContent, setDetailContent] = useState(formContent?.detail || {})
+  
+  useEffect(()=>{
+    const updateForm = () => {
+      const newForm = {
+        ...formContent,
+        detail: detailContent
+      }
+      onFormChange(newForm)
+    }
+    updateForm()
+  },[detailContent])
+
   return(
     <div className={clsx(className,"scrollbar") }>
       
       <StyledOthersTable 
         inputUsed
+        detailContent={detailContent}
+        onDetailChange={setDetailContent}
       />
 
     </div>

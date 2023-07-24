@@ -10,12 +10,8 @@ import { useState } from "react"
 import { register } from "api/auth"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import { useDispatch } from "react-redux"
-import { setCurrentUser } from "reducers/userSlice"
-import { auth } from "api/firebaseConfig"
 
 const LoginPage = ({className})=>{
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [registerContent, setRegisterContent] = useState({}) 
   const [passwordCheckError, setPasswordCheckError] = useState("")

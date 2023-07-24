@@ -9,14 +9,13 @@ const ActivityCreateStepThree = ({ className, formContent, onFormChange}) => {
   
   useEffect(()=>{
     const updateForm = () => {
-      onFormChange({
+      const newForm = {
         ...formContent,
         detail: detailContent
-      })
+      }
+      onFormChange(newForm)
     }
-
     updateForm()
-    
   },[detailContent])
   
   return(

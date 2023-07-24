@@ -6,21 +6,18 @@ const RangeInput = ({ className, title, minPlaceholder, maxPlaceholder, unit, in
 
 
   const handleRangeInput = (e) => {
-    let newRange;
-
+    let newRange
     if(e.target.id === minInputId){
       newRange = [e.target.value, range[1]]
     }else if(e.target.id === maxInputId){
       newRange = [range[0], e.target.value]
     }
-
-    setRange(newRange)
-    
-    onFormChange({
+    const newForm = {
       ...formContent,
       [inputName]: newRange
-    })
-
+    }
+    setRange(newRange)
+    onFormChange(newForm)
   }
 
   return(

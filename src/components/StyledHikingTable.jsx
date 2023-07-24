@@ -5,37 +5,38 @@ import StyledRangeInput from "./inputs/StyledRangeInput"
 import StyledTextArea from "./inputs/StyledTextArea"
 import StyledImageInput from "./inputs/StyledImageInput"
 
-const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
-  const trackTypeOptions = [
-    { 
-      name: "trackType",
-      label: "環狀路線",
-      id: "round"
-    },
-    { 
-      name: "trackType",
-      label: "原路折返",
-      id: "backtrack"
-    },
-    { 
-      name: "trackType",
-      label: "甲進乙出",
-      id: "one-way"
-    },
-  ]
+const trackTypeOptions = [
+  { 
+    name: "trackType",
+    label: "環狀路線",
+    id: "round"
+  },
+  { 
+    name: "trackType",
+    label: "原路折返",
+    id: "backtrack"
+  },
+  { 
+    name: "trackType",
+    label: "甲進乙出",
+    id: "one-way"
+  },
+]
 
-  const applicationNeededOptions = [
-    { 
-      name: "applicationNeeded",
-      label: "需要",
-      id: "needed"
-    },
-    { 
-      name: "applicationNeeded",
-      label: "不需要",
-      id: "unNeeded"
-    }
-  ]
+const applicationNeededOptions = [
+  { 
+    name: "applicationNeeded",
+    label: "需要",
+    id: "needed"
+  },
+  { 
+    name: "applicationNeeded",
+    label: "不需要",
+    id: "unNeeded"
+  }
+]
+
+const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
 
   return(
     <>

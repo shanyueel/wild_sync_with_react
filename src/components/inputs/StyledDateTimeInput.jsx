@@ -6,12 +6,12 @@ const DateTimeInput = ({className, title, inputId, formContent, onFormChange, wa
   const [date, setDate] = useState(formContent[inputId] || null)
   
   const handleDateInput = (newDate) => {
-    setDate(newDate)
-
-    onFormChange({
+    const newForm = {
       ...formContent,
       [inputId]: newDate,
-    })
+    }
+    setDate(newDate)
+    onFormChange(newForm)
   }
 
   return(

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
 import styled from "styled-components"
 
 import StyledButton from "components/StyledButton"
 import StyledUserInfo from "components/StyledUserInfo"
 import StyledHikingTable from "components/StyledHikingTable"
 import StyledTransportationTable from "components/StyledTransportationTable"
-import StyledResidenceTable from "components/StyledResidenceTable"
+import StyledAccommodationTable from "components/StyledAccommodationTable"
 import StyledOthersTable from "components/StyledOthersTable"
 import StyledActivityBasicInfo from "components/StyledActivityBasicInfo"
 import StyledActivityHistory from "components/StyledActivityHistory"
@@ -24,35 +23,56 @@ const activity = {
   location: "南投縣信義鄉",
   time: ["2023-07-22T08:00","2023-07-22T13:00"],
   deadline: "2023-07-22T08:00",
+  detail:{
+    departurePoint: "上東埔登山口",
+    trackType: "backtrack",
+    trackLength: "11",
+    altitude: [1000, 1500],
+    trackCondition: "柏油路、原始山徑、石階、木棧道",
+    belongingPark: "玉山國家公園",
+    applicationNeeded: "unNeeded",
+    trackIntroduction: "信義路五段150巷22弄→(0.05K,2分鐘)→靈雲宮→(0.5K,35分鐘)→六巨石→(0.1K, 8分鐘)→逸賢亭(象山頂)→(0.25K, 10分鐘)→打印台→(0.6K, 35分鐘)→永春崗公園",
+    trackImage: "https://farm4.static.flickr.com/3616/3368789043_3f745faa30_b.jpg",
+    schedule:"成功登山人<br />時間: 2023/07/02 (日)<br />09:00 - 13:00<br />地點：塔塔加遊客中心<br />費用：無<br />程度：初階<br /><br />提醒：<br />記得自備登山裝備、換洗衣物",
+    notes:"大家自己斟酌體力、量力而為"
+  },
+  transportation: {
+    outbound:"1.國道三號名間交流道→台16→水里→台21→信義→和社→塔塔加遊客中心→台18線108.7K上東埔停車場。2.國道三號中埔交流道→台18→阿里山→台18線108.7K上東埔停車場。",
+    inbound:"1.嘉義出發：嘉義市搭乘嘉義縣公車至阿里山後，再雇車至塔塔加遊憩區，或於阿里山森林遊樂區內搭乘員林客運「6739日月潭─阿里山線」，於塔塔加遊憩區「上東埔」站下車，步行即達登山口。2.南投出發：搭乘員林客運「6739日月潭─阿里山線」，於「塔塔加遊客中心」下車，改由塔塔加遊客中心旁步道進入。或於「上東埔」站下車，步行即達登山口。"
+  },
+  accommodationList: [
+    {
+      id: 0,
+      date: null,
+      name: "萌陽莊園",
+      address: "南投市玉山下面",
+      roomDetail: "雙人房1000 </br>四人房2000",
+      notes:"有提供車位、早餐"
+    },
+    {
+      id: 1,
+      date: null,
+      name: "台中民宿",
+      address: "台中市勤美旁邊",
+      roomDetail: "雙人房1200",
+      notes:""
+    },
+    {
+      id: 2,
+      date: null,
+      name: "玉山營地",
+      address: "排雲山莊",
+      roomDetail: "雙人房1300",
+      notes:"有提供車位"
+    },
+  ]
 }
-
-const detail = {
-  departurePoint: "上東埔登山口",
-  trackType: "backtrack",
-  trackLength: "11",
-  altitude: [1000, 1500],
-  trackCondition: "柏油路、原始山徑、石階、木棧道",
-  belongingPark: "玉山國家公園",
-  applicationNeeded: "unNeeded",
-  trackIntroduction: "信義路五段150巷22弄→(0.05K,2分鐘)→靈雲宮→(0.5K,35分鐘)→六巨石→(0.1K, 8分鐘)→逸賢亭(象山頂)→(0.25K, 10分鐘)→打印台→(0.6K, 35分鐘)→永春崗公園",
-  trackImage: "https://farm4.static.flickr.com/3616/3368789043_3f745faa30_b.jpg"
-}
-
-const transportation = {
-  outbound:"1.國道三號名間交流道→台16→水里→台21→信義→和社→塔塔加遊客中心→台18線108.7K上東埔停車場。2.國道三號中埔交流道→台18→阿里山→台18線108.7K上東埔停車場。",
-  inbound:"1.嘉義出發：嘉義市搭乘嘉義縣公車至阿里山後，再雇車至塔塔加遊憩區，或於阿里山森林遊樂區內搭乘員林客運「6739日月潭─阿里山線」，於塔塔加遊憩區「上東埔」站下車，步行即達登山口。2.南投出發：搭乘員林客運「6739日月潭─阿里山線」，於「塔塔加遊客中心」下車，改由塔塔加遊客中心旁步道進入。或於「上東埔」站下車，步行即達登山口。"
-}
-
-
 
 const ActivityPage = ({ className }) => {
   const [attendance, setAttendance] = useState(true)
   const expired = false
   const [btnContent, setBtnContent] = useState("報名")
   const [ActiveTable, setActiveTable] = useState("detail")
-  const environmentParams = useSelector((state) => state.environment)
-  const isMediumLayout = environmentParams.windowSize === "medium" || environmentParams.windowSize === "large"
-  
 
   useEffect(() => {
     if((expired && attendance) || (!expired && attendance)){
@@ -126,14 +146,25 @@ const ActivityPage = ({ className }) => {
                 </label>
               </div>
               <div className="l-activity-tables__container">
-                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" detailContent={detail}/>}
+                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" detailContent={activity.detail}/>}
                 {ActiveTable === "residence-transportation" && 
                   <div className="o-activity-residence-and-transportation-table">
-                    <StyledTransportationTable transportationContent={transportation}/>
-                    <StyledResidenceTable formContent={transportation}/>
+                    <StyledTransportationTable transportationContent={activity.transportation}/>
+                    <div className="l-activity-create__accommodation">
+                      {activity.accommodationList?.map((accommodationContent)=>{
+                        return(
+                          <StyledAccommodationTable
+                            key={accommodationContent.id}
+                            accommodationId={accommodationContent.id}
+                            accommodationList={activity.accommodationList}
+                            onAccommodationListChange={()=>{}}
+                          />
+                        )
+                      })}
+                    </div>
                   </div>
                   }
-                {ActiveTable === "others" && <StyledOthersTable isMediumLayout={isMediumLayout}/>}
+                {ActiveTable === "others" && <StyledOthersTable detailContent={activity.detail}/>}
               </div> 
             </div>
           </div>

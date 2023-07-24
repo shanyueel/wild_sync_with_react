@@ -125,7 +125,8 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
           {formProgress === 5 &&
             <StyledActivityCreateStepFive
-
+              formContent={activityContent} 
+              onFormChange={setActivityContent}
             />
           }
 

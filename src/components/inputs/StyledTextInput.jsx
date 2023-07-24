@@ -4,12 +4,11 @@ import clsx from "clsx"
 const TextInput = ({ className, title, placeholder, unit, inputId, formContent, onFormChange, warning, password, numberUsed }) => {
   
   const handleTextInput = (e) => {
-
-    onFormChange({
+    const newForm = {
       ...formContent,
       [e.target.id]: e.target.value
-    })
-
+    }
+    onFormChange(newForm)
   }
 
   return(

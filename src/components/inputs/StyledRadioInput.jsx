@@ -3,12 +3,11 @@ import styled from "styled-components";
 const RadioInput = ({className, title, radioOptions, formContent, onFormChange}) => {
 
   const handleRadioChange = (e) => {
-
-    onFormChange({
+    const newForm = {
       ...formContent,
       [e.target.name]: e.target.id
-    })
-
+    }
+    onFormChange(newForm)
   }
 
   return(

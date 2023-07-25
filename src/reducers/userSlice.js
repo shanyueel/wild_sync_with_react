@@ -6,7 +6,6 @@ const initialProfile = {
     email: "",
     displayName: "訪客",
     photoURL: "",
-
     coverURL: "",
     profession: "",
     birth: null,

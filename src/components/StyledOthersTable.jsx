@@ -1,27 +1,26 @@
 import styled from "styled-components"
+import StyledTextArea from "./inputs/StyledTextArea"
 
-const OthersTable = ({className}) => {
+const OthersTable = ({className, inputUsed, detailContent, onDetailChange }) => {
 
   return(
     <>
         <table className={className}>
           <tbody>
             <tr>
-              <td className="o-activity-table__key">詳細行程</td>
+              <td className="o-activity-table__key">行程細節</td>
             </tr>
             <tr>
               <td className="o-activity-table__content">
-                <p className="o-activity-content">
-                  成功登山人<br />
-                  時間: 2023/07/02 (日)<br />
-                  09:00 - 13:00<br />
-                  地點：塔塔加遊客中心<br />
-                  費用：無<br />
-                  程度：初階<br />
-                  <br />
-                  提醒：<br />
-                  記得自備登山裝備、換洗衣物
-                </p>
+                {inputUsed?
+                  <StyledTextArea
+                    placeholder="請輸入行程細節" 
+                    inputId="schedule" 
+                    formContent={detailContent}
+                    onFormChange={onDetailChange}
+                  />
+                  :detailContent?.schedule
+                }
               </td>
             </tr>
             <tr>
@@ -29,7 +28,15 @@ const OthersTable = ({className}) => {
             </tr>
             <tr>
               <td className="o-activity-table__content">
-                中級山步道
+                {inputUsed?
+                    <StyledTextArea
+                      placeholder="請輸入備註(若有需要)" 
+                      inputId="notes" 
+                      formContent={detailContent}
+                      onFormChange={onDetailChange}
+                    />
+                    :detailContent?.notes
+                  }
               </td>
             </tr>
           </tbody>

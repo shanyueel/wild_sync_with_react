@@ -7,8 +7,18 @@ import {ReactComponent as EllipsisIcon} from "assets/icons/EllipsisIcon.svg"
 import { Link } from "react-router-dom"
 import StyledHorizontalActivityCard from "components/StyledHorizontalActivityCard"
 import StyledUserCard from "components/StyledUserCard"
+import StyledUserEditModal from "modals/StyledUserEditModal"
+import { useState } from "react"
 
 const UserPage = ({className}) => {
+  const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false)
+
+  const handleUserEdit = () => {
+    setIsUserEditModalOpen(true)
+    document.querySelector('body').classList.add('no-scroll');
+    document.querySelector('html').classList.add('no-scroll');
+  }
+
   return(
     <div className={className}>
       <div className="l-web-container__main">
@@ -29,7 +39,11 @@ const UserPage = ({className}) => {
             <div className="l-user__stats">
 
             </div>
-            <StyledButton className="o-user__edit-button" outlined>編輯個人資料</StyledButton>
+            <StyledButton className="o-user__edit-button" onClick={handleUserEdit} outlined>編輯個人資料</StyledButton>
+            <StyledUserEditModal 
+              isUserEditModalOpen={isUserEditModalOpen} 
+              setIsUserEditModalOpen={setIsUserEditModalOpen}
+            />
           </div>
           
           <div className="l-user-activities">

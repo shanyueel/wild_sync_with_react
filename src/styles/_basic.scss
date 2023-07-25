@@ -38,6 +38,8 @@ h5{
   font-weight: 400;
 }
 
+/* ------ table ------*/
+
 table{
   width: 100%;
 }
@@ -46,7 +48,34 @@ td{
   vertical-align: middle;
   padding: .75rem;
   border: 1.5px solid #3F6F41;
+  line-height: 1.25rem;
 }
+
+.c-table-key {
+  text-align: center;
+  width: 9rem;
+  font-weight: 700;
+  color: #3F6F41;
+  background-color: #F0F0F0;
+}
+
+.c-table-content {
+  background-color: white;
+  white-space: pre-wrap;
+}
+
+.c-table-divide{
+  height: .5rem;
+}
+
+@media screen and (min-width: 768px) {
+  .c-table-key {
+    width: 12rem;
+    white-space: nowrap;
+  }
+}
+
+/* ------ input ------*/
 
 input{
   width: 100%;
@@ -54,7 +83,6 @@ input{
   border: 1px solid #3F6F41;
   border-radius: .5rem;
   font-size: 1rem;
-  color:#3F6F41;
   padding: .2rem .75rem;
 
   &:hover, &:focus {
@@ -100,27 +128,53 @@ select{
   padding: .2rem .75rem;
 }
 
-.input-title{
+  .c-input-body__date-picker {
+    background-color: white;
+    border-radius: .5rem;
+
+    input {
+      height: 1rem;
+      font-size: 1rem;
+      color: #7B7B7B;
+      background-color: white;
+      padding: .6rem 1rem;
+      border-radius: .5rem;
+      max-width: 10rem;
+
+      &:hover,
+      &:focus {
+        border: none;
+      }
+    }
+
+    button svg{
+      fill: #3F6F41;
+    }
+
+    fieldset {
+      border: 1px solid #3F6F41;
+      border-radius: .5rem;
+    }
+
+  }
+
+.c-input-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #3F6F41;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+
+  label {
     color: #3F6F41;
     font-weight: 700;
-    margin-bottom: .5rem;
-}
+  }
 
-.ReactModal__Overlay {
-  z-index: 3;
-}
-
-.c-table-key {
-  text-align: center;
-  width: 9rem;
-  font-weight: 700;
-  color: #3F6F41;
-  background-color: #F0F0F0;
-}
-
-.c-table-content {
-  background-color: white;
-  white-space: pre-wrap;
+  .o-input-title__warning {
+    color: #D0342C;
+  font-weight: 400;
+  }
 }
 
 .c-number-input__with-unit{
@@ -137,6 +191,44 @@ select{
   gap: .25rem;
 }
 
+/* ------ modal ------*/
+
+.ReactModal__Overlay {
+  z-index: 3;
+}
+
+.l-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 .25rem .75rem;
+  border-bottom: 1px solid #7B7B7B;
+
+  .o-modal__title {
+    color: #3F6F41;
+    font-weight: 700;
+  }
+
+  .o-modal__close-icon {
+    height: 1rem;
+    width: 1rem;
+    cursor: pointer;
+  }
+}
+
+.l-modal__body {
+  width: 100%;
+  height: calc(100% - 2rem);
+
+  .l-modal__form-container {
+    width: 100%;
+    height: calc(100% - 9rem);
+    margin-top: .75rem;
+  }
+}
+
+/* ------ scrollbar ------*/
+
 .scrollbar {
   padding-left: 6px;
 
@@ -150,6 +242,8 @@ select{
     background-color: #ADADAD;
   }
 }
+
+/* ------ container ------*/
 
 .l-web-container{
   position: relative;

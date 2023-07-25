@@ -1,16 +1,24 @@
 import styled from "styled-components"
+import clsx from "clsx"
 
-const TextInput = ({ className,title,placeholder }) => {
-  const warning = "";
+const TextInput = ({ className, title, placeholder, inputId, formContent, onFormChange, warning, password }) => {
   
+  const handleTextInput = (e) => {
+    
+    onFormChange({
+      ...formContent,
+      [e.target.id]: e.target.value
+    })
+
+  }
+
   return(
     <div className={className}>
       <div className="c-input-labels">
         <label className="o-input-title">{title}</label>
         <label className="o-input-warning">{warning}</label>
       </div>
-
-      <input placeholder={placeholder} />
+      <input type={clsx({password:password},{text:!password})} id={inputId} placeholder={placeholder} onChange={handleTextInput} />
     </div>
 
   )

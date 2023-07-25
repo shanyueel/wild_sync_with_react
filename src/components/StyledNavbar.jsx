@@ -12,17 +12,18 @@ import { ReactComponent as UserIcon } from "assets/icons/UserIcon.svg"
 import { ReactComponent as LoginIcon } from "assets/icons/LoginIcon.svg"
 import { ReactComponent as PlusIcon } from "assets/icons/PlusIcon.svg"
 import { ReactComponent as LogoutIcon } from "assets/icons/LogoutIcon.svg"
+import { ReactComponent as SettingIcon } from "assets/icons/SettingIcon.svg"
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from "api/auth"
 import { resetUser } from "reducers/userSlice"
+import StyledAccountSettingModal from "modals/StyledAccountSettingModal"
 
 const Navbar = ({ className }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
   const navIconsRef = useRef([])
-
   const [isActivityCreateModalOpen, setIsActivityCreateModalOpen] = useState(false)
+  const [isAccountSettingModalOpen, setIsAccountSettingModalOpen] = useState(false)
   const user = useSelector((state)=> state.user)
 
   const handleSearch = () => {
@@ -38,9 +39,18 @@ const Navbar = ({ className }) => {
     })
   } 
 
-  const handleCreateClick = () => {
+  const handleActivityCreate = () => {
     setIsActivityCreateModalOpen(true)
     navIconsRef.current[2].checked = false
+    document.querySelector('body').classList.add('no-scroll');
+    document.querySelector('html').classList.add('no-scroll');
+  }
+
+  const handleAccountSetting = () => {
+    setIsAccountSettingModalOpen(true)
+    navIconsRef.current[2].checked = false
+    document.querySelector('body').classList.add('no-scroll');
+    document.querySelector('html').classList.add('no-scroll');
   }
   
   const handleLogin = () => {
@@ -99,7 +109,7 @@ const Navbar = ({ className }) => {
             <input name="navbar-icons" id="user-icon" type="checkbox" ref={(element)=>navIconsRef.current.push(element)} onChange={handleNavbarIconChange}/>
             <label htmlFor="user-icon"><UserIcon /></label>
             <div className="l-navbar__user-dropdown">
-              <Link to="/user/1">
+              <Link to={`/user/${user.uid}`}>
                 <img className="o-navbar__user-avatar" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />
               </Link>
               <h2 className="o-navbar__user-name">{user.displayName}</h2>
@@ -107,13 +117,15 @@ const Navbar = ({ className }) => {
               <ul className="l-navbar__user-dropdown-body">
                 {user.loggedIn?
                   <>
-                    <li className="c-navbar__create-account" onClick={handleCreateClick}><PlusIcon/>建立活動</li>
+                    <li className="c-navbar__create-account" onClick={handleActivityCreate}><PlusIcon/>建立活動</li>
+                    <li className="c-navbar__logout" onClick={handleAccountSetting}><SettingIcon/>帳戶設定</li>
                     <li className="c-navbar__logout" onClick={handleLogout}><LogoutIcon/>帳戶登出</li>
                   </>
                   :<li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>}
               </ul>
               
               <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
+              <StyledAccountSettingModal isAccountSettingModalOpen={isAccountSettingModalOpen} setIsAccountSettingModalOpen={setIsAccountSettingModalOpen}/>
             </div>
           </div>
 

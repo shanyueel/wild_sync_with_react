@@ -17,15 +17,21 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
   const [formProgress, setFormProgress] = useState(1);
 
   const closeModal = () => {
-    setIsActivityCreateModalOpen(false);
     setFormProgress(1)
+    setIsActivityCreateModalOpen(false);
+    document.querySelector('body').classList.remove('no-scroll');
+    document.querySelector('html').classList.remove('no-scroll');
   }
 
-  const onPreviousPageClick = () => {
+  const handleClearData = () => {
+    setActivityContent({})
+  }
+
+  const handlePreviousPageClick = () => {
     setFormProgress(formProgress - 1)
   }
 
-  const onNextPageClick = () => {
+  const handleNextPageClick = () => {
     setFormProgress(formProgress + 1)
     console.log(activityContent)
   }
@@ -94,7 +100,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
           </div>
         </div>
 
-        <form className='l-activity-create__form-container'>
+        <form className='l-modal__form-container'>
           {formProgress === 1 &&
             <StyledActivityCreateStepOne
               formContent={activityContent}
@@ -133,8 +139,11 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
         </form>
 
         <div className='c-activity-create__pagination'>
-          <StyledButton onClick={onPreviousPageClick} disabled={formProgress === 1}>前一頁</StyledButton>
-          <StyledButton onClick={onNextPageClick} >{formProgress<5?"下一頁":"建立活動"}</StyledButton>
+          {formProgress === 1 ? 
+            <StyledButton onClick={handleClearData} alert>清空資料</StyledButton>
+            :<StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
+          }
+          <StyledButton onClick={handleNextPageClick} >{formProgress<5?"下一頁":"建立活動"}</StyledButton>
         </div>
       </div>
 
@@ -147,42 +156,20 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
   width: 90vw;
   height: 100vh;
   max-width: 896px;
-  max-height: calc(100vh - 6rem);
+  max-height: calc(100vh - 8rem);
   margin: 5rem auto 0;
   border-radius: .5rem;
   background-color: ${({theme})=> theme.backgroundColor.default};
   padding: 1rem;
 
-  .l-modal__header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 .25rem .75rem;
-    border-bottom: 1px solid ${({theme})=> theme.color.grey};
-
-    .o-modal__title{
-      color: ${({theme})=> theme.color.default};
-      font-weight: 700;
-    }
-
-    .o-modal__close-icon{
-      height: 1rem;
-      width: 1rem;
-      cursor: pointer;
-    }
-  }
-
   .l-modal__body{
-    width: 100%;
-    height: calc(100% - 2rem);
-
-    .l-activity-create__steps{
+    .l-activity-create__steps {
       display: flex;
       justify-content: space-between;
       padding: .75rem 0;
-      border-bottom: 1px solid ${({theme})=> theme.backgroundColor.secondary};
+      border-bottom: 1px solid #ADADAD;
 
-      .c-activity-create__step{
+      .c-activity-create__step {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -190,69 +177,66 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
         flex-grow: 1;
         counter-increment: step-counter;
 
-        &::after{
+        &::after {
           content: "";
           position: absolute;
           top: 1rem;
           left: calc(50% + 1.5rem);
           right: calc(-50% + 1.5rem);
           height: 2px;
-          background-color: ${({theme})=> theme.color.default};
-        }
-        
-        &:last-child::after{
-          display: none;
+          background-color: #3F6F41;
         }
 
-        .o-activity-create__step-circle{
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 1.75rem;
-          height: 1.75rem;
-          border-radius: 50%;
-          border: 2px solid ${({theme})=>theme.color.default};
-          background-color: white;
-
-          &::before{
-            content: counter(step-counter);
-            color: ${({theme})=>theme.color.default};
-            font-weight: 700;
+          &:last-child::after {
+            display: none;
           }
 
-          &.done{
-            background-color: ${({theme})=>theme.color.default};
+      .o-activity-create__step-circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 50%;
+        border: 2px solid #3F6F41;
+        background-color: white;
 
-            ::before{
-              content: "✔";
-              color: white;
-            }
-          }
+        &::before {
+          content: counter(step-counter);
+          color: #3F6F41;
+          font-weight: 700;
+        }
 
-          &.active{
-            background-color: ${({theme})=>theme.color.default};
+        &.done {
+          background-color: #3F6F41;
 
-            ::before{
-              color: white;
-            }
+          ::before {
+            content: "✔";
+            color: white;
           }
         }
 
-        .o-activity-create__step-title{
-          font-size: .75rem;
-          margin-top: .25rem;
-          color: ${({theme})=>theme.color.default};
+        &.active {
+          background-color: #3F6F41;
+
+          ::before {
+            color: white;
+          }
         }
+      }
 
-
+      .o-activity-create__step-title {
+        font-size: .75rem;
+        margin-top: .25rem;
+        color: #3F6F41;
       }
     }
+  }
 
-    .l-activity-create__form-container{
+    .l-modal__form-container{
       width: 100%;
       height: calc(100% - 9rem);
-      margin-top: .75rem;
-
+      margin: .75rem 0;
 
       .c-activity-create__time{
         h3{
@@ -279,7 +263,7 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
   }
 
   @media screen and (min-width: 768px) {
-    width: 80vw;
+    width: 50vw;
   }
 `
 

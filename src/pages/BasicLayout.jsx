@@ -48,15 +48,13 @@ const BasicLayout = () => {
       dispatch(resetUser())
     }
   })
-
-
-  
   
   return(
     <>
       <StyledNavbar activitiesRef={activitiesRef} />
-      <div className={licenseOnly?"l-web-container--license-only":"l-web-container"}>
+      <div className={licenseOnly ? "l-web-container--license-only" : "l-web-container scrollbar"}>
         <Outlet />
+      
       </div>
       <StyledFooter/>
       <ToastContainer

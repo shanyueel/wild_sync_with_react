@@ -16,7 +16,6 @@ import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as ChatIcon} from "assets/icons/ChatIcon.svg"
 import { Outlet } from "react-router-dom"
 
-
 const activity = {
   name: "麟趾-鹿林山健行",
   type: "hiking",

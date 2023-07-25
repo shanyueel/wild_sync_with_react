@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-const Button = ({className, onClick, children, disabled, outlined}) =>{
+const Button = ({className, onClick, children, disabled, outlined, invisible, alert}) =>{
   return(
     <button className={className} disabled={disabled} onClick={onClick}>{children}</button>
   )
@@ -42,6 +42,16 @@ const  StyledButton = styled(Button)`
       color: white;
       background-color: ${({theme})=>theme.color.default};
     }
+  `
+  }
+
+  ${(props) => props.invisible && css`
+    visibility: hidden;
+  `
+  }
+  
+    ${(props) => props.alert && css`
+    background-color: ${({theme})=>theme.color.alert};
   `
   }
 `

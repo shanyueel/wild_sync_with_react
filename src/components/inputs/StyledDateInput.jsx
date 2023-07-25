@@ -2,7 +2,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
 import styled from "styled-components";
 
-const DateInput = ({className, title, inputId, formContent, onFormChange, warning }) => {
+const DateInput = ({className, title, inputId, formContent, onFormChange, warning, disablePast, disableFuture }) => {
   const [date, setDate] = useState(formContent[inputId] || null)
   
   const handleDateInput = (newDate) => {
@@ -23,7 +23,8 @@ const DateInput = ({className, title, inputId, formContent, onFormChange, warnin
       <div className="c-input-body">
         <DatePicker
           className="c-input-body__date-picker"
-          disablePast
+          disablePast={disablePast}
+          disableFuture={disableFuture}
           value={date} 
           onChange={handleDateInput}
         />

@@ -1,25 +1,48 @@
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Modal from 'react-modal';
 import styled from "styled-components";
 
-import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
 import StyledImageInput from 'components/inputs/StyledImageInput';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import StyledTextInput from 'components/inputs/StyledTextInput';
 import StyledAvatarInput from 'components/inputs/StyledAvatarInput';
 import StyledDateInput from 'components/inputs/StyledDateInput';
 import StyledTextArea from 'components/inputs/StyledTextArea';
 import StyledButton from 'components/StyledButton';
 
+import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
+import { updateUserInfo } from 'api/api';
+
 const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen}) => {
   const user = useSelector(state => state.user)
-  const [userContent, setUserContent] = useState(user)
-  console.log(userContent)
+  const userId = user.uid
+  const {uid, photoURL, email, displayName, birth, coverURL, introduction, profession, region} = user
+  const [accountContent, setAccountContent] = useState({
+    uid,
+    photoURL,
+    email,
+    displayName
+  })
+  const [userInfoContent, setUserInfoContent] = useState({
+    uid, 
+    birth, 
+    coverURL, 
+    introduction, 
+    profession, 
+    region
+  })
+
 
   const closeModal = () => {
     setIsUserEditModalOpen(false);
     document.querySelector('body').classList.remove('no-scroll');
     document.querySelector('html').classList.remove('no-scroll');
+  }
+
+  const handleUpdate = async() => {
+    console.log(userId, userInfoContent)
+    
+    await updateUserInfo( userId, userInfoContent )
   }
   
   return(
@@ -44,47 +67,48 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
             title="使用者名稱*" 
             placeholder="請輸入使用者名稱"
             inputId="displayName" 
-            formContent={userContent}
-            onFormChange={setUserContent}
+            formContent={accountContent}
+            onFormChange={setAccountContent}
           />
           <StyledTextInput 
             title="使用者信箱*" 
             placeholder="請輸入使用者信箱"
             inputId="email" 
-            formContent={userContent}
-            onFormChange={setUserContent}
+            formContent={accountContent}
+            onFormChange={setAccountContent}
           />
           <StyledDateInput
+            disableFuture={true}
             title="使用者生日" 
             inputId="birth" 
-            formContent={userContent} 
-            onFormChange={setUserContent}
+            formContent={userInfoContent} 
+            onFormChange={setUserInfoContent}
           />
           <StyledTextInput 
             title="使用者職業" 
             placeholder="請輸入使用者職業"
             inputId="profession" 
-            formContent={userContent}
-            onFormChange={setUserContent}
+            formContent={userInfoContent}
+            onFormChange={setUserInfoContent}
           />
           <StyledTextInput 
             title="使用者地區" 
             placeholder="請輸入居住地區"
             inputId="region" 
-            formContent={userContent}
-            onFormChange={setUserContent}
+            formContent={userInfoContent}
+            onFormChange={setUserInfoContent}
           />
           <StyledTextArea
             title="使用者介紹" 
             placeholder="請輸入自我介紹" 
             inputId="introduction" 
-            formContent={userContent} 
-            onFormChange={setUserContent}
+            formContent={userInfoContent} 
+            onFormChange={setUserInfoContent}
           />
         </form>
         <div className='c-user-edit__summit'>
           <StyledButton  alert>取消更新</StyledButton>
-          <StyledButton >更新資料</StyledButton>
+          <StyledButton onClick={handleUpdate}>更新資料</StyledButton>
         </div>
       </div>
 

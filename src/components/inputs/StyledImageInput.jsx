@@ -4,6 +4,8 @@ import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
 import {ReactComponent as UploadIcon} from "assets/icons/UploadIcon.svg"
 
 const ImageInput = ({className, title, warning}) => {
+
+
   return(
     <div className={className}>
       <div className="c-input-title">

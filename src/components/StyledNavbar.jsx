@@ -66,7 +66,7 @@ const Navbar = ({ className }) => {
 
       toast.success('已成功登出', {
         position: "top-right",
-        autoClose: 2500,
+        autoClose: 1500,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -74,6 +74,8 @@ const Navbar = ({ className }) => {
         progress: undefined,
         theme: "light",
       });
+
+      window.location.reload()
     }
 
     navIconsRef.current[2].checked = false

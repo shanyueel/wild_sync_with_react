@@ -1,4 +1,5 @@
 import { DatePicker } from "@mui/x-date-pickers";
+import { format } from "date-fns";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -6,11 +7,13 @@ const DateInput = ({className, title, inputId, formContent, onFormChange, warnin
   const [date, setDate] = useState(formContent[inputId] || null)
   
   const handleDateInput = (newDate) => {
+    const newDateString = Date.parse(newDate)
+
     const newForm = {
       ...formContent,
-      [inputId]: newDate,
+      [inputId]: newDateString,
     }
-    setDate(newDate)
+    setDate(newDateString)
     onFormChange(newForm)
   }
 

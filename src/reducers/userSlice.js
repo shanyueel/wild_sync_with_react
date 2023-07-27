@@ -36,10 +36,22 @@ const userSlice = createSlice({
     },
     resetUser(){
       return initialProfile
+    },
+    updateInfo(state,action){
+      const {birth, coverURL, introduction, profession, region} = action.payload
+
+      return{
+        ...state,
+        birth: birth,
+        coverURL: coverURL,
+        introduction: introduction,
+        profession: profession,
+        region: region
+      }
     }
   }
 })
 
-export const { initUser, resetUser } = userSlice.actions;
+export const { initUser, resetUser, updateInfo } = userSlice.actions;
 
 export default userSlice.reducer;

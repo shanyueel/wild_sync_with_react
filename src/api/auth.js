@@ -41,14 +41,6 @@ const logout = async() => {
   }
 }
 
-const updateUserAccount = async ( updateContent ) => {
-  try{
-    await updateProfile(auth.currentUser,updateContent)
-    console.log("[更新資料成功]:",auth.currentUser)
-  }catch(error){
-    console.error("[更新資料失敗]:",error)
-  }
 
-}
 
-export {register, login, logout, updateUserAccount}
+export {register, login, logout}

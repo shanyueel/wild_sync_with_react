@@ -11,22 +11,20 @@ import StyledTextArea from 'components/inputs/StyledTextArea';
 import StyledButton from 'components/StyledButton';
 
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
-import { updateUserInfo } from 'api/api';
+import { updateUserAccount, updateUserInfo } from 'api/api';
 
 const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen}) => {
   const user = useSelector(state => state.user)
-  const userId = user.uid
-  const {uid, photoURL, email, displayName, birth, coverURL, introduction, profession, region} = user
+  const {uid, photoURL, displayName, birth, coverURL, introduction, profession, region} = user
   const [accountContent, setAccountContent] = useState({
     uid,
     photoURL,
-    email,
     displayName
   })
   const [userInfoContent, setUserInfoContent] = useState({
     uid, 
     birth, 
-    coverURL, 
+    // coverURL, 
     introduction, 
     profession, 
     region
@@ -40,9 +38,8 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
   }
 
   const handleUpdate = async() => {
-    console.log(userId, userInfoContent)
-    
-    await updateUserInfo( userId, userInfoContent )
+    await updateUserInfo(uid, userInfoContent)
+    await updateUserAccount( accountContent )
   }
   
   return(
@@ -67,13 +64,6 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
             title="使用者名稱*" 
             placeholder="請輸入使用者名稱"
             inputId="displayName" 
-            formContent={accountContent}
-            onFormChange={setAccountContent}
-          />
-          <StyledTextInput 
-            title="使用者信箱*" 
-            placeholder="請輸入使用者信箱"
-            inputId="email" 
             formContent={accountContent}
             onFormChange={setAccountContent}
           />

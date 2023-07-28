@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 import StyledImageInput from 'components/inputs/StyledImageInput';
 import StyledTextInput from 'components/inputs/StyledTextInput';
-import StyledAvatarInput from 'components/inputs/StyledAvatarInput';
 import StyledDateInput from 'components/inputs/StyledDateInput';
 import StyledTextArea from 'components/inputs/StyledTextArea';
 import StyledButton from 'components/StyledButton';
@@ -29,6 +28,7 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
   }
 
   const handleUpdate = async() => {
+    console.log(userContent)
     const newUser = await updateUser(uid, userContent)
 
     if(newUser){
@@ -75,8 +75,27 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
       <div className='l-modal__body'>
         <form className='l-modal__form-container scrollbar'>
           <div className='c-user-edit__image'>
-            <StyledImageInput className="o-user-edit__cover" title="使用者頭貼 / 封面照片"/>
-            <StyledAvatarInput className="o-user-edit__avatar"/>
+            <StyledImageInput 
+              className="o-user-edit__cover" 
+              coverUsed
+              title="使用者頭貼 / 封面照片"
+              inputId="coverURL" 
+              uploadFolder="covers"
+              uploadFilename={`${uid}-cover`}
+              defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/covers%2Fdefault-cover.jpg?alt=media&token=9e44c402-706b-4b36-9b27-0d659f52f119"
+              formContent={userContent}
+              onFormChange={setUserContent}
+            />
+            <StyledImageInput 
+              className="o-user-edit__avatar" 
+              avatarUsed
+              inputId="photoURL" 
+              uploadFolder="avatars"
+              uploadFilename={`${uid}-avatar`}
+              defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/avatars%2Fdefault-avatar.png?alt=media&token=d993930e-be86-4f46-9dec-5cec25dd3f4c"
+              formContent={userContent}
+              onFormChange={setUserContent}
+            />
           </div>
           <StyledTextInput 
             title="使用者名稱*" 
@@ -128,7 +147,7 @@ const StyledUserEditModal = styled(UserEditModal)`
   position: relative;
   width: 90vw;
   height: 100vh;
-  max-width: 896px;
+  max-width: 640px;
   max-height: calc(100vh - 8rem);
   margin: 5rem auto 0;
   border-radius: .5rem;
@@ -148,14 +167,10 @@ const StyledUserEditModal = styled(UserEditModal)`
       position: relative;
       margin-bottom: 1rem;
 
-      .o-user-edit__cover{
-        
-      }
-
       .o-user-edit__avatar{
         position: absolute;
+        left: .5rem;
         bottom: -1rem;
-        left: 1rem;
         z-index: 3;
       }
     }

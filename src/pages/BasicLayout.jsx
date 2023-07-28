@@ -9,7 +9,7 @@ import StyledFooter from "components/StyledFooter"
 import { setWindowSize } from "reducers/environmentSlice"
 
 import 'react-toastify/dist/ReactToastify.css';
-import { resetUser, initUser, updateInfo } from "reducers/userSlice";
+import { resetUser, updateUserSlice } from "reducers/userSlice";
 import { auth } from "api/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { getUserInfo } from "api/api";
@@ -40,19 +40,16 @@ const BasicLayout = () => {
       const userAccount = auth.currentUser
       const userInfo = await getUserInfo(userAccount?.uid)
       console.log(userInfo)
-      dispatch(initUser({
+      dispatch(updateUserSlice({
         uid: userAccount?.uid,
         email: userAccount?.email,
         displayName:userAccount?.displayName,
         photoURL:userAccount?.photoURL,
-      }))
-      dispatch(updateInfo({
-        birth: userInfo?.birth,
         coverURL: userInfo?.coverURL,
+        birth: userInfo?.birth,
         introduction: userInfo?.introduction,
         profession: userInfo?.profession,
         region: userInfo?.region,
-        uid: userAccount?.uid
       }))
     } else {
       dispatch(resetUser())

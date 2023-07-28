@@ -13,45 +13,34 @@ const initialProfile = {
     introduction: "",
     role: "user",
     attendance: [],
-    createAt: null,
-    updateAt: null
 }
 
 const userSlice = createSlice({
   name: "user",
   initialState: initialProfile,
   reducers:{
-    initUser(state,action){
-      const { uid, email, displayName, photoURL } = action.payload
-      
-      return {
+    updateUserSlice(state,action){
+      const {uid, displayName, photoURL, email, birth, coverURL, introduction, profession, region} = action.payload
+      return{
         ...state,
         loggedIn: true,
         uid: uid,
         email: email,
         displayName: displayName,
-        photoURL: photoURL
-      }
-
-    },
-    resetUser(){
-      return initialProfile
-    },
-    updateInfo(state,action){
-      const {birth, coverURL, introduction, profession, region} = action.payload
-
-      return{
-        ...state,
+        photoURL: photoURL, 
         birth: birth,
         coverURL: coverURL,
         introduction: introduction,
         profession: profession,
         region: region
       }
+    },
+    resetUser(){
+      return initialProfile
     }
   }
 })
 
-export const { initUser, resetUser, updateInfo } = userSlice.actions;
+export const { updateUserSlice, resetUser } = userSlice.actions;
 
 export default userSlice.reducer;

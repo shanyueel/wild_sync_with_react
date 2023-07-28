@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 import styled from "styled-components";
 
@@ -11,24 +11,15 @@ import StyledTextArea from 'components/inputs/StyledTextArea';
 import StyledButton from 'components/StyledButton';
 
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
-import { updateUserAccount, updateUserInfo } from 'api/api';
+import { updateUser} from 'api/api';
+import { updateUserSlice } from 'reducers/userSlice';
+import { toast } from 'react-toastify';
 
 const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen}) => {
+  const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  const {uid, photoURL, displayName, birth, coverURL, introduction, profession, region} = user
-  const [accountContent, setAccountContent] = useState({
-    uid,
-    photoURL,
-    displayName
-  })
-  const [userInfoContent, setUserInfoContent] = useState({
-    uid, 
-    birth, 
-    // coverURL, 
-    introduction, 
-    profession, 
-    region
-  })
+  const uid = user.uid
+  const [userContent, setUserContent] = useState(user)
 
 
   const closeModal = () => {
@@ -38,8 +29,35 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
   }
 
   const handleUpdate = async() => {
-    await updateUserInfo(uid, userInfoContent)
-    await updateUserAccount( accountContent )
+    const newUser = await updateUser(uid, userContent)
+
+    if(newUser){
+      dispatch(updateUserSlice(newUser))
+      toast.success('更新資料成功', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      setTimeout(()=>{
+        setIsUserEditModalOpen(false)
+      },1500)
+    }else{
+      toast.error('更新資料失敗', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    }
   }
   
   return(
@@ -64,36 +82,36 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
             title="使用者名稱*" 
             placeholder="請輸入使用者名稱"
             inputId="displayName" 
-            formContent={accountContent}
-            onFormChange={setAccountContent}
+            formContent={userContent}
+            onFormChange={setUserContent}
           />
           <StyledDateInput
             disableFuture={true}
             title="使用者生日" 
             inputId="birth" 
-            formContent={userInfoContent} 
-            onFormChange={setUserInfoContent}
+            formContent={userContent} 
+            onFormChange={setUserContent}
           />
           <StyledTextInput 
             title="使用者職業" 
             placeholder="請輸入使用者職業"
             inputId="profession" 
-            formContent={userInfoContent}
-            onFormChange={setUserInfoContent}
+            formContent={userContent}
+            onFormChange={setUserContent}
           />
           <StyledTextInput 
             title="使用者地區" 
             placeholder="請輸入居住地區"
             inputId="region" 
-            formContent={userInfoContent}
-            onFormChange={setUserInfoContent}
+            formContent={userContent}
+            onFormChange={setUserContent}
           />
           <StyledTextArea
             title="使用者介紹" 
             placeholder="請輸入自我介紹" 
             inputId="introduction" 
-            formContent={userInfoContent} 
-            onFormChange={setUserInfoContent}
+            formContent={userContent} 
+            onFormChange={setUserContent}
           />
         </form>
         <div className='c-user-edit__summit'>

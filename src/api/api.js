@@ -20,23 +20,52 @@ const postNewActivity = async() => {
   }
 }
 
-const updateUserInfo = async(userId, userInfo) => {
+// const updateUserInfo = async(userId, userInfo) => {
+//   try{
+//     await setDoc(doc(firestoreDB, 'users', `user-${userId}`), userInfo, { merge:true })
+//     console.log("[更新使用者資料成功]:",userInfo)
+//     return userInfo
+//   }catch(error){
+//     console.error("[更新使用者資料失敗]:",error)
+//     return null
+//   }
+// }
+
+// const updateUserAccount = async ( updateContent ) => {
+//   try{
+//     await updateProfile(auth.currentUser,updateContent)
+//     console.log("[更新使用者帳戶成功]:",updateContent)
+//     return {success: true, ...updateContent}
+//   }catch(error){
+//     console.error("[更新使用者帳戶失敗]:",error)
+//     return  {success: false}
+//   }
+
+// }
+
+const updateUser = async(userId , updateContent) => {
   try{
-    await setDoc(doc(firestoreDB, 'users', `user-${userId}`), userInfo, { merge:true })
-    console.log("[更新使用者資料成功]:")
+    if(userId || updateContent){
+      await setDoc(doc(firestoreDB, 'users', `user-${userId}`), {
+        // coverURL: updateContent?.coverURL,
+        profession: updateContent?.profession,
+        birth: updateContent?.birth,
+        region: updateContent?.region,
+        introduction: updateContent?.introduction,
+      }, { merge:true })
+      await updateProfile(auth.currentUser,{
+        email: updateContent?.email,
+        displayName: updateContent?.displayName,
+        // photoURL: updateContent?.photoURL
+      })
+
+      return updateContent
+    }
+    
   }catch(error){
-    console.error("[更新使用者資料失敗]:",error)
+    console.error(error)
+    return null
   }
 }
 
-const updateUserAccount = async ( updateContent ) => {
-  try{
-    await updateProfile(auth.currentUser,updateContent)
-    console.log("[更新使用者帳戶成功]:",auth.currentUser)
-  }catch(error){
-    console.error("[更新使用者帳戶失敗]:",error)
-  }
-
-}
-
-export { getUserInfo, updateUserInfo, updateUserAccount}
+export { getUserInfo, updateUser}

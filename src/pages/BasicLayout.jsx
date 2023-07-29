@@ -9,15 +9,15 @@ import StyledFooter from "components/StyledFooter"
 import { setWindowSize } from "reducers/environmentSlice"
 
 import 'react-toastify/dist/ReactToastify.css';
-import { resetUser, initUser } from "reducers/userSlice";
+import { resetUser, updateUserSlice } from "reducers/userSlice";
 import { auth } from "api/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import { getUserInfo } from "api/api";
 
 const BasicLayout = () => {
   const dispatch = useDispatch()
   const location = useLocation()
   const activitiesRef = useRef(null)
-
   const pathname = location.pathname
   const licenseOnly = (pathname === "/login") || (pathname === "/register")
 
@@ -35,14 +35,21 @@ const BasicLayout = () => {
     };
   });
 
-  onAuthStateChanged(auth, (user)=>{
+  onAuthStateChanged(auth, async(user)=>{
     if (user) {
-      const user = auth.currentUser 
-      dispatch(initUser({
-        uid: user?.uid,
-        email: user?.email,
-        displayName:user?.displayName,
-        photoURL:user?.photoURL,
+      const userAccount = auth.currentUser
+      const userInfo = await getUserInfo(userAccount?.uid)
+      console.log(userInfo)
+      dispatch(updateUserSlice({
+        uid: userAccount?.uid,
+        email: userAccount?.email,
+        displayName:userAccount?.displayName,
+        photoURL:userAccount?.photoURL,
+        coverURL: userInfo?.coverURL,
+        birth: userInfo?.birth,
+        introduction: userInfo?.introduction,
+        profession: userInfo?.profession,
+        region: userInfo?.region,
       }))
     } else {
       dispatch(resetUser())

@@ -15,8 +15,6 @@ import UserPage from 'pages/UserPage'
 import ActivityPageDiscussionListArea from 'pages/ActivityPageDiscussionListArea';
 import ActivityPageDiscussionArea from 'pages/ActivityPageDiscussionArea'
 
-
-
 const theme = {
   color:{
     default: "#3F6F41",

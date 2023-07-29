@@ -4,13 +4,15 @@ import styled from "styled-components";
 
 const DateTimeInput = ({className, title, inputId, formContent, onFormChange, warning }) => {
   const [date, setDate] = useState(formContent[inputId] || null)
-  
-  const handleDateInput = (newDate) => {
+
+  const handleDateTimeInput = (newDate) => {
+    const newDateString = Date.parse(newDate)
+
     const newForm = {
       ...formContent,
-      [inputId]: newDate,
+      [inputId]: newDateString,
     }
-    setDate(newDate)
+    setDate(newDateString)
     onFormChange(newForm)
   }
 
@@ -25,7 +27,7 @@ const DateTimeInput = ({className, title, inputId, formContent, onFormChange, wa
           className="c-input-body__date-picker"
           disablePast
           value={date} 
-          onChange={handleDateInput}
+          onChange={handleDateTimeInput}
         />
       </div>
     </div>

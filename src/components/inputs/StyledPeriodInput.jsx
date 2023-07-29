@@ -6,21 +6,25 @@ const PeriodInput = ({className, title, inputName, formContent, onFormChange, wa
   const [period,setPeriod] = useState(formContent[inputName]||[null,null])
 
   const handleStartInput = (newDate) => {
-    const newPeriod = [newDate, period[1]]
+    const newDateString = Date.parse(newDate)
+    const newPeriod = [newDateString, period[1]]
     const newForm = {
       ...formContent,
       [inputName]: newPeriod
     }
+
     setPeriod(newPeriod)
     onFormChange(newForm)
   }
 
   const handleEndInput = (newDate) => {
-    const newPeriod = [period[0], newDate]
+    const newDateString = Date.parse(newDate)
+    const newPeriod = [period[0], newDateString]
     const newForm = {
       ...formContent,
       [inputName]: newPeriod
     }
+
     setPeriod(newPeriod)
     onFormChange(newForm)
   }

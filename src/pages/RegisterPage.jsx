@@ -36,7 +36,7 @@ const LoginPage = ({className})=>{
     if(success){      
       toast.success('註冊成功', {
         position: "top-right",
-        autoClose: 2500,
+        autoClose: 1500,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,

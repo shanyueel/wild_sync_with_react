@@ -23,7 +23,7 @@ const login = async ({email, password}) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password)
     const user = userCredential.user;
     console.log("[登入成功]:",user);
-    return { success: true, user }
+    return { success: true, ...user }
   }catch(error){
     console.error("[登入失敗]:",error.response)
     return { success: false }

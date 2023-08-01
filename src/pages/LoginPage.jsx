@@ -38,7 +38,7 @@ const LoginPage = ({className})=>{
 
       setTimeout(()=>{
         navigate(`/`)
-      },3000)
+      },1500)
     }
 
 

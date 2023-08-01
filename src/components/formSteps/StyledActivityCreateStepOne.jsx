@@ -34,12 +34,20 @@ const typeOptions = [
   }
 ]
 
+const activityId = 1
+
 const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
   return(
     <div className={clsx(className,"scrollbar") }>
       
       <StyledImageInput 
         title="活動封面照片"
+        inputId="coverURL"
+        uploadFolder="activity-covers"
+        uploadFilename={`${activityId}-cover`}
+        defaultImgURL="" 
+        formContent={formContent} 
+        onFormChange={onFormChange}
       />
       <StyledTextInput 
         title="活動名稱" 

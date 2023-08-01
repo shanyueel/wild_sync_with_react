@@ -58,6 +58,11 @@ const Navbar = ({ className }) => {
     navIconsRef.current[2].checked = false
   }
 
+  const handleRegister = () => {
+    navigate(`/register`)
+    navIconsRef.current[2].checked = false
+  }
+
   const handleLogout = async () => {
     const { success } = await logout()
     
@@ -111,19 +116,25 @@ const Navbar = ({ className }) => {
             <input name="navbar-icons" id="user-icon" type="checkbox" ref={(element)=>navIconsRef.current.push(element)} onChange={handleNavbarIconChange}/>
             <label htmlFor="user-icon"><UserIcon /></label>
             <div className="l-navbar__user-dropdown">
+              {user.uid?
               <Link to={`/user/${user.uid}`}>
                 <img className="o-navbar__user-avatar" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />
               </Link>
+              :<img className="o-navbar__user-avatar not-user" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />}
               <h2 className="o-navbar__user-name">{user.displayName}</h2>
               
               <ul className="l-navbar__user-dropdown-body">
                 {user.loggedIn?
                   <>
                     <li className="c-navbar__create-account" onClick={handleActivityCreate}><PlusIcon/>建立活動</li>
-                    <li className="c-navbar__logout" onClick={handleAccountSetting}><SettingIcon/>帳戶設定</li>
+                    <li className="c-navbar__account-setting" onClick={handleAccountSetting}><SettingIcon/>帳戶設定</li>
                     <li className="c-navbar__logout" onClick={handleLogout}><LogoutIcon/>帳戶登出</li>
                   </>
-                  :<li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>}
+                  :
+                  <>
+                    <li className="c-navbar__register" onClick={handleRegister}><PlusIcon/> 帳號註冊</li>
+                    <li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>
+                  </>}
               </ul>
               
               <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
@@ -303,6 +314,10 @@ const StyledNavbar = styled(Navbar)`
                 border: 5px solid ${({theme})=> theme.color.default};
                 border-radius: 50%;
                 margin-top: .75rem;
+              }
+
+              .not-user{
+                cursor: default;
               }
 
               .o-navbar__user-name{

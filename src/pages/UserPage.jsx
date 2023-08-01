@@ -1,17 +1,43 @@
 import StyledButton from "components/StyledButton"
-import StyledUserInfo from "components/StyledUserInfo"
 import styled from "styled-components"
 
-import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
-import {ReactComponent as EllipsisIcon} from "assets/icons/EllipsisIcon.svg"
-import { Link } from "react-router-dom"
-import StyledHorizontalActivityCard from "components/StyledHorizontalActivityCard"
+import { useParams } from "react-router-dom"
+import StyledActivityListItem from "components/StyledActivityListItem"
 import StyledUserCard from "components/StyledUserCard"
 import StyledUserEditModal from "modals/StyledUserEditModal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { getUserInfo } from "api/api"
+import { useSelector } from "react-redux"
+import StyledPagination from "components/StyledPagination"
+import clsx from "clsx"
 
 const UserPage = ({className}) => {
+
+  const selectedUserId = useParams().id
+  const user = useSelector(state=> state.user)
+  const environmentParams = useSelector(state => state.environment)
+  const userId = user.uid
+  const windowSize = environmentParams.windowSize
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false)
+  const [selectedUser, setSelectedUser] = useState({})
+  const [isLargeLayout, setIsLargeLayout] = useState(false)
+
+  useEffect(()=>{
+   const setWindowSize = () => {
+    setIsLargeLayout(windowSize === "large")
+   } 
+   setWindowSize()
+  })
+
+  useEffect(()=>{
+    const getSelectedUser = async(id) => {
+      const user = await getUserInfo(id)
+      setSelectedUser(user)
+      console.log(user)
+    }
+    getSelectedUser(selectedUserId)
+   
+  },[selectedUserId])
 
   const handleUserEdit = () => {
     setIsUserEditModalOpen(true)
@@ -19,73 +45,91 @@ const UserPage = ({className}) => {
     document.querySelector('html').classList.add('no-scroll');
   }
 
+  const calculateAge = (birthTimeStamp) => {
+    const currentTimeStamp = Date.now()
+    const age = Math.floor((currentTimeStamp - birthTimeStamp) / (1000 * 60 * 60 * 24 * 365.25))
+    return age
+  }
+
   return(
     <div className={className}>
-      <div className="l-web-container__main">
-        <div className="l-user__header">
-          <Link><ReturnIcon className="o-user-header__return"/></Link>
-          <StyledUserInfo className="c-user-header__user-info"/>
-          <EllipsisIcon className="o-user-header__more"/>
-        </div>
-        <div className="l-user__main">
-          <img className="o-user__cover-image" src={require("assets/images/userDefaultCover.jpg")} alt="user-cover"/>
-          <img className="o-user__avatar" src={require("assets/images/userDefaultImage.png")} alt="user-avatar"/>
-          <div className="l-user__info">
-            <h1 className="o-user__name">Daisy</h1>
-            <h3 className="o-user__account">@daisy1234</h3>
-            <p className="o-user__introduction">
-              我是一位熱愛登山的夢想家。希望能在這個平台上結交志同道合的夥伴，一同征服大自然的奇妙，共享挑戰與成就。期待與你們相遇，共創難忘的登山冒險！
-            </p>
-            <div className="l-user__stats">
+      <div className="l-web-container__main l-user">
 
-            </div>
-            <StyledButton className="o-user__edit-button" onClick={handleUserEdit} outlined>編輯個人資料</StyledButton>
-            <StyledUserEditModal 
-              isUserEditModalOpen={isUserEditModalOpen} 
-              setIsUserEditModalOpen={setIsUserEditModalOpen}
-            />
+        <div className="l-user__image">
+          <img className="o-user__cover" src={selectedUser?.coverURL} alt="user-cover"/>
+          <img className="o-user__avatar" src={selectedUser?.photoURL} alt="user-avatar"/>
+        </div>
+        <div className="l-user__info">
+          <div className="l-user__title">
+            <h1 className="o-user__name">{selectedUser?.displayName}</h1>
+            <h3 className="o-user__email">{selectedUser?.email}</h3>
+          </div>
+          <div className="l-user__brief">
+            <h3 className="o-user__region">{selectedUser?.region}</h3>
+            <h3 className="o-user__age">{`${calculateAge(selectedUser?.birth)}歲`}</h3>
+            <h3 className="o-user__profession">{selectedUser?.profession}</h3>
+          </div>
+          <p className="o-user__introduction">{selectedUser?.introduction}</p>
+          {selectedUserId === userId && 
+            <>
+              <StyledButton className="o-user__edit" onClick={handleUserEdit} outlined>更新資料</StyledButton>
+              <StyledUserEditModal 
+                isUserEditModalOpen={isUserEditModalOpen} 
+                setIsUserEditModalOpen={setIsUserEditModalOpen}
+              />
+            </>
+          }
+
+        </div>
+          
+        <div className="l-user-activities">
+
+          <div className="l-user-activities__navbar">
+            <label htmlFor="participation" className="o-user-activities__nav-item">
+              <input type="radio" name="user-activities" id="participation" defaultChecked />參與紀錄
+            </label>
+            <label htmlFor="favorite" className="o-user-activities__nav-item">
+              <input type="radio" name="user-activities" id="favorite" />喜愛活動
+            </label>
+            <label htmlFor="host" className="o-user-activities__nav-item">
+              <input type="radio" name="user-activities" id="host" />主辦經驗
+            </label>
           </div>
           
-          <div className="l-user-activities">
+          <div className="l-user-activities__container">
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledActivityListItem />
+            <StyledPagination className="o-user-activities__pagination" lightTheme/>
+          </div>
 
-            <div className="l-user-activities__navbar">
-              <label htmlFor="participation" className="o-user-activities__nav-item">
-                <input type="radio" name="user-activities" id="participation" defaultChecked />參與紀錄
-              </label>
+        </div>
 
-              <label htmlFor="favorite" className="o-user-activities__nav-item">
-                <input type="radio" name="user-activities" id="favorite" />喜愛活動
-              </label>
+      </div>
 
-              <label htmlFor="host" className="o-user-activities__nav-item">
-                <input type="radio" name="user-activities" id="host" />主辦經驗
-              </label>
-            </div>
-            
-            <div className="l-user-activities__container">
-              <StyledHorizontalActivityCard />
-              <StyledHorizontalActivityCard />
-              <StyledHorizontalActivityCard />
-            </div>
-
+      <div className="l-web-container__side l-holder-recommendation">
+      
+        <h2 className="o-holder-recommendation__title">熱門主辦者</h2>
+        <div className={clsx("l-holder-recommendation__container",{"scrollbar-x":!isLargeLayout})}>
+          <div className="l-holder-recommendation__holders">
+            <StyledUserCard />
+            <StyledUserCard />
+            <StyledUserCard />
+            <StyledUserCard />
+            <StyledUserCard />
+            <StyledUserCard />
           </div>
         </div>
 
+      </div>
 
-      </div>
-      <div className="l-web-container__side">
-          <div className="l-holder-recommendation">
-            <h2 className="o-holder-recommendation__title">熱門主辦者</h2>
-            <div className="l-holder-recommendation__container">
-               <StyledUserCard />
-               <StyledUserCard />
-               <StyledUserCard />
-               <StyledUserCard />
-               <StyledUserCard />
-               <StyledUserCard />
-            </div>
-          </div>
-      </div>
     </div>
   )
 }
@@ -94,150 +138,178 @@ const StyledUserPage = styled(UserPage)`
   width: 100%;
   height: 100%;
 
-  .l-web-container{
-    &__side{
-      .o-holder-recommendation__title{
-        color: ${({theme})=>theme.color.default};
-        font-weight: 700;
+  .l-user{
+    padding-top: calc(100vw * 9 / 16 + 3rem);
+
+    .l-user__image{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding-bottom: 2rem;
+
+      .o-user__cover{
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
       }
 
-      .l-holder-recommendation__container{
-        margin-top: 1rem;
+      .o-user__avatar{
+        position: absolute;
+        bottom: 0;
+        left: 1.5rem;
+        width: 7.5rem;
+        height: 7.5rem;
+        border-radius: 50%;
+        border: 10px solid ${({theme})=>theme.color.default};
+        z-index: 1;
+      }
+    }
+    
+    .l-user__info{
+      position: relative;
+      padding: 0 1rem;
+
+      .l-user__brief{
+        position: relative;
+        margin-top: .5rem;
         display: flex;
-        flex-direction: column;
-        gap: .5rem;
+        gap: 1rem;
+
+        h3{
+          color: ${({theme})=>theme.color.grey};
+        }
+
+        h3::after{
+          content: "";
+          position: absolute;
+          margin-left:.35rem;
+          width: 5px;
+          height: 1.5px;
+          background-color: ${({theme})=>theme.color.grey};
+          top: 50%;
+          transform: translate(0,-50%);
+        }
+
+        h3:last-child::after{
+          display: none;
+        }
       }
     }
 
-    &__main{
-      position: relative;
+    .o-user{
+      &__name, &__email{
+        color: ${({theme})=> theme.color.default};
+      }
 
-      .l-user__header{
-        width: 100%;
-        display: flex;
-        align-items: center;
-        height: 4rem;
-        border-bottom: 1px solid ${({theme})=> theme.backgroundColor.default};
+      &__email{
+        margin-top: .25rem;
+      }
 
-        svg{
-          width: 1.5rem;
-          height: 1.5rem;
-          fill: ${({theme})=>theme.color.default}
-        }
+      &__introduction{
+        margin-top: 1rem;
+      }
 
-        .c-user-header__user-info{
-          margin-left: 1rem;
-          margin-right: auto;
+      &__edit{
+        position: absolute;
+        width: 30%;
+        top: 0;
+        right: 1rem;
+      }
+    }
+    
+    .l-user-activities{
+      &__navbar{
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: .25rem;
+        margin-top: 2rem;
+        
+        .o-user-activities__nav-item{
+          position: relative;
+          height: 3rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+          font-weight: 700;
+          border-radius: .5rem .5rem 0 0;
+          color: ${({theme})=> theme.color.default};
+          background-color: ${({theme})=> theme.backgroundColor.default};
+          cursor: pointer;
+
+          input{
+            display: none;
+          }
+
+          label{
+
+          }
+
+          &:has(input:checked){
+            background-color: ${({theme})=> theme.color.default};
+              color: white;            
+
+            &::after{
+              position: absolute;
+              content:"";
+              background-color: ${({theme})=> theme.color.default};
+              width: 100%;
+              height: 1rem;
+              top: 2.75rem;
+              left: 0;
+              right: 0;
+            }
+          } 
         }
       }
- 
-      .l-user__main{
-        margin-top: 12.5rem;
-        
-        .l-user__info{
-          position: relative;
-          padding: 0 1rem;
+
+      &__container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: .75rem;
+        margin-top: .5rem;
+        padding: 1rem .75rem;
+        background-color: ${({theme})=>theme.color.default};
+        margin-bottom: 5rem;
+        border-radius: 0 0 .5rem .5rem;
+      }
+    }
+  }
+
+  .l-web-container__side{
+    margin-bottom: 3rem;
+
+    .o-holder-recommendation__title{
+      color: ${({theme})=>theme.color.default};
+      font-weight: 700;
+    }
+
+    .l-holder-recommendation__container{
+      margin-top: 1rem;
+
+      .l-holder-recommendation__holders{
+        display: flex;
+        width: fit-content;
+        gap: .75rem;
+      }
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .l-user{
+      padding-top: calc(100vw * 9 / 21 + 3rem);
+
+      .l-user__image{
+        .o-user__cover{
+          aspect-ratio: 21 / 9;
         }
 
-        .o-user{
-          &__cover-image{
-            position: absolute;
-            left: 0;
-            top: 4rem;
-            width: 100%;
-            height: 10rem;
-            object-fit: cover;
-          }
-
-          &__avatar{
-            position: absolute;
-            top: 11rem;
-            left: 1.25rem;
-            width: 5rem;
-            height: 5rem;
-            border-radius: 50%;
-            z-index: 1;
-          }
-
-          &__name, &__account{
-            color: ${({theme})=> theme.color.default};
-          }
-
-          &__account{
-            margin-top: .25rem;
-          }
-
-          &__introduction{
-            margin-top: 1rem;
-          }
-
-          &__edit-button{
-            position: absolute;
-            width: 40%;
-            top: .25rem;
-            right: 1rem;
-          }
+        .o-user__avatar{
+          width: 9rem;
+          height: 9rem;
         }
-        
-        .l-user-activities{
-          &__navbar{
-            display: grid;
-            grid-template-columns: repeat(3,1fr);
-            gap: .25rem;
-            justify-content: space-between;
-            margin-top: 2rem;
-            
-            .o-user-activities__nav-item{
-              position: relative;
-              height: 3rem;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 1rem;
-              font-weight: 700;
-              border-radius: .25rem .25rem 0 0;
-              color: ${({theme})=> theme.color.default};
-              background-color: ${({theme})=> theme.backgroundColor.default};
-              cursor: pointer;
-
-              input{
-                display: none;
-              }
-
-              label{
-
-              }
-
-              &:has(input:checked){
-                background-color: ${({theme})=> theme.color.default};
-                  color: white;            
-
-                &::after{
-                  position: absolute;
-                  content:"";
-                  background-color: ${({theme})=> theme.color.default};
-                  width: 100%;
-                  height: 1rem;
-                  top: 2.75rem;
-                  left: 0;
-                  right: 0;
-                }
-              } 
-            }
-          }
-
-          &__container{
-            display: flex;
-            flex-direction: column;
-            gap: .75rem;
-            margin-top: .5rem;
-            padding: .75rem .5rem;
-            background-color: ${({theme})=>theme.color.default};
-            margin-bottom: 5rem;
-            border-radius: 0 0 .25rem .25rem;
-          }
-        }
-
       }
     }
   }
@@ -245,6 +317,29 @@ const StyledUserPage = styled(UserPage)`
   @media screen and (min-width: 1024px) {
     display: flex;
     justify-content: space-between;
+
+    .l-user{
+      padding-top: 0;
+
+      .l-user__image{
+        position: relative;
+
+        .o-user__cover{
+          aspect-ratio: 32 / 9;
+        }
+      }
+
+      .l-user__info{
+        margin-top: 1rem;
+      }
+    }
+
+    .l-holder-recommendation__container{
+      
+      .l-holder-recommendation__holders{
+        flex-direction: column;
+      }
+    }
   }
 `
 

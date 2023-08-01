@@ -80,7 +80,7 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
               coverUsed
               title="使用者頭貼 / 封面照片"
               inputId="coverURL" 
-              uploadFolder="covers"
+              uploadFolder="user-covers"
               uploadFilename={`${uid}-cover`}
               defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/covers%2Fdefault-cover.jpg?alt=media&token=9e44c402-706b-4b36-9b27-0d659f52f119"
               formContent={userContent}

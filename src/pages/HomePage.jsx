@@ -2,8 +2,8 @@ import styled from "styled-components"
 
 import StyledImageSlider from "components/StyledImageSlider"
 import StyledVerticalActivityCard from "components/StyledVerticalActivityCard"
-import StyledHorizontalActivityCard from "components/StyledHorizontalActivityCard"
-import StyledCalendarSele from "components/inputs/StyledCalendarSelector"
+import StyledActivityListItem from "components/StyledActivityListItem"
+import StyledCalendarSelector from "components/inputs/StyledCalendarSelector"
 import StyledButton from "components/StyledButton"
 import StyledPagination from "components/StyledPagination"
 import { Link } from "react-router-dom"
@@ -247,7 +247,7 @@ const HomePage = ({className}) => {
 
                 <div className="c-activities-filters__date">
                   <h3 className="o-activities-filters__title">活動日期</h3>
-                  <StyledCalendarSele />
+                  <StyledCalendarSelector />
                 </div>
 
                 <div className="c-activities-filters__length">
@@ -308,14 +308,14 @@ const HomePage = ({className}) => {
 
             {activitiesDisplay === "list" &&
               <div className="l-activities__container--list">
-                <StyledHorizontalActivityCard />
-                <StyledHorizontalActivityCard />
-                <StyledHorizontalActivityCard />
-                <StyledHorizontalActivityCard />
-                <StyledHorizontalActivityCard />
-                <StyledHorizontalActivityCard />
-                <StyledHorizontalActivityCard />
-                <StyledHorizontalActivityCard />                
+                <StyledActivityListItem />
+                <StyledActivityListItem />
+                <StyledActivityListItem />
+                <StyledActivityListItem />
+                <StyledActivityListItem />
+                <StyledActivityListItem />
+                <StyledActivityListItem />
+                <StyledActivityListItem />                
               </div>
             }
 

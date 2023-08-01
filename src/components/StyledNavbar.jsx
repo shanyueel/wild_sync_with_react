@@ -58,6 +58,11 @@ const Navbar = ({ className }) => {
     navIconsRef.current[2].checked = false
   }
 
+  const handleRegister = () => {
+    navigate(`/register`)
+    navIconsRef.current[2].checked = false
+  }
+
   const handleLogout = async () => {
     const { success } = await logout()
     
@@ -122,10 +127,14 @@ const Navbar = ({ className }) => {
                 {user.loggedIn?
                   <>
                     <li className="c-navbar__create-account" onClick={handleActivityCreate}><PlusIcon/>建立活動</li>
-                    <li className="c-navbar__logout" onClick={handleAccountSetting}><SettingIcon/>帳戶設定</li>
+                    <li className="c-navbar__account-setting" onClick={handleAccountSetting}><SettingIcon/>帳戶設定</li>
                     <li className="c-navbar__logout" onClick={handleLogout}><LogoutIcon/>帳戶登出</li>
                   </>
-                  :<li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>}
+                  :
+                  <>
+                    <li className="c-navbar__register" onClick={handleRegister}><PlusIcon/> 帳號註冊</li>
+                    <li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>
+                  </>}
               </ul>
               
               <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>

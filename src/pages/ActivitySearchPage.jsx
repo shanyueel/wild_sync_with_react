@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import StyledButton from "components/StyledButton";
-import StyledHorizontalActivityCard from "components/StyledHorizontalActivityCard";
+import StyledHorizontalActivityCard from "components/StyledActivityListItem";
 import StyledActivityHistory from "components/StyledActivityHistory";
 
 const ActivitySearchPage = ({ className }) => {

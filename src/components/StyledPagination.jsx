@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 import {ReactComponent as NextIcon} from "assets/icons/NextIcon.svg"
 
-const Pagination = ({className}) => {
+const Pagination = ({className, lightTheme}) => {
   return(
     <div className={className}>
       <ReturnIcon/>
@@ -23,6 +23,7 @@ const StyledPagination = styled(Pagination)`
   display: flex;
   align-items: center;
   gap: .5rem;
+  margin: 1rem 0;
 
   svg{
     width: 1rem;
@@ -59,6 +60,29 @@ const StyledPagination = styled(Pagination)`
       }
     }
   }
+
+  ${props=> props.lightTheme && css`
+    svg{
+      fill: white;
+    }
+
+    ul li{
+
+      label{
+        color: white;
+      }
+
+      &:has(input:checked){
+        background-color: ${({theme})=>theme.backgroundColor.default};
+
+        label{
+          color: ${({theme})=>theme.color.default};
+        }
+      }
+      
+    }
+
+  `}
 `
 
 export default StyledPagination

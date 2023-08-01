@@ -243,6 +243,14 @@ select{
   }
 }
 
+.scrollbar-x {
+  @extend .scrollbar;
+
+  padding-left: 0;
+  padding-bottom: .75rem;
+  overflow-x: scroll;
+}
+
 /* ------ container ------*/
 
 .l-web-container{

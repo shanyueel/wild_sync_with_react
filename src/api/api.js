@@ -61,7 +61,7 @@ const updateUser = async(userId , updateContent) => {
         photoURL: updateContent?.photoURL
       })
 
-      return updateContent
+      return {id: userId, ...updateContent}
     }
     
   }catch(error){

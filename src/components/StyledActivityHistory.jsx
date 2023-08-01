@@ -7,7 +7,7 @@ const ActivityHistory = ({className}) => {
   return(
     <div className={className}>
       <h2 className="o-activity-history__title">瀏覽紀錄</h2>
-      <div className="l-activity-history__body scrollbar">
+      <div className="l-activity-history__body scrollbar-x">
         <div className="c-activity-history__cards">
           <StyledVerticalActivityCard small/>
           <StyledVerticalActivityCard small/>
@@ -29,8 +29,6 @@ const StyledActivityHistory = styled(ActivityHistory)`
 
   .l-activity-history__body{
     margin-bottom: 3rem;
-    padding-bottom: 1rem;
-    overflow-x: scroll;
 
     .c-activity-history__cards{
       display: flex;

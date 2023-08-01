@@ -36,6 +36,8 @@ const applicationNeededOptions = [
   }
 ]
 
+const activityId = 1
+
 const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
 
   return(
@@ -169,7 +171,14 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
             <tr>
               <td className="c-table-content" colSpan={2}>
                 {inputUsed?
-                  <StyledImageInput/>
+                  <StyledImageInput
+                    inputId="routeURL"
+                    uploadFolder="activity-route"
+                    uploadFilename={`${activityId}-route`}
+                    defaultImgURL="" 
+                    formContent={detailContent} 
+                    onFormChange={onDetailChange}
+                  />
                   :<img className="o-hiking-table__image" src={detailContent?.trackImage} alt="hiking map"/>
                 }
                 

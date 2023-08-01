@@ -10,6 +10,7 @@ import { useState } from "react"
 import { register } from "api/auth"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import { buildUserInfo } from "api/api"
 
 const LoginPage = ({className})=>{
   const navigate = useNavigate()
@@ -27,7 +28,13 @@ const LoginPage = ({className})=>{
       return
     }
 
-    const {success} = await register({
+    const { uid } = await register({
+      email:registerContent.email,
+      displayName: registerContent.name,
+      password:registerContent.password
+    })
+
+    const {success} = await buildUserInfo(uid, {
       email:registerContent.email,
       displayName: registerContent.name,
       password:registerContent.password
@@ -47,7 +54,7 @@ const LoginPage = ({className})=>{
 
       setTimeout(()=>{
         navigate(`/`)
-      },3000)
+      },1500)
     }
   }
 

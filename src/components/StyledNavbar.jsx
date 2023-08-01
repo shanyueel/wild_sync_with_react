@@ -111,9 +111,11 @@ const Navbar = ({ className }) => {
             <input name="navbar-icons" id="user-icon" type="checkbox" ref={(element)=>navIconsRef.current.push(element)} onChange={handleNavbarIconChange}/>
             <label htmlFor="user-icon"><UserIcon /></label>
             <div className="l-navbar__user-dropdown">
+              {user.uid?
               <Link to={`/user/${user.uid}`}>
                 <img className="o-navbar__user-avatar" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />
               </Link>
+              :<img className="o-navbar__user-avatar not-user" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />}
               <h2 className="o-navbar__user-name">{user.displayName}</h2>
               
               <ul className="l-navbar__user-dropdown-body">
@@ -303,6 +305,10 @@ const StyledNavbar = styled(Navbar)`
                 border: 5px solid ${({theme})=> theme.color.default};
                 border-radius: 50%;
                 margin-top: .75rem;
+              }
+
+              .not-user{
+                cursor: default;
               }
 
               .o-navbar__user-name{

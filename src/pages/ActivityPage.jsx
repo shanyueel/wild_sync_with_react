@@ -15,10 +15,11 @@ import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as ChatIcon} from "assets/icons/ChatIcon.svg"
 import { Outlet, useParams } from "react-router-dom"
-import { getActivity } from "api/api"
+import { alterActivityAttendance, getActivity } from "api/api"
 import { useSelector } from "react-redux"
 import StyledActivityUpdateModal from "modals/StyledActivityUpdateModal"
 import { transferTimestamp } from "utils/date-fns"
+import { toast } from "react-toastify"
 
 const ActivityPage = ({ className }) => {
   const user = useSelector(state=>state.user)
@@ -39,7 +40,7 @@ const ActivityPage = ({ className }) => {
     }
     getSelectedActivity()
     setExpired(Date.parse(now) > selectedActivity?.deadline)
-    console.log(expired)
+    setAttendance(selectedActivity?.attendance?.includes(userId))
   },[selectedActivityId, selectedActivity?.deadline])
 
   useEffect(() => {
@@ -69,8 +70,38 @@ const ActivityPage = ({ className }) => {
     }
   }
 
-  const handleAttendClick = () => {
-    setAttendance(!attendance)
+  const handleAttendClick = async() => {
+    try{
+      await alterActivityAttendance(userId, selectedActivityId)
+      setAttendance(!attendance)
+
+      if(!attendance){
+        toast.success('參加活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.success('退出活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+
+    }catch(error){
+      console.error(error)
+    }
   }
 
   const handleActivityUpdate = () => {

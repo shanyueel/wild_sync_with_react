@@ -1,6 +1,6 @@
 import { auth, storage } from "api/firebaseConfig"
 import { updateProfile } from "firebase/auth";
-import { addDoc, collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "@firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc, query, updateDoc, where } from "@firebase/firestore";
 import { firestoreDB } from "./firebaseConfig";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
@@ -37,6 +37,16 @@ const getUserInfo = async(userId) => {
   }
 }
 
+// const getActivitiesList = async() => {
+//   try{
+//     const activitiesRef = collection(firestoreDB, "activities")
+//     const activityListQuery = query()
+//     const activitiesList = await getDocs(collection(firestoreDB,"activities"))
+//   }catch(error){
+//     console.error("[取得所有活動失敗]:",error)
+//   }
+// }
+
 const getActivity = async(activityId) => {
   try{
     const activity = await getDoc(doc(firestoreDB, 'activities', activityId))
@@ -54,7 +64,8 @@ const postActivity = async(activityId, holderInfo, activityContent) => {
     await updateDoc(doc(firestoreDB, "activities",`${activityId}`),{
       ...activityContent,
       id: activityId,
-      holder: holderInfo
+      holder: holderInfo,
+      attendance:[]
     })
     console.log("[新增活動成功]:",activityId)
     return activityId
@@ -63,13 +74,46 @@ const postActivity = async(activityId, holderInfo, activityContent) => {
   }
 }
 
-const updateActivity = async(activityId, holderInfo, activityContent) => {
+const updateActivity = async(activityId, activityContent) => {
   try{
     await updateDoc(doc(firestoreDB, "activities", `${activityId}`), activityContent)
     console.log("[更新活動成功]:", activityId)
     return activityId
   }catch(error){
     console.error("[更新活動失敗]:",error)
+  }
+}
+
+const alterActivityAttendance = async(userId, activityId) => {
+  try{
+    const activityRef = await getActivity(activityId)
+    const userRef = await getUserInfo(userId)
+    const existingAttendance = activityRef?.attendance
+    const currentAttendedActivities = userRef?.attendedActivities
+
+    if(existingAttendance.includes(userId)){
+      const newAttendance = existingAttendance.filter((attendance)=> attendance !== userId)
+      const newAttendedActivities = currentAttendedActivities.filter((activity)=>activity !== activityId)
+      updateDoc(doc(firestoreDB, "activities", `${activityId}`), {
+        attendance : newAttendance
+      })
+      updateDoc(doc(firestoreDB, "users", `${userId}-user`), {
+        attendActivities: newAttendedActivities
+      })
+      console.log("[退出活動成功]:",activityId)
+    }else{
+      const newAttendance = [...existingAttendance, userId]
+      const newAttendedActivities = [...currentAttendedActivities, activityId]
+      updateDoc(doc(firestoreDB, "activities", `${activityId}`), {
+        attendance : newAttendance
+      })
+      updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+        attendedActivities: newAttendedActivities
+      })
+      console.log("[加入活動成功]:",activityId)
+    }
+  }catch(error){
+    console.log("[加入/退出活動失敗]:", error)
   }
 }
 
@@ -85,6 +129,9 @@ const buildUserInfo = async(userId, accountInfo) => {
       birth: null,
       region: "以山為家",
       introduction: "大家好！我是山林探險家，喜歡攀登高峰，感受山川的氣息。期待在Wild Sync認識志同道合的山友，一起探索未知的頂峰！",
+      heldActivities:[],
+      attendedActivities:[],
+      likedActivities:[]
     })
     console.log("[初始化使用者資料成功]:",accountInfo)
     return { success: true, accountInfo }
@@ -147,4 +194,4 @@ const deleteImage = async(folder, filename) => {
   
 }
 
-export { getRandomId, removeRandomId, getUserInfo, getActivity, postActivity, updateActivity, buildUserInfo, updateUser, uploadImage, deleteImage}
+export { getRandomId, removeRandomId, alterActivityAttendance, getUserInfo, getActivity, postActivity, updateActivity, buildUserInfo, updateUser, uploadImage, deleteImage}

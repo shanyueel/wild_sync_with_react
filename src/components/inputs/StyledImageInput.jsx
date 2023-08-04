@@ -5,7 +5,7 @@ import {ReactComponent as UploadIcon} from "assets/icons/UploadIcon.svg"
 import { useRef } from "react";
 import { deleteImage, uploadImage } from "api/api";
 
-const ImageInput = ({ className, title, inputId, uploadFolder, uploadFilename, defaultImgURL, formContent, onFormChange, warning, coverUsed, avatarUsed }) => {
+const ImageInput = ({ className, title, inputId, uploadFolder, uploadFilename, defaultImgURL, formContent, onFormChange, warning, coverUsed, avatarUsed, activityCoverUsed }) => {
   const uploadButtonRef = useRef(null)
   const displayImageRef = useRef(null)
 
@@ -92,6 +92,8 @@ const StyledImageInput = styled(ImageInput)`
     .o-image-input__display{
       position: relative;
       object-fit: cover;
+      width: 100%;
+      aspect-ratio: 16/9;
     }
     
     .c-image-input__control{
@@ -162,10 +164,6 @@ const StyledImageInput = styled(ImageInput)`
         }
       }
     }
-    
-
-
-
   `}
 
 `

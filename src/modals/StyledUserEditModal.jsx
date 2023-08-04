@@ -14,7 +14,7 @@ import { updateUser} from 'api/api';
 import { updateUserSlice } from 'reducers/userSlice';
 import { toast } from 'react-toastify';
 
-const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen}) => {
+const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, selectedUser, setSelectedUser}) => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const uid = user.uid
@@ -28,7 +28,6 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
   }
 
   const handleUpdate = async() => {
-    console.log(userContent)
     const newUser = await updateUser(uid, userContent)
 
     if(newUser){
@@ -45,6 +44,7 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen})
       })
       setTimeout(()=>{
         setIsUserEditModalOpen(false)
+        setSelectedUser(newUser)
       },1500)
     }else{
       toast.error('更新資料失敗', {

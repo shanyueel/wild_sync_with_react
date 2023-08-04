@@ -1,0 +1,382 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+}
+
+/* remember to define focus styles! */
+:focus {
+  outline: 0;
+}
+
+body {
+  line-height: 1;
+  color: black;
+  background: white;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+caption,
+th,
+td {
+  text-align: left;
+  font-weight: normal;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+}
+
+blockquote,
+q {
+  quotes: "" "";
+}
+
+* {
+  box-sizing: border-box;
+  color: #272727;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 1.5rem;
+  align-self: center;
+  font-weight: 700;
+  color: #3F6F41;
+}
+
+h2 {
+  font-size: 1.25rem;
+  align-self: center;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1rem;
+  align-self: center;
+  font-weight: 500;
+}
+
+h4 {
+  font-size: 0.8rem;
+  align-self: center;
+  font-weight: 500;
+}
+
+h5 {
+  font-size: 0.8rem;
+  align-self: center;
+  font-weight: 400;
+}
+
+/* ------ table ------*/
+table {
+  width: 100%;
+}
+
+td {
+  vertical-align: middle;
+  padding: 0.75rem;
+  border: 1.5px solid #3F6F41;
+  line-height: 1.25rem;
+}
+
+.c-table-key {
+  text-align: center;
+  width: 9rem;
+  font-weight: 700;
+  color: #3F6F41;
+  background-color: #F0F0F0;
+}
+
+.c-table-content {
+  background-color: white;
+  white-space: pre-wrap;
+}
+
+.c-table-divide {
+  height: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  .c-table-key {
+    width: 12rem;
+    white-space: nowrap;
+  }
+}
+/* ------ input ------*/
+input {
+  width: 100%;
+  height: 2.25rem;
+  border: 1px solid #3F6F41;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  padding: 0.2rem 0.75rem;
+}
+input:hover, input:focus {
+  border: 2px solid #3F6F41;
+}
+input[type=datetime-local] {
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 0.75rem;
+}
+input[type=radio] {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  padding: 0;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  margin: 0;
+}
+input[type=radio]:checked {
+  box-shadow: inset 0 0 0 3.5px #3F6F41;
+}
+
+textarea {
+  width: 100%;
+  resize: none;
+  border: 1px solid #3F6F41;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+}
+
+select {
+  width: 100%;
+  height: 2.25rem;
+  border: 1px solid #3F6F41;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #3F6F41;
+  padding: 0.2rem 0.75rem;
+}
+
+.c-input-body__date-picker {
+  background-color: white;
+  border-radius: 0.5rem;
+}
+.c-input-body__date-picker input {
+  height: 1rem;
+  font-size: 1rem;
+  color: #7B7B7B;
+  background-color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  max-width: 10rem;
+}
+.c-input-body__date-picker input:hover, .c-input-body__date-picker input:focus {
+  border: none;
+}
+.c-input-body__date-picker button svg {
+  fill: #3F6F41;
+}
+.c-input-body__date-picker fieldset {
+  border: 1px solid #3F6F41;
+  border-radius: 0.5rem;
+}
+
+.c-input-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #3F6F41;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.c-input-title label {
+  color: #3F6F41;
+  font-weight: 700;
+}
+.c-input-title .o-input-title__warning {
+  color: #D0342C;
+  font-weight: 400;
+}
+
+.c-number-input__with-unit {
+  display: flex;
+  align-items: center;
+}
+.c-number-input__with-unit label {
+  text-align: center;
+  width: 4rem;
+}
+
+.c-time-length-input {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* ------ modal ------*/
+.ReactModal__Overlay {
+  z-index: 3;
+}
+
+.l-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.25rem 0.75rem;
+  border-bottom: 1px solid #7B7B7B;
+}
+.l-modal__header .o-modal__title {
+  color: #3F6F41;
+  font-weight: 700;
+}
+.l-modal__header .o-modal__close-icon {
+  height: 1rem;
+  width: 1rem;
+  cursor: pointer;
+}
+
+.l-modal__body {
+  width: 100%;
+  height: calc(100% - 2rem);
+}
+.l-modal__body .l-modal__form-container {
+  width: 100%;
+  height: calc(100% - 9rem);
+  margin-top: 0.75rem;
+}
+
+/* ------ scrollbar ------*/
+.scrollbar, .scrollbar-x {
+  padding-left: 6px;
+}
+.scrollbar::-webkit-scrollbar, .scrollbar-x::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollbar::-webkit-scrollbar-thumb, .scrollbar-x::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: #ADADAD;
+}
+
+.scrollbar-x {
+  padding-left: 0;
+  padding-bottom: 0.75rem;
+  overflow-x: scroll;
+}
+
+/* ------ container ------*/
+.l-web-container, .l-web-container--license-only {
+  position: relative;
+  max-width: 1200px;
+  min-height: calc(100vh - 14rem);
+  margin: 4rem auto 0;
+  padding: 0 1rem;
+  overflow-x: hidden;
+}
+.l-web-container::-webkit-scrollbar, .l-web-container--license-only::-webkit-scrollbar {
+  display: none;
+}
+
+.l-web-container--license-only {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 4rem);
+  padding-bottom: 2rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .l-web-container__main {
+    width: 70%;
+  }
+  .l-web-container__side {
+    width: 27.5%;
+    padding-top: 4rem;
+  }
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}/*# sourceMappingURL=index.css.map */

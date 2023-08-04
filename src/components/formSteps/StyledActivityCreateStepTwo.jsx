@@ -47,10 +47,10 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
       />
       <StyledTextInput 
         numberUsed 
-        title="活動時長" 
-        placeholder="請輸入活動時長" 
+        title="實際活動時長" 
+        placeholder="請輸入實際活動時長(扣除通勤、用餐時間)" 
         unit="小時" 
-        inputId="outdoorLength" 
+        inputId="activityTimeLength" 
         formContent={formContent} 
         onFormChange={onFormChange}
       />
@@ -59,7 +59,7 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
         minPlaceholder="最低費用" 
         maxPlaceholder="最高費用" 
         unit="$" 
-        inputName="Cost"
+        inputName="cost"
         minInputId="minCost"
         maxInputId="maxCost"
         formContent={formContent}
@@ -82,7 +82,7 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
       />
       <StyledTextArea
         title="活動簡介" 
-        placeholder="請輸入活動簡介" 
+        placeholder="請簡單介紹活動內容(50字內)" 
         inputId="introduction" 
         formContent={formContent} 
         onFormChange={onFormChange} 

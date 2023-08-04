@@ -3,6 +3,7 @@ import StyledDateTimeInput from "./inputs/StyledDateTimeInput"
 import StyledTextInput from "./inputs/StyledTextInput"
 import StyledTextArea from "./inputs/StyledTextArea"
 import { useEffect, useState } from "react"
+import { transferTimestamp } from "utils/date-fns"
 
 const AccommodationTable = ({className, inputUsed, accommodationId, accommodationList, onAccommodationListChange}) => {
   const [accommodationDetail, setAccommodationDetail] = useState(accommodationList[accommodationId])
@@ -29,7 +30,7 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
                   formContent={accommodationDetail} 
                   onFormChange={setAccommodationDetail}
                 />
-                :accommodationDetail?.date
+                :transferTimestamp(accommodationDetail?.date,"yyyy年MM月dd日")
               }
             </td>
           </tr>

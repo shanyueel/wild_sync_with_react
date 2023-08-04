@@ -1,23 +1,75 @@
 import { auth, storage } from "api/firebaseConfig"
 import { updateProfile } from "firebase/auth";
-import { doc, getDoc, setDoc } from "@firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "@firebase/firestore";
 import { firestoreDB } from "./firebaseConfig";
-import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+const getRandomId = async() => {
+  try{
+    const docRef = await addDoc(collection(firestoreDB, "activities"),{
+      id: ""
+    })
+    console.log("[產生ID成功]:", docRef.id)
+    return docRef.id
+  }catch(error){
+    console.error("[產生ID失敗]:",error)
+  }
+}
+
+const removeRandomId = async(activityId) => {
+  try{
+    await deleteDoc(doc(firestoreDB, "activities", `${activityId}`))
+    console.log("[刪除ID成功]:",activityId)
+  }catch(error){
+    console.error("[刪除ID失敗]:",error)
+  }
+}
 
 const getUserInfo = async(userId) => {
   try{
     const userInfo = await getDoc(doc(firestoreDB, 'users', `${userId}-user`))
-    if(userInfo.exists()) return userInfo.data()
+    if(userInfo.exists()){
+      console.log("[取得使用者成功]:",userInfo.data())
+      return userInfo.data()
+    }
   }catch(error){
-    console.error(error)
+    console.error("[取得使用者失敗]:",error)
   }
 }
 
-const postNewActivity = async() => {
+const getActivity = async(activityId) => {
   try{
-
+    const activity = await getDoc(doc(firestoreDB, 'activities', activityId))
+    if(activity.exists()){
+      console.log("[取得活動成功]:",activity.data())
+      return activity.data()
+    }
   }catch(error){
+    console.log("[取得活動失敗]:",error)
+  }
+}
 
+const postActivity = async(activityId, holderInfo, activityContent) => {
+  try{
+    await updateDoc(doc(firestoreDB, "activities",`${activityId}`),{
+      ...activityContent,
+      id: activityId,
+      holder: holderInfo
+    })
+    console.log("[新增活動成功]:",activityId)
+    return activityId
+  }catch(error){
+    console.error("[新增活動失敗]:",error)
+  }
+}
+
+const updateActivity = async(activityId, holderInfo, activityContent) => {
+  try{
+    await updateDoc(doc(firestoreDB, "activities", `${activityId}`), activityContent)
+    console.log("[更新活動成功]:", activityId)
+    return activityId
+  }catch(error){
+    console.error("[更新活動失敗]:",error)
   }
 }
 
@@ -41,6 +93,7 @@ const buildUserInfo = async(userId, accountInfo) => {
   }
 }
 
+
 const updateUser = async(userId , updateContent) => {
   try{
     if(userId || updateContent){
@@ -61,7 +114,7 @@ const updateUser = async(userId , updateContent) => {
         photoURL: updateContent?.photoURL
       })
 
-      return updateContent
+      return {id: userId, ...updateContent}
     }
     
   }catch(error){
@@ -94,4 +147,4 @@ const deleteImage = async(folder, filename) => {
   
 }
 
-export { getUserInfo, buildUserInfo, updateUser, uploadImage, deleteImage}
+export { getRandomId, removeRandomId, getUserInfo, getActivity, postActivity, updateActivity, buildUserInfo, updateUser, uploadImage, deleteImage}

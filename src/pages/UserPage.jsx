@@ -76,6 +76,8 @@ const UserPage = ({className}) => {
               <StyledUserEditModal 
                 isUserEditModalOpen={isUserEditModalOpen} 
                 setIsUserEditModalOpen={setIsUserEditModalOpen}
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser}
               />
             </>
           }

@@ -5,28 +5,45 @@ import {ReactComponent as ClockIcon} from "assets/icons/ClockIcon.svg"
 import {ReactComponent as PaymentIcon} from "assets/icons/PaymentIcon.svg"
 import {ReactComponent as CrowdIcon} from "assets/icons/CrowdIcon.svg"
 
-const ActivityBasicInfo = ({ className }) => {
+const ActivityBasicInfo = ({ className, activityContent }) => {
+  const difficultySwitch = (difficulty) => {
+    switch(difficulty){
+      case "beginner":
+        return "簡單";
+      case "medium":
+        return "中等";
+      case "advanced":
+        return "進階";
+      case "expert":
+        return "專家";
+      case "master":
+        return "大師";
+      default:
+        return
+    }
+  }
+
   return(
     <div className={className}>
       <div className="c-activity-info-card">
         <FlameIcon className="o-activity-info-card__icon" />
         <h3 className="o-activity-info-card__title">難易程度</h3>
-        <h3 className="o-activity-info-card__value">入門</h3>
+        <h3 className="o-activity-info-card__value">{difficultySwitch(activityContent?.difficulty)}</h3>
       </div>
       <div className="c-activity-info-card">
         <ClockIcon className="o-activity-info-card__icon" />
         <h3 className="o-activity-info-card__title">活動時長</h3>
-        <h3 className="o-activity-info-card__value">5.5 小時</h3>
+        <h3 className="o-activity-info-card__value">{activityContent?.activityTimeLength} hr</h3>
       </div>
       <div className="c-activity-info-card">
         <PaymentIcon className="o-activity-info-card__icon"/>
         <h3 className="o-activity-info-card__title">活動費用</h3>
-        <h3 className="o-activity-info-card__value">300 - 500</h3>
+        <h3 className="o-activity-info-card__value">{activityContent?.cost?.[0]} - {activityContent?.cost?.[1]}</h3>
       </div>
       <div className="c-activity-info-card">
         <CrowdIcon className="o-activity-info-card__icon"/>
         <h3 className="o-activity-info-card__title">人數限制</h3>
-        <h3 className="o-activity-info-card__value">10 / 12</h3>
+        <h3 className="o-activity-info-card__value">10 / {activityContent?.attendanceLimit}</h3>
       </div>
     </div>
   )

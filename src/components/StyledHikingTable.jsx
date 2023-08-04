@@ -36,9 +36,8 @@ const applicationNeededOptions = [
   }
 ]
 
-const activityId = 1
 
-const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
+const HikingTable = ({className, activityId, inputUsed, detailContent, onDetailChange}) => {
 
   return(
     <>
@@ -179,7 +178,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
                     formContent={detailContent} 
                     onFormChange={onDetailChange}
                   />
-                  :<img className="o-hiking-table__image" src={detailContent?.trackImage} alt="hiking map"/>
+                  :<img className="o-hiking-table__image" src={detailContent?.routeURL} alt="hiking map"/>
                 }
                 
               </td>

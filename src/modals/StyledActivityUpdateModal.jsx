@@ -10,58 +10,27 @@ import StyledActivityCreateStepTwo from 'components/formSteps/StyledActivityCrea
 import StyledActivityCreateStepThree from 'components/formSteps/StyledActivityCreateStepThree';
 import StyledActivityCreateStepFour from 'components/formSteps/StyledActivityCreateStepFour';
 import StyledActivityCreateStepFive from 'components/formSteps/StyledActivityCreateStepFive';
-import { getRandomId, postActivity, removeRandomId } from 'api/api';
+import { updateActivity } from 'api/api';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
+import { useParams } from 'react-router';
 
-const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivityCreateModalOpen}) => {
-  const navigate = useNavigate()
+const ActivityUpdateModal = ({className, currentActivity, refreshActivity, selectedActivityId, isActivityUpdateModalOpen, setIsActivityUpdateModalOpen}) => {
+  const activityId = useParams.id
   const stepsRef = useRef(null)
-  const [activityContent, setActivityContent] = useState({})
+  const [activityContent, setActivityContent] = useState(currentActivity)
   const [formProgress, setFormProgress] = useState(1);
-  const [activityId, setActivityId] = useState("")
   const user = useSelector(state => state.user)
-  const holderInfo = {
-    uid: user.uid,
-    birth: user.birth,
-    displayName: user.displayName,
-    photoURL: user.photoURL,
-    profession: user.profession,
-    region: user.region
-  }
-
-  useEffect(()=>{
-    const generateId = async() => {
-      const newId = await getRandomId("activities")
-      setActivityId(newId)
-    }
-
-    const removeId = async() => {
-      await removeRandomId(activityId)
-      setActivityId("")
-    }
-
-    if(isActivityCreateModalOpen === true){
-      generateId()
-    }
-    if(isActivityCreateModalOpen === false || activityId !== ""){
-      removeId()
-    }
-  },[isActivityCreateModalOpen])
-
-
-
 
   const closeModal = () => {
     setFormProgress(1)
-    setIsActivityCreateModalOpen(false);
+    setIsActivityUpdateModalOpen(false);
     document.querySelector('body').classList.remove('no-scroll');
     document.querySelector('html').classList.remove('no-scroll');
   }
 
-  const handleClearData = () => {
-    setActivityContent({})
+  const handleResetData = () => {
+    setActivityContent(currentActivity)
   }
 
   const handlePreviousPageClick = () => {
@@ -70,27 +39,30 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
   const handleNextPageClick = () => {
     setFormProgress(formProgress + 1)
-    console.log(activityContent)
   }
 
-  const handleActivityCreate = async() => {
+  const handleActivityUpdate = async() => {
     try{
-      await postActivity(activityId, holderInfo, activityContent)
-      setActivityId("")
-      toast.success('建立活動成功', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      setTimeout(()=>{
-      setIsActivityCreateModalOpen(false)
-      navigate(`activity/${activityId}`)
-    },1500)
+      await updateActivity(selectedActivityId, activityContent)
+
+      if(selectedActivityId){
+        toast.success('更新活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+
+        refreshActivity(activityContent)
+
+        setTimeout(()=>{
+        setIsActivityUpdateModalOpen(false)
+      },1500)
+      }
 
     }catch(error){
       toast.error('建立活動失敗', {
@@ -133,12 +105,12 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
   return(
     <Modal
       className={className}
-      isOpen={isActivityCreateModalOpen}
+      isOpen={isActivityUpdateModalOpen}
       onRequestClose={closeModal}
       contentLabel="Activity Create Modal"
     >
       <div className='l-modal__header'>
-        <h2 className='o-modal__title'>建立活動</h2>
+        <h2 className='o-modal__title'>更新活動資訊</h2>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal}/>
       </div>
 
@@ -208,12 +180,12 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
         <div className='c-activity-create__pagination'>
           {formProgress === 1 ? 
-            <StyledButton onClick={handleClearData} alert>清空資料</StyledButton>
+            <StyledButton onClick={handleResetData} alert>復原活動</StyledButton>
             :<StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
           }
           {formProgress < 5 ?
             <StyledButton onClick={handleNextPageClick} >下一頁</StyledButton>
-            :<StyledButton onClick={handleActivityCreate} >建立活動</StyledButton>
+            :<StyledButton onClick={handleActivityUpdate} >更新活動</StyledButton>
           }
         </div>
       </div>
@@ -222,7 +194,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
   )
 }
 
-const StyledActivityCreateModal = styled(ActivityCreateModal)`
+const StyledActivityUpdateModal = styled(ActivityUpdateModal)`
   position: relative;
   width: 90vw;
   height: 100vh;
@@ -338,4 +310,4 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
   }
 `
 
-export default StyledActivityCreateModal
+export default StyledActivityUpdateModal

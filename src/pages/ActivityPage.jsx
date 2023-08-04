@@ -14,65 +14,33 @@ import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as ChatIcon} from "assets/icons/ChatIcon.svg"
-import { Outlet } from "react-router-dom"
-
-const activity = {
-  name: "麟趾-鹿林山健行",
-  type: "hiking",
-  location: "南投縣信義鄉",
-  time: ["2023-07-22T08:00","2023-07-22T13:00"],
-  deadline: "2023-07-22T08:00",
-  introduction: "麟趾山、鹿林山、鹿林前山位於自然豐富的地區，是登山愛好者和自然探險家的理想目的地。這些山峰環繞著壯麗的風光，提供了各種難度的登山步道，從輕鬆的遊覽徑到具有挑戰性的高山路線。沿途可以欣賞壯麗的山景、叢林和植物生態。在山頂，你將被壯闊的景觀和雄偉的美景所震撼，這將是一個令人難忘的登山體驗。",
-  detail:{
-    departurePoint: "上東埔登山口",
-    trackType: "backtrack",
-    trackLength: "11",
-    altitude: [1000, 1500],
-    trackCondition: "柏油路、原始山徑、石階、木棧道",
-    belongingPark: "玉山國家公園",
-    applicationNeeded: "unNeeded",
-    trackIntroduction: "信義路五段150巷22弄→(0.05K,2分鐘)→靈雲宮→(0.5K,35分鐘)→六巨石→(0.1K, 8分鐘)→逸賢亭(象山頂)→(0.25K, 10分鐘)→打印台→(0.6K, 35分鐘)→永春崗公園",
-    trackImage: "https://farm4.static.flickr.com/3616/3368789043_3f745faa30_b.jpg",
-    schedule:"成功登山人<br />時間: 2023/07/02 (日)<br />09:00 - 13:00<br />地點：塔塔加遊客中心<br />費用：無<br />程度：初階<br /><br />提醒：<br />記得自備登山裝備、換洗衣物",
-    notes:"大家自己斟酌體力、量力而為"
-  },
-  transportation: {
-    outbound:"1.國道三號名間交流道→台16→水里→台21→信義→和社→塔塔加遊客中心→台18線108.7K上東埔停車場。2.國道三號中埔交流道→台18→阿里山→台18線108.7K上東埔停車場。",
-    inbound:"1.嘉義出發：嘉義市搭乘嘉義縣公車至阿里山後，再雇車至塔塔加遊憩區，或於阿里山森林遊樂區內搭乘員林客運「6739日月潭─阿里山線」，於塔塔加遊憩區「上東埔」站下車，步行即達登山口。2.南投出發：搭乘員林客運「6739日月潭─阿里山線」，於「塔塔加遊客中心」下車，改由塔塔加遊客中心旁步道進入。或於「上東埔」站下車，步行即達登山口。"
-  },
-  accommodationList: [
-    {
-      id: 0,
-      date: null,
-      name: "萌陽莊園",
-      address: "南投市玉山下面",
-      roomDetail: "雙人房1000 </br>四人房2000",
-      notes:"有提供車位、早餐"
-    },
-    {
-      id: 1,
-      date: null,
-      name: "台中民宿",
-      address: "台中市勤美旁邊",
-      roomDetail: "雙人房1200",
-      notes:""
-    },
-    {
-      id: 2,
-      date: null,
-      name: "玉山營地",
-      address: "排雲山莊",
-      roomDetail: "雙人房1300",
-      notes:"有提供車位"
-    },
-  ]
-}
+import { Outlet, useParams } from "react-router-dom"
+import { getActivity } from "api/api"
+import { useSelector } from "react-redux"
+import StyledActivityUpdateModal from "modals/StyledActivityUpdateModal"
+import { transferTimestamp } from "utils/date-fns"
 
 const ActivityPage = ({ className }) => {
-  const [attendance, setAttendance] = useState(true)
-  const expired = false
+  const user = useSelector(state=>state.user)
+  const userId = user.uid
+  const selectedActivityId = useParams().id
+  const [attendance, setAttendance] = useState(false)
+  const [expired, setExpired] = useState(false)
   const [btnContent, setBtnContent] = useState("報名")
   const [ActiveTable, setActiveTable] = useState("detail")
+  const [selectedActivity, setSelectedActivity] = useState({})
+  const [isActivityUpdateModalOpen, setIsActivityUpdateModalOpen] = useState(false)
+
+  useEffect(()=>{
+    const now = new Date()
+    const getSelectedActivity = async() => {
+      const activity = await getActivity(selectedActivityId)
+      setSelectedActivity(activity)
+    }
+    getSelectedActivity()
+    setExpired(Date.parse(now) > selectedActivity?.deadline)
+    console.log(expired)
+  },[selectedActivityId, selectedActivity?.deadline])
 
   useEffect(() => {
     if((expired && attendance) || (!expired && attendance)){
@@ -84,8 +52,6 @@ const ActivityPage = ({ className }) => {
     }
     //更新活動資訊
   },[expired,attendance])
-
-
 
   const handleReturn = () => {
     window.history.back()
@@ -107,31 +73,57 @@ const ActivityPage = ({ className }) => {
     setAttendance(!attendance)
   }
 
+  const handleActivityUpdate = () => {
+    setIsActivityUpdateModalOpen(true)
+  }
+
   return(
       <div className={className}>
         <div className="l-web-container__main l-activity">
           <div className="l-activity-header">
             <ReturnIcon className="o-activity-header__return" onClick={handleReturn}/>
-            <StyledUserInfo/>
+            <StyledUserInfo user={selectedActivity?.holder}/>
           </div>
           <div className="l-activity-body">
-            <img className="o-activity-cover" src="https://www.ysnp.gov.tw/UploadPlugin?file=i%2BifzMiqxoOGxT%2FVr25SKzsDjCs7OItEOJlnGmQ4RxicJgsIU04Z4eAK80tRn%2FwR6XmMRuJgAVD2G9JaZXVLDA%3D%3D" alt="activity-cover" />
-            <h2 className="o-activity-title">{activity.name} <span className="o-activity-title__update-time">( 最後更新於: 2023/07/18 23:00 )</span> </h2>
+            <img className="o-activity-cover" src={selectedActivity?.coverURL} alt="activity-cover" />
+            <h2 className="o-activity-title">{selectedActivity?.name} <span className="o-activity-title__update-time">( 最後更新於: 2023/07/18 23:00 )</span> </h2>
             <div className="l-activity-location">
-              <LocationIcon /><h3>{activity.location}</h3>
+              <LocationIcon /><h3>{selectedActivity?.location}</h3>
             </div>
             <div className="l-activity-time">
-              <CalendarIcon /><h3>2023.07.01 08:00 - 2023.07.02 18:00</h3>
+              <CalendarIcon /><h3>{transferTimestamp(selectedActivity?.time?.[0])} - {transferTimestamp(selectedActivity?.time?.[1])}</h3>
             </div>
 
-            <p className="o-activity-introduction">快來參加我們的登山活動！一起征服麟趾山和鹿林山的壯麗峰巒吧！無論你是新手還是經驗豐富的登山者，都歡迎加入我們的隊伍。盡情享受大自然的美景，與同好們一同挑戰極限！</p>
+            <p className="o-activity-introduction">{selectedActivity?.introduction}</p>
 
             <div className="l-activity-application">
-              <StyledButton outlined={!attendance} disabled={expired} onClick={handleAttendClick} >{ btnContent }</StyledButton>
-              <h4 className="o-activity-deadline">- 申請截止日：2023年06月24日 (六) 23:59 -</h4>
+              {selectedActivity?.holder?.uid === userId ? 
+                <>
+                  <StyledButton outlined disabled={expired} onClick={handleActivityUpdate} >更新活動</StyledButton>
+                  <StyledActivityUpdateModal
+                    selectedActivityId={selectedActivityId}
+                    currentActivity={selectedActivity}
+                    refreshActivity={setSelectedActivity}
+                    isActivityUpdateModalOpen={isActivityUpdateModalOpen}  
+                    setIsActivityUpdateModalOpen={setIsActivityUpdateModalOpen}
+                  />  
+                </>
+
+                :<StyledButton outlined={!attendance} disabled={expired} onClick={handleAttendClick} >{ btnContent }</StyledButton>
+              }
+              
+              <h4 className="o-activity-deadline">- 報名截止日: {transferTimestamp(selectedActivity?.deadline, "yyyy年MM月dd日 HH:mm")} -</h4>
             </div>
 
-            <StyledActivityBasicInfo className="l-activity-basics"/>
+            <StyledActivityBasicInfo 
+              className="l-activity-basics" 
+              activityContent={{
+                difficulty: selectedActivity?.difficulty,
+                activityTimeLength: selectedActivity?.activityTimeLength,
+                cost: selectedActivity?.cost,
+                attendanceLimit: selectedActivity?.attendanceLimit
+              }}
+            />
             
             <div className="l-activity-tables">
               <div className="c-activity-tables__navbar" onClick={handleTableNavbarClick} >
@@ -146,17 +138,17 @@ const ActivityPage = ({ className }) => {
                 </label>
               </div>
               <div className="l-activity-tables__container">
-                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" detailContent={activity.detail}/>}
+                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" detailContent={selectedActivity?.detail}/>}
                 {ActiveTable === "residence-transportation" && 
                   <div className="o-activity-residence-and-transportation-table">
-                    <StyledTransportationTable transportationContent={activity.transportation}/>
+                    <StyledTransportationTable transportationContent={selectedActivity?.transportation}/>
                     <div className="l-activity-create__accommodation">
-                      {activity.accommodationList?.map((accommodationContent)=>{
+                      {selectedActivity?.accommodation?.map((accommodationContent)=>{
                         return(
                           <StyledAccommodationTable
                             key={accommodationContent.id}
                             accommodationId={accommodationContent.id}
-                            accommodationList={activity.accommodationList}
+                            accommodationList={selectedActivity?.accommodation}
                             onAccommodationListChange={()=>{}}
                           />
                         )
@@ -164,7 +156,7 @@ const ActivityPage = ({ className }) => {
                     </div>
                   </div>
                   }
-                {ActiveTable === "others" && <StyledOthersTable detailContent={activity.detail}/>}
+                {ActiveTable === "others" && <StyledOthersTable detailContent={selectedActivity?.detail}/>}
               </div> 
             </div>
           </div>
@@ -194,7 +186,7 @@ const StyledActivityPage = styled(ActivityPage)`
     display: flex;
     align-items: center;
     width: 100%;
-    height: 3.5rem;
+    height: 4rem;
     
     .o-activity-header__return{
       height: 1.5rem;
@@ -206,7 +198,7 @@ const StyledActivityPage = styled(ActivityPage)`
 
   .o-activity-cover{
     position: absolute;
-    top: 3.5rem;
+    top: 4rem;
     left: 0;
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -228,7 +220,7 @@ const StyledActivityPage = styled(ActivityPage)`
       }
     }
     
-    .l-activity-time, .l-activity-location, .o-activity-deadline{
+    .l-activity-time, .l-activity-location {
       display: flex;
       align-items: center;
       margin: .25rem 0;
@@ -242,7 +234,7 @@ const StyledActivityPage = styled(ActivityPage)`
       h3{
         margin-left: .25rem;
         color: ${({theme})=>theme.color.default};
-
+        font-weight: 400;
       }
       
     }
@@ -253,6 +245,7 @@ const StyledActivityPage = styled(ActivityPage)`
         height: 1rem;
       }
     }
+    
 
     .o-activity-introduction{
       margin-top: .75rem;
@@ -271,6 +264,8 @@ const StyledActivityPage = styled(ActivityPage)`
         justify-self: center;
         text-align: center;
         letter-spacing: .1rem;
+        color: ${({theme})=>theme.color.default};
+        font-weight: 400;
       }
     }
     

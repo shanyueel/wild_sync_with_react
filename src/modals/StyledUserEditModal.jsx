@@ -28,7 +28,6 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, 
   }
 
   const handleUpdate = async() => {
-    console.log(userContent)
     const newUser = await updateUser(uid, userContent)
 
     if(newUser){

@@ -1,21 +1,28 @@
 import { Link } from "react-router-dom"
 import styled, { css } from "styled-components"
 
-const UserInfo = ({className, cardUsed, message}) => {
+const UserInfo = ({className, user, cardUsed, message}) => {
+  const calculateAge = (birthTimeStamp) => {
+    const currentTimeStamp = Date.now()
+    const age = Math.floor((currentTimeStamp - birthTimeStamp) / (1000 * 60 * 60 * 24 * 365.25))
+    return age
+  }
+
+
   return(
     <div  className={className}>
-      <Link to="/user/1">
-        <img className="o-user-avatar" src={require("assets/images/userDefaultImage.png")} alt="holder-avatar"/>
+      <Link to={`/user/${user?.uid}`}>
+        <img className="o-user-avatar" src={user?.photoURL} alt="holder-avatar"/>
       </Link>
       <div className="c-user-info">
         <Link to="/user/1">
-          <h2 className="o-user-info__name">Daisy</h2> 
+          <h2 className="o-user-info__name">{user?.displayName}</h2> 
         </Link>
         <h4 className="o-user-info__time">3小時前</h4>
         <div className="c-user-info__brief"> 
-          <h4 className="o-user-info__region">台中北屯</h4>
-          <h4 className="o-user-info__age">26歲</h4>
-          <h4 className="o-user-info__profession">地勤人員</h4>
+          <h4 className="o-user-info__region">{user?.region}</h4>
+          <h4 className="o-user-info__age">{calculateAge(user?.birth)}歲</h4>
+          <h4 className="o-user-info__profession">{user?.profession}</h4>
         </div>
       </div>
     </div>

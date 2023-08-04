@@ -28,6 +28,7 @@
     "react-slick": "^0.29.0",
     "react-toastify": "^9.1.3",
     "redux-persist": "^6.0.0",
+    "sass": "^1.64.2",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.11",
     "web-vitals": "^2.1.4"

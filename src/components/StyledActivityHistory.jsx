@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import StyledVerticalActivityCard from "./StyledVerticalActivityCard";
+import StyledActivityCardItem from "./StyledActivityCardItem";
 
 const ActivityHistory = ({className}) => {
 
@@ -9,11 +9,11 @@ const ActivityHistory = ({className}) => {
       <h2 className="o-activity-history__title">瀏覽紀錄</h2>
       <div className="l-activity-history__body scrollbar-x">
         <div className="c-activity-history__cards">
-          <StyledVerticalActivityCard small/>
-          <StyledVerticalActivityCard small/>
-          <StyledVerticalActivityCard small/>
-          <StyledVerticalActivityCard small/>
-          <StyledVerticalActivityCard small/>
+          <StyledActivityCardItem small/>
+          <StyledActivityCardItem small/>
+          <StyledActivityCardItem small/>
+          <StyledActivityCardItem small/>
+          <StyledActivityCardItem small/>
         </div>
       </div>
     </div>

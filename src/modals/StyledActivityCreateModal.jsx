@@ -28,7 +28,8 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
     displayName: user.displayName,
     photoURL: user.photoURL,
     profession: user.profession,
-    region: user.region
+    region: user.region,
+    introduction: user.introduction
   }
 
   useEffect(()=>{

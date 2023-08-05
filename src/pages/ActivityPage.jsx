@@ -13,12 +13,12 @@ import StyledActivityHistory from "components/StyledActivityHistory"
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
-import {ReactComponent as ChatIcon} from "assets/icons/ChatIcon.svg"
-import { Outlet, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { getActivity } from "api/api"
 import { useSelector } from "react-redux"
 import StyledActivityUpdateModal from "modals/StyledActivityUpdateModal"
 import { transferTimestamp } from "utils/date-fns"
+import ActivityPageAttendanceArea from "./ActivityPageAttendanceArea"
 
 const ActivityPage = ({ className }) => {
   const user = useSelector(state=>state.user)
@@ -166,13 +166,10 @@ const ActivityPage = ({ className }) => {
         </div>
 
         <div className="l-web-container__side">
-          <div className="c-activity-discussion__icon">
-            <input type="checkbox" id="activity-discussion"/>
-            <label htmlFor="activity-discussion"><ChatIcon  /></label>
-          </div>
-          <div className="l-activity-discussion">
-            <Outlet />
-          </div>
+          <ActivityPageAttendanceArea 
+            holder={selectedActivity?.holder}
+            attendance={selectedActivity?.attendance}
+          />
         </div>
       </div>
   )
@@ -331,57 +328,7 @@ const StyledActivityPage = styled(ActivityPage)`
     }
   }
 
-  .c-activity-discussion__icon{
-    position: fixed;
-    bottom: 2.5rem;
-    right: 2rem;
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${({theme})=> theme.color.default};
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
-    z-index: 1;
-    
 
-    input{
-      display: none;
-    }
-
-    svg{
-      fill: white;
-      width: 2rem;
-      height: 2rem;
-      cursor: pointer;
-    }
-
-    &:has(input:checked){
-      display: none;
-
-      & ~ .l-activity-discussion{
-        display: flex;
-        flex-direction: column;
-      }
-    }
-
-  }
-
-  .l-activity-discussion{
-    display: none;
-    position: fixed;
-    top: 4rem;
-    left: 0;
-    bottom: 0;
-    right: 0; 
-    margin-bottom: 3rem;
-    background-color: rgb(255,255,255,0.9);
-    width: 100%;
-    height: calc(100vh - 4rem) ;
-    padding: 1rem 1rem 3rem;
-    z-index: 1;
-  }
 
   
 
@@ -402,17 +349,7 @@ const StyledActivityPage = styled(ActivityPage)`
       }
 
       .l-web-container__side{
-        .c-activity-discussion__icon{
-          display: none;
-        }
-
-        .l-activity-discussion{
-          padding: 0;
-          display: block;
-          position: static;
-
-          height: calc(100vh - 10rem);
-        }
+        
       }
 
 

@@ -3,8 +3,23 @@ import styled from "styled-components";
 import {ReactComponent as GroupIcon} from "assets/icons/GroupIcon.svg"
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 import StyledUserCard from "components/StyledUserCard";
+import { useEffect, useState } from "react";
+import { getUsersByIdList } from "api/userApi";
 
 const ActivityPageAttendanceArea = ({className, holder, attendance}) => {
+  const [attendanceList, setAttendanceList]= useState([])
+
+  useEffect(()=>{
+    const getAttendanceList = async() => {
+      if(attendance?.length > 0){
+        const userList = await getUsersByIdList(attendance)
+        setAttendanceList(userList)
+        return
+      }
+      return
+    }
+    getAttendanceList()
+  },[attendance])
 
   return(
     <div className={className}>
@@ -20,11 +35,9 @@ const ActivityPageAttendanceArea = ({className, holder, attendance}) => {
         
         <div className="l-activity-discussion-list__body scrollbar">
           <StyledUserCard listItem isHolder user={holder} />
-          <StyledUserCard listItem user={holder} />
-          <StyledUserCard listItem user={holder} />
-          <StyledUserCard listItem user={holder} />
-          <StyledUserCard listItem user={holder} />
-          <StyledUserCard listItem user={holder} />
+          {
+            attendanceList?.map(user => <StyledUserCard listItem user={user} />)
+          }
         </div>
       </div>
     </div>

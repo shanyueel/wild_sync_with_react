@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { resetUser, updateUserSlice } from "reducers/userSlice";
 import { auth } from "api/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { getUserInfo } from "api/api";
+import { getUserInfo } from "api/userApi";
 
 const BasicLayout = () => {
   const dispatch = useDispatch()

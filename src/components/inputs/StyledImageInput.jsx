@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
 import {ReactComponent as UploadIcon} from "assets/icons/UploadIcon.svg"
 import { useRef } from "react";
-import { deleteImage, uploadImage } from "api/api";
+import { uploadImage, deleteImage } from "api/storageApi";
 
 const ImageInput = ({ className, title, inputId, uploadFolder, uploadFilename, defaultImgURL, formContent, onFormChange, warning, coverUsed, avatarUsed, activityCoverUsed }) => {
   const uploadButtonRef = useRef(null)

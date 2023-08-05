@@ -7,7 +7,7 @@ const UserCard = ({className, user, isHolder, listItem}) => {
     <div className={className}>
       <StyledUserInfo cardUsed={!listItem} user={user} />
       <p className="o-user-card__introduction">{user?.introduction}</p>
-      {isHolder && <div className="o-user-card__holder-display">主辦人</div>}
+      {isHolder && <div className="o-user-card__holder-display">HOST</div>}
     </div>
   )
 }
@@ -41,6 +41,7 @@ const StyledUserCard = styled(UserCard)`
       padding: .25rem .5rem;
       border-radius: .25rem;
       border: 2px solid ${({theme})=>theme.color.default};
+      font-size: .75rem;
       font-weight: 700;
       color: ${({theme})=>theme.color.default};
     }

@@ -10,7 +10,7 @@ import StyledActivityCreateStepTwo from 'components/formSteps/StyledActivityCrea
 import StyledActivityCreateStepThree from 'components/formSteps/StyledActivityCreateStepThree';
 import StyledActivityCreateStepFour from 'components/formSteps/StyledActivityCreateStepFour';
 import StyledActivityCreateStepFive from 'components/formSteps/StyledActivityCreateStepFive';
-import { updateActivity } from 'api/api';
+import { updateActivity } from 'api/activityApi';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router';

@@ -10,7 +10,7 @@ import { useState } from "react"
 import { register } from "api/auth"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import { buildUserInfo } from "api/api"
+import { buildUserInfo } from "api/userApi"
 
 const LoginPage = ({className})=>{
   const navigate = useNavigate()

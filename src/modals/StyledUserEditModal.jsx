@@ -10,7 +10,7 @@ import StyledTextArea from 'components/inputs/StyledTextArea';
 import StyledButton from 'components/StyledButton';
 
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
-import { updateUser} from 'api/api';
+import { updateUser} from 'api/userApi';
 import { updateUserSlice } from 'reducers/userSlice';
 import { toast } from 'react-toastify';
 

@@ -1,18 +1,16 @@
+import { useState } from "react"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 import StyledImageSlider from "components/StyledImageSlider"
-import StyledVerticalActivityCard from "components/StyledVerticalActivityCard"
+import StyledActivityCardItem from "components/StyledActivityCardItem"
 import StyledActivityListItem from "components/StyledActivityListItem"
 import StyledCalendarSelector from "components/inputs/StyledCalendarSelector"
 import StyledButton from "components/StyledButton"
 import StyledPagination from "components/StyledPagination"
-import { Link } from "react-router-dom"
 
 import {ReactComponent as GridIcon} from "assets/icons/GridIcon.svg"
 import {ReactComponent as ListIcon} from "assets/icons/ListIcon.svg"
-import { useState } from "react"
-
-
 
 const HomePage = ({className}) => {
   const [activitiesDisplay, setActivityDisplay] = useState("grid")
@@ -291,17 +289,18 @@ const HomePage = ({className}) => {
           <div className="l-activities__container">
             {activitiesDisplay === "grid" &&
               <div className="l-activities__container--grid">
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
-                <StyledVerticalActivityCard className="c-activities__card"/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
+                <StyledActivityCardItem/>
                 {/* <i></i><i></i><i></i><i></i><i></i>                 */}
               </div>
             }
@@ -547,15 +546,15 @@ const StyledHomePage = styled(HomePage)`
     .l-activities__container{
       display: flex;
       justify-content: center;
-      margin-top: 2rem;
+      margin-top: 1rem;
       width: 90%;
 
       &--grid{
         display: grid;
-        grid-template-columns: repeat(2, 9.5rem);
+        grid-template-columns: repeat(2, 11rem);
         grid-auto-rows: 18rem;
         width: fit-content;
-        gap: 1.25rem;
+        gap: .25rem;
         margin: 2rem auto 0;
       }
 
@@ -573,16 +572,10 @@ const StyledHomePage = styled(HomePage)`
   }
 
 
-  @media screen and (min-width: 480px) {
+  @media screen and (min-width: 540px) {
     .l-activities .l-activities__container--grid{
-      grid-template-columns: repeat(2, 12rem);
-      grid-auto-rows: 21rem;
-    }
-  }
-
-  @media screen and (min-width:718px) {
-    .l-activities .l-activities__container--grid{
-      grid-template-columns: repeat(3, 12rem);
+      grid-template-columns: repeat(3, 11rem);
+      gap: .5rem;
     }
   }
 
@@ -596,12 +589,14 @@ const StyledHomePage = styled(HomePage)`
       }
     }
 
+    .l-activities .l-activities__container--grid{
+      grid-template-columns: repeat(4, 11rem);
+    }
+
   }
 
-  @media screen and (min-width:952px) {
-    .l-activities .l-activities__container--grid{
-      grid-template-columns: repeat(4, 12rem);
-    }
+  @media screen and (min-width:900px) {
+    
   }
 
   @media screen and (min-width: 1024px) {
@@ -612,11 +607,16 @@ const StyledHomePage = styled(HomePage)`
         gap: 6rem;
       }
     }
+
+    .l-activities .l-activities__container--grid{
+      gap: .75rem
+    }
   }
 
-  @media screen and (min-width:1190px) {
+  @media screen and (min-width:1200px) {
     .l-activities .l-activities__container--grid{
-      grid-template-columns: repeat(5, 12rem);
+      grid-template-columns: repeat(6, 11rem);
+      gap: .75rem
     }
   }
 `

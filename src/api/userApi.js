@@ -24,6 +24,7 @@ export const getUsersByIdList = async(idList) => {
     userListSnapshot.forEach((user)=>{
       userList.push(user.data())
     })
+    console.log("[獲取使用者清單成功]",userList)
     return userList
   }catch(error){
     console.error("[獲取使用者清單失敗]",error)

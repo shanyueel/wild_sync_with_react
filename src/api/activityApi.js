@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc } from "@firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, query, getDocs, where } from "@firebase/firestore"
 import { firestoreDB } from "./firebaseConfig"
 import { getUserInfo } from "./userApi"
 
@@ -32,6 +32,22 @@ export const getActivity = async(activityId) => {
     }
   }catch(error){
     console.log("[取得活動失敗]:",error)
+  }
+}
+
+export const getActivitiesByIdList = async(idList) => {
+  try{
+    const activitiesRef = collection(firestoreDB, "activities")
+    const activityListQuery = query(activitiesRef, where("id","in",idList))
+    const activityListSnapshot = await getDocs(activityListQuery)
+    const activityList = []
+    activityListSnapshot.forEach((user)=>{
+      activityList.push(user.data())
+    })
+    console.log("[獲取活動清單成功]",activityList)
+    return activityList
+  }catch(error){
+    console.error("[獲取活動清單失敗]",error)
   }
 }
 

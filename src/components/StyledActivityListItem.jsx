@@ -5,46 +5,80 @@ import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
+import { useSelector } from "react-redux";
+import { transferTimestamp } from "utils/date-fns";
 
 
-const ActivityListItem = ({className, sideUsed}) => {
+const ActivityListItem = ({className, activity, sideUsed}) => {
+  const user = useSelector(state => state.user)
+
+  const difficultySwitch = (difficulty) => {
+    switch(difficulty){
+      case "beginner":
+        return "簡單";
+      case "medium":
+        return "中等";
+      case "advanced":
+        return "進階";
+      case "expert":
+        return "專家";
+      case "master":
+        return "大師";
+      default:
+        return
+    }
+  }
+
+  const sliceIntroduction = (introduction) => {
+    let introductionSlice = introduction
+    if(introductionSlice?.length > 50) introductionSlice = introduction.slice(0,50)
+    return introductionSlice
+  }
+  
   return(
     <div className={className}>
 
       <div className="l-activity-card__info">
         <div className="l-activity-card__title">
           <Link className="o-activity-card__avatar" to="/user/1" >
-            <img  src="https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="user avatar"/>
+            <img  src={activity?.holder?.photoURL} alt="user avatar"/>
           </Link>
           <Link className="o-activity-card__name" to="/activity/1">
-            <h3>麟趾-鹿林山健行</h3>
+            <h3>{activity?.name}</h3>
           </Link>
-          <div className="o-activity-card__attendance">
-            <CheckIcon/><h4>已參加</h4>
-          </div>
+          {
+            user?.attendedActivities?.includes(activity?.id) &&
+            <div className="o-activity-card__attendance">
+              <CheckIcon/><h4>已參加</h4>
+            </div>
+          }
+          
         </div>
 
         <div className="c-activity-card__brief">
-          <h4 className="o-activity-card__location"><LocationIcon/>南投縣信義鄉</h4>
-          <h4 className="o-activity-card__date"><CalendarIcon/>2023.07.01 08:30 -{sideUsed && <br/>}2023.07.02 18:00</h4>
+          <h4 className="o-activity-card__location"><LocationIcon/>{activity?.location}</h4>
+          <h4 className="o-activity-card__date">
+            <CalendarIcon/>
+            {transferTimestamp(activity?.time?.[0])} - {/* sideUsed && <br/> */}{transferTimestamp(activity?.time?.[1])}
+          </h4>
         </div>
 
         <ul className="c-activity-card__highlights">
-          <li><span>難度 : </span>中等</li>
-          <li><span>時長 : </span>5.5hr</li>
-          <li><span>費用 : </span>300-500</li>
-          <li><span>人數 : </span>10 / 12</li>
+          <li><span>難度 : </span>{difficultySwitch(activity?.difficulty)}</li>
+          <li><span>時長 : </span>{activity?.activityTimeLength} hr</li>
+          <li><span>費用 : </span>{activity?.cost?.[0]} - {activity?.cost?.[1]}</li>
+          <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
 
         <p className="o-activity-card__introduction">
-          麟趾山、鹿林山、鹿林前山位於自然豐富的地區，是登山愛好者和自然探險家的理想目的地。這些山峰環繞著壯麗... <Link to="/activity/1">深入了解</Link>
+          {sliceIntroduction(activity?.introduction)} ...<Link to="/activity/1">深入了解</Link>
         </p>
 
       </div>
 
       <div className="l-activity-card__cover">
-        <Link to="/activity/1">
-          <img className="o-activity__image" src="https://clutchpoints.com/_next/image?url=https%3A%2F%2Fwp.clutchpoints.com%2Fwp-content%2Fuploads%2F2023%2F06%2Ffinals.jpg&w=3840&q=75" alt="activity cover" />
+        <Link to={`/activity/${activity?.id}`}>
+          <img className="o-activity__image" src={activity?.coverURL} alt="activity cover" />
         </Link>
       </div>
       
@@ -285,7 +319,7 @@ const StyledActivityListItem = styled(ActivityListItem)`
     }
   }
 
-  ${(props)=> props.sideUsed && css`
+  /* ${(props)=> props.sideUsed && css`
     @media screen and (min-width: 1024px) {
       height: 7.5rem;
 
@@ -314,7 +348,7 @@ const StyledActivityListItem = styled(ActivityListItem)`
       }
     }  
 
-  `}
+  `} */
 `
 
 export default StyledActivityListItem

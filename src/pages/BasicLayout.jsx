@@ -39,7 +39,6 @@ const BasicLayout = () => {
     if (user) {
       const userAccount = auth.currentUser
       const userInfo = await getUserInfo(userAccount?.uid)
-      console.log(userInfo)
       dispatch(updateUserSlice({
         uid: userAccount?.uid,
         email: userAccount?.email,

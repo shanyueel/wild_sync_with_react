@@ -6,7 +6,7 @@ import StyledActivityListItem from "components/StyledActivityListItem"
 import StyledUserCard from "components/StyledUserCard"
 import StyledUserEditModal from "modals/StyledUserEditModal"
 import { useEffect, useState } from "react"
-import { getUserInfo } from "api/userApi"
+import { getPopularUsersList, getUserInfo } from "api/userApi"
 import { useSelector } from "react-redux"
 import StyledPagination from "components/StyledPagination"
 import clsx from "clsx"
@@ -21,6 +21,7 @@ const UserPage = ({className}) => {
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState({})
   const [isLargeLayout, setIsLargeLayout] = useState(false)
+  const [popularUsers, setPopularUsers] = useState([])
 
   useEffect(()=>{
    const setWindowSize = () => {
@@ -35,7 +36,12 @@ const UserPage = ({className}) => {
       setSelectedUser(user)
       console.log(user)
     }
+    const getPopularUsers = async() => {
+      const popularUsersList = await getPopularUsersList()
+      setPopularUsers(popularUsersList)
+    }
     getSelectedUser(selectedUserId)
+    getPopularUsers()
    
   },[selectedUserId])
 
@@ -121,12 +127,7 @@ const UserPage = ({className}) => {
         <h2 className="o-holder-recommendation__title">熱門主辦者</h2>
         <div className={clsx("l-holder-recommendation__container",{"scrollbar-x":!isLargeLayout})}>
           <div className="l-holder-recommendation__holders">
-            <StyledUserCard />
-            <StyledUserCard />
-            <StyledUserCard />
-            <StyledUserCard />
-            <StyledUserCard />
-            <StyledUserCard />
+            {popularUsers?.map(user => <StyledUserCard key={user?.id} user={user} listItem={isLargeLayout}/>)}
           </div>
         </div>
 

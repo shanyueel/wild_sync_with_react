@@ -1,6 +1,6 @@
 import { auth } from "api/firebaseConfig"
 import { updateProfile } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from "@firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, where } from "@firebase/firestore";
 import { firestoreDB } from "./firebaseConfig";
 
 export const getUserInfo = async(userId) => {
@@ -30,6 +30,23 @@ export const getUsersByIdList = async(idList) => {
   }
 }
 
+export const getPopularUsersList = async() => {
+  try{
+    const usersRef = collection(firestoreDB, "users")
+    const userListQuery = query(usersRef, orderBy("heldActivities", "desc"), limit(10))
+    const userListSnapshot = await getDocs(userListQuery)
+    const userList = []
+
+    userListSnapshot.forEach((user)=>{
+      userList.push(user.data())
+    })
+
+    return userList
+  }catch(error){
+    console.error(error)
+  }
+}
+
 export const buildUserInfo = async(userId, accountInfo) => {
   try{
     await setDoc(doc(firestoreDB, 'users', `${userId}-user`),{
@@ -53,8 +70,7 @@ export const buildUserInfo = async(userId, accountInfo) => {
   }
 }
 
-
-export const updateUser = async(userId , updateContent) => {
+export const updateUser = async(userId, updateContent) => {
   try{
     if(userId || updateContent){
       
@@ -66,7 +82,7 @@ export const updateUser = async(userId , updateContent) => {
         profession: updateContent?.profession,
         birth: updateContent?.birth,
         region: updateContent?.region,
-        introduction: updateContent?.introduction,
+        introduction: updateContent?.introduction
       }, { merge:true })
       await updateProfile(auth.currentUser,{
         email: updateContent?.email,

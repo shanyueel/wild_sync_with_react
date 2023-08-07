@@ -120,8 +120,8 @@ const StyledUserInfo = styled(UserInfo)`
         grid-template-columns: auto auto;
         grid-template-rows: 1.25rem;
         grid-template-areas: 
-          "region age"
-          "profession profession";
+          "profession profession"
+          "region age";
         gap: 0 .5rem;
 
         h4:nth-child(2)::after{

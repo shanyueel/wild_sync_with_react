@@ -2,11 +2,21 @@ import styled, { css } from "styled-components";
 import StyledUserInfo from "./StyledUserInfo";
 
 const UserCard = ({className, user, isHolder, listItem}) => {
+  const sliceIntroduction = (introduction) => {
+    let introductionSlice = introduction
+    if(listItem){
+      if(introductionSlice?.length > 50) introductionSlice = `${introduction?.slice(0,50)} ...`
+    }else{
+      if(introductionSlice?.length > 30) introductionSlice = `${introduction?.slice(0,30)} ...`
+    }
+    
+    return introductionSlice
+  }
 
   return(
     <div className={className}>
       <StyledUserInfo cardUsed={!listItem} user={user} />
-      <p className="o-user-card__introduction">{user?.introduction}</p>
+      <p className="o-user-card__introduction">{sliceIntroduction(user?.introduction)}</p>
       {isHolder && <div className="o-user-card__holder-display">HOST</div>}
     </div>
   )

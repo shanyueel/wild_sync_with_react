@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 
@@ -11,9 +11,20 @@ import StyledPagination from "components/StyledPagination"
 
 import {ReactComponent as GridIcon} from "assets/icons/GridIcon.svg"
 import {ReactComponent as ListIcon} from "assets/icons/ListIcon.svg"
+import { getAllActivities } from "api/activityApi"
+import clsx from "clsx"
 
 const HomePage = ({className}) => {
   const [activitiesDisplay, setActivityDisplay] = useState("grid")
+  const [activityList, setActivityList] = useState([])
+
+  useEffect(()=>{
+    const getActivities = async() => {
+      const activities= await getAllActivities()
+      setActivityList(activities)
+    }
+    getActivities()
+  },[])
 
   const onDisplayClicked = (e) => {
     if(e.target.id === "activities-grid-display") setActivityDisplay("grid")
@@ -287,36 +298,14 @@ const HomePage = ({className}) => {
           </div>
 
           <div className="l-activities__container">
-            {activitiesDisplay === "grid" &&
-              <div className="l-activities__container--grid">
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                <StyledActivityCardItem/>
-                {/* <i></i><i></i><i></i><i></i><i></i>                 */}
-              </div>
-            }
+            <div className={clsx({"l-activities__container--grid":activitiesDisplay === "grid"},{"l-activities__container--list":activitiesDisplay === "list"})}>
+              { 
+                activitiesDisplay === "grid" ? 
+                activityList.map((activity)=> <StyledActivityCardItem key={activity.id} activity={activity} /> )
+                : activityList.map((activity)=> <StyledActivityListItem key={activity.id} activity={activity} /> )
+              }
+            </div>
 
-            {activitiesDisplay === "list" &&
-              <div className="l-activities__container--list">
-                <StyledActivityListItem />
-                <StyledActivityListItem />
-                <StyledActivityListItem />
-                <StyledActivityListItem />
-                <StyledActivityListItem />
-                <StyledActivityListItem />
-                <StyledActivityListItem />
-                <StyledActivityListItem />                
-              </div>
-            }
 
           </div>
           

@@ -35,6 +35,18 @@ export const getActivity = async(activityId) => {
   }
 }
 
+export const getAllActivities = async() => {
+  try{
+    const allActivities = []
+    const allActivitiesSnapshot = await getDocs(collection(firestoreDB, "activities"))
+    allActivitiesSnapshot.forEach(activity=> allActivities.push(activity.data()))
+    return allActivities
+  }catch(error){
+    console.log(error)
+  }
+  
+}
+
 export const getActivitiesByIdList = async(idList) => {
   try{
     const activitiesRef = collection(firestoreDB, "activities")

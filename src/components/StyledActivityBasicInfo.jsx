@@ -43,7 +43,7 @@ const ActivityBasicInfo = ({ className, activityContent }) => {
       <div className="c-activity-info-card">
         <CrowdIcon className="o-activity-info-card__icon"/>
         <h3 className="o-activity-info-card__title">人數限制</h3>
-        <h3 className="o-activity-info-card__value">10 / {activityContent?.attendanceLimit}</h3>
+        <h3 className="o-activity-info-card__value">{activityContent?.attendance?.length} / {activityContent?.attendanceLimit}</h3>
       </div>
     </div>
   )

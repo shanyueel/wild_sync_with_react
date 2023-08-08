@@ -7,27 +7,11 @@ import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
 import { useSelector } from "react-redux";
 import { transferTimestamp } from "utils/date-fns";
+import { switchDifficulty } from "utils/translation";
 
 
 const ActivityListItem = ({className, activity, sideUsed}) => {
   const user = useSelector(state => state.user)
-
-  const difficultySwitch = (difficulty) => {
-    switch(difficulty){
-      case "beginner":
-        return "簡單";
-      case "medium":
-        return "中等";
-      case "advanced":
-        return "進階";
-      case "expert":
-        return "專家";
-      case "master":
-        return "大師";
-      default:
-        return
-    }
-  }
 
   const sliceIntroduction = (introduction) => {
     let introductionSlice = introduction
@@ -40,10 +24,10 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
 
       <div className="l-activity-card__info">
         <div className="l-activity-card__title">
-          <Link className="o-activity-card__avatar" to="/user/1" >
+          <Link className="o-activity-card__avatar" to={`/user/${activity?.holder?.uid}`} >
             <img  src={activity?.holder?.photoURL} alt="user avatar"/>
           </Link>
-          <Link className="o-activity-card__name" to="/activity/1">
+          <Link className="o-activity-card__name" to={`/activity/${activity?.id}`}>
             <h3>{activity?.name}</h3>
           </Link>
           {
@@ -64,14 +48,14 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
         </div>
 
         <ul className="c-activity-card__highlights">
-          <li><span>難度 : </span>{difficultySwitch(activity?.difficulty)}</li>
+          <li><span>難度 : </span>{switchDifficulty(activity?.difficulty)}</li>
           <li><span>時長 : </span>{activity?.activityTimeLength} hr</li>
           <li><span>費用 : </span>{activity?.cost?.[0]} - {activity?.cost?.[1]}</li>
           <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
 
         <p className="o-activity-card__introduction">
-          {sliceIntroduction(activity?.introduction)} ...<Link to="/activity/1">深入了解</Link>
+          {sliceIntroduction(activity?.introduction)} ...<Link to={`/activity/${activity?.id}`}>深入了解</Link>
         </p>
 
       </div>

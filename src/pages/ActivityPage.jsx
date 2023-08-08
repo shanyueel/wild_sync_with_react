@@ -152,6 +152,7 @@ const ActivityPage = ({ className }) => {
                 difficulty: selectedActivity?.difficulty,
                 activityTimeLength: selectedActivity?.activityTimeLength,
                 cost: selectedActivity?.cost,
+                attendance: selectedActivity?.attendance,
                 attendanceLimit: selectedActivity?.attendanceLimit
               }}
             />

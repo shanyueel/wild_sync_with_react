@@ -1,52 +1,57 @@
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
+import { transferTimestamp } from "utils/date-fns";
+import { switchDifficulty } from "utils/translation";
 
+const ActivityCardItem = ({className, activity}) => {
+  const user = useSelector(state => state.user)
 
-const ActivityCardItem = ({className}) => {
   return(
     <div className={className}>
 
       <div className="l-activity-card__cover">
-        <Link to="/activity/1">
-          <img className="o-activity__image" src="https://clutchpoints.com/_next/image?url=https%3A%2F%2Fwp.clutchpoints.com%2Fwp-content%2Fuploads%2F2023%2F06%2Ffinals.jpg&w=3840&q=75" alt="activity cover" />
+        <Link to={`/activity/${activity?.id}`}>
+          <img className="o-activity__image" src={activity?.coverURL} alt="activity cover" />
         </Link>
-        <div className="o-activity-card__attendance">
+        {
+          user?.attendedActivities?.includes(activity?.id) &&
+          <div className="o-activity-card__attendance">
             <CheckIcon/><h4>已參加</h4>
-        </div>
+          </div>
+        }
+        
       </div>
 
       <div className="l-activity-card__info">
         <div className="l-activity-card__title">
-          <Link className="o-activity-card__avatar" to="/user/1" >
-            <img  src="https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="user avatar"/>
+          <Link className="o-activity-card__avatar" to={`/user/${activity?.holder?.uid}`} >
+            <img  src={activity?.holder?.photoURL} alt="user avatar"/>
           </Link>
-          <Link className="o-activity-card__name" to="/activity/1">
-            <h3>麟趾-鹿林山健行</h3>
+          <Link className="o-activity-card__name" to={`/activity/${activity?.id}`}>
+            <h3>{activity?.name}</h3>
           </Link>
-          
         </div>
 
         <div className="c-activity-card__brief">
-          <h4 className="o-activity-card__location"><LocationIcon/>南投縣信義鄉</h4>
-          <h4 className="o-activity-card__date"><CalendarIcon/>2023.07.01 08:30 -<br/>2023.07.02 18:00</h4>
+          <h4 className="o-activity-card__location"><LocationIcon/>{activity?.location}</h4>
+          <h4 className="o-activity-card__date"><CalendarIcon/>{transferTimestamp(activity?.time?.[0])} -<br/>{transferTimestamp(activity?.time?.[1])}</h4>
         </div>
 
         <ul className="c-activity-card__highlights">
-          <li><span>難度 : </span>中等</li>
-          <li><span>時長 : </span>5.5hr</li>
-          <li><span>費用 : </span>300-500</li>
-          <li><span>人數 : </span>10 / 12</li>
+          <li><span>難度 : </span>{switchDifficulty(activity?.difficulty)}</li>
+          <li><span>時長 : </span>{activity?.activityTimeLength} hr</li>
+          <li><span>費用 : </span>{activity?.cost?.[0]} - {activity?.cost?.[1]}</li>
+          <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
 
       </div>
 
-
-      
       <div className="o-activity-card__like">
         <input id="like" type="checkbox"/>
         <label htmlFor="like"><HeartIcon /></label>
@@ -204,69 +209,6 @@ const StyledActivityCardItem = styled(ActivityCardItem)`
       }
     }
   }
-
-
-
-  /* @media screen and (min-width: 720px) {
-    width: 12.5rem;
-    height: 21rem;
-
-    .l-activity-card__info{
-      padding: 1rem;
-
-      .l-activity-card__title .o-activity-card__attendance{
-        padding: .25rem .5rem;
-
-        h4{
-          display: block;
-          color: ${({theme})=>theme.color.default}
-        }
-      }
-      
-      .o-activity-card__date, 
-      .o-activity-card__location{
-        align-self: start;
-        
-        svg{
-          
-        }
-      }
-
-      .o-activity-card__date{
-        margin-top: .5rem;
-      }
-
-      .c-activity-card__highlights{
-        margin-top: .75rem;
-      }
-
-      .c-activity-card__basic-info{
-        margin-top: .5rem;
-      }
-    }
-  } */
-
-  /* @media screen and (min-width: 900px) {
-    height: 10rem;
-
-    .l-activity-card__info{
-      .c-activity-card__brief{
-        display: flex;
-        gap: .5rem;
-      }
-
-      .c-activity-card__highlights{
-        li:last-child{
-          display: block;
-        }
-      }
-
-      .o-activity-card__introduction{
-        display: block;
-        margin-top: .75rem;
-      }
-    }
-  } */
 `
 
 export default StyledActivityCardItem

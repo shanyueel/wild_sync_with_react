@@ -34,17 +34,13 @@ const typeOptions = [
   }
 ]
 
-const activityId = 1
-
 const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
   return(
     <div className={clsx(className,"scrollbar") }>
       <StyledImageInput
         title="活動封面照片"
         inputId="coverURL"
-        uploadFolder="activity-covers"
-        uploadFilename={`${activityId}-cover`}
-        defaultImgURL="" 
+        defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/activity-covers%2Fdefault-cover.jpg?alt=media&token=2eedc2a0-8f83-4168-be67-bdfae41b04b5" 
         formContent={formContent} 
         onFormChange={onFormChange}
       />

@@ -37,7 +37,7 @@ const applicationNeededOptions = [
 ]
 
 
-const HikingTable = ({className, activityId, inputUsed, detailContent, onDetailChange}) => {
+const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
 
   return(
     <>
@@ -102,7 +102,7 @@ const HikingTable = ({className, activityId, inputUsed, detailContent, onDetailC
                   formContent={detailContent} 
                   onFormChange={onDetailChange}
                  />
-                 :`${detailContent?.altitude[0]} - ${detailContent?.altitude[1]} m`
+                 :`${detailContent?.altitude?.[0]} - ${detailContent?.altitude?.[1]} m`
                 }
               </td>
             </tr>
@@ -172,9 +172,7 @@ const HikingTable = ({className, activityId, inputUsed, detailContent, onDetailC
                 {inputUsed?
                   <StyledImageInput
                     inputId="routeURL"
-                    uploadFolder="activity-route"
-                    uploadFilename={`${activityId}-route`}
-                    defaultImgURL="" 
+                    defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/activity-routes%2Fdefault-route.jpg?alt=media&token=eded7a45-4064-424f-b17a-6d8f78f546f2" 
                     formContent={detailContent} 
                     onFormChange={onDetailChange}
                   />

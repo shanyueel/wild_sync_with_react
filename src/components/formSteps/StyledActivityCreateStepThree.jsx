@@ -4,7 +4,7 @@ import clsx from "clsx";
 import StyledHikingTable from "components/StyledHikingTable";
 import { useEffect, useState } from "react";
 
-const ActivityCreateStepThree = ({ className, activityId, formContent, onFormChange}) => {
+const ActivityCreateStepThree = ({ className, formContent, onFormChange}) => {
   const [detailContent, setDetailContent] = useState(formContent?.detail || {})
   
   useEffect(()=>{
@@ -23,7 +23,6 @@ const ActivityCreateStepThree = ({ className, activityId, formContent, onFormCha
       
       <StyledHikingTable 
         inputUsed
-        activityId={activityId}
         detailContent={detailContent} 
         onDetailChange={setDetailContent}
       />

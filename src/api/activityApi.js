@@ -63,16 +63,21 @@ export const getActivitiesByIdList = async(idList) => {
   }
 }
 
-export const postActivity = async(activityId, holderInfo, activityContent) => {
+export const postActivity = async( activityId, holderInfo, activityContent ) => {
   try{
-    await updateDoc(doc(firestoreDB, "activities",`${activityId}`),{
+    const nowTimeString = Date.parse(new Date())
+    await updateDoc(doc(firestoreDB, "activities", `${activityId}`),{
       ...activityContent,
       id: activityId,
       holder: holderInfo,
+      createAt: nowTimeString,
       attendance:[]
+    },{merge: true})
+    await updateDoc(doc(firestoreDB, "users", `${holderInfo.uid}-user`),{
+      heldActivities: [...holderInfo.heldActivities, activityId]
     })
     console.log("[新增活動成功]:",activityId)
-    return activityId
+    return {success:true, id: activityId}
   }catch(error){
     console.error("[新增活動失敗]:",error)
   }

@@ -1,5 +1,5 @@
-const { ref, uploadBytes, getDownloadURL, deleteObject } = require("@firebase/storage")
-const { storage } = require("./firebaseConfig")
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "@firebase/storage"
+import { storage } from "./firebaseConfig"
 
 export const uploadImage = async(folder, filename, file)=> {
   try{

@@ -10,17 +10,17 @@ import StyledActivityCreateStepTwo from 'components/formSteps/StyledActivityCrea
 import StyledActivityCreateStepThree from 'components/formSteps/StyledActivityCreateStepThree';
 import StyledActivityCreateStepFour from 'components/formSteps/StyledActivityCreateStepFour';
 import StyledActivityCreateStepFive from 'components/formSteps/StyledActivityCreateStepFive';
-import { getRandomId, postActivity, removeRandomId } from 'api/activityApi';
+import { getRandomId, postActivity } from 'api/activityApi';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
+import { uploadImage } from 'api/storageApi';
 
 const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivityCreateModalOpen}) => {
   const navigate = useNavigate()
   const stepsRef = useRef(null)
   const [activityContent, setActivityContent] = useState({})
   const [formProgress, setFormProgress] = useState(1);
-  const [activityId, setActivityId] = useState("")
   const user = useSelector(state => state.user)
   const holderInfo = {
     uid: user.uid,
@@ -29,85 +29,10 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
     photoURL: user.photoURL,
     profession: user.profession,
     region: user.region,
-    introduction: user.introduction
+    introduction: user.introduction,
+    heldActivities: user.heldActivities || []
   }
 
-  useEffect(()=>{
-    const generateId = async() => {
-      const newId = await getRandomId("activities")
-      setActivityId(newId)
-    }
-
-    const removeId = async() => {
-      await removeRandomId(activityId)
-      setActivityId("")
-    }
-
-    if(isActivityCreateModalOpen === true){
-      generateId()
-    }
-    if(isActivityCreateModalOpen === false || activityId !== ""){
-      removeId()
-    }
-  },[isActivityCreateModalOpen])
-
-
-
-
-  const closeModal = () => {
-    setFormProgress(1)
-    setIsActivityCreateModalOpen(false);
-    document.querySelector('body').classList.remove('no-scroll');
-    document.querySelector('html').classList.remove('no-scroll');
-  }
-
-  const handleClearData = () => {
-    setActivityContent({})
-  }
-
-  const handlePreviousPageClick = () => {
-    setFormProgress(formProgress - 1)
-  }
-
-  const handleNextPageClick = () => {
-    setFormProgress(formProgress + 1)
-    console.log(activityContent)
-  }
-
-  const handleActivityCreate = async() => {
-    try{
-      await postActivity(activityId, holderInfo, activityContent)
-      setActivityId("")
-      toast.success('建立活動成功', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      setTimeout(()=>{
-      setIsActivityCreateModalOpen(false)
-      navigate(`activity/${activityId}`)
-    },1500)
-
-    }catch(error){
-      toast.error('建立活動失敗', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-    }
-
-  }
-  
   useEffect(()=>{
     const adjustStepDisplay = (currentFormProgress) => {
       const steps = stepsRef?.current
@@ -131,6 +56,81 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
     adjustStepDisplay(formProgress)
   },[formProgress])
 
+  const closeModal = async() => {
+    setFormProgress(1)
+    setIsActivityCreateModalOpen(false)
+    document.querySelector('body').classList.remove('no-scroll')
+    document.querySelector('html').classList.remove('no-scroll')
+  }
+
+  const handleClearData = async() => {
+    setActivityContent({})
+  }
+
+  const handlePreviousPageClick = () => {
+    setFormProgress(formProgress - 1)
+  }
+
+  const handleNextPageClick = () => {
+    setFormProgress(formProgress + 1)
+    console.log( holderInfo, activityContent)
+  }
+
+  const handleActivityCreate = async() => {
+    const activityId = await getRandomId()
+    let updateCoverURL = null
+    let updateRouteURL = null
+
+    if(activityContent?.coverURLFile) updateCoverURL = await uploadImage("activity-covers",`${activityId}-cover`, activityContent?.coverURLFile)
+    if(activityContent?.detail?.routeURLFile) updateRouteURL = await uploadImage("activity-routes", `${activityId}-route`, activityContent?.detail?.routeURLFile)
+    
+    delete activityContent?.coverURLFile
+    delete activityContent?.detail?.routeURLFile
+    URL.revokeObjectURL(activityContent?.coverURL)
+    URL.revokeObjectURL(activityContent?.detail?.routeURL)
+
+    const updateActivityContent = {
+      ...activityContent,
+      coverURL: updateCoverURL,
+      detail:{
+        ...activityContent?.detail,
+        routeURL: updateRouteURL
+      }
+    }
+
+    const { success } = await postActivity(activityId, holderInfo, updateActivityContent)
+
+    if(success){
+      setFormProgress(1)
+      setActivityContent({})
+      toast.success('建立活動成功', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      setTimeout(()=>{
+        setIsActivityCreateModalOpen(false)
+        navigate(`activity/${activityId}`)
+      },1500)
+    }else{
+      toast.error('建立活動失敗', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    }
+  }
+  
   return(
     <Modal
       className={className}
@@ -185,7 +185,6 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
           {formProgress === 3 &&
             <StyledActivityCreateStepThree
-              activityId={activityId}
               formContent={activityContent} 
               onFormChange={setActivityContent}
             />

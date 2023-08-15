@@ -8,16 +8,18 @@ import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
 import { transferTimestamp } from "utils/date-fns";
 import { switchDifficulty } from "utils/translation";
+import { displayLocation } from "utils/location";
 
 const ActivityCardItem = ({className, activity}) => {
   const user = useSelector(state => state.user)
+  const defaultImageURL = require('data/defaultImageURL.json')
 
   return(
     <div className={className}>
 
       <div className="l-activity-card__cover">
         <Link to={`/activity/${activity?.id}`}>
-          <img className="o-activity__image" src={activity?.coverURL} alt="activity cover" />
+          <img className="o-activity__image" src={activity?.coverURL || defaultImageURL.activityCover} alt="activity cover" />
         </Link>
         {
           user?.attendedActivities?.includes(activity?.id) &&
@@ -34,18 +36,18 @@ const ActivityCardItem = ({className, activity}) => {
             <img  src={activity?.holder?.photoURL} alt="user avatar"/>
           </Link>
           <Link className="o-activity-card__name" to={`/activity/${activity?.id}`}>
-            <h3>{activity?.name}</h3>
+            <h3>{activity?.name?.length > 8 ? activity?.name?.slice(0,7)+'...':activity?.name}</h3>
           </Link>
         </div>
 
         <div className="c-activity-card__brief">
-          <h4 className="o-activity-card__location"><LocationIcon/>{activity?.location}</h4>
+          <h4 className="o-activity-card__location"><LocationIcon/>{displayLocation(activity?.location)}</h4>
           <h4 className="o-activity-card__date"><CalendarIcon/>{transferTimestamp(activity?.time?.[0])} -<br/>{transferTimestamp(activity?.time?.[1])}</h4>
         </div>
 
         <ul className="c-activity-card__highlights">
           <li><span>難度 : </span>{switchDifficulty(activity?.difficulty)}</li>
-          <li><span>時長 : </span>{activity?.activityTimeLength} hr</li>
+          <li><span>時長 : </span>{activity?.activityTimeLength}hr</li>
           <li><span>費用 : </span>{activity?.cost?.[0]} - {activity?.cost?.[1]}</li>
           <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
@@ -164,7 +166,7 @@ const StyledActivityCardItem = styled(ActivityCardItem)`
       margin-left: .25rem;
 
       li{
-        padding: .25rem .5rem;
+        padding: .25rem .375rem;
         border-radius: .25rem;
         font-size: .75rem;
         color: white;

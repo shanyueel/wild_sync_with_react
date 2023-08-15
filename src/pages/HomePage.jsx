@@ -15,6 +15,7 @@ import { getAllActivities } from "api/activityApi"
 import clsx from "clsx"
 
 const HomePage = ({className}) => {
+  const activitiesAreas = require('data/taiwanDistricts.json')
   const [activitiesDisplay, setActivityDisplay] = useState("grid")
   const [activityList, setActivityList] = useState([])
 
@@ -102,97 +103,6 @@ const HomePage = ({className}) => {
     }
   ]
 
-  const activitiesAreas = [
-    {
-      id: "KEL",
-      title: "基隆"
-    },
-    {
-      id: "TPE",
-      title: "台北"
-    },
-    {
-      id: "NTPC",
-      title: "新北"
-    },
-    {
-      id: "TYN",
-      title: "桃園"
-    },
-    {
-      id: "HSZ",
-      title: "新竹"
-    },
-    {
-      id: "ZMI",
-      title: "苗栗"
-    },
-    {
-      id: "TXG",
-      title: "台中"
-    },
-    {
-      id: "CHW",
-      title: "彰化"
-    },
-    {
-      id: "NTC",
-      title: "南投"
-    },
-    {
-      id: "YUN",
-      title: "雲林"
-    },
-    {
-      id: "CYI",
-      title: "嘉義"
-    },
-    {
-      id: "TNN",
-      title: "台南"
-    },
-    {
-      id: "KHH",
-      title: "高雄"
-    },
-    {
-      id: "PIF",
-      title: "屏東"
-    },
-    {
-      id: "ILA",
-      title: "宜蘭"
-    },
-    {
-      id: "HUN",
-      title: "花蓮"
-    },
-    {
-      id: "TTT",
-      title: "台東"
-    },
-    {
-      id: "PEH",
-      title: "澎湖"
-    },
-    {
-      id: "GNI",
-      title: "綠島"
-    },
-    {
-      id: "KYD",
-      title: "蘭嶼"
-    },
-    {
-      id: "KNH",
-      title: "金門"
-    },
-    {
-      id: "MFK",
-      title: "馬祖"
-    },
-  ]
-
   return(
       <div className={className} >
         <StyledImageSlider sliderImages={sliderImage}/>
@@ -243,11 +153,11 @@ const HomePage = ({className}) => {
                 <div className="c-activities-filters__area">
                   <h3 className="o-activities-filters__title">活動位置</h3>
                   <ul className="c-activities-filters__checkbox-list">
-                    { activitiesAreas.map((activitiesArea)=>{
+                    { activitiesAreas?.map((activitiesArea)=>{
                       return(
                       <li className="c-activities-checkbox-item" key={activitiesArea.id}>
                         <input type="checkbox" className="o-activities-checkbox" name="activities-area" id={`${activitiesArea.id}-area`} />
-                        <label htmlFor={`${activitiesArea.id}-area`}>{activitiesArea.title}</label>
+                        <label htmlFor={`${activitiesArea.id}-area`}>{activitiesArea.name.slice(0,2)}</label>
                       </li>
                       )
                     }) }
@@ -301,8 +211,8 @@ const HomePage = ({className}) => {
             <div className={clsx({"l-activities__container--grid":activitiesDisplay === "grid"},{"l-activities__container--list":activitiesDisplay === "list"})}>
               { 
                 activitiesDisplay === "grid" ? 
-                activityList.map((activity)=> <StyledActivityCardItem key={activity.id} activity={activity} /> )
-                : activityList.map((activity)=> <StyledActivityListItem key={activity.id} activity={activity} /> )
+                activityList?.map((activity)=> <StyledActivityCardItem key={activity.id} activity={activity} /> )
+                : activityList?.map((activity)=> <StyledActivityListItem key={activity.id} activity={activity} /> )
               }
             </div>
 

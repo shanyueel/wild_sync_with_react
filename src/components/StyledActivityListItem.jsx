@@ -8,10 +8,12 @@ import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
 import { useSelector } from "react-redux";
 import { transferTimestamp } from "utils/date-fns";
 import { switchDifficulty } from "utils/translation";
+import { displayLocation } from "utils/location";
 
 
 const ActivityListItem = ({className, activity, sideUsed}) => {
   const user = useSelector(state => state.user)
+  const defaultImageURL = require('data/defaultImageURL')
 
   const sliceIntroduction = (introduction) => {
     let introductionSlice = introduction
@@ -40,7 +42,7 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
         </div>
 
         <div className="c-activity-card__brief">
-          <h4 className="o-activity-card__location"><LocationIcon/>{activity?.location}</h4>
+          <h4 className="o-activity-card__location"><LocationIcon/>{displayLocation(activity?.location)}</h4>
           <h4 className="o-activity-card__date">
             <CalendarIcon/>
             {transferTimestamp(activity?.time?.[0])} - {/* sideUsed && <br/> */}{transferTimestamp(activity?.time?.[1])}
@@ -62,7 +64,7 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
 
       <div className="l-activity-card__cover">
         <Link to={`/activity/${activity?.id}`}>
-          <img className="o-activity__image" src={activity?.coverURL} alt="activity cover" />
+          <img className="o-activity__image" src={activity?.coverURL || defaultImageURL.activityCover} alt="activity cover" />
         </Link>
       </div>
       

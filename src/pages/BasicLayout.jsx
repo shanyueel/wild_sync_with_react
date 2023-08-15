@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { resetUser, updateUserSlice } from "reducers/userSlice";
 import { auth } from "api/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { getUserInfo } from "api/userApi";
+import { getUser } from "api/userApi";
 
 const BasicLayout = () => {
   const dispatch = useDispatch()
@@ -38,7 +38,7 @@ const BasicLayout = () => {
   onAuthStateChanged(auth, async(user)=>{
     if (user) {
       const userAccount = auth.currentUser
-      const userInfo = await getUserInfo(userAccount?.uid)
+      const userInfo = await getUser(userAccount?.uid)
       dispatch(updateUserSlice({
         uid: userAccount?.uid,
         email: userAccount?.email,

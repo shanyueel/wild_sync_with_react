@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import styled from "styled-components";
 
 const RadioInput = ({className, title, radioOptions, formContent, onFormChange}) => {
@@ -16,8 +17,8 @@ const RadioInput = ({className, title, radioOptions, formContent, onFormChange})
       <div className="l-radio-options">
         {radioOptions.map(radioOption =>{
           return(
-            <div key={radioOption.id} className="c-radio-option">
-              <input id={radioOption.id} name={radioOption.name} type="radio" onChange={handleRadioChange} checked={radioOption.id===formContent[radioOption.name]} required />
+            <div key={radioOption.id} className={clsx("c-radio-option",{"--disabled":radioOption.disabled}) }>
+              <input id={radioOption.id} name={radioOption.name} type="radio" onChange={handleRadioChange} checked={radioOption.id===formContent[radioOption.name]} disabled={radioOption.disabled} />
               <label htmlFor={radioOption.id}>{radioOption.label}</label>
             </div>
           )
@@ -44,6 +45,11 @@ const StyledRadioInput = styled(RadioInput)`
         white-space: nowrap;
         margin-left: .25rem;
       }
+
+      &.--disabled{
+        opacity: 0.25;
+      }
+
     }
   }
 

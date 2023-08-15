@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import clsx from "clsx";
 
-import StyledOthersTable from "components/StyledOthersTable";
+import StyledOthersTable from "components/tables/StyledOthersTable";
 import { useEffect, useState } from "react";
 
 const ActivityCreateStepFive = ({ className, formContent, onFormChange}) => {

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import clsx from "clsx";
 
-import StyledHikingTable from "components/StyledHikingTable";
+import StyledHikingTable from "components/tables/StyledHikingTable";
 import { useEffect, useState } from "react";
 
 const ActivityCreateStepThree = ({ className, formContent, onFormChange}) => {

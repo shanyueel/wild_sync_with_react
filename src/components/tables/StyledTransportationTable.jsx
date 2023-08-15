@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import StyledTextArea from "./inputs/StyledTextArea";
+import StyledTextArea from "../inputs/StyledTextArea";
+import clsx from "clsx";
 
 const TransportationTable = ({className, inputUsed, transportationContent, onTransportationContentChange}) => {
   return(
@@ -8,10 +9,10 @@ const TransportationTable = ({className, inputUsed, transportationContent, onTra
       <table >
         <tbody>
           <tr>
-              <td className="c-table-key" colSpan={2}>交通方式</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})} colSpan={2}>交通方式</td>
           </tr>
           <tr>
-            <td className="c-table-key">去程交通</td>
+            <td className={clsx("c-table-key",{inputUsed: inputUsed})}>去程交通</td>
             <td className="c-table-content">
               {inputUsed?
                 <StyledTextArea
@@ -25,7 +26,7 @@ const TransportationTable = ({className, inputUsed, transportationContent, onTra
             </td>
           </tr>
           <tr>
-            <td className="c-table-key">回程交通</td>
+            <td className={clsx("c-table-key",{inputUsed: inputUsed})}>回程交通</td>
             <td className="c-table-content">
               {inputUsed?
                 <StyledTextArea

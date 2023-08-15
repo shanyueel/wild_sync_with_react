@@ -1,25 +1,27 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+
+import StyledUserCard from "components/StyledUserCard";
+
+import { getUsersByIdList } from "api/userApi";
 
 import {ReactComponent as GroupIcon} from "assets/icons/GroupIcon.svg"
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
-import StyledUserCard from "components/StyledUserCard";
-import { useEffect, useState } from "react";
-import { getUsersByIdList } from "api/userApi";
 
-const ActivityPageAttendanceArea = ({className, holder, attendance}) => {
+const ActivityAttendance = ({className, holder, attendance}) => {
   const [attendanceList, setAttendanceList]= useState([])
 
   useEffect(()=>{
     const getAttendanceList = async() => {
-      if(attendance?.length > 0){
-        const userList = await getUsersByIdList(attendance)
-        setAttendanceList(userList)
-        return
-      }
-      return
+      const userList = await getUsersByIdList(attendance)
+      setAttendanceList(userList)
     }
     getAttendanceList()
   },[attendance])
+
+  const displayAttendance = () => {
+    console.log(attendanceList)
+  }
 
   return(
     <div className={className}>
@@ -30,13 +32,13 @@ const ActivityPageAttendanceArea = ({className, holder, attendance}) => {
       <div className="l-activity-attendance">
         <div className="l-activity-discussion__header">
           <label htmlFor="activity-attendance"><ReturnIcon className="o-activity-discussion__return-icon"/></label>
-          <h2 className="o-activity-discussion__title">活動參加者</h2>
+          <h2 className="o-activity-discussion__title" onClick={displayAttendance}>活動參加者</h2>
         </div>
         
         <div className="l-activity-discussion-list__body scrollbar">
           <StyledUserCard listItem isHolder user={holder} />
-          {
-            attendanceList?.map(user => <StyledUserCard listItem user={user} />)
+          { 
+            attendanceList?.map(user=> <StyledUserCard key={user?.uid} listItem user={user} /> ) 
           }
         </div>
       </div>
@@ -44,7 +46,9 @@ const ActivityPageAttendanceArea = ({className, holder, attendance}) => {
   )
 }
 
-const StyledActivityPageAttendanceArea = styled(ActivityPageAttendanceArea)`
+
+
+const StyledActivityAttendance = styled(ActivityAttendance)`
   width: 100%;
   height: 100%;
   
@@ -149,4 +153,5 @@ const StyledActivityPageAttendanceArea = styled(ActivityPageAttendanceArea)`
   }
 `
 
-export default StyledActivityPageAttendanceArea
+export default StyledActivityAttendance
+

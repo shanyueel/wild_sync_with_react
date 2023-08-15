@@ -4,7 +4,7 @@ import clsx from "clsx"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 
-import { getPopularUsersList, getUserInfo } from "api/userApi"
+import { getPopularUsersList, getUser } from "api/userApi"
 import { getActivitiesByIdList } from "api/activityApi"
 
 import StyledButton from "components/StyledButton"
@@ -34,7 +34,7 @@ const UserPage = ({className}) => {
 
   useEffect(()=>{
     const getSelectedUser = async(id) => {
-      const user = await getUserInfo(id)
+      const user = await getUser(id)
       setSelectedUser(user)
       console.log(user)
     }

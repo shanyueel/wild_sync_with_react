@@ -1,9 +1,12 @@
-import styled from "styled-components"
-import StyledTextInput from "./inputs/StyledTextInput"
-import StyledRadioInput from "./inputs/StyledRadioInput"
-import StyledRangeInput from "./inputs/StyledRangeInput"
-import StyledTextArea from "./inputs/StyledTextArea"
-import StyledImageInput from "./inputs/StyledImageInput"
+import styled, { css } from "styled-components"
+import StyledTextInput from "../inputs/StyledTextInput"
+import StyledRadioInput from "../inputs/StyledRadioInput"
+import StyledRangeInput from "../inputs/StyledRangeInput"
+import StyledTextArea from "../inputs/StyledTextArea"
+import StyledImageInput from "../inputs/StyledImageInput"
+import StyledLocationInput from "../inputs/StyledLocationInput"
+import { displayLocation } from "utils/location"
+import clsx from "clsx"
 
 const trackTypeOptions = [
   { 
@@ -47,13 +50,13 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               <td className="c-table-key">出發地點</td>
               <td className="c-table-content">
                 {inputUsed?
-                 <StyledTextInput
-                  placeholder="出發地點" 
+                 <StyledLocationInput
+                  detailed
                   inputId="departurePoint" 
                   formContent={detailContent} 
                   onFormChange={onDetailChange}
                  />
-                 :detailContent?.departurePoint
+                 :displayLocation(detailContent?.departurePoint)
                 }
               </td>
             </tr>
@@ -73,7 +76,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               </td>
             </tr>
             <tr>
-              <td className="c-table-key ">路徑長度</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>路徑長度</td>
               <td className="c-table-content">
                 {inputUsed?
                  <StyledTextInput
@@ -111,7 +114,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               <td className="c-table-content">
                 {inputUsed?
                  <StyledTextInput
-                  placeholder="路徑狀況" 
+                  placeholder="路徑主類 (石階 / 泥土 / 拉繩)" 
                   inputId="trackCondition"
                   formContent={detailContent} 
                   onFormChange={onDetailChange}
@@ -193,7 +196,6 @@ const StyledHikingTable = styled(HikingTable)`
   .o-hiking-table__image{
     width: 100%;
   }
-
 
 `
 

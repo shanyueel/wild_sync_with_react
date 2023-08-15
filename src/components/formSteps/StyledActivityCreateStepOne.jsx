@@ -5,6 +5,7 @@ import StyledImageInput from "components/inputs/StyledImageInput";
 import StyledPeriodInput from "components/inputs/StyledPeriodInput";
 import StyledRadioInput from "components/inputs/StyledRadioInput";
 import StyledTextInput from "components/inputs/StyledTextInput";
+import StyledLocationInput from "components/inputs/StyledLocationInput";
 
 const typeOptions = [
   { 
@@ -59,10 +60,9 @@ const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
         onFormChange={onFormChange} 
         radioOptions={typeOptions}
       />
-      <StyledTextInput 
-        title="活動地點" 
-        placeholder="請輸入活動地點" 
-        inputId="location" 
+      <StyledLocationInput
+        title="活動地點"
+        inputId="location"
         formContent={formContent} 
         onFormChange={onFormChange}
       />

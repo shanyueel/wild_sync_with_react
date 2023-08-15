@@ -1,9 +1,9 @@
 import styled from "styled-components"
-import StyledDateTimeInput from "./inputs/StyledDateTimeInput"
-import StyledTextInput from "./inputs/StyledTextInput"
-import StyledTextArea from "./inputs/StyledTextArea"
+import StyledTextInput from "../inputs/StyledTextInput"
+import StyledTextArea from "../inputs/StyledTextArea"
 import { useEffect, useState } from "react"
 import { transferTimestamp } from "utils/date-fns"
+import StyledDateInput from "../inputs/StyledDateInput"
 
 const AccommodationTable = ({className, inputUsed, accommodationId, accommodationList, onAccommodationListChange}) => {
   const [accommodationDetail, setAccommodationDetail] = useState(accommodationList[accommodationId])
@@ -12,6 +12,11 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
     accommodationList.splice(accommodationId,1,accommodationDetail)
     onAccommodationListChange(accommodationList)
   },[accommodationDetail])
+
+  const handleAccommodationDelete = () => {
+    accommodationList.pop()
+    onAccommodationListChange(accommodationList)
+  }
 
   return(
     <div className={className}>
@@ -25,7 +30,7 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
             <td className="c-table-key">住宿日期</td>
             <td className="o-activity-table__content">
               {inputUsed?
-                <StyledDateTimeInput 
+                <StyledDateInput
                   inputId="date" 
                   formContent={accommodationDetail} 
                   onFormChange={setAccommodationDetail}
@@ -97,6 +102,7 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
 }
 
 const StyledAccommodationTable = styled(AccommodationTable)`
+  position: relative;
   width:100%;
   display: flex;
   flex-direction: column;

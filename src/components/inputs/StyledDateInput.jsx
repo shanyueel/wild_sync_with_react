@@ -3,7 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const DateInput = ({className, title, inputId, formContent, onFormChange, warning, disablePast, disableFuture }) => {
-  const [date, setDate] = useState(formContent[inputId] || null)
+  const [date, setDate] = useState(formContent?.[inputId] || null)
   
   const handleDateInput = (newDate) => {
     const newDateString = Date.parse(newDate)

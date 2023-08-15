@@ -9,6 +9,7 @@ import StyledAccommodationTable from "components/StyledAccommodationTable"
 import StyledOthersTable from "components/StyledOthersTable"
 import StyledActivityBasicInfo from "components/StyledActivityBasicInfo"
 import StyledActivityHistory from "components/StyledActivityHistory"
+import StyledActivityTables from "components/tables/StyledActivityTables"
 
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
@@ -157,40 +158,10 @@ const ActivityPage = ({ className }) => {
               }}
             />
             
-            <div className="l-activity-tables">
-              <div className="c-activity-tables__navbar" onClick={handleTableNavbarClick} >
-                <label htmlFor="activity-detail" className="c-activity-tables__nav-item">
-                  <input name="activity-tables__navbar" id="activity-detail" type="radio" defaultChecked/>活動細節
-                </label>
-                <label htmlFor="activity-residence-and-transportation" className="c-activity-tables__nav-item">
-                  <input name="activity-tables__navbar" id="activity-residence-and-transportation" type="radio"/>交通 / 住宿
-                </label>
-                <label htmlFor="activity-others" className="c-activity-tables__nav-item">
-                  <input name="activity-tables__navbar" id="activity-others" type="radio"/>行程 & 其他
-                </label>
-              </div>
-              <div className="l-activity-tables__container">
-                {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" detailContent={selectedActivity?.detail}/>}
-                {ActiveTable === "residence-transportation" && 
-                  <div className="o-activity-residence-and-transportation-table">
-                    <StyledTransportationTable transportationContent={selectedActivity?.transportation}/>
-                    <div className="l-activity-create__accommodation">
-                      {selectedActivity?.accommodation?.map((accommodationContent)=>{
-                        return(
-                          <StyledAccommodationTable
-                            key={accommodationContent.id}
-                            accommodationId={accommodationContent.id}
-                            accommodationList={selectedActivity?.accommodation}
-                            onAccommodationListChange={()=>{}}
-                          />
-                        )
-                      })}
-                    </div>
-                  </div>
-                  }
-                {ActiveTable === "others" && <StyledOthersTable detailContent={selectedActivity?.detail}/>}
-              </div> 
-            </div>
+            <StyledActivityTables 
+              selectedActivity={selectedActivity}
+            />
+            
           </div>
           
           <StyledActivityHistory />
@@ -297,95 +268,23 @@ const StyledActivityPage = styled(ActivityPage)`
         font-weight: 400;
       }
     }
-    
-    .l-activity-tables{
-      margin: 2rem auto;
+  }
 
-      .c-activity-tables__navbar{
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: .5rem;
-        margin-bottom: .5rem;
+  @media screen and (min-width: 1024px) {
+    display: flex;
+    justify-content: space-between;
 
-        .c-activity-tables__nav-item{
-          position: relative;
-          height: 3rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1rem;
-          font-weight: 700;
-          border-radius: .25rem .25rem 0 0;
-          color: ${({theme})=> theme.color.default};
-          background-color: ${({theme})=> theme.backgroundColor.default};
-          cursor: pointer;
+    .l-web-container__main{
 
-          input{
-            display: none;
-          }
+      .l-activity-body{
+        margin-top: 0;
 
-          label{
-
-          }
-
-          &:has(input:checked){
-            background-color: ${({theme})=> theme.color.default};
-              color: white;            
-
-            &::after{
-              position: absolute;
-              content:"";
-              background-color: ${({theme})=> theme.color.default};
-              width: 100%;
-              height: 1rem;
-              top: 2.75rem;
-              left: 0;
-              right: 0;
-            }
-          }
-        }
-      }
-
-      .l-activity-tables__container{
-        padding: 1.5rem 1rem;
-        background-color: ${({theme})=>theme.color.default};
-        border-radius: 0 0 .25rem .25rem;
-
-        .o-activity-residence-and-transportation-table{
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
+        .o-activity-cover{
+          width: 100%;
+          position: static;
         }
       }
     }
-  }
-
-
-
-  
-
-  @media screen and (min-width: 1024px) {
-      display: flex;
-      justify-content: space-between;
-
-      .l-web-container__main{
-
-        .l-activity-body{
-          margin-top: 0;
-
-          .o-activity-cover{
-            width: 100%;
-            position: static;
-          }
-        }
-      }
-
-      .l-web-container__side{
-        
-      }
-
-
-
   } 
 `
 

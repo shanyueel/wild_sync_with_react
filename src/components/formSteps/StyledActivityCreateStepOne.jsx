@@ -7,41 +7,17 @@ import StyledRadioInput from "components/inputs/StyledRadioInput";
 import StyledTextInput from "components/inputs/StyledTextInput";
 import StyledLocationInput from "components/inputs/StyledLocationInput";
 
-const typeOptions = [
-  { 
-    name: "type",
-    label: "登山",
-    id: "hiking"
-  },
-  { 
-    name: "type",
-    label: "露營",
-    id: "camping"
-  },
-  { 
-    name: "type",
-    label: "單車",
-    id: "cycling"
-  },
-  { 
-    name: "type",
-    label: "潛水",
-    id: "diving"
-  },
-  { 
-    name: "type",
-    label: "其他",
-    id: "others"
-  }
-]
 
 const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
+  const defaultImageURL = require('data/defaultImageURL.json')
+  const typeOptions = require('data/activityTypeOptions.json')
+
   return(
     <div className={clsx(className,"scrollbar") }>
       <StyledImageInput
         title="活動封面照片"
         inputId="coverURL"
-        defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/activity-covers%2Fdefault-cover.jpg?alt=media&token=2eedc2a0-8f83-4168-be67-bdfae41b04b5" 
+        defaultImgURL={defaultImageURL.activityCover} 
         formContent={formContent} 
         onFormChange={onFormChange}
       />

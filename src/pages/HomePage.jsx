@@ -16,6 +16,7 @@ import clsx from "clsx"
 
 const HomePage = ({className}) => {
   const activitiesAreas = require('data/taiwanDistricts.json')
+  const activitiesTypes = require('data/activityTypeOptions.json') 
   const [activitiesDisplay, setActivityDisplay] = useState("grid")
   const [activityList, setActivityList] = useState([])
 
@@ -80,29 +81,8 @@ const HomePage = ({className}) => {
     }
   ]
 
-  const activitiesTypes = [
-    {
-      id: "hiking-type",
-      title: "登山"
-    },
-    {
-      id: "camping-type",
-      title: "露營"
-    },
-    {
-      id: "cycling-type",
-      title: "單車"
-    },
-    {
-      id: "diving-type",
-      title: "潛水"
-    },
-    {
-      id: "others-type",
-      title: "其他"
-    }
-  ]
-
+  
+  
   return(
       <div className={className} >
         <StyledImageSlider sliderImages={sliderImage}/>
@@ -129,7 +109,7 @@ const HomePage = ({className}) => {
               return(
                 <li className="o-activities__type" key={activitiesType.id}>
                   <input type="radio" name="activities-type" id={activitiesType.id}/>
-                  <label htmlFor={activitiesType.id}>{activitiesType.title}</label>
+                  <label htmlFor={activitiesType.id}>{activitiesType.label}</label>
                 </li>
               )
             })}

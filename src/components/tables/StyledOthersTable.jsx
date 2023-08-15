@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import StyledTextArea from "./inputs/StyledTextArea"
+import StyledTextArea from "../inputs/StyledTextArea"
 
 const OthersTable = ({className, inputUsed, detailContent, onDetailChange }) => {
 

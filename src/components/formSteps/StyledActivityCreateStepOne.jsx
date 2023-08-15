@@ -46,8 +46,9 @@ const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
       />
       <StyledTextInput 
         title="活動名稱" 
-        placeholder="請輸入活動名稱" 
         inputId="name" 
+        placeholder="請輸入活動名稱 (字數限制: 16字)" 
+        wordLimit={16}
         formContent={formContent} 
         onFormChange={onFormChange} 
         value={ formContent.name || "" }

@@ -48,7 +48,7 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
       <StyledTextInput 
         numberUsed 
         title="實際活動時長" 
-        placeholder="請輸入實際活動時長(扣除通勤、用餐時間)" 
+        placeholder="實際活動時長 (扣除前後通勤、用餐時間)" 
         unit="小時" 
         inputId="activityTimeLength" 
         formContent={formContent} 
@@ -68,7 +68,7 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
       <StyledTextInput 
         numberUsed 
         title="人數限制" 
-        placeholder="報名人數上限" 
+        placeholder="報名人數上限 (不含主辦人)" 
         unit="人" 
         inputId="attendanceLimit" 
         formContent={formContent} 
@@ -82,8 +82,9 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
       />
       <StyledTextArea
         title="活動簡介" 
-        placeholder="請簡單介紹活動內容(50字內)" 
-        inputId="introduction" 
+        placeholder="請簡單介紹活動內容 (字數限制: 80字)" 
+        inputId="introduction"
+        wordLimit={80}
         formContent={formContent} 
         onFormChange={onFormChange} 
       />

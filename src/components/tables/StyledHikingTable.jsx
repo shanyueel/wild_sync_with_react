@@ -41,13 +41,13 @@ const applicationNeededOptions = [
 
 
 const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
-
+  const defaultImageURL = require('data/defaultImageURL.json')
   return(
     <>
         <table className={className}>
           <tbody>
             <tr>
-              <td className="c-table-key">出發地點</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>出發地點</td>
               <td className="c-table-content">
                 {inputUsed?
                  <StyledLocationInput
@@ -61,7 +61,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               </td>
             </tr>
             <tr>
-              <td className="c-table-key ">步道類型</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>步道類型</td>
               <td className="c-table-content">
                 {inputUsed &&
                  <StyledRadioInput
@@ -74,7 +74,26 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
                 {(!inputUsed && detailContent?.trackType === "backtrack") && "原路折返"}
                 {(!inputUsed && detailContent?.trackType === "one-way") && "雙向進出"}
               </td>
-            </tr>
+            </tr>  
+            {
+              detailContent?.trackType === "one-way" &&
+              <>
+                <tr>
+                  <td className={clsx("c-table-key",{inputUsed: inputUsed})}>登出地點</td>
+                  <td className="c-table-content">
+                    {inputUsed?
+                    <StyledLocationInput
+                      detailed
+                      inputId="exitPoint" 
+                      formContent={detailContent} 
+                      onFormChange={onDetailChange}
+                    />
+                    :detailContent?.exitPoint
+                    }
+                  </td>
+                </tr>
+              </>
+            }
             <tr>
               <td className={clsx("c-table-key",{inputUsed: inputUsed})}>路徑長度</td>
               <td className="c-table-content">
@@ -92,7 +111,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               </td>
             </tr>
             <tr>
-              <td className="c-table-key ">海拔高度</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>海拔高度</td>
               <td className="c-table-content">
                 {inputUsed?
                  <StyledRangeInput
@@ -110,7 +129,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               </td>
             </tr>
             <tr>
-              <td className="c-table-key ">路面狀況</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>路面種類</td>
               <td className="c-table-content">
                 {inputUsed?
                  <StyledTextInput
@@ -124,7 +143,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               </td>
             </tr>
             <tr>
-              <td className="c-table-key ">所屬園區</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>所屬園區</td>
               <td className="c-table-content">
                 {inputUsed?
                  <StyledTextInput
@@ -138,7 +157,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               </td>
             </tr>
             <tr>
-              <td className="c-table-key ">入園申請</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>入園申請</td>
               <td className="c-table-content">
                 {inputUsed &&
                  <StyledRadioInput
@@ -152,7 +171,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               </td>
             </tr>
             <tr>
-              <td className="c-table-key " colSpan={2}>路線資訊</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})} colSpan={2}>路線資訊</td>
             </tr>
             <tr>
               <td className="c-table-content" colSpan={2}>
@@ -168,18 +187,19 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               </td>
             </tr>
             <tr>
-              <td className="c-table-key " colSpan={2}>路徑地圖</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})} colSpan={2}>路徑地圖</td>
             </tr>
             <tr>
               <td className="c-table-content" colSpan={2}>
                 {inputUsed?
                   <StyledImageInput
-                    inputId="routeURL"
-                    defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/activity-routes%2Fdefault-route.jpg?alt=media&token=eded7a45-4064-424f-b17a-6d8f78f546f2" 
+                    activityMapUsed
+                    inputId="mapURL"
+                    defaultImgURL={defaultImageURL.activityMap} 
                     formContent={detailContent} 
                     onFormChange={onDetailChange}
                   />
-                  :<img className="o-hiking-table__image" src={detailContent?.routeURL} alt="hiking map"/>
+                  :<img className="o-hiking-table__image" src={detailContent?.mapURL || defaultImageURL.activityMap} alt="hiking map"/>
                 }
                 
               </td>
@@ -195,6 +215,7 @@ const StyledHikingTable = styled(HikingTable)`
   
   .o-hiking-table__image{
     width: 100%;
+    aspect-ratio: 4 / 3;
   }
 
 `

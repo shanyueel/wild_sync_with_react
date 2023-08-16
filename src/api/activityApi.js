@@ -30,15 +30,15 @@ export const getActivity = async(activityId) => {
     const holder = await getActivityHolder(activity?.holder)
     const detail = (await getDoc(activity?.detail))?.data()
     const transportation = (await getDoc(activity?.transportation))?.data()
-    const accommodation = (await getDoc(activity?.transportation))?.data()
-
+    const accommodation = (await getDoc(activity?.accommodation))?.data()
+    console.log(detail, transportation ,accommodation)
     console.log("[取得活動成功]:", activityId)
     return {
       ...activity, 
       holder: holder,
       detail: detail || null,
       transportation: transportation || null,
-      accommodation: accommodation|| null 
+      accommodation: accommodation?.accommodationList|| null 
     }
 
   }catch(error){
@@ -88,23 +88,61 @@ export const getActivitiesByIdList = async(idList) => {
   }
 }
 
-export const postActivity = async( activityId, holderInfo, activityContent ) => {
+export const postActivity = async( activityId, holderReference, activityContent ) => {
   try{
     const nowTimeString = Date.parse(new Date())
-    await updateDoc(doc(firestoreDB, "activities", `${activityId}`),{
-      ...activityContent,
+    const holder = (await getDoc(holderReference))?.data()
+    const mainActivityContent = {
       id: activityId,
-      holder: holderInfo,
+      holder: holderReference,
       createAt: nowTimeString,
       attendance:[]
-    },{merge: true})
-    await updateDoc(doc(firestoreDB, "users", `${holderInfo.uid}-user`),{
-      heldActivities: [...holderInfo.heldActivities, activityId]
+    }
+    Object.keys(activityContent)?.forEach(keyName=>{
+      if(!(["detail","transportation", "accommodation"].includes(keyName))){
+        mainActivityContent[keyName] = activityContent?.[keyName]
+      }
     })
+    const detailContent = {
+      id: activityId,
+      ...activityContent?.detail
+    }
+
+    const transportationContent = {
+      id: activityId,
+      ...activityContent?.transportation
+    }
+
+    const accommodationContent = {
+      id: activityId,
+      accommodationList: activityContent?.accommodation
+    }
+
+    console.log(mainActivityContent, detailContent, transportationContent, accommodationContent)
+
+    if(detailContent){
+      await setDoc(doc(firestoreDB, "activities-details",`${activityId}-detail`),detailContent)
+      mainActivityContent["detail"] = doc(firestoreDB, "activities-details",`${activityId}-detail`)
+    }
+    if(transportationContent){
+      await setDoc(doc(firestoreDB, "activities-transportation",`${activityId}-transportation`),transportationContent)
+      mainActivityContent["transportation"] = doc(firestoreDB, "activities-transportation",`${activityId}-transportation`)
+    }
+    if(accommodationContent?.accommodationList?.length > 0){
+      await setDoc(doc(firestoreDB, "activities-accommodation", `${activityId}-accommodation`),accommodationContent)
+      mainActivityContent["accommodation"] = doc(firestoreDB, "activities-accommodation", `${activityId}-accommodation`)
+    }
+
+    await setDoc(doc(firestoreDB, "activities", `${activityId}`), mainActivityContent)   
+    await updateDoc(doc(firestoreDB, "users", `${holder?.uid}-user`),{
+      heldActivities: [...holder?.heldActivities, activityId]
+    })
+    
     console.log("[新增活動成功]:",activityId)
-    return {success:true, id: activityId}
+    return { success:true, id: activityId }
   }catch(error){
     console.error("[新增活動失敗]:",error)
+    return { success:false }
   }
 }
 
@@ -112,9 +150,10 @@ export const updateActivity = async(activityId, activityContent) => {
   try{
     await updateDoc(doc(firestoreDB, "activities", `${activityId}`), activityContent)
     console.log("[更新活動成功]:", activityId)
-    return activityId
+    return { success:true, id: activityId}
   }catch(error){
     console.error("[更新活動失敗]:",error)
+    return { success:false }
   }
 }
 
@@ -126,13 +165,13 @@ export const alterActivityAttendance = async(userId, activityId) => {
     const currentAttendedActivities = userRef?.attendedActivities
 
     if(existingAttendance.includes(userId)){
-      const newAttendance = existingAttendance.filter((attendance) => attendance !== userId)
-      const newAttendedActivities = currentAttendedActivities.filter((activity) => activity !== activityId)
+      const newAttendance = existingAttendance.filter((attendance)=> attendance !== userId)
+      const newAttendedActivities = currentAttendedActivities.filter((activity)=>activity !== activityId)
       updateDoc(doc(firestoreDB, "activities", `${activityId}`), {
         attendance : newAttendance
       })
       updateDoc(doc(firestoreDB, "users", `${userId}-user`), {
-        attendActivities: newAttendedActivities
+        attendedActivities: newAttendedActivities
       })
       console.log("[退出活動成功]:",activityId)
     }else{

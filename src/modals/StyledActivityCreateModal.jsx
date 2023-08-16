@@ -15,23 +15,16 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { uploadImage } from 'api/storageApi';
+import { doc } from 'firebase/firestore';
+import { firestoreDB } from 'api/firebaseConfig';
 
 const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivityCreateModalOpen}) => {
   const navigate = useNavigate()
   const stepsRef = useRef(null)
   const [activityContent, setActivityContent] = useState({})
-  const [formProgress, setFormProgress] = useState(1);
+  const [formProgress, setFormProgress] = useState(1)
   const user = useSelector(state => state.user)
-  const holderInfo = {
-    uid: user.uid,
-    birth: user.birth,
-    displayName: user.displayName,
-    photoURL: user.photoURL,
-    profession: user.profession,
-    region: user.region,
-    introduction: user.introduction,
-    heldActivities: user.heldActivities || []
-  }
+  const uid = user.uid
 
   useEffect(()=>{
     const adjustStepDisplay = (currentFormProgress) => {
@@ -73,36 +66,35 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
   const handleNextPageClick = () => {
     setFormProgress(formProgress + 1)
-    console.log( holderInfo, activityContent)
+    console.log( activityContent)
   }
 
   const handleActivityCreate = async() => {
     const activityId = await getRandomId()
     let updateCoverURL = null
-    let updateRouteURL = null
+    let updateMapURL = null
 
-    if(activityContent?.coverURLFile) updateCoverURL = await uploadImage("activity-covers",`${activityId}-cover`, activityContent?.coverURLFile)
-    if(activityContent?.detail?.routeURLFile) updateRouteURL = await uploadImage("activity-routes", `${activityId}-route`, activityContent?.detail?.routeURLFile)
+    if(activityContent?.coverURLFile) updateCoverURL = await uploadImage("activities-covers",`${activityId}-cover`, activityContent?.coverURLFile)
+    if(activityContent?.detail?.mapURLFile) updateMapURL = await uploadImage("activities-maps", `${activityId}-map`, activityContent?.detail?.mapURLFile)
     
     delete activityContent?.coverURLFile
-    delete activityContent?.detail?.routeURLFile
+    delete activityContent?.detail?.mapURLFile
     URL.revokeObjectURL(activityContent?.coverURL)
-    URL.revokeObjectURL(activityContent?.detail?.routeURL)
+    URL.revokeObjectURL(activityContent?.detail?.mapURL)
 
-    const updateActivityContent = {
+    const createActivityContent = {
       ...activityContent,
       coverURL: updateCoverURL,
       detail:{
         ...activityContent?.detail,
-        routeURL: updateRouteURL
+        mapURL: updateMapURL,
       }
     }
 
-    const { success } = await postActivity(activityId, holderInfo, updateActivityContent)
+
+    const { success } = await postActivity(activityId, doc(firestoreDB, "users", `${uid}-user`), createActivityContent)
 
     if(success){
-      setFormProgress(1)
-      setActivityContent({})
       toast.success('建立活動成功', {
         position: "top-right",
         autoClose: 1500,
@@ -115,6 +107,10 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
       })
       setTimeout(()=>{
         setIsActivityCreateModalOpen(false)
+        setFormProgress(1)
+        setActivityContent({})
+        document.querySelector('body').classList.add('no-scroll');
+        document.querySelector('html').classList.add('no-scroll');
         navigate(`activity/${activityId}`)
       },1500)
     }else{
@@ -170,45 +166,25 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
         <form className='l-modal__form-container'>
           {formProgress === 1 &&
-            <StyledActivityCreateStepOne
-              formContent={activityContent}
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepOne formContent={activityContent} onFormChange={setActivityContent} />
           }
-
           {formProgress === 2 && 
-            <StyledActivityCreateStepTwo
-              formContent={activityContent}
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepTwo formContent={activityContent} onFormChange={setActivityContent} />
           }
-
           {formProgress === 3 &&
-            <StyledActivityCreateStepThree
-              formContent={activityContent} 
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepThree formContent={activityContent} onFormChange={setActivityContent} />
           }
-
           {formProgress === 4 &&
-            <StyledActivityCreateStepFour
-              formContent={activityContent} 
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepFour formContent={activityContent} onFormChange={setActivityContent} />
           }
-
           {formProgress === 5 &&
-            <StyledActivityCreateStepFive
-              formContent={activityContent} 
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepFive formContent={activityContent} onFormChange={setActivityContent} />
           }
-
         </form>
 
         <div className='c-activity-create__pagination'>
           {formProgress === 1 ? 
-            <StyledButton onClick={handleClearData} alert>清空資料</StyledButton>
+            <StyledButton onClick={handleClearData} alert >清空資料</StyledButton>
             :<StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
           }
           {formProgress < 5 ?
@@ -226,7 +202,7 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
   position: relative;
   width: 90vw;
   height: 100vh;
-  max-width: 896px;
+  max-width: 640px;
   max-height: calc(100vh - 8rem);
   margin: 5rem auto 0;
   border-radius: .5rem;

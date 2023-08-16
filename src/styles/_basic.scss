@@ -57,6 +57,10 @@ td{
   font-weight: 700;
   color: #3F6F41;
   background-color: #F0F0F0;
+
+  &.inputUsed{
+    width: 7.5rem;
+  }
 }
 
 .c-table-content {
@@ -124,7 +128,7 @@ select{
   border: 1px solid #3F6F41;
   border-radius: .5rem;
   font-size: 1rem;
-  color: #3F6F41;
+  background-color: white;
   padding: .2rem .75rem;
 }
 
@@ -249,6 +253,10 @@ select{
   padding-left: 0;
   padding-bottom: .75rem;
   overflow-x: scroll;
+}
+
+.no-scroll{
+  overflow: hidden;
 }
 
 /* ------ container ------*/

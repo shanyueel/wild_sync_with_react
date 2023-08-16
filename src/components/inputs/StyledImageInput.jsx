@@ -4,7 +4,7 @@ import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
 import {ReactComponent as UploadIcon} from "assets/icons/UploadIcon.svg"
 import { useRef, useState } from "react";
 
-const ImageInput = ({ className, title, inputId, defaultImgURL, formContent, onFormChange, warning, coverUsed, avatarUsed, activityCoverUsed }) => {
+const ImageInput = ({ className, title, inputId, defaultImgURL, formContent, onFormChange, warning, coverUsed, avatarUsed, activityMapUsed }) => {
   const uploadButtonRef = useRef(null)
   const displayImageRef = useRef(null)
   const [imgSrc, setImgSrc] = useState(formContent[inputId] || defaultImgURL)
@@ -152,6 +152,15 @@ const StyledImageInput = styled(ImageInput)`
             height: 1rem;
           }
         }
+      }
+    }
+  `}
+
+  ${props => props.activityMapUsed && css`
+    .c-input-body{
+      .o-image-input__display{
+        width: 100%;
+        aspect-ratio: 4 / 3;
       }
     }
   `}

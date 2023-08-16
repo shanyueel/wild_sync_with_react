@@ -13,10 +13,10 @@ import StyledUserCard from "components/StyledUserCard"
 import StyledUserEditModal from "modals/StyledUserEditModal"
 
 const UserPage = ({className}) => {
-  const selectedUserId = useParams().id
   const user = useSelector(state=> state.user)
   const environmentParams = useSelector(state => state.environment)
   const userId = user.uid
+  const selectedUserId = useParams().id
   const windowSize = environmentParams.windowSize
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState({})
@@ -30,13 +30,13 @@ const UserPage = ({className}) => {
     setIsLargeLayout(windowSize === "large")
    } 
    setWindowSize()
-  })
+  },[windowSize])
 
   useEffect(()=>{
     const getSelectedUser = async(id) => {
       const user = await getUser(id)
       setSelectedUser(user)
-      console.log(user)
+      return user
     }
     const getPopularUsers = async() => {
       const popularUsersList = await getPopularUsersList()
@@ -53,7 +53,7 @@ const UserPage = ({className}) => {
       setActivities(selectedActivities)
     }
     getActivities()
-  },[selectedActivityNav])
+  },[selectedUser,selectedActivityNav])
 
   const handleUserEdit = () => {
     setIsUserEditModalOpen(true)
@@ -135,7 +135,7 @@ const UserPage = ({className}) => {
         <h2 className="o-holder-recommendation__title">熱門主辦者</h2>
         <div className={clsx("l-holder-recommendation__container",{"scrollbar-x":!isLargeLayout})}>
           <div className="l-holder-recommendation__holders">
-            {popularUsers?.map(user => <StyledUserCard key={user?.id} user={user} listItem={isLargeLayout}/>)}
+            {popularUsers && popularUsers?.map(user => <StyledUserCard key={user?.uid} user={user} listItem={isLargeLayout}/>)}
           </div>
         </div>
 

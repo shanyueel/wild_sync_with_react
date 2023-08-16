@@ -1,6 +1,6 @@
 import { auth } from "api/firebaseConfig"
 import { updateProfile } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, where } from "@firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc } from "@firebase/firestore";
 import { firestoreDB } from "./firebaseConfig";
 import { asyncForEach } from "utils/asyncLoop";
 
@@ -35,8 +35,8 @@ export const getPopularUsersList = async() => {
     const userListSnapshot = await getDocs(userListQuery)
     const userList = []
 
-    userListSnapshot.forEach((user)=>{
-      userList.push(user.data())
+    userListSnapshot?.forEach((user)=>{
+      userList?.push(user?.data())
     })
 
     return userList
@@ -45,10 +45,11 @@ export const getPopularUsersList = async() => {
   }
 }
 
-export const buildUserInfo = async(userId, accountInfo) => {
+export const buildUser = async(userId, accountInfo) => {
   try{
     await setDoc(doc(firestoreDB, 'users', `${userId}-user`),{
       uid: userId,
+      role: "user",
       email: accountInfo?.email,
       displayName: accountInfo?.displayName,
       photoURL: "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/avatars%2Fdefault-avatar.png?alt=media&token=9be55a06-7192-4e2b-b6b5-884cd6fece53",

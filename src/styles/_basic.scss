@@ -201,9 +201,26 @@ select{
   z-index: 3;
 }
 
+.ReactModal__Content{
+  position: relative;
+  width: 90vw;
+  height: calc(100vh - 9rem);
+  max-width: 640px;
+  margin: 5rem auto 0;
+  border-radius: .5rem;
+  background-color: #F0F0F0;
+  padding: 1rem;
+
+  @media screen and (min-width: 768px) {
+    width: 60vw;
+  }
+}
+
 .l-modal__header {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
+  align-items: center;
+  gap: .75rem;
   align-items: center;
   padding: 0 .25rem .75rem;
   border-bottom: 1px solid #7B7B7B;
@@ -211,6 +228,7 @@ select{
   .o-modal__title {
     color: #3F6F41;
     font-weight: 700;
+    margin-right: auto;
   }
 
   .o-modal__close-icon {
@@ -230,6 +248,7 @@ select{
     margin-top: .75rem;
   }
 }
+
 
 /* ------ scrollbar ------*/
 
@@ -272,6 +291,19 @@ select{
   &::-webkit-scrollbar{
     display: none;
   }
+
+  @media screen and (min-width: 1024px) {
+    .l-web-container {
+      &__main {
+        width: 70%;
+      }
+
+      &__side {
+        width: 27.5%;
+        padding-top: 4rem;
+      }
+    }
+  }
 }
 
 .l-web-container--license-only{
@@ -284,15 +316,3 @@ select{
   padding-bottom: 2rem;
 }
 
-@media screen and (min-width: 1024px) {
-  .l-web-container{
-    &__main {
-        width: 70%;
-      }
-    
-    &__side {
-      width: 27.5%;
-      padding-top: 4rem;
-    }
-  }
-}

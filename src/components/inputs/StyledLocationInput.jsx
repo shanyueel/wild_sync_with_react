@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const LocationInput = ({className, title, inputId, formContent, onFormChange, warning, detailed}) => {
@@ -6,8 +6,16 @@ const LocationInput = ({className, title, inputId, formContent, onFormChange, wa
   const detailRef = useRef(null)
   const defaultCounty = taiwanDistricts?.find(county => county.id === formContent?.[inputId]?.county) || taiwanDistricts?.[0]
   const [districts, setDistrict] = useState(defaultCounty?.districts)
-  const [locationContent, setLocationContent] = useState(formContent?.[inputId] || {})
+  const [locationContent, setLocationContent] = useState({})
 
+  useEffect(()=>{
+    const setDistrictOptions = () => {
+      const selectedCounty = taiwanDistricts?.find(county=>county.id === formContent?.[inputId]?.county)
+      setDistrict(selectedCounty?.districts)
+    }
+    setLocationContent(formContent?.[inputId])
+    setDistrictOptions()
+  },[formContent, inputId, taiwanDistricts])
 
   const handleCountySelect = (e) => {
     const selectedCounty = taiwanDistricts?.find(county=>county.id === e.target.value)
@@ -16,7 +24,6 @@ const LocationInput = ({className, title, inputId, formContent, onFormChange, wa
       district: selectedCounty?.districts?.[0]?.id
     }
     setLocationContent(newLocation)
-    setDistrict(selectedCounty?.districts)
     const newForm = {
       ...formContent,
       [inputId]: newLocation
@@ -63,7 +70,7 @@ const LocationInput = ({className, title, inputId, formContent, onFormChange, wa
         <select 
           className="o-location-input__county" 
           onChange={handleCountySelect} 
-          value={locationContent?.county || "default"}
+          value={locationContent?.["county"] || "default"}
         >
           <option value="default" disabled>縣市</option>
           { taiwanDistricts?.map( county => <option key={county?.id} value={county?.id}>{county?.name}</option> ) }
@@ -72,7 +79,7 @@ const LocationInput = ({className, title, inputId, formContent, onFormChange, wa
           className="o-location-input__district" 
           onChange={handleDistrictSelect} 
           disabled={!districts} 
-          value={locationContent?.district || "default"}
+          value={locationContent?.["district"] || "default"}
         >
           <option value="default" disabled>區域</option>
           { districts && districts?.map(district =><option key={district?.id} value={district?.id}>{district?.name}</option> ) }

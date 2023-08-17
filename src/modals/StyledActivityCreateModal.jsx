@@ -109,10 +109,10 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
         setIsActivityCreateModalOpen(false)
         setFormProgress(1)
         setActivityContent({})
-        document.querySelector('body').classList.add('no-scroll');
-        document.querySelector('html').classList.add('no-scroll');
+        document.querySelector('body').classList.remove('no-scroll');
+        document.querySelector('html').classList.remove('no-scroll');
         navigate(`activity/${activityId}`)
-      },1500)
+      }, 1500)
     }else{
       toast.error('建立活動失敗', {
         position: "top-right",
@@ -124,6 +124,9 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
         progress: undefined,
         theme: "light",
       })
+      setTimeout(()=>{
+        setFormProgress(1)
+      }, 1500)
     }
   }
   
@@ -136,6 +139,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
     >
       <div className='l-modal__header'>
         <h2 className='o-modal__title'>建立活動</h2>
+        <StyledButton onClick={handleClearData} alertOutlined sm>清空填入資料</StyledButton>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal}/>
       </div>
 
@@ -184,7 +188,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
         <div className='c-activity-create__pagination'>
           {formProgress === 1 ? 
-            <StyledButton onClick={handleClearData} alert >清空資料</StyledButton>
+            <StyledButton disabled >前一頁</StyledButton>
             :<StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
           }
           {formProgress < 5 ?
@@ -199,16 +203,6 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 }
 
 const StyledActivityCreateModal = styled(ActivityCreateModal)`
-  position: relative;
-  width: 90vw;
-  height: 100vh;
-  max-width: 640px;
-  max-height: calc(100vh - 8rem);
-  margin: 5rem auto 0;
-  border-radius: .5rem;
-  background-color: ${({theme})=> theme.backgroundColor.default};
-  padding: 1rem;
-
   .l-modal__body{
     .l-activity-create__steps {
       display: flex;
@@ -307,10 +301,6 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
       margin-top: 1rem;
       border-top: 1px solid ${({theme})=> theme.backgroundColor.secondary};
     }
-  }
-
-  @media screen and (min-width: 768px) {
-    width: 50vw;
   }
 `
 

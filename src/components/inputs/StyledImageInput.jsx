@@ -160,7 +160,6 @@ const StyledImageInput = styled(ImageInput)`
     .c-input-body{
       .o-image-input__display{
         width: 100%;
-        aspect-ratio: 4 / 3;
       }
     }
   `}

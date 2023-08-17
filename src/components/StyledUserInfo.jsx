@@ -15,7 +15,7 @@ const UserInfo = ({className, user, cardUsed, message}) => {
         <img className="o-user-avatar" src={user?.photoURL} alt="holder-avatar"/>
       </Link>
       <div className="c-user-info">
-        <Link to="/user/1">
+        <Link to={`/user/${user?.uid}`}>
           <h2 className="o-user-info__name">{user?.displayName}</h2> 
         </Link>
         <h4 className="o-user-info__time">3小時前</h4>

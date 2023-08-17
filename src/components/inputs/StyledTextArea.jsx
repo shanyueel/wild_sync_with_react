@@ -24,7 +24,7 @@ const TextArea = ({ className, title, placeholder, inputId, formContent, onFormC
     }else{
       setWarningContent("")
     }
-  },[wordLimit, textRef?.current?.value])
+  },[wordLimit, textRef?.current?.value, inputId, formContent, onFormChange])
 
   return(
     <div className={className}>
@@ -37,7 +37,8 @@ const TextArea = ({ className, title, placeholder, inputId, formContent, onFormC
         ref={textRef} 
         placeholder={placeholder} 
         onChange={handleTextArea} 
-        value={formContent?.[inputId] || ""} />
+        value={formContent?.[inputId] || ""} 
+      />
     </div>
   )
 }
@@ -48,7 +49,11 @@ const StyledTextArea = styled(TextArea)`
   width: 100%;
 
   textarea{
-    height: 5.5rem;
+    height: 7.5rem;
+  }
+
+  @media screen and (min-width: 1024px) {
+    height: 6.75rem;
   }
 
 `

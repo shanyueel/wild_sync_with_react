@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
   const [transportationContent, setTransportationContent] = useState(formContent?.transportation || {})
   const [accommodationList, setAccommodationList] = useState(formContent?.accommodation || [])
-  const [accommodationCount, setAccommodationCount] = useState(-1)
+  const [accommodationCount, setAccommodationCount] = useState(formContent?.accommodation?.length - 1)
 
   useEffect(()=>{
     const updateTransportationForm = () => {
@@ -22,7 +22,7 @@ const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
       onFormChange(newForm)
     }
     updateTransportationForm()
-  },[transportationContent])
+  },[transportationContent, formContent, onFormChange])
 
   useEffect(()=>{
     const updateAccommodationForm = () => {
@@ -33,7 +33,7 @@ const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
       onFormChange(newForm)
     }
     updateAccommodationForm()
-  },[accommodationList])
+  },[accommodationList, formContent, onFormChange])
   
   const handleAccommodationAdd = () => {
     const newId = accommodationCount + 1
@@ -51,7 +51,6 @@ const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
 
     setAccommodationCount(newId)
     setAccommodationList(newArray)
-    console.log(newArray)
   }
 
   const handleAccommodationRemove = () => {
@@ -59,7 +58,6 @@ const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
     accommodationList?.pop()
     setAccommodationCount(resetId)
     setAccommodationList(accommodationList)
-    console.log(accommodationList)
   }
 
   return(
@@ -73,10 +71,10 @@ const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
       
       <div className="l-activity-create__accommodation">
 
-        {accommodationList?.map((accommodationContent)=>{
+        {accommodationList?.map((accommodationContent, index)=>{
           return(
             <StyledAccommodationTable
-              key={accommodationContent?.id}
+              key={index}
               inputUsed
               accommodationId={accommodationContent?.id}
               accommodationList={accommodationList}

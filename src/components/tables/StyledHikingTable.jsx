@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import StyledTextInput from "../inputs/StyledTextInput"
 import StyledRadioInput from "../inputs/StyledRadioInput"
 import StyledRangeInput from "../inputs/StyledRangeInput"
@@ -215,7 +215,6 @@ const StyledHikingTable = styled(HikingTable)`
   
   .o-hiking-table__image{
     width: 100%;
-    aspect-ratio: 4 / 3;
   }
 
 `

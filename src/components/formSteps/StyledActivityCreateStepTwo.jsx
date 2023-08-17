@@ -82,9 +82,9 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
       />
       <StyledTextArea
         title="活動簡介" 
-        placeholder="請簡單介紹活動內容 (字數限制: 80字)" 
+        placeholder="請簡單介紹活動內容 (字數限制: 100字)" 
         inputId="introduction"
-        wordLimit={80}
+        wordLimit={100}
         formContent={formContent} 
         onFormChange={onFormChange} 
       />

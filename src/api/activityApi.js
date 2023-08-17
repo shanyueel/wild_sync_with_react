@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, query, getDocs, where, setDoc } from "@firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, getDocs, setDoc } from "@firebase/firestore"
 import { firestoreDB } from "./firebaseConfig"
 import { getUser } from "./userApi"
 import { asyncForEach } from "utils/asyncLoop"
@@ -27,20 +27,12 @@ export const removeRandomId = async(activityId) => {
 export const getActivity = async(activityId) => {
   try{
     const activity = (await getDoc(doc(firestoreDB, 'activities', activityId)))?.data()
-    const holder = await getActivityHolder(activity?.holder)
-    const detail = (await getDoc(activity?.detail))?.data()
-    const transportation = (await getDoc(activity?.transportation))?.data()
-    const accommodation = (await getDoc(activity?.accommodation))?.data()
-    console.log(detail, transportation ,accommodation)
+    if(activity?.holder) activity['holder'] = await getActivityHolder(activity?.holder)
+    if(activity?.detail) activity['detail'] = (await getDoc(activity?.detail))?.data()
+    if(activity?.transportation) activity['transportation'] = (await getDoc(activity?.transportation))?.data()
+    if(activity?.accommodation) activity['accommodation'] = (await getDoc(activity?.accommodation))?.data()?.accommodationList
     console.log("[取得活動成功]:", activityId)
-    return {
-      ...activity, 
-      holder: holder,
-      detail: detail || null,
-      transportation: transportation || null,
-      accommodation: accommodation?.accommodationList|| null 
-    }
-
+    return activity
   }catch(error){
     console.error("[取得活動失敗]:",error)
   }
@@ -137,7 +129,7 @@ export const postActivity = async( activityId, holderReference, activityContent 
     await updateDoc(doc(firestoreDB, "users", `${holder?.uid}-user`),{
       heldActivities: [...holder?.heldActivities, activityId]
     })
-    
+
     console.log("[新增活動成功]:",activityId)
     return { success:true, id: activityId }
   }catch(error){

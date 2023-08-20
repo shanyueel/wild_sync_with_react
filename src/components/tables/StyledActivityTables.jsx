@@ -6,7 +6,7 @@ import StyledTransportationTable from "components/tables/StyledTransportationTab
 import StyledAccommodationTable from "components/tables/StyledAccommodationTable"
 import StyledOthersTable from "components/tables/StyledOthersTable"
 
-const ActivityTables = ({className, selectedActivity}) => {
+const ActivityTables = ({className, activity}) => {
   const [ActiveTable, setActiveTable] = useState("detail")
 
   const handleTableNavbarClick = (e) => {
@@ -35,25 +35,30 @@ const ActivityTables = ({className, selectedActivity}) => {
         </label>
       </div>
       <div className="l-activity-tables__container">
-        {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" detailContent={selectedActivity?.detail}/>}
+        {ActiveTable === "detail" && <StyledHikingTable className="o-activity-detail-table" detailContent={activity?.detail}/>}
         {ActiveTable === "residence-transportation" && 
           <div className="o-activity-residence-and-transportation-table">
-            <StyledTransportationTable transportationContent={selectedActivity?.transportation}/>
+            <StyledTransportationTable transportationContent={activity?.transportation}/>
             <div className="l-activity-create__accommodation">
-              {selectedActivity?.accommodation?.map((accommodationContent)=>{
+              {activity?.accommodation &&       
+                <table>
+                  <tbody>
+                    <tr><td className="c-table-key" colSpan={2}>住宿資訊</td></tr> 
+                  </tbody>
+                </table>
+              }
+              {activity?.accommodation?.map((accommodationDay)=>{
                 return(
                   <StyledAccommodationTable
-                    key={accommodationContent.id}
-                    accommodationId={accommodationContent.id}
-                    accommodationList={selectedActivity?.accommodation}
-                    onAccommodationListChange={()=>{}}
+                    key={accommodationDay?.date}
+                    accommodationDay={accommodationDay}
                   />
                 )
               })}
             </div>
           </div>
           }
-        {ActiveTable === "others" && <StyledOthersTable detailContent={selectedActivity?.detail}/>}
+        {ActiveTable === "others" && <StyledOthersTable detailContent={activity?.detail}/>}
       </div> 
     </div>
   )

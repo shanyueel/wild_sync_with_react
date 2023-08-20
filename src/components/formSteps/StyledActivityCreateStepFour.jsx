@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
   const [transportationContent, setTransportationContent] = useState(formContent?.transportation || {})
   const [accommodationList, setAccommodationList] = useState(formContent?.accommodation || [])
-  const [accommodationCount, setAccommodationCount] = useState(formContent?.accommodation?.length - 1)
 
   useEffect(()=>{
     const updateTransportationForm = () => {
@@ -22,7 +21,7 @@ const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
       onFormChange(newForm)
     }
     updateTransportationForm()
-  },[transportationContent, formContent, onFormChange])
+  },[transportationContent])
 
   useEffect(()=>{
     const updateAccommodationForm = () => {
@@ -33,31 +32,25 @@ const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
       onFormChange(newForm)
     }
     updateAccommodationForm()
-  },[accommodationList, formContent, onFormChange])
+  },[accommodationList])
   
   const handleAccommodationAdd = () => {
-    const newId = accommodationCount + 1
     const newArray = [
       ...accommodationList,
       {
-        id: newId,
         date: null,
         name: "",
-        address: "",
+        address: {},
         roomDetail: "",
         notes:""
       }
     ]
-
-    setAccommodationCount(newId)
     setAccommodationList(newArray)
   }
 
   const handleAccommodationRemove = () => {
-    const resetId = accommodationCount - 1
-    accommodationList?.pop()
-    setAccommodationCount(resetId)
-    setAccommodationList(accommodationList)
+    const newArray = accommodationList?.slice(0,-1)
+    setAccommodationList(newArray)
   }
 
   return(
@@ -70,18 +63,28 @@ const ActivityCreateStepFour = ({ className, formContent, onFormChange}) => {
       />
       
       <div className="l-activity-create__accommodation">
-
-        {accommodationList?.map((accommodationContent, index)=>{
-          return(
-            <StyledAccommodationTable
-              key={index}
-              inputUsed
-              accommodationId={accommodationContent?.id}
-              accommodationList={accommodationList}
-              onAccommodationListChange={setAccommodationList}
-            />
-          )
-        })}
+        {accommodationList?.length > 0 &&       
+          <table>
+            <tbody>
+              <tr><td className="c-table-key" colSpan={2}>住宿資訊</td></tr> 
+            </tbody>
+          </table>
+        }
+        {
+          accommodationList?.length > 0 && 
+          accommodationList?.map((accommodationDay,index)=>{
+            return(
+              <StyledAccommodationTable
+                key={index}
+                inputUsed
+                accommodationDay={accommodationDay}
+                accommodationIndex={index}
+                accommodationList={accommodationList}
+                onAccommodationListChange={setAccommodationList}
+              />
+            )
+          })
+        }
 
       </div>
 

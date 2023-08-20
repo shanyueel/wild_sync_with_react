@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import styled from "styled-components";
+import { toast } from 'react-toastify';
 
-import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
+import { updateActivity } from 'api/activityApi';
+import { deleteImage, uploadImage } from 'api/storageApi';
 
 import StyledButton from 'components/StyledButton';
 import StyledActivityCreateStepOne from 'components/formSteps/StyledActivityCreateStepOne';
@@ -10,75 +12,14 @@ import StyledActivityCreateStepTwo from 'components/formSteps/StyledActivityCrea
 import StyledActivityCreateStepThree from 'components/formSteps/StyledActivityCreateStepThree';
 import StyledActivityCreateStepFour from 'components/formSteps/StyledActivityCreateStepFour';
 import StyledActivityCreateStepFive from 'components/formSteps/StyledActivityCreateStepFive';
-import { updateActivity } from 'api/activityApi';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { useParams } from 'react-router';
 
-const ActivityUpdateModal = ({className, currentActivity, refreshActivity, selectedActivityId, isActivityUpdateModalOpen, setIsActivityUpdateModalOpen}) => {
-  const activityId = useParams.id
+import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
+
+const ActivityUpdateModal = ({ className, currentActivity, setActivity, activityId, isActivityUpdateModalOpen, setIsActivityUpdateModalOpen }) => {
   const stepsRef = useRef(null)
-  const [activityContent, setActivityContent] = useState(currentActivity)
+  const [updateContent, setUpdateContent] = useState(currentActivity)
   const [formProgress, setFormProgress] = useState(1);
-  const user = useSelector(state => state.user)
 
-  const closeModal = () => {
-    setFormProgress(1)
-    setIsActivityUpdateModalOpen(false);
-    document.querySelector('body').classList.remove('no-scroll');
-    document.querySelector('html').classList.remove('no-scroll');
-  }
-
-  const handleResetData = () => {
-    setActivityContent(currentActivity)
-  }
-
-  const handlePreviousPageClick = () => {
-    setFormProgress(formProgress - 1)
-  }
-
-  const handleNextPageClick = () => {
-    setFormProgress(formProgress + 1)
-  }
-
-  const handleActivityUpdate = async() => {
-    try{
-      await updateActivity(selectedActivityId, activityContent)
-
-      if(selectedActivityId){
-        toast.success('更新活動成功', {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        })
-
-        refreshActivity(activityContent)
-
-        setTimeout(()=>{
-        setIsActivityUpdateModalOpen(false)
-      },1500)
-      }
-
-    }catch(error){
-      toast.error('建立活動失敗', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-    }
-
-  }
-  
   useEffect(()=>{
     const adjustStepDisplay = (currentFormProgress) => {
       const steps = stepsRef?.current
@@ -102,6 +43,123 @@ const ActivityUpdateModal = ({className, currentActivity, refreshActivity, selec
     adjustStepDisplay(formProgress)
   },[formProgress])
 
+  const closeModal = () => {
+    setFormProgress(1)
+    setIsActivityUpdateModalOpen(false);
+    document.querySelector('body').classList.remove('no-scroll');
+    document.querySelector('html').classList.remove('no-scroll');
+  }
+
+  const handleResetData = () => {
+    setUpdateContent(currentActivity)
+  }
+
+  const handlePreviousPageClick = () => {
+    setFormProgress(formProgress - 1)
+  }
+
+  const handleNextPageClick = () => {
+    setFormProgress(formProgress + 1)
+  }
+
+  const filterModifiedContent = (content) => {
+    const filteredUpdateContent = { ...content }
+    delete filteredUpdateContent?.holder
+    delete filteredUpdateContent?.attendance
+    delete filteredUpdateContent?.createAt
+
+    for(let updateKey in filteredUpdateContent){
+      if(filteredUpdateContent?.[updateKey] === currentActivity?.[updateKey]){
+        delete filteredUpdateContent?.[updateKey]
+      }else if(updateKey === "detail"){
+        for(let detailKey in filteredUpdateContent?.detail){
+          if(filteredUpdateContent?.detail?.[detailKey] === currentActivity?.detail?.[detailKey]){
+            delete filteredUpdateContent?.detail?.[detailKey]
+          }
+        }
+      }else if(updateKey === "transportation"){
+        for(let transportationKey in filteredUpdateContent?.transportation){
+          if(filteredUpdateContent?.transportation?.[transportationKey] === currentActivity?.transportation?.[transportationKey]){
+            delete filteredUpdateContent?.transportation?.[transportationKey]
+          }
+        }
+      }
+    }
+
+    return filteredUpdateContent
+  }
+
+  const handleDeleteActivity = () => {
+
+  }
+
+  const handleActivityUpdate = async() => {
+    let updatedActivity = updateContent
+    let updateCoverURL = currentActivity?.coverURL || null
+    let updateMapURL = currentActivity?.detail?.mapURL || null
+
+    if(updatedActivity?.coverURLFile){
+      await deleteImage("activities-covers",`${activityId}-cover`)
+      updateCoverURL = await uploadImage("activities-covers",`${activityId}-cover`, updatedActivity?.coverURLFile)
+      delete updatedActivity?.coverURLFile
+      URL.revokeObjectURL(updatedActivity?.coverURL)
+      updatedActivity={
+        ...updatedActivity,
+        coverURL: updateCoverURL
+      }
+    }
+    if(updatedActivity?.detail?.mapURLFile){
+      await deleteImage("activities-maps", `${activityId}-map`)
+      updateMapURL = await uploadImage("activities-maps", `${activityId}-map`, updatedActivity?.detail?.mapURLFile)
+      delete updatedActivity?.detail?.mapURLFile
+      URL.revokeObjectURL(updatedActivity?.detail?.mapURL)
+      updatedActivity={
+        ...updatedActivity,
+        detail:{
+          ...updatedActivity?.detail,
+          mapURL: updateMapURL
+        }
+      }
+    }
+
+    const updateData = filterModifiedContent(updatedActivity)
+
+    const { success} = await updateActivity(activityId, currentActivity, updateData)
+
+    if(success){
+      toast.success('更新活動成功', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+
+      setTimeout(()=>{
+        document.querySelector('body').classList.remove('no-scroll');
+        document.querySelector('html').classList.remove('no-scroll');
+        setIsActivityUpdateModalOpen(false)
+        setFormProgress(1)
+        setActivity(updatedActivity)
+      },1500)
+
+    }else{
+      toast.error('更新活動失敗', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    }
+  }
+  
   return(
     <Modal
       className={className}
@@ -111,6 +169,8 @@ const ActivityUpdateModal = ({className, currentActivity, refreshActivity, selec
     >
       <div className='l-modal__header'>
         <h2 className='o-modal__title'>更新活動資訊</h2>
+        <StyledButton onClick={handleResetData} sm outlined>還原更動資訊</StyledButton>
+        <StyledButton onClick={handleDeleteActivity} sm alertOutlined>刪除活動</StyledButton>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal}/>
       </div>
 
@@ -141,46 +201,29 @@ const ActivityUpdateModal = ({className, currentActivity, refreshActivity, selec
 
         <form className='l-modal__form-container'>
           {formProgress === 1 &&
-            <StyledActivityCreateStepOne
-              formContent={activityContent}
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepOne formContent={updateContent} onFormChange={setUpdateContent}/>
           }
 
           {formProgress === 2 && 
-            <StyledActivityCreateStepTwo
-              formContent={activityContent}
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepTwo formContent={updateContent} onFormChange={setUpdateContent} />
           }
 
           {formProgress === 3 &&
-            <StyledActivityCreateStepThree
-              activityId={activityId}
-              formContent={activityContent} 
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepThree activityId={activityId} formContent={updateContent} onFormChange={setUpdateContent}/>
           }
 
           {formProgress === 4 &&
-            <StyledActivityCreateStepFour
-              formContent={activityContent} 
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepFour formContent={updateContent} onFormChange={setUpdateContent}/>
           }
 
           {formProgress === 5 &&
-            <StyledActivityCreateStepFive
-              formContent={activityContent} 
-              onFormChange={setActivityContent}
-            />
+            <StyledActivityCreateStepFive formContent={updateContent} onFormChange={setUpdateContent}/>
           }
-
         </form>
 
         <div className='c-activity-create__pagination'>
           {formProgress === 1 ? 
-            <StyledButton onClick={handleResetData} alert>復原活動</StyledButton>
+            <StyledButton disabled>前一頁</StyledButton>
             :<StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
           }
           {formProgress < 5 ?

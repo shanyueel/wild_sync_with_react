@@ -22,12 +22,11 @@ import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 
 
 const ActivityPage = ({ className }) => {
-  const user = useSelector(state=>state.user)
+  const user = useSelector(state => state.user)
   const userId = user.uid
-  const selectedActivityId = useParams().id
+  const activityId = useParams().activityId
   const defaultImageURL = require('data/defaultImageURL.json')
-
-  const [selectedActivity, setSelectedActivity] = useState({})
+  const [activity, setActivity] = useState({})
   const [userAttendance, setUserAttendance] = useState(false)
   const [expired, setExpired] = useState(false)
   const [btnContent, setBtnContent] = useState("報名")
@@ -35,17 +34,17 @@ const ActivityPage = ({ className }) => {
 
   useEffect(()=>{
     const getSelectedActivity = async() => {
-      const activity = await getActivity(selectedActivityId)
-      setSelectedActivity(activity)
+      const activity = await getActivity(activityId)
+      setActivity(activity)
     }
     getSelectedActivity()
-  },[selectedActivityId])
+  },[activityId])
 
   useEffect(()=>{
     const now = new Date()
-    setExpired(Date.parse(now) > selectedActivity?.deadline)
-    setUserAttendance(selectedActivity?.attendance?.includes(userId))
-  },[selectedActivity, selectedActivity?.deadline, selectedActivity?.attendance, userId])
+    setExpired(Date.parse(now) > activity?.deadline)
+    setUserAttendance(activity?.attendance?.includes(userId))
+  },[activity, activity?.deadline, activity?.attendance, userId])
 
   useEffect(() => {
     if((expired && userAttendance) || (!expired && userAttendance)){
@@ -66,7 +65,7 @@ const ActivityPage = ({ className }) => {
     try{
       if(expired) return
       
-      await alterActivityAttendance(userId, selectedActivityId)
+      await alterActivityAttendance(userId, activityId)
       setUserAttendance(!userAttendance)
 
       if(!userAttendance){
@@ -100,6 +99,8 @@ const ActivityPage = ({ className }) => {
 
   const handleActivityUpdate = () => {
     setIsActivityUpdateModalOpen(true)
+    document.querySelector('body').classList.add('no-scroll');
+    document.querySelector('html').classList.add('no-scroll');
   }
 
   return(
@@ -107,30 +108,30 @@ const ActivityPage = ({ className }) => {
         <div className="l-web-container__main l-activity">
           <div className="l-activity-header">
             <ReturnIcon className="o-activity-header__return" onClick={handleReturn}/>
-            <StyledUserInfo user={selectedActivity?.holder}/>
+            <StyledUserInfo user={activity?.holder}/>
           </div>
           <div className="l-activity-body">
-            <img className="o-activity-cover" src={selectedActivity?.coverURL || defaultImageURL.activityCover} alt="activity-cover" />
-              <h2 className="o-activity-title">{selectedActivity?.name}
-              <span className="o-activity-title__update-time">( 最後更新於: {transferTimestamp(selectedActivity?.updateAt)|| transferTimestamp(selectedActivity?.createAt)} )</span>
+            <img className="o-activity-cover" src={activity?.coverURL || defaultImageURL?.activityCover} alt="activity-cover" />
+              <h2 className="o-activity-title">{activity?.name}
+              <span className="o-activity-title__update-time">( 最後更新於: {transferTimestamp(activity?.updateAt) || transferTimestamp(activity?.createAt)} )</span>
             </h2>
             <div className="l-activity-location">
-              <LocationIcon /><h3>{displayLocation(selectedActivity?.location)}</h3>
+              <LocationIcon /><h3>{displayLocation(activity?.location)}</h3>
             </div>
             <div className="l-activity-time">
-              <CalendarIcon /><h3>{transferTimestamp(selectedActivity?.time?.[0])} - {transferTimestamp(selectedActivity?.time?.[1])}</h3>
+              <CalendarIcon /><h3>{transferTimestamp(activity?.time?.[0])} - {transferTimestamp(activity?.time?.[1])}</h3>
             </div>
 
-            <p className="o-activity-introduction">{selectedActivity?.introduction}</p>
+            <p className="o-activity-introduction">{activity?.introduction}</p>
 
             <div className="l-activity-application">
-              {selectedActivity?.holder?.uid === userId ? 
+              {activity?.holder?.uid === userId ? 
                 <>
-                  <StyledButton outlined disabled={expired} onClick={handleActivityUpdate} >更新活動</StyledButton>
+                  <StyledButton outlined onClick={handleActivityUpdate} >更新活動</StyledButton>
                   <StyledActivityUpdateModal
-                    selectedActivityId={selectedActivityId}
-                    currentActivity={selectedActivity}
-                    refreshActivity={setSelectedActivity}
+                    activityId={activityId}
+                    currentActivity={activity}
+                    setActivity={setActivity}
                     isActivityUpdateModalOpen={isActivityUpdateModalOpen}  
                     setIsActivityUpdateModalOpen={setIsActivityUpdateModalOpen}
                   />  
@@ -139,22 +140,22 @@ const ActivityPage = ({ className }) => {
                 :<StyledButton outlined={!userAttendance} disabled={expired} onClick={handleAttendClick} >{ btnContent }</StyledButton>
               }
               
-              <h4 className="o-activity-deadline">- 報名截止日: {transferTimestamp(selectedActivity?.deadline, "yyyy年MM月dd日 HH:mm")} -</h4>
+              <h4 className="o-activity-deadline">- 報名截止日: {transferTimestamp(activity?.deadline, "yyyy年MM月dd日 HH:mm")} -</h4>
             </div>
 
             <StyledActivityBasicInfo 
               className="l-activity-basics" 
               activityContent={{
-                difficulty: selectedActivity?.difficulty,
-                activityTimeLength: selectedActivity?.activityTimeLength,
-                cost: selectedActivity?.cost,
-                attendance: selectedActivity?.attendance,
-                attendanceLimit: selectedActivity?.attendanceLimit
+                difficulty: activity?.difficulty,
+                activityTimeLength: activity?.activityTimeLength,
+                cost: activity?.cost,
+                attendance: activity?.attendance,
+                attendanceLimit: activity?.attendanceLimit
               }}
             />
             
             <StyledActivityTables 
-              selectedActivity={selectedActivity}
+              activity={activity}
             />
             
           </div>
@@ -165,10 +166,10 @@ const ActivityPage = ({ className }) => {
 
         <div className="l-web-container__side">
           {
-            selectedActivity?.attendance && 
+            activity?.attendance && 
             <StyledActivityAttendance 
-              holder={selectedActivity?.holder}
-              attendance={selectedActivity?.attendance}
+              holder={activity?.holder}
+              attendance={activity?.attendance}
             />
           }
         </div>

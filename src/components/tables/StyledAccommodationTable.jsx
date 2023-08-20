@@ -8,22 +8,20 @@ import StyledLocationInput from "components/inputs/StyledLocationInput"
 import { displayLocation } from "utils/location"
 import clsx from "clsx"
 
-const AccommodationTable = ({className, inputUsed, accommodationId, accommodationList, onAccommodationListChange}) => {
-  const [accommodationDetail, setAccommodationDetail] = useState(accommodationList[accommodationId])
+const AccommodationTable = ({className, inputUsed, accommodationDay, accommodationIndex, accommodationList, onAccommodationListChange}) => {
+  const [accommodationDetail, setAccommodationDetail] = useState(accommodationDay)
   
   useEffect(()=>{
-    accommodationList.splice(accommodationId,1,accommodationDetail)
-    onAccommodationListChange(accommodationList)
-  },[accommodationDetail])
+    if(accommodationIndex || accommodationList || onAccommodationListChange){
+      accommodationList.splice(accommodationIndex, 1, accommodationDetail)
+      onAccommodationListChange(accommodationList)
+    }
+  },[accommodationDetail, accommodationIndex, accommodationList, onAccommodationListChange])
 
   return(
     <div className={className}>
       <table>
         <tbody>
-          {accommodationId === 0 ?
-           <tr><td className="c-table-key" colSpan={2}>住宿資訊</td></tr> 
-           :<tr className="c-table-divide"></tr>
-          }
           <tr>
             <td className={clsx("c-table-key",{inputUsed: inputUsed})}>住宿日期</td>
             <td className="o-activity-table__content">
@@ -93,6 +91,7 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
                 }
               </td>
           </tr>
+          <tr className="c-table-divide"></tr>
         </tbody>
       </table>
     </div>

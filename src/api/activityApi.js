@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, getDocs, setDoc } from "@firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, getDocs, setDoc, deleteField } from "@firebase/firestore"
 import { firestoreDB } from "./firebaseConfig"
 import { getUser } from "./userApi"
 import { asyncForEach } from "utils/asyncLoop"
@@ -31,7 +31,7 @@ export const getActivity = async(activityId) => {
     if(activity?.detail) activity['detail'] = (await getDoc(activity?.detail))?.data()
     if(activity?.transportation) activity['transportation'] = (await getDoc(activity?.transportation))?.data()
     if(activity?.accommodation) activity['accommodation'] = (await getDoc(activity?.accommodation))?.data()?.accommodationList
-    console.log("[取得活動成功]:", activityId)
+    console.log("[取得活動成功]:", activity)
     return activity
   }catch(error){
     console.error("[取得活動失敗]:",error)
@@ -110,8 +110,6 @@ export const postActivity = async( activityId, holderReference, activityContent 
       accommodationList: activityContent?.accommodation
     }
 
-    console.log(mainActivityContent, detailContent, transportationContent, accommodationContent)
-
     if(detailContent){
       await setDoc(doc(firestoreDB, "activities-details",`${activityId}-detail`),detailContent)
       mainActivityContent["detail"] = doc(firestoreDB, "activities-details",`${activityId}-detail`)
@@ -138,14 +136,54 @@ export const postActivity = async( activityId, holderReference, activityContent 
   }
 }
 
-export const updateActivity = async(activityId, activityContent) => {
+export const updateActivity = async(activityId, currentActivity, updateContent) => {
   try{
-    await updateDoc(doc(firestoreDB, "activities", `${activityId}`), activityContent)
+    const nowTimeString = Date.parse(new Date())
+    let [detailUpdate, transportationUpdate, accommodationUpdate] = [null,null,null]
+
+    if(updateContent?.detail){
+      detailUpdate = updateContent?.detail
+      await updateDoc(doc(firestoreDB, "activities-details",`${activityId}-detail`), detailUpdate)
+      delete updateContent?.detail
+    }
+    if(updateContent?.transportation){
+      transportationUpdate = updateContent?.transportation
+      await updateDoc(doc(firestoreDB, "activities-transportation", `${activityId}-transportation`), transportationUpdate)
+      delete updateContent?.transportation
+    } 
+
+    if(updateContent?.accommodation?.length > 0){
+      accommodationUpdate = {accommodationList: updateContent?.accommodation}
+      if(currentActivity?.accommodation){
+        await updateDoc(doc(firestoreDB, "activities-accommodation", `${activityId}-accommodation`), accommodationUpdate)
+        delete updateContent?.accommodation
+      }else{
+        await setDoc(doc(firestoreDB, "activities-accommodation", `${activityId}-accommodation`), accommodationUpdate)
+        updateContent["accommodation"] = doc(firestoreDB, "activities-accommodation", `${activityId}-accommodation`)
+        console.log(updateContent)
+      }
+    }else if(!updateContent?.accommodation?.length > 0 || currentActivity?.accommodation){
+      await deleteDoc(doc(firestoreDB, "activities-accommodation", `${activityId}-accommodation`))
+      await updateDoc(doc(firestoreDB, "activities", `${activityId}`), { accommodation: deleteField() })
+      delete updateContent?.accommodation
+    }
+
+    const mainUpdate = { ...updateContent, updateAt: nowTimeString }
+    await updateDoc(doc(firestoreDB, "activities", `${activityId}`), mainUpdate)
+  
     console.log("[更新活動成功]:", activityId)
-    return { success:true, id: activityId}
+    return { 
+      success: true, 
+      id: activityId, 
+      mainUpdate: updateContent,
+      detailUpdate: detailUpdate,
+      transportationUpdate: transportationUpdate,
+      accommodationUpdate: accommodationUpdate
+    }
+
   }catch(error){
     console.error("[更新活動失敗]:",error)
-    return { success:false }
+    return { success: false }
   }
 }
 

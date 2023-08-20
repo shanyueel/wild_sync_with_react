@@ -16,7 +16,7 @@ const UserPage = ({className}) => {
   const user = useSelector(state=> state.user)
   const environmentParams = useSelector(state => state.environment)
   const userId = user.uid
-  const selectedUserId = useParams().id
+  const selectedUserId = useParams().userId
   const windowSize = environmentParams.windowSize
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState({})

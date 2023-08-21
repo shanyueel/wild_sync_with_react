@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 
-import StyledUserCard from "components/StyledUserCard";
-
 import { getUsersByIdList } from "api/userApi";
+
+import StyledUserCard from "components/StyledUserCard";
 
 import {ReactComponent as GroupIcon} from "assets/icons/GroupIcon.svg"
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 
-const ActivityAttendance = ({className, holder, attendance}) => {
+const ActivityAttendance = ({className, holder, attendance, isLargeLayout}) => {
   const [attendanceList, setAttendanceList]= useState([])
 
   useEffect(()=>{
@@ -19,27 +19,24 @@ const ActivityAttendance = ({className, holder, attendance}) => {
     getAttendanceList()
   },[attendance])
 
-  const displayAttendance = () => {
-    console.log(attendanceList)
-  }
-
   return(
     <div className={className}>
-      <div className="c-activity-attendance__icon">
-        <input type="checkbox" id="activity-attendance"/>
-        <label htmlFor="activity-attendance"><GroupIcon  /></label>
-      </div>
+      {
+        !isLargeLayout &&
+        <div className="c-activity-attendance__icon">
+          <input type="checkbox" id="activity-attendance"/>
+          <label htmlFor="activity-attendance"><GroupIcon  /></label>
+        </div>
+      }
+
       <div className="l-activity-attendance">
         <div className="l-activity-discussion__header">
-          <label htmlFor="activity-attendance"><ReturnIcon className="o-activity-discussion__return-icon"/></label>
-          <h2 className="o-activity-discussion__title" onClick={displayAttendance}>活動參加者</h2>
+          { !isLargeLayout && <label htmlFor="activity-attendance"><ReturnIcon className="o-activity-discussion__return-icon"/></label> }
+          <h2 className="o-activity-discussion__title">活動參加者</h2>
         </div>
-        
-        <div className="l-activity-discussion-list__body scrollbar">
+        <div className="l-activity-discussion__body scrollbar">
           <StyledUserCard listItem isHolder user={holder} />
-          { 
-            attendanceList?.map(user=> <StyledUserCard key={user?.uid} listItem user={user} /> ) 
-          }
+          { attendanceList && attendanceList?.map(user => <StyledUserCard key={user?.uid} listItem user={user} /> ) }
         </div>
       </div>
     </div>
@@ -119,11 +116,12 @@ const StyledActivityAttendance = styled(ActivityAttendance)`
       }
     }
 
-    .l-activity-discussion-list__body{
+    .l-activity-discussion__body{
       display: flex;
       flex-direction: column;
       flex-grow: 1;
       gap: .5rem;
+      height: fit-content;
       margin: 1rem 1rem 0;
       overflow-y: scroll;
       padding: .25rem 0;
@@ -132,21 +130,13 @@ const StyledActivityAttendance = styled(ActivityAttendance)`
   }
 
   @media screen and (min-width: 1024px){
-    .c-activity-attendance__icon{
-      display: none;
-    }
-
     .l-activity-attendance{
       padding: 0;
       display: block;
       position: static;
       height: calc(100vh - 10rem);
 
-      .l-activity-discussion__header .o-activity-discussion__return-icon{
-        display: none;
-      }
-
-      .l-activity-discussion-list__body{
+      .l-activity-discussion__body{
         margin: 1rem 0 0;
       }
     }

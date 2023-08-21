@@ -23,9 +23,13 @@ import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 
 const ActivityPage = ({ className }) => {
   const user = useSelector(state => state.user)
+  const environmentParams = useSelector(state => state.environment)
   const userId = user.uid
+  const windowSize = environmentParams.windowSize
   const activityId = useParams().activityId
   const defaultImageURL = require('data/defaultImageURL.json')
+  const [isLargeLayout, setIsLargeLayout] = useState(false)
+  const [isMediumLayout, setIsMediumLayout] = useState(false)
   const [activity, setActivity] = useState({})
   const [userAttendance, setUserAttendance] = useState(false)
   const [expired, setExpired] = useState(false)
@@ -33,11 +37,19 @@ const ActivityPage = ({ className }) => {
   const [isActivityUpdateModalOpen, setIsActivityUpdateModalOpen] = useState(false)
 
   useEffect(()=>{
-    const getSelectedActivity = async() => {
+    const setWindowSize = () => {
+      setIsLargeLayout(windowSize === "large")
+      setIsMediumLayout(windowSize === "medium" || windowSize === "large")
+    }
+    setWindowSize()
+  },[windowSize])
+
+  useEffect(()=>{
+    const setCurrentActivity = async() => {
       const activity = await getActivity(activityId)
       setActivity(activity)
     }
-    getSelectedActivity()
+    setCurrentActivity()
   },[activityId])
 
   useEffect(()=>{
@@ -54,7 +66,6 @@ const ActivityPage = ({ className }) => {
     }else {
       setBtnContent("報名")
     }
-    //更新活動資訊
   },[expired,userAttendance])
 
   const handleReturn = () => {
@@ -62,38 +73,35 @@ const ActivityPage = ({ className }) => {
   }
 
   const handleAttendClick = async() => {
-    try{
-      if(expired) return
-      
-      await alterActivityAttendance(userId, activityId)
-      setUserAttendance(!userAttendance)
+    if(expired) return
+    
+    await alterActivityAttendance(userId, activityId)
+    setUserAttendance(!userAttendance)
+    const newActivity = await getActivity(activityId)
+    setActivity(newActivity)
 
-      if(!userAttendance){
-        toast.success('參加活動成功', {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        })
-      }else{
-        toast.success('退出活動成功', {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        })
-      }
-
-    }catch(error){
-      console.error(error)
+    if(!userAttendance){
+      toast.success('參加活動成功', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    }else{
+      toast.success('退出活動成功', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
     }
   }
 
@@ -113,7 +121,8 @@ const ActivityPage = ({ className }) => {
           <div className="l-activity-body">
             <img className="o-activity-cover" src={activity?.coverURL || defaultImageURL?.activityCover} alt="activity-cover" />
               <h2 className="o-activity-title">{activity?.name}
-              <span className="o-activity-title__update-time">( 最後更新於: {transferTimestamp(activity?.updateAt) || transferTimestamp(activity?.createAt)} )</span>
+              {!isMediumLayout && <br/>}
+              <span className="o-activity-title__update-time"> ( 最後更新於: {transferTimestamp(activity?.updateAt) || transferTimestamp(activity?.createAt)} )</span>
             </h2>
             <div className="l-activity-location">
               <LocationIcon /><h3>{displayLocation(activity?.location)}</h3>
@@ -165,13 +174,7 @@ const ActivityPage = ({ className }) => {
         </div>
 
         <div className="l-web-container__side">
-          {
-            activity?.attendance && 
-            <StyledActivityAttendance 
-              holder={activity?.holder}
-              attendance={activity?.attendance}
-            />
-          }
+          { activity && <StyledActivityAttendance holder={activity?.holder} attendance={activity?.attendance} isLargeLayout={isLargeLayout}/> }
         </div>
       </div>
   )

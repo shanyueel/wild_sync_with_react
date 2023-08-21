@@ -17,7 +17,7 @@ export const getUser = async(userId) => {
 export const getUsersByIdList = async(idList) => {
   try{
     const userList = []
-    asyncForEach(idList, async(userId)=>{
+    await asyncForEach(idList, async(userId)=>{
       const user = await getUser(userId)
       userList?.push(user)
     })

@@ -32,7 +32,8 @@ const ActivityPage = ({ className }) => {
   const [isMediumLayout, setIsMediumLayout] = useState(false)
   const [activity, setActivity] = useState({})
   const [userAttendance, setUserAttendance] = useState(false)
-  const [expired, setExpired] = useState(false)
+  const [isAttendanceExpired, setIsAttendanceExpired] = useState(false)
+  const [isAttendanceFull, setIsAttendanceFull] = useState(false)
   const [btnContent, setBtnContent] = useState("報名")
   const [isActivityUpdateModalOpen, setIsActivityUpdateModalOpen] = useState(false)
 
@@ -52,36 +53,49 @@ const ActivityPage = ({ className }) => {
     setCurrentActivity()
   },[activityId])
 
-  useEffect(()=>{
-    const now = new Date()
-    setExpired(Date.parse(now) > activity?.deadline)
-    setUserAttendance(activity?.attendance?.includes(userId))
-  },[activity, activity?.deadline, activity?.attendance, userId])
-
   useEffect(() => {
-    if((expired && userAttendance) || (!expired && userAttendance)){
-      setBtnContent("報名成功")
-    }else if(expired && !userAttendance){
-      setBtnContent("報名截止")
-    }else {
-      setBtnContent("報名")
+    const now = new Date()
+    setIsAttendanceExpired(Date.parse(now) > activity?.deadline)
+    setUserAttendance(activity?.attendance?.includes(userId))
+    setIsAttendanceFull(Number(activity?.attendance?.length) === Number(activity?.attendanceLimit))
+
+    if(userAttendance){
+      setBtnContent("已成功報名 ( 再次點擊退出 )")
+    }else if(isAttendanceExpired){
+      setBtnContent("報名已截止")
+    }else if(isAttendanceFull){
+      setBtnContent("報名已額滿")
+    }else{
+      setBtnContent("報名加入")
     }
-  },[expired,userAttendance])
+  },[activity, userId, userAttendance, isAttendanceExpired, isAttendanceFull])
 
   const handleReturn = () => {
     window.history.back()
   }
 
   const handleAttendClick = async() => {
-    if(expired) return
+    if(isAttendanceExpired || (isAttendanceFull && !userAttendance)) return
     
-    await alterActivityAttendance(userId, activityId)
+    const { success } = await alterActivityAttendance(userId, activityId)
     setUserAttendance(!userAttendance)
     const newActivity = await getActivity(activityId)
     setActivity(newActivity)
 
     if(!userAttendance){
-      toast.success('參加活動成功', {
+      if(success){
+        toast.success('參加活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.error('參加活動失敗', {
         position: "top-right",
         autoClose: 1500,
         hideProgressBar: false,
@@ -91,17 +105,33 @@ const ActivityPage = ({ className }) => {
         progress: undefined,
         theme: "light",
       })
+      }
+      
     }else{
-      toast.success('退出活動成功', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
+      if(success){
+        toast.success('退出活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.success('退出活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+      
     }
   }
 
@@ -146,7 +176,7 @@ const ActivityPage = ({ className }) => {
                   />  
                 </>
 
-                :<StyledButton outlined={!userAttendance} disabled={expired} onClick={handleAttendClick} >{ btnContent }</StyledButton>
+                :<StyledButton outlined={!userAttendance} disabled={isAttendanceExpired || (!userAttendance && isAttendanceFull)} onClick={handleAttendClick} >{ btnContent }</StyledButton>
               }
               
               <h4 className="o-activity-deadline">- 報名截止日: {transferTimestamp(activity?.deadline, "yyyy年MM月dd日 HH:mm")} -</h4>

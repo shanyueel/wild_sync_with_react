@@ -193,6 +193,7 @@ export const alterActivityAttendance = async(userId, activityId) => {
     const userRef = await getUser(userId)
     const existingAttendance = activityRef?.attendance
     const currentAttendedActivities = userRef?.attendedActivities
+    const now = new Date()
 
     if(existingAttendance.includes(userId)){
       const newAttendance = existingAttendance.filter((attendance)=> attendance !== userId)
@@ -204,7 +205,10 @@ export const alterActivityAttendance = async(userId, activityId) => {
         attendedActivities: newAttendedActivities
       })
       console.log("[退出活動成功]:",activityId)
+      return {success: true}
     }else{
+      if(Number(activityRef?.attendance?.length) === Number(activityRef?.attendanceLimit) || Date.parse(now) > activityRef?.deadline) return {success: false}
+
       const newAttendance = [...existingAttendance, userId]
       const newAttendedActivities = [...currentAttendedActivities, activityId]
       updateDoc(doc(firestoreDB, "activities", `${activityId}`), {
@@ -214,9 +218,11 @@ export const alterActivityAttendance = async(userId, activityId) => {
         attendedActivities: newAttendedActivities
       })
       console.log("[加入活動成功]:",activityId)
+      return {success: true, notes: ""}
     }
   }catch(error){
     console.log("[加入/退出活動失敗]:", error)
+    return {success: false}
   }
 }
 

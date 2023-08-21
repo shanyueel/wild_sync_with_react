@@ -167,7 +167,7 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
 
     const updateData = filterModifiedContent(updatedActivity)
 
-    const { success} = await updateActivity(activityId, currentActivity, updateData)
+    const { success, updateAt } = await updateActivity(activityId, currentActivity, updateData)
 
     if(success){
       toast.success('更新活動成功', {
@@ -186,7 +186,10 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
         document.querySelector('html').classList.remove('no-scroll');
         setIsActivityUpdateModalOpen(false)
         setFormProgress(1)
-        setActivity(updatedActivity)
+        setActivity({
+          ...updatedActivity,
+          updateAt: updateAt
+        })
       },1500)
 
     }else{

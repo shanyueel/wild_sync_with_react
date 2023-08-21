@@ -178,7 +178,8 @@ export const updateActivity = async(activityId, currentActivity, updateContent) 
       mainUpdate: updateContent,
       detailUpdate: detailUpdate,
       transportationUpdate: transportationUpdate,
-      accommodationUpdate: accommodationUpdate
+      accommodationUpdate: accommodationUpdate,
+      updateAt: nowTimeString
     }
 
   }catch(error){

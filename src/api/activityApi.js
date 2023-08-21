@@ -219,3 +219,22 @@ export const alterActivityAttendance = async(userId, activityId) => {
     console.log("[加入/退出活動失敗]:", error)
   }
 }
+
+export const deleteActivity = async( userId, activity ) => {
+  try{
+    if(activity?.detail) await deleteDoc(doc(firestoreDB, "activities-details", `${activity?.id}-detail`))
+    if(activity?.transportation) await deleteDoc(doc(firestoreDB, "activities-transportation", `${activity?.id}-transportation`))
+    if(activity?.accommodation) await deleteDoc(doc(firestoreDB, "activities-accommodation", `${activity?.id}-accommodation`))
+    await deleteDoc(doc(firestoreDB, "activities", `${activity?.id}`))
+    const currentHeldActivities = (await getUser(userId))?.heldActivities
+    const newHeldActivities = currentHeldActivities?.filter(heldActivity => heldActivity !== activity?.id)
+    await updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+      heldActivities: newHeldActivities
+    })
+    console.log("[刪除活動成功]:", activity?.id)
+    return {success: true}
+  }catch(error){
+    console.error("[刪除活動失敗]:", error)
+    return {success: false}
+  }
+}

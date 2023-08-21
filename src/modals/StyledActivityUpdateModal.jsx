@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import styled from "styled-components";
 import { toast } from 'react-toastify';
 
-import { updateActivity } from 'api/activityApi';
+import { deleteActivity, updateActivity } from 'api/activityApi';
 import { deleteImage, uploadImage } from 'api/storageApi';
 
 import StyledButton from 'components/StyledButton';
@@ -14,11 +14,18 @@ import StyledActivityCreateStepFour from 'components/formSteps/StyledActivityCre
 import StyledActivityCreateStepFive from 'components/formSteps/StyledActivityCreateStepFive';
 
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
+import StyledConfirmModal from './StyledConfirmModal';
+import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 const ActivityUpdateModal = ({ className, currentActivity, setActivity, activityId, isActivityUpdateModalOpen, setIsActivityUpdateModalOpen }) => {
+  const navigate = useNavigate()
   const stepsRef = useRef(null)
+  const user = useSelector(state=>state.user)
+  const userId = user.uid
   const [updateContent, setUpdateContent] = useState(currentActivity)
-  const [formProgress, setFormProgress] = useState(1);
+  const [formProgress, setFormProgress] = useState(1)
+  const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] = useState(false)
 
   useEffect(()=>{
     const adjustStepDisplay = (currentFormProgress) => {
@@ -62,6 +69,46 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
     setFormProgress(formProgress + 1)
   }
 
+  const handleDeleteActivity = () => {
+    setIsDeleteConfirmModalOpen(true)
+  }
+
+  const handleConfirmDeleteClick = async() => {
+    const { success } = await deleteActivity( userId, currentActivity )
+
+    if(success){
+      toast.success('刪除活動成功', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+
+      setTimeout(()=>{
+        document.querySelector('body').classList.remove('no-scroll');
+        document.querySelector('html').classList.remove('no-scroll');
+        setIsDeleteConfirmModalOpen(false)
+        setIsActivityUpdateModalOpen(false)
+        navigate(`/user/${userId}`)
+      },1500)
+    }else{
+      toast.error('刪除活動失敗', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+    }
+  }
+
   const filterModifiedContent = (content) => {
     const filteredUpdateContent = { ...content }
     delete filteredUpdateContent?.holder
@@ -87,10 +134,6 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
     }
 
     return filteredUpdateContent
-  }
-
-  const handleDeleteActivity = () => {
-
   }
 
   const handleActivityUpdate = async() => {
@@ -168,9 +211,16 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
       contentLabel="Activity Create Modal"
     >
       <div className='l-modal__header'>
-        <h2 className='o-modal__title'>更新活動資訊</h2>
-        <StyledButton onClick={handleResetData} sm outlined>還原更動資訊</StyledButton>
+        <h2 className='o-modal__title'>更新活動</h2>
+        <StyledButton onClick={handleResetData} sm outlined>還原變更</StyledButton>
         <StyledButton onClick={handleDeleteActivity} sm alertOutlined>刪除活動</StyledButton>
+        <StyledConfirmModal
+          title="刪除活動"
+          content="確認要刪除嗎?"
+          isConfirmModalOpen={isDeleteConfirmModalOpen}
+          setIsConfirmModalOpen={setIsDeleteConfirmModalOpen}
+          handleConfirmClick={handleConfirmDeleteClick}
+        />
         <CrossIcon className="o-modal__close-icon" onClick={closeModal}/>
       </div>
 
@@ -221,7 +271,7 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
           }
         </form>
 
-        <div className='c-activity-create__pagination'>
+        <div className='l-modal__controls'>
           {formProgress === 1 ? 
             <StyledButton disabled>前一頁</StyledButton>
             :<StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
@@ -238,16 +288,6 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
 }
 
 const StyledActivityUpdateModal = styled(ActivityUpdateModal)`
-  position: relative;
-  width: 90vw;
-  height: 100vh;
-  max-width: 896px;
-  max-height: calc(100vh - 8rem);
-  margin: 5rem auto 0;
-  border-radius: .5rem;
-  background-color: ${({theme})=> theme.backgroundColor.default};
-  padding: 1rem;
-
   .l-modal__body{
     .l-activity-create__steps {
       display: flex;
@@ -337,14 +377,6 @@ const StyledActivityUpdateModal = styled(ActivityUpdateModal)`
 
        }
       }
-    }
-
-    .c-activity-create__pagination{
-      display: flex;
-      gap: 1rem;
-      padding-top: .5rem;
-      margin-top: 1rem;
-      border-top: 1px solid ${({theme})=> theme.backgroundColor.secondary};
     }
   }
 

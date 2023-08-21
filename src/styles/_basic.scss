@@ -210,6 +210,7 @@ select{
   border-radius: .5rem;
   background-color: #F0F0F0;
   padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .2);
 
   @media screen and (min-width: 768px) {
     width: 60vw;
@@ -246,6 +247,14 @@ select{
     width: 100%;
     height: calc(100% - 9rem);
     margin-top: .75rem;
+  }
+
+  .l-modal__controls{
+    display: flex;
+    gap: 1rem;
+    padding-top: .5rem;
+    margin-top: 1rem;
+    border-top: 1px solid #ADADAD;
   }
 }
 

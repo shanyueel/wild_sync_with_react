@@ -7,43 +7,18 @@ import StyledRangeInput from "components/inputs/StyledRangeInput";
 import StyledDateTimeInput from "components/inputs/StyledDateTimeInput";
 import StyledTextArea from "components/inputs/StyledTextArea";
 
-const difficultyOptions = [
-  { 
-    name: "difficulty",
-    label: "入門",
-    id: "beginner"
-  },
-  { 
-    name: "difficulty",
-    label: "中等",
-    id: "medium"
-  },
-  { 
-    name: "difficulty",
-    label: "進階",
-    id: "advanced"
-  },
-  { 
-    name: "difficulty",
-    label: "專家",
-    id: "expert"
-  },
-  { 
-    name: "difficulty",
-    label: "大師",
-    id: "master"
-  }
-]
-
 const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
+  const activityDifficultyOptions = require('data/activityDifficultyOptions.json')
+  
   return(
     <div className={clsx(className,"scrollbar") }>
       
       <StyledRadioInput 
         title="難易程度" 
+        inputId="difficulty"
         formContent={formContent}
         onFormChange={onFormChange} 
-        radioOptions={difficultyOptions}
+        radioOptions={activityDifficultyOptions}
       />
       <StyledTextInput 
         numberUsed 

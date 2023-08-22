@@ -1,0 +1,14 @@
+[
+  { 
+    "name": "環狀路線",
+    "id": "round"
+  },
+  { 
+    "name": "原路折返",
+    "id": "backtrack"
+  },
+  { 
+    "name": "甲進乙出",
+    "id": "one-way"
+  }
+]

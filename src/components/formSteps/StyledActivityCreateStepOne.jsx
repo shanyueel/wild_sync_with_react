@@ -10,7 +10,7 @@ import StyledLocationInput from "components/inputs/StyledLocationInput";
 
 const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
   const defaultImageURL = require('data/defaultImageURL.json')
-  const typeOptions = require('data/activityTypeOptions.json')
+  const activityTypeOptions = require('data/activityTypeOptions.json')
 
   return(
     <div className={clsx(className,"scrollbar") }>
@@ -32,9 +32,10 @@ const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
       />
       <StyledRadioInput 
         title="活動類型" 
+        inputId="type"
+        radioOptions={activityTypeOptions}
         formContent={formContent} 
         onFormChange={onFormChange} 
-        radioOptions={typeOptions}
       />
       <StyledLocationInput
         title="活動地點"

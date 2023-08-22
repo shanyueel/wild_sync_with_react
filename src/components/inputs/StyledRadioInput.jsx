@@ -1,25 +1,37 @@
 import clsx from "clsx";
 import styled from "styled-components";
 
-const RadioInput = ({className, title, radioOptions, formContent, onFormChange}) => {
+const RadioInput = ({className, title, inputId, radioOptions, formContent, onFormChange, warningContent}) => {
 
   const handleRadioChange = (e) => {
     const newForm = {
       ...formContent,
-      [e.target.name]: e.target.id
+      [inputId]: e.target.value
     }
     onFormChange(newForm)
   }
 
   return(
     <div className={className}>
-      <h3 className="o-radio-title c-input-title">{title}</h3>
+      {title && 
+        <div className="c-input-title">
+          <label className="o-input-title__name">{title}</label>
+          <label className="o-input-title__warning">{warningContent}</label>
+        </div>
+      }
       <div className="l-radio-options">
         {radioOptions.map(radioOption =>{
           return(
             <div key={radioOption.id} className={clsx("c-radio-option",{"--disabled":radioOption.disabled}) }>
-              <input id={radioOption.id} name={radioOption.name} type="radio" onChange={handleRadioChange} checked={radioOption.id===formContent[radioOption.name]} disabled={radioOption.disabled} />
-              <label htmlFor={radioOption.id}>{radioOption.label}</label>
+              <input 
+                type="radio" 
+                name={inputId}
+                value={radioOption.id}  
+                onChange={handleRadioChange} 
+                checked={radioOption.id===formContent[inputId]} 
+                disabled={radioOption.disabled} 
+              />
+              <label htmlFor={radioOption.value}>{radioOption.name}</label>
             </div>
           )
         })}

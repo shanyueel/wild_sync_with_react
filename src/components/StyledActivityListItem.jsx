@@ -45,14 +45,14 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
           <h4 className="o-activity-card__location"><LocationIcon/>{displayLocation(activity?.location)}</h4>
           <h4 className="o-activity-card__date">
             <CalendarIcon/>
-            {transferTimestamp(activity?.time?.[0])} - {/* sideUsed && <br/> */}{transferTimestamp(activity?.time?.[1])}
+            {transferTimestamp(activity?.time?.start)} - {/* sideUsed && <br/> */}{transferTimestamp(activity?.time?.end)}
           </h4>
         </div>
 
         <ul className="c-activity-card__highlights">
           <li><span>難度 : </span>{switchDifficulty(activity?.difficulty)}</li>
           <li><span>時長 : </span>{activity?.activityTimeLength} hr</li>
-          <li><span>費用 : </span>{activity?.cost?.[0]} - {activity?.cost?.[1]}</li>
+          <li><span>費用 : </span>{activity?.cost?.min} - {activity?.cost?.max}</li>
           <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
 

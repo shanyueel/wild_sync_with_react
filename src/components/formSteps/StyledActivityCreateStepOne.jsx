@@ -2,7 +2,7 @@ import styled from "styled-components";
 import clsx from "clsx";
 
 import StyledImageInput from "components/inputs/StyledImageInput";
-import StyledPeriodInput from "components/inputs/StyledPeriodInput";
+import StyledPeriodInput from "components/inputs/StyledDateTimePeriodInput";
 import StyledRadioInput from "components/inputs/StyledRadioInput";
 import StyledTextInput from "components/inputs/StyledTextInput";
 import StyledLocationInput from "components/inputs/StyledLocationInput";
@@ -45,7 +45,7 @@ const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
       />
       <StyledPeriodInput 
         title="活動期間" 
-        inputName="time" 
+        inputId="time" 
         formContent={formContent} 
         onFormChange={onFormChange}
       />

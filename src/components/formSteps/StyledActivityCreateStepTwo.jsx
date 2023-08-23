@@ -31,12 +31,10 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
       />
       <StyledRangeInput 
         title="預估費用"
+        inputId="cost"
         minPlaceholder="最低費用" 
         maxPlaceholder="最高費用" 
         unit="$" 
-        inputName="cost"
-        minInputId="minCost"
-        maxInputId="maxCost"
         formContent={formContent}
         onFormChange={onFormChange}
       />

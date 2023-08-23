@@ -88,16 +88,14 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
           <td className="c-table-content">
             {inputUsed?
               <StyledRangeInput
-              minPlaceholder="最低海拔" 
-              maxPlaceholder="最高海拔" 
-              unit="m" 
-              inputName="altitude"
-              minInputId="minAltitude" 
-              maxInputId="maxAltitude"
-              formContent={detailContent} 
-              onFormChange={onDetailChange}
+                inputId="altitude"
+                minPlaceholder="最低海拔" 
+                maxPlaceholder="最高海拔" 
+                unit="m" 
+                formContent={detailContent} 
+                onFormChange={onDetailChange}
               />
-              :`${detailContent?.altitude?.[0]} - ${detailContent?.altitude?.[1]} m`
+              :`${detailContent?.altitude?.min} - ${detailContent?.altitude?.max} m`
             }
           </td>
         </tr>

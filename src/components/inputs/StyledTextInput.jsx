@@ -54,24 +54,6 @@ const StyledTextInput = styled(TextInput)`
   flex-direction: column;
   width: 100%;
   
-  .c-input-title{
-    display: flex;
-    justify-content: space-between;
-    font-size: 1rem;
-
-    label{
-      color: ${({theme})=> theme.color.default};
-      font-weight: 700;
-    }
-
-    .o-input-title__warning{
-      color: ${({theme})=> theme.color.alert};
-      font-weight: 700;
-      font-size: .75rem;
-      align-self: end;
-    }
-  }
-
   .c-input-body{
     display: flex;
     align-items: center;

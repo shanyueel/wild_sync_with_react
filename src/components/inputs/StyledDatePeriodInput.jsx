@@ -1,34 +1,90 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { DatePicker } from "@mui/x-date-pickers";
 
+const DatePeriodInput = ({className, title, inputId, formContent, onFormChange, warning}) => {
+  const [period,setPeriod] = useState(formContent[inputId] || {start:null, end:null})
+  const [warningContent, setWarningContent] = useState(warning)
 
-const PeriodSelector = ({className}) => {
-   const [selectedRange, setSelectedRange] = useState([null, null]);
-
-  const handleCalendarChange = (date) => {
-    if (selectedRange[0] && !selectedRange[1]) {
-      // 如果已选择了一个日期，但尚未选择第二个日期，则选择第二个日期
-      setSelectedRange([selectedRange[0], date]);
-      console.log(selectedRange)
-    } else {
-      // 如果没有选择日期或者已经选择了两个日期，则重新选择日期范围
-      setSelectedRange([date, null]);
-      console.log(selectedRange)
-    }
-
+  const handleStartInput = (newDate) => {
+    const newDateStamp = Number(Date.parse(newDate))
     
+    if(period?.end && newDateStamp > period?.end){
+      setWarningContent("開始時間不可在結束時間之後")
+      const newPeriod = {start:null, end:period?.end}
+      setPeriod(newPeriod)
+      return
+    }else{
+      setWarningContent("")
+      const newPeriod = {start:newDateStamp, end:period?.end}
+      const newForm = {
+        ...formContent,
+        [inputId]: newPeriod
+      }
+      setPeriod(newPeriod)
+      onFormChange(newForm)
+    }
+  }
+
+  const handleEndInput = (newDate) => {
+    const newDateStamp = Number(Date.parse(newDate)) + 86399999
+
+    if(period?.start && newDateStamp < period?.start){
+      setWarningContent("結束時間不可在開始時間之前")
+      const newPeriod = {start:period?.start, end:null}
+      setPeriod(newPeriod)
+      return
+    }else{
+      setWarningContent("")
+      const newPeriod = {start:period?.start, end:newDateStamp}
+      const newForm = {
+        ...formContent,
+        [inputId]: newPeriod
+      }
+      setPeriod(newPeriod)
+      onFormChange(newForm)
+    }
   }
   
   return(
     <div className={className}>
-      Calendar
+      {title &&
+        <div className="c-input-title">
+          <label className="o-input-title__name">{title}</label>
+          <label className="o-input-title__warning">{warningContent}</label>
+        </div>
+      }
+      <div className="c-input-body">
+        <DatePicker
+          className="c-input-body__date-picker"
+          disablePast
+          maxDate={period?.end||null}
+          value={period?.start|| null} 
+          onChange={handleStartInput}
+        />
+        -
+        <DatePicker
+          className="c-input-body__date-picker" 
+          disablePast
+          minDate={period?.start ||null}
+          value={period?.end || null} 
+          onChange={handleEndInput}
+        />
+      </div>
+      
     </div>
   )
 }
 
-const StyledPeriodSelector = styled(PeriodSelector)`
+const StyledDatePeriodInput = styled(DatePeriodInput)`
+  
+  .c-input-body{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
 
-.react-calendar {
+/* .react-calendar {
   max-width: 25rem;
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.125em;
@@ -168,7 +224,7 @@ const StyledPeriodSelector = styled(PeriodSelector)`
 
 .react-calendar--selectRange .react-calendar__tile--hover {
   background-color: #e6e6e6;
-}
+} */
 `
 
-export default StyledPeriodSelector
+export default StyledDatePeriodInput

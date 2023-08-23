@@ -1,50 +1,59 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import styled, { css } from "styled-components"
 
-const RangeInput = ({ className, title, minPlaceholder, maxPlaceholder, unit, inputName, minInputId, maxInputId, formContent, onFormChange, warning }) => {
-  const [range, setRange] = useState(formContent[inputName]|| [undefined,undefined])
+const RangeInput = ({ className, title, inputId, minPlaceholder, maxPlaceholder, unit, formContent, onFormChange, warning }) => {
+  const minRef = useRef(null)
+  const maxRef = useRef(null)
+  const [range, setRange] = useState(formContent[inputId]|| { min:null,max: null })
 
+  const handleMinInput = () => {
+      const newRange = { min: minRef.current.value, max:range?.max }
+      const newForm = {
+        ...formContent,
+        [inputId]: newRange
+      }
+      setRange(newRange)
+      onFormChange(newForm)
+  }
 
-  const handleRangeInput = (e) => {
-    let newRange
-    if(e.target.id === minInputId){
-      newRange = [e.target.value, range[1]]
-    }else if(e.target.id === maxInputId){
-      newRange = [range[0], e.target.value]
-    }
-    const newForm = {
-      ...formContent,
-      [inputName]: newRange
-    }
-    setRange(newRange)
-    onFormChange(newForm)
+  const handleMaxInput = () => {
+      const newRange = { min: range?.min, max:maxRef.current.value }
+      const newForm = {
+        ...formContent,
+        [inputId]: newRange
+      }
+      setRange(newRange)
+      onFormChange(newForm)
   }
 
   return(
     <div className={className}>
-      <div className="c-input-title">
-        <label className="o-input-title__name">{title}</label>
-        <label className="o-input-title__warning">{warning}</label>
-      </div>
+      {title &&
+        <div className="c-input-title">
+          <label className="o-input-title__name">{title}</label>
+          <label className="o-input-title__warning">{warning}</label>
+        </div>
+      }
       <div className="c-input-body">
         <div className="c-input-body__min-value">
-          <input type="number" 
-            id={minInputId} 
-            name={inputName} 
+          <input 
+            type="number" 
+            ref={minRef}
+            name={inputId} 
             placeholder={minPlaceholder} 
-            onChange={handleRangeInput} 
-            value={range[0] || ""} 
+            onChange={handleMinInput} 
+            value={range?.min || ""} 
           />
         </div>
         <div className="o-input-body__connect-line">-</div>
         <div className="c-input-body__max-value">
           <input 
-            type="number" 
-            id={maxInputId} 
-            name={inputName} 
+            type="number"
+            ref={maxRef} 
+            name={inputId} 
             placeholder={maxPlaceholder} 
-            onChange={handleRangeInput} 
-            value={range[1] || ""}
+            onChange={handleMaxInput} 
+            value={range?.max || ""}
           />
         </div>
         <div className="o-input-body__unit">

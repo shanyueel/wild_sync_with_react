@@ -1,34 +1,20 @@
 import styled from "styled-components";
 
+import { switchDifficulty } from "utils/translation";
+
 import {ReactComponent as FlameIcon} from "assets/icons/FlameIcon.svg"
 import {ReactComponent as ClockIcon} from "assets/icons/ClockIcon.svg"
 import {ReactComponent as PaymentIcon} from "assets/icons/PaymentIcon.svg"
 import {ReactComponent as CrowdIcon} from "assets/icons/CrowdIcon.svg"
 
 const ActivityBasicInfo = ({ className, activityContent }) => {
-  const difficultySwitch = (difficulty) => {
-    switch(difficulty){
-      case "beginner":
-        return "簡單";
-      case "medium":
-        return "中等";
-      case "advanced":
-        return "進階";
-      case "expert":
-        return "專家";
-      case "master":
-        return "大師";
-      default:
-        return
-    }
-  }
 
   return(
     <div className={className}>
       <div className="c-activity-info-card">
         <FlameIcon className="o-activity-info-card__icon" />
         <h3 className="o-activity-info-card__title">難易程度</h3>
-        <h3 className="o-activity-info-card__value">{difficultySwitch(activityContent?.difficulty)}</h3>
+        <h3 className="o-activity-info-card__value">{switchDifficulty(activityContent?.difficulty)}</h3>
       </div>
       <div className="c-activity-info-card">
         <ClockIcon className="o-activity-info-card__icon" />
@@ -38,7 +24,7 @@ const ActivityBasicInfo = ({ className, activityContent }) => {
       <div className="c-activity-info-card">
         <PaymentIcon className="o-activity-info-card__icon"/>
         <h3 className="o-activity-info-card__title">活動費用</h3>
-        <h3 className="o-activity-info-card__value">{activityContent?.cost?.[0]} - {activityContent?.cost?.[1]}</h3>
+        <h3 className="o-activity-info-card__value">{activityContent?.cost?.min} - {activityContent?.cost?.max}</h3>
       </div>
       <div className="c-activity-info-card">
         <CrowdIcon className="o-activity-info-card__icon"/>

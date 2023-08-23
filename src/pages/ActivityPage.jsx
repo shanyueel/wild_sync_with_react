@@ -158,7 +158,7 @@ const ActivityPage = ({ className }) => {
               <LocationIcon /><h3>{displayLocation(activity?.location)}</h3>
             </div>
             <div className="l-activity-time">
-              <CalendarIcon /><h3>{transferTimestamp(activity?.time?.[0])} - {transferTimestamp(activity?.time?.[1])}</h3>
+              <CalendarIcon /><h3>{transferTimestamp(activity?.time?.start)} - {transferTimestamp(activity?.time?.end)}</h3>
             </div>
 
             <p className="o-activity-introduction">{activity?.introduction}</p>

@@ -51,41 +51,8 @@
             }
         ],
         "name": "臺北市",
-        "id": "TPE"
-    },
-    {
-        "districts": [
-            {
-                "id": "200",
-                "name": "仁愛區"
-            },
-            {
-                "id": "201",
-                "name": "信義區"
-            },
-            {
-                "id": "202",
-                "name": "中正區"
-            },
-            {
-                "id": "203",
-                "name": "中山區"
-            },
-            {
-                "id": "204",
-                "name": "安樂區"
-            },
-            {
-                "id": "205",
-                "name": "暖暖區"
-            },
-            {
-                "id": "206",
-                "name": "七堵區"
-            }
-        ],
-        "name": "基隆市",
-        "id": "KLU"
+        "id": "TPE",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FTPE.jpg?alt=media&token=9b4b9d70-0027-4e21-b63c-158703410ce7"
     },
     {
         "districts": [
@@ -207,163 +174,43 @@
             }
         ],
         "name": "新北市",
-        "id": "TPH"
+        "id": "TPH",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FTPH.jpg?alt=media&token=98bda9da-b9d4-4342-ae40-2dfb6d2e08bb"
     },
     {
         "districts": [
             {
-                "id": "209",
-                "name": "南竿鄉"
+                "id": "200",
+                "name": "仁愛區"
             },
             {
-                "id": "210",
-                "name": "北竿鄉"
+                "id": "201",
+                "name": "信義區"
             },
             {
-                "id": "211",
-                "name": "莒光鄉"
+                "id": "202",
+                "name": "中正區"
             },
             {
-                "id": "212",
-                "name": "東引鄉"
+                "id": "203",
+                "name": "中山區"
+            },
+            {
+                "id": "204",
+                "name": "安樂區"
+            },
+            {
+                "id": "205",
+                "name": "暖暖區"
+            },
+            {
+                "id": "206",
+                "name": "七堵區"
             }
         ],
-        "name": "連江縣",
-        "id": "LNN"
-    },
-    {
-        "districts": [
-            {
-                "id": "260",
-                "name": "宜蘭市"
-            },
-            {
-                "id": "263",
-                "name": "壯圍鄉"
-            },
-            {
-                "id": "261",
-                "name": "頭城鎮"
-            },
-            {
-                "id": "262",
-                "name": "礁溪鄉"
-            },
-            {
-                "id": "264",
-                "name": "員山鄉"
-            },
-            {
-                "id": "265",
-                "name": "羅東鎮"
-            },
-            {
-                "id": "266",
-                "name": "三星鄉"
-            },
-            {
-                "id": "267",
-                "name": "大同鄉"
-            },
-            {
-                "id": "268",
-                "name": "五結鄉"
-            },
-            {
-                "id": "269",
-                "name": "冬山鄉"
-            },
-            {
-                "id": "270",
-                "name": "蘇澳鎮"
-            },
-            {
-                "id": "272",
-                "name": "南澳鄉"
-            },
-            {
-                "id": "290",
-                "name": "釣魚臺"
-            }
-        ],
-        "name": "宜蘭縣",
-        "id": "ILN"
-    },
-    {
-        "districts": [
-            {
-                "id": "300",
-                "name": "東區"
-            },
-            {
-                "id": "300",
-                "name": "北區"
-            },
-            {
-                "id": "300",
-                "name": "香山區"
-            }
-        ],
-        "name": "新竹市",
-        "id": "HSC"
-    },
-    {
-        "districts": [
-            {
-                "id": "308",
-                "name": "寶山鄉"
-            },
-            {
-                "id": "302",
-                "name": "竹北市"
-            },
-            {
-                "id": "303",
-                "name": "湖口鄉"
-            },
-            {
-                "id": "304",
-                "name": "新豐鄉"
-            },
-            {
-                "id": "305",
-                "name": "新埔鎮"
-            },
-            {
-                "id": "306",
-                "name": "關西鎮"
-            },
-            {
-                "id": "307",
-                "name": "芎林鄉"
-            },
-            {
-                "id": "310",
-                "name": "竹東鎮"
-            },
-            {
-                "id": "311",
-                "name": "五峰鄉"
-            },
-            {
-                "id": "312",
-                "name": "橫山鄉"
-            },
-            {
-                "id": "313",
-                "name": "尖石鄉"
-            },
-            {
-                "id": "314",
-                "name": "北埔鄉"
-            },
-            {
-                "id": "315",
-                "name": "峨眉鄉"
-            }
-        ],
-        "name": "新竹縣",
-        "id": "HSH"
+        "name": "基隆市",
+        "id": "KLU",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FKLU.jpg?alt=media&token=e0b355c7-a1cb-4dd1-82a0-31c291e4e850"
     },
     {
         "districts": [
@@ -421,7 +268,87 @@
             }
         ],
         "name": "桃園市",
-        "id": "TYC"
+        "id": "TYC",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FTYC.jpg?alt=media&token=ba9f8554-41e0-4106-a349-9c5ac0caf2a9"
+    },
+
+    {
+        "districts": [
+            {
+                "id": "300",
+                "name": "東區"
+            },
+            {
+                "id": "300",
+                "name": "北區"
+            },
+            {
+                "id": "300",
+                "name": "香山區"
+            }
+        ],
+        "name": "新竹市",
+        "id": "HSC",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FHSC.jpg?alt=media&token=5eed7e1f-83d8-4873-864d-405cb97d555f"
+    },
+    {
+        "districts": [
+            {
+                "id": "308",
+                "name": "寶山鄉"
+            },
+            {
+                "id": "302",
+                "name": "竹北市"
+            },
+            {
+                "id": "303",
+                "name": "湖口鄉"
+            },
+            {
+                "id": "304",
+                "name": "新豐鄉"
+            },
+            {
+                "id": "305",
+                "name": "新埔鎮"
+            },
+            {
+                "id": "306",
+                "name": "關西鎮"
+            },
+            {
+                "id": "307",
+                "name": "芎林鄉"
+            },
+            {
+                "id": "310",
+                "name": "竹東鎮"
+            },
+            {
+                "id": "311",
+                "name": "五峰鄉"
+            },
+            {
+                "id": "312",
+                "name": "橫山鄉"
+            },
+            {
+                "id": "313",
+                "name": "尖石鄉"
+            },
+            {
+                "id": "314",
+                "name": "北埔鄉"
+            },
+            {
+                "id": "315",
+                "name": "峨眉鄉"
+            }
+        ],
+        "name": "新竹縣",
+        "id": "HSH",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FHSH.jpg?alt=media&token=b13e0b45-b421-4e65-b313-5ff6da09d06d"
     },
     {
         "districts": [
@@ -499,7 +426,8 @@
             }
         ],
         "name": "苗栗縣",
-        "id": "MAL"
+        "id": "MAL",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FMAL.jpg?alt=media&token=c15106a3-3a2f-4664-b93e-7d8f41c0e916"
     },
     {
         "districts": [
@@ -621,7 +549,67 @@
             }
         ],
         "name": "臺中市",
-        "id": "TXG"
+        "id": "TXG",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FTXG.jpg?alt=media&token=d874bcc8-ff7a-4952-9b45-d47d929027c1"
+    },
+    {
+        "districts": [
+            {
+                "id": "540",
+                "name": "南投市"
+            },
+            {
+                "id": "541",
+                "name": "中寮鄉"
+            },
+            {
+                "id": "542",
+                "name": "草屯鎮"
+            },
+            {
+                "id": "544",
+                "name": "國姓鄉"
+            },
+            {
+                "id": "545",
+                "name": "埔里鎮"
+            },
+            {
+                "id": "546",
+                "name": "仁愛鄉"
+            },
+            {
+                "id": "551",
+                "name": "名間鄉"
+            },
+            {
+                "id": "552",
+                "name": "集集鎮"
+            },
+            {
+                "id": "553",
+                "name": "水里鄉"
+            },
+            {
+                "id": "555",
+                "name": "魚池鄉"
+            },
+            {
+                "id": "556",
+                "name": "信義鄉"
+            },
+            {
+                "id": "557",
+                "name": "竹山鎮"
+            },
+            {
+                "id": "558",
+                "name": "鹿谷鄉"
+            }
+        ],
+        "name": "南投縣",
+        "id": "NTO",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FNTO.jpg?alt=media&token=981e130b-611b-4754-9186-4419c6fbcee8"
     },
     {
         "districts": [
@@ -731,66 +719,10 @@
             }
         ],
         "name": "彰化縣",
-        "id": "CWH"
+        "id": "CWH",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FCWH.jpg?alt=media&token=892d64af-768b-48c2-a295-73a27aef7b72"
     },
-    {
-        "districts": [
-            {
-                "id": "540",
-                "name": "南投市"
-            },
-            {
-                "id": "541",
-                "name": "中寮鄉"
-            },
-            {
-                "id": "542",
-                "name": "草屯鎮"
-            },
-            {
-                "id": "544",
-                "name": "國姓鄉"
-            },
-            {
-                "id": "545",
-                "name": "埔里鎮"
-            },
-            {
-                "id": "546",
-                "name": "仁愛鄉"
-            },
-            {
-                "id": "551",
-                "name": "名間鄉"
-            },
-            {
-                "id": "552",
-                "name": "集集鎮"
-            },
-            {
-                "id": "553",
-                "name": "水里鄉"
-            },
-            {
-                "id": "555",
-                "name": "魚池鄉"
-            },
-            {
-                "id": "556",
-                "name": "信義鄉"
-            },
-            {
-                "id": "557",
-                "name": "竹山鎮"
-            },
-            {
-                "id": "558",
-                "name": "鹿谷鄉"
-            }
-        ],
-        "name": "南投縣",
-        "id": "NTO"
-    },
+
     {
         "districts": [
             {
@@ -803,7 +735,8 @@
             }
         ],
         "name": "嘉義市",
-        "id": "CYI"
+        "id": "CYI",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FCYI.jpg?alt=media&token=a7e31f3a-6936-4e7a-9a51-feeca8de520b"
     },
     {
         "districts": [
@@ -881,7 +814,8 @@
             }
         ],
         "name": "嘉義縣",
-        "id": "CHY"
+        "id": "CHY",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FCHY.jpg?alt=media&token=6dd6d31d-119f-432b-9a0a-e903be51ad1c"
     },
     {
         "districts": [
@@ -967,7 +901,8 @@
             }
         ],
         "name": "雲林縣",
-        "id": "YLH"
+        "id": "YLH",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FYLH.jpg?alt=media&token=0f9803ae-cd08-4ecd-b3c1-0a59bbc08600"
     },
     {
         "districts": [
@@ -1121,7 +1056,8 @@
             }
         ],
         "name": "臺南市",
-        "id": "TNN"
+        "id": "TNN",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FTNN.jpg?alt=media&token=ea905c52-5508-4e62-bf6d-c0751db64f03"
     },
     {
         "districts": [
@@ -1279,67 +1215,8 @@
             }
         ],
         "name": "高雄市",
-        "id": "KHH"
-    },
-    {
-        "districts": [
-            {
-                "id": "880",
-                "name": "馬公市"
-            },
-            {
-                "id": "881",
-                "name": "西嶼鄉"
-            },
-            {
-                "id": "882",
-                "name": "望安鄉"
-            },
-            {
-                "id": "883",
-                "name": "七美鄉"
-            },
-            {
-                "id": "884",
-                "name": "白沙鄉"
-            },
-            {
-                "id": "885",
-                "name": "湖西鄉"
-            }
-        ],
-        "name": "澎湖縣",
-        "id": "PEH"
-    },
-    {
-        "districts": [
-            {
-                "id": "890",
-                "name": "金沙鎮"
-            },
-            {
-                "id": "891",
-                "name": "金湖鎮"
-            },
-            {
-                "id": "892",
-                "name": "金寧鄉"
-            },
-            {
-                "id": "893",
-                "name": "金城鎮"
-            },
-            {
-                "id": "894",
-                "name": "烈嶼鄉"
-            },
-            {
-                "id": "896",
-                "name": "烏坵鄉"
-            }
-        ],
-        "name": "金門縣",
-        "id": "KMN"
+        "id": "KHH",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FKHH.jpg?alt=media&token=00a53a4a-6afb-43b0-8802-0bbfabbe5d8e"
     },
     {
         "districts": [
@@ -1477,7 +1354,126 @@
             }
         ],
         "name": "屏東縣",
-        "id": "IUH"
+        "id": "IUH",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FIUH.jpg?alt=media&token=d04ba673-ecb5-4cf9-80b2-6001afc47e22"
+    },
+    {
+        "districts": [
+            {
+                "id": "260",
+                "name": "宜蘭市"
+            },
+            {
+                "id": "263",
+                "name": "壯圍鄉"
+            },
+            {
+                "id": "261",
+                "name": "頭城鎮"
+            },
+            {
+                "id": "262",
+                "name": "礁溪鄉"
+            },
+            {
+                "id": "264",
+                "name": "員山鄉"
+            },
+            {
+                "id": "265",
+                "name": "羅東鎮"
+            },
+            {
+                "id": "266",
+                "name": "三星鄉"
+            },
+            {
+                "id": "267",
+                "name": "大同鄉"
+            },
+            {
+                "id": "268",
+                "name": "五結鄉"
+            },
+            {
+                "id": "269",
+                "name": "冬山鄉"
+            },
+            {
+                "id": "270",
+                "name": "蘇澳鎮"
+            },
+            {
+                "id": "272",
+                "name": "南澳鄉"
+            },
+            {
+                "id": "290",
+                "name": "釣魚臺"
+            }
+        ],
+        "name": "宜蘭縣",
+        "id": "ILN",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FILN.jpg?alt=media&token=02414e19-9257-419d-8764-f13ac62e2f0c"
+    },
+    {
+        "districts": [
+            {
+                "id": "970",
+                "name": "花蓮市"
+            },
+            {
+                "id": "971",
+                "name": "新城鄉"
+            },
+            {
+                "id": "972",
+                "name": "秀林鄉"
+            },
+            {
+                "id": "973",
+                "name": "吉安鄉"
+            },
+            {
+                "id": "974",
+                "name": "壽豐鄉"
+            },
+            {
+                "id": "975",
+                "name": "鳳林鎮"
+            },
+            {
+                "id": "976",
+                "name": "光復鄉"
+            },
+            {
+                "id": "977",
+                "name": "豐濱鄉"
+            },
+            {
+                "id": "978",
+                "name": "瑞穗鄉"
+            },
+            {
+                "id": "979",
+                "name": "萬榮鄉"
+            },
+            {
+                "id": "981",
+                "name": "玉里鎮"
+            },
+            {
+                "id": "982",
+                "name": "卓溪鄉"
+            },
+            {
+                "id": "983",
+                "name": "富里鄉"
+            }
+        ],
+        "name": "花蓮縣",
+        "id": "HWA",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FHWA.jpg?alt=media&token=28fa3cf8-42e7-417f-82e4-f9b7bbb6030a"
     },
     {
         "districts": [
@@ -1547,64 +1543,92 @@
             }
         ],
         "name": "臺東縣",
-        "id": "TTT"
+        "id": "TTT",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FTTT.jpg?alt=media&token=22af68df-834f-467c-9e4b-9c1563364481"
     },
     {
         "districts": [
             {
-                "id": "970",
-                "name": "花蓮市"
+                "id": "880",
+                "name": "馬公市"
             },
             {
-                "id": "971",
-                "name": "新城鄉"
+                "id": "881",
+                "name": "西嶼鄉"
             },
             {
-                "id": "972",
-                "name": "秀林鄉"
+                "id": "882",
+                "name": "望安鄉"
             },
             {
-                "id": "973",
-                "name": "吉安鄉"
+                "id": "883",
+                "name": "七美鄉"
             },
             {
-                "id": "974",
-                "name": "壽豐鄉"
+                "id": "884",
+                "name": "白沙鄉"
             },
             {
-                "id": "975",
-                "name": "鳳林鎮"
-            },
-            {
-                "id": "976",
-                "name": "光復鄉"
-            },
-            {
-                "id": "977",
-                "name": "豐濱鄉"
-            },
-            {
-                "id": "978",
-                "name": "瑞穗鄉"
-            },
-            {
-                "id": "979",
-                "name": "萬榮鄉"
-            },
-            {
-                "id": "981",
-                "name": "玉里鎮"
-            },
-            {
-                "id": "982",
-                "name": "卓溪鄉"
-            },
-            {
-                "id": "983",
-                "name": "富里鄉"
+                "id": "885",
+                "name": "湖西鄉"
             }
         ],
-        "name": "花蓮縣",
-        "id": "HWA"
+        "name": "澎湖縣",
+        "id": "PEH",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FPEH.jpg?alt=media&token=8404d36c-90ea-4310-a52a-98a81a528ed2"
+    },
+    {
+        "districts": [
+            {
+                "id": "890",
+                "name": "金沙鎮"
+            },
+            {
+                "id": "891",
+                "name": "金湖鎮"
+            },
+            {
+                "id": "892",
+                "name": "金寧鄉"
+            },
+            {
+                "id": "893",
+                "name": "金城鎮"
+            },
+            {
+                "id": "894",
+                "name": "烈嶼鄉"
+            },
+            {
+                "id": "896",
+                "name": "烏坵鄉"
+            }
+        ],
+        "name": "金門縣",
+        "id": "KMN",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FKMN.jpg?alt=media&token=6746a3b2-6de0-4d3c-a92e-8b7ca89bb2ba"
+    },
+    {
+        "districts": [
+            {
+                "id": "209",
+                "name": "南竿鄉"
+            },
+            {
+                "id": "210",
+                "name": "北竿鄉"
+            },
+            {
+                "id": "211",
+                "name": "莒光鄉"
+            },
+            {
+                "id": "212",
+                "name": "東引鄉"
+            }
+        ],
+        "name": "連江縣",
+        "id": "LNN",
+        "image": "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/taiwan-counties-images%2FLNN.jpg?alt=media&token=dde4f1f4-5746-4c20-b5d2-9cf91d3ee958"
     }
 ]

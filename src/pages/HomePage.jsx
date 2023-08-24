@@ -1,91 +1,74 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 import StyledImageSlider from "components/StyledImageSlider"
 import StyledActivityCardItem from "components/StyledActivityCardItem"
 import StyledActivityListItem from "components/StyledActivityListItem"
-import StyledCalendarSelector from "components/inputs/StyledCalendarSelector"
 import StyledButton from "components/StyledButton"
 import StyledPagination from "components/StyledPagination"
 
 import {ReactComponent as GridIcon} from "assets/icons/GridIcon.svg"
 import {ReactComponent as ListIcon} from "assets/icons/ListIcon.svg"
-import { getAllActivities } from "api/activityApi"
+import { getActivitiesByFilters } from "api/activityApi"
 import clsx from "clsx"
+import StyledSelector from "components/inputs/StyledSelector"
+import StyledCheckboxInput from "components/inputs/StyledCheckboxInput"
+import StyledDatePeriodInput from "components/inputs/StyledDatePeriodInput"
+import { toast } from "react-toastify"
 
 const HomePage = ({className}) => {
-  const activitiesAreas = require('data/taiwanDistricts.json')
-  const activitiesTypes = require('data/activityTypeOptions.json') 
+  const filterCheckboxRef = useRef(null)
+
+  const activityTypeOptions = require('data/activityTypeOptions.json') 
+  const activitiesOrderOptions = require('data/activitiesOrderOptions.json')
+  const activitiesLocationOptions = require('data/taiwanDistricts.json')
+  const activitiesDifficultyOptions = require('data/activityDifficultyOptions.json')
+  const homePageSliderImages = require('data/homePageSliderImages.json')
+  const popularPlaces = require('dummyDatas/popularPlaces.json')
+
   const [activitiesDisplay, setActivityDisplay] = useState("grid")
   const [activityList, setActivityList] = useState([])
+  const [filterCache, setFilterCache] = useState({})
+  const [activitiesFilter, setActivitiesFilter] = useState({})
 
   useEffect(()=>{
     const getActivities = async() => {
-      const activities= await getAllActivities()
+      const activities= await getActivitiesByFilters(activitiesFilter)
       setActivityList(activities)
     }
     getActivities()
-  },[])
+  },[activitiesFilter])
 
-  const onDisplayClicked = (e) => {
+  const handleDisplayClicked = (e) => {
     if(e.target.id === "activities-grid-display") setActivityDisplay("grid")
     if(e.target.id === "activities-list-display") setActivityDisplay("list")
   }
 
-  const sliderImage = [
-    {
-      title: "picture1",
-      image: "https://dsgmedia.blob.core.windows.net/pub/2020/03/10-Best-Outdoor-Activities-to-do-with-Kids2.jpg",
-    },
-    {
-      title: "picture2",
-      image: "https://dsgmedia.blob.core.windows.net/pub/2020/03/10-Best-Outdoor-Activities-to-https://www.verywellfamily.com/thmb/WdsWDcwj9Iuh86Ev8jLiWqa0m0o=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Familyhike-5075e31a9cb24a2fa35fa22e39adc7c6.jpgdo-with-Kids2.jpg",
-    },
-    {
-      title: "picture3",
-      image: "https://wildernessredefined.com/wp-content/uploads/2022/06/different-types-of-tents-set-up-for-camping.jpg",
+  const handleActivitiesFilter = async(e) => {
+    e.preventDefault()
+    if(Object.keys(filterCache).length === 0){
+      toast.error('未更改任何條件', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      return
     }
-  ]
-  
-  const popularPlaces = [
-    {
-      id: "NTC",
-      title: "南投縣",
-      image: "https://s.yimg.com/ny/api/res/1.2/WJG407_51l31TqvWfGxBGg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNQ--/https://s.yimg.com/os/creatr-uploaded-images/2021-05/8c9fdf90-bc2d-11eb-be7f-12f267e28102",
-    },
-    {
-      id: "HSZ",
-      title: "新竹縣",
-      image: "https://recreation.forest.gov.tw/Files/RT/Photo/027/05/%E5%A4%A7%E9%9C%B85.jpg",
-    },
-    {
-      id: "ILA",
-      title: "宜蘭縣",
-      image: "https://www.lookit.tw/upload/RB/tK0/37065eb6713a4cc596c35ce9d867c63f.jpg",
-    },
-    {
-      id: "HUN",
-      title: "花蓮縣",
-      image: "https://www.eastcoast-nsa.gov.tw/content/images/static/water-active-05.jpg",
-    },
-    {
-      id: "TTT",
-      title: "台東縣",
-      image: "https://owlting-blog-media.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2020/10/06095120/shutterstock_1428104768.jpg",
-    },
-    {
-      id: "PIF",
-      title: "屏東縣",
-      image: "https://margaret.tw/webp/wp-content/uploads/nEO_IMG_DSC08152-4.jpg.webp",
-    }
-  ]
 
-  
-  
+    const filterCheckbox = document.getElementById("o-activities-filter__checkbox")
+    filterCheckbox.checked = !filterCheckbox.checked
+    setActivitiesFilter(filterCache)
+  }
+
   return(
       <div className={className} >
-        <StyledImageSlider sliderImages={sliderImage}/>
+        <StyledImageSlider sliderImages={homePageSliderImages}/>
 
         <div className="l-popular-places">
           <h1 className="o-popular-places__title">熱門活動地點</h1>
@@ -105,11 +88,11 @@ const HomePage = ({className}) => {
           <ul className="c-activities__types-options">
             <li className="o-activities__type"><input type="radio" name="activities-type" id="all-type" defaultChecked />
             <label htmlFor="all-type">不限</label></li>
-            {activitiesTypes.map((activitiesType)=>{
+            {activityTypeOptions?.map((activityType)=>{
               return(
-                <li className="o-activities__type" key={activitiesType.id}>
-                  <input type="radio" name="activities-type" id={activitiesType.id}/>
-                  <label htmlFor={activitiesType.id}>{activitiesType.label}</label>
+                <li className="o-activities__type" key={activityType.id}>
+                  <input type="radio" name="activities-type" disabled={activityType.disabled} id={activityType.id}/>
+                  <label htmlFor={activityType.id}>{activityType.name}</label>
                 </li>
               )
             })}
@@ -118,69 +101,54 @@ const HomePage = ({className}) => {
           <div className="l-activities-settings">         
 
             <div className="l-activities-filters">
-              <input id="o-activities-filter__checkbox" type="checkbox"/>
+              <input id="o-activities-filter__checkbox" ref={filterCheckboxRef} type="checkbox"/>
               <label htmlFor="o-activities-filter__checkbox" >▼ 篩選器</label>
-              <div className="l-activities-filters__modal">
-                <div className="c-activities-filters__order">
-                  <h3 className="o-activities-filters__title">排序依據</h3>
-                  <select className="c-activities-filters__selector">
-                    <option>最新發布</option>
-                    <option>即將開始</option>
-                    <option>熱門聚會</option>
-                  </select>
-                </div>
+              <form className="l-activities-filters__dropdown">
 
-                <div className="c-activities-filters__area">
-                  <h3 className="o-activities-filters__title">活動位置</h3>
-                  <ul className="c-activities-filters__checkbox-list">
-                    { activitiesAreas?.map((activitiesArea)=>{
-                      return(
-                      <li className="c-activities-checkbox-item" key={activitiesArea.id}>
-                        <input type="checkbox" className="o-activities-checkbox" name="activities-area" id={`${activitiesArea.id}-area`} />
-                        <label htmlFor={`${activitiesArea.id}-area`}>{activitiesArea.name.slice(0,2)}</label>
-                      </li>
-                      )
-                    }) }
-                  </ul>
-                </div>
+                <StyledSelector 
+                  title="排序方式" 
+                  selectorId="order"
+                  optionList={activitiesOrderOptions}
+                  formContent={filterCache}
+                  onFormChange={setFilterCache}
+                />
 
-                <div className="c-activities-filters__date">
-                  <h3 className="o-activities-filters__title">活動日期</h3>
-                  <StyledCalendarSelector />
-                </div>
+                <StyledCheckboxInput
+                  title="活動難度"
+                  inputId="difficulty"
+                  checkboxOptions={activitiesDifficultyOptions}
+                  formContent={filterCache}
+                  onFormChange={setFilterCache}
+                />
 
-                <div className="c-activities-filters__length">
-                  <h3 className="o-activities-filters__title">活動時長</h3>
-                  <ul className="c-activities-filters__checkbox-list">
-                    <li className="c-activities-checkbox-item">
-                    <input name="activities-length" type="checkbox" id="hours" /><label htmlFor="hours">短時</label>
-                    </li>
-                    <li className="c-activities-checkbox-item">
-                      <input name="activities-length" type="checkbox" id="half-day" /><label htmlFor="half-day">半天</label>
-                    </li>
-                    <li className="c-activities-checkbox-item">
-                      <input name="activities-length" type="checkbox" id="all-day" /><label htmlFor="all-day">全天</label>
-                    </li>
-                    <li className="c-activities-checkbox-item">
-                      <input name="activities-length" type="checkbox" id="overnight" /><label htmlFor="overnight">多天數</label>
-                    </li>
-                  </ul>
+                <StyledDatePeriodInput
+                  title="活動時間"
+                  inputId="time"
+                  formContent={filterCache}
+                  onFormChange={setFilterCache}
+                />
 
-                </div>
+                <StyledCheckboxInput
+                  title="活動地點"
+                  inputId="location"
+                  checkboxOptions={activitiesLocationOptions}
+                  formContent={filterCache}
+                  onFormChange={setFilterCache}
+                />
 
-                <StyledButton className="o-activities-filters__button">篩選</StyledButton>
+                <StyledButton className="o-activities-filters__button" onClick={handleActivitiesFilter}>篩選</StyledButton>
 
-              </div>
+              </form>
             </div>
 
             <div className="c-activities-display">
               <h3 className="o-activities-display__title">顯示方式</h3>   
               <div className="c-activities-display__option">
-                <input type="radio" name="activities-display" id="activities-grid-display" onClick={onDisplayClicked} defaultChecked/>
+                <input type="radio" name="activities-display" id="activities-grid-display" onClick={handleDisplayClicked} defaultChecked/>
                 <label htmlFor="activities-grid-display"><GridIcon/></label>
               </div>
               <div className="c-activities-display__option">
-                <input type="radio" name="activities-display" id="activities-list-display" onClick={onDisplayClicked} />
+                <input type="radio" name="activities-display" id="activities-list-display" onClick={handleDisplayClicked} />
                 <label htmlFor="activities-list-display"><ListIcon/></label>
               </div>
             </div>
@@ -191,12 +159,10 @@ const HomePage = ({className}) => {
             <div className={clsx({"l-activities__container--grid":activitiesDisplay === "grid"},{"l-activities__container--list":activitiesDisplay === "list"})}>
               { 
                 activitiesDisplay === "grid" ? 
-                activityList?.map((activity)=> <StyledActivityCardItem key={activity.id} activity={activity} /> )
-                : activityList?.map((activity)=> <StyledActivityListItem key={activity.id} activity={activity} /> )
+                activityList?.map((activity)=> <StyledActivityCardItem key={activity?.id} activity={activity} /> )
+                : activityList?.map((activity)=> <StyledActivityListItem key={activity?.id} activity={activity} /> )
               }
             </div>
-
-
           </div>
           
           <StyledPagination className="c-activities__pagination"/>
@@ -293,6 +259,14 @@ const StyledHomePage = styled(HomePage)`
             justify-content: center;
           }
         }
+
+        &:has(input:disabled){
+          label{
+            text-decoration: line-through;
+            color: ${({theme})=>theme.backgroundColor.default};
+            cursor: default;
+          }
+        }
       }
     }
 
@@ -314,20 +288,21 @@ const StyledHomePage = styled(HomePage)`
             cursor: pointer;
           }
 
-          &:checked ~ .l-activities-filters__modal{
+          &:checked ~ .l-activities-filters__dropdown{
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 1rem;
           }
         }
 
-        .l-activities-filters__modal{
+        .l-activities-filters__dropdown{
           position: absolute;
           left:0;
           top:-1;
           display: none;
           width: 100%;
-          max-width: 432px;
+          max-width: 376px;
           margin-top: 1rem;
           background-color: ${({theme})=>theme.backgroundColor.default};
           padding: 1.5rem 1rem;

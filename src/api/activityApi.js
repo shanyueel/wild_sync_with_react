@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, getDocs, setDoc, deleteField } from "@firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, updateDoc, getDoc, getDocs, setDoc, deleteField, where, query, orderBy } from "@firebase/firestore"
 import { firestoreDB } from "./firebaseConfig"
 import { getUser } from "./userApi"
 import { asyncForEach } from "utils/asyncLoop"
@@ -54,18 +54,6 @@ export const getActivityHolder = async(holderReference) => {
   }
 }
 
-export const getAllActivities = async() => {
-  try{
-    const allActivitiesIdList = []
-    const allActivitiesSnapshot = await getDocs(collection(firestoreDB, "activities"))
-    allActivitiesSnapshot.forEach(activity => allActivitiesIdList.push(activity?.data()?.id))
-    const allActivities = await getActivitiesByIdList(allActivitiesIdList)
-    return allActivities
-  }catch(error){
-    console.log(error)
-  }
-}
-
 export const getActivitiesByIdList = async(idList) => {
   try{
     const activityList = []
@@ -77,6 +65,98 @@ export const getActivitiesByIdList = async(idList) => {
     return activityList
   }catch(error){
     console.error("[獲取活動清單失敗]",error)
+  }
+}
+
+export const getOrderedActivities = async( orderType ) => {
+  try{
+    let orderQuery
+    const nowTimestamp = Date.parse(new Date())
+
+    switch (orderType) {
+      case "releaseDate":
+        orderQuery = query(collection(firestoreDB, "activities"), orderBy("createAt", "desc"));
+        break;
+      case "activityDate":
+        orderQuery = query(collection(firestoreDB, "activities"), where("time.start", ">", nowTimestamp), orderBy("time.start"));
+        break;
+      case "deadlineDate":
+        orderQuery = query(collection(firestoreDB, "activities"), where("deadline", ">", nowTimestamp), orderBy("deadline"));
+        break;
+      default:
+        orderQuery = query(collection(firestoreDB, "activities"), orderBy("createAt", "desc"));
+        break;
+    }
+
+    const orderedActivitiesIdList = (await getDocs(orderQuery))?.docs?.map(doc=> doc?.data()?.id)
+    console.log("[排序活動列表成功]:", orderedActivitiesIdList)
+    return orderedActivitiesIdList
+    
+  }catch(error){
+    console.error("[排序活動列表失敗]:", error)
+  }
+}
+
+export const getActivitiesByTimeFilter = async(timeFilter) => {
+  try{
+    let timeFilteredIdList = []
+
+    const startQuery = timeFilter?.start
+      ? query(collection(firestoreDB, "activities"), where('time.start', ">=", timeFilter?.start ))
+      : null
+    const endQuery = timeFilter?.end
+      ? query(collection(firestoreDB, "activities"), where("time.end", "<=", timeFilter?.end))
+      : null
+
+    if(startQuery && endQuery){
+      const startSnapshot = await getDocs(startQuery)
+      const startIdList = startSnapshot?.docs?.map(doc=> doc?.data()?.id)
+      const endSnapshot = await getDocs(endQuery)
+      const endIdList = endSnapshot?.docs?.map(doc=> doc?.data()?.id)
+      timeFilteredIdList = endIdList.filter((id)=> startIdList.includes(id))
+    }else if(startQuery){
+      const startSnapshot = await getDocs(startQuery)
+      timeFilteredIdList = startSnapshot?.docs?.map(doc=> doc?.data()?.id)
+    }else if(endQuery){
+      const endSnapshot = await getDocs(endQuery)
+      timeFilteredIdList = endSnapshot?.docs?.map(doc=> doc?.data()?.id)
+    }
+
+    console.log("[活動時間篩選成功]:" ,timeFilteredIdList)
+    return timeFilteredIdList
+  }catch(error){
+    console.error("[活動期間篩選失敗]:", error)
+  }
+}
+
+export const getActivitiesByFilters = async(filters) => {
+  try{
+    let filteredActivitiesIdList = []
+
+    const orderedActivitiesIdList = await getOrderedActivities(filters?.order)
+    filteredActivitiesIdList = orderedActivitiesIdList
+
+    if(filters?.time){
+      const timeFilteredIdList = await getActivitiesByTimeFilter(filters?.time)
+      filteredActivitiesIdList = filteredActivitiesIdList?.filter(id=> timeFilteredIdList?.includes(id))
+    }
+    
+    if(filters?.location?.length > 0){
+      const locationQuery = query(collection(firestoreDB, "activities"), where("location.county", "in", filters?.location))
+      const locationFilteredIdList = (await getDocs(locationQuery))?.docs?.map(doc=>doc?.data()?.id)
+      filteredActivitiesIdList = filteredActivitiesIdList?.filter(id => locationFilteredIdList?.includes(id))
+    }
+
+    if(filters?.difficulty?.length > 0){
+      const difficultyQuery = query(collection(firestoreDB, "activities"), where("difficulty", "in", filters?.difficulty))
+      const difficultyFilteredIdList = (await getDocs(difficultyQuery))?.docs?.map(doc=>doc?.data()?.id)
+      filteredActivitiesIdList = filteredActivitiesIdList?.filter(id => difficultyFilteredIdList?.includes(id))
+    }
+
+    const filteredActivities = await getActivitiesByIdList(filteredActivitiesIdList)
+    return filteredActivities
+  }catch(error){
+    console.error()
   }
 }
 

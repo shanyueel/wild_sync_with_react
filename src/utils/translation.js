@@ -1,7 +1,7 @@
   export const switchDifficulty = (difficulty) => {
     switch(difficulty){
       case "beginner":
-        return "簡單";
+        return "入門";
       case "medium":
         return "中等";
       case "advanced":

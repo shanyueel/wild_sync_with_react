@@ -58,15 +58,15 @@ const DatePeriodInput = ({className, title, inputId, formContent, onFormChange, 
         <DatePicker
           className="c-input-body__date-picker"
           disablePast
-          maxDate={period?.end||null}
-          value={period?.start|| null} 
+          maxDate={period?.end ||null}
+          value={period?.start || null} 
           onChange={handleStartInput}
         />
         -
         <DatePicker
           className="c-input-body__date-picker" 
           disablePast
-          minDate={period?.start ||null}
+          minDate={period?.start || null}
           value={period?.end || null} 
           onChange={handleEndInput}
         />

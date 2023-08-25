@@ -111,7 +111,7 @@ const UserPage = ({className}) => {
               <input type="radio" name="user-activities" id="attendedActivities" defaultChecked />參與紀錄
             </label>
             <label htmlFor="likedActivities" className="o-user-activities__nav-item" onChange={handleActivitiesChange}>
-              <input type="radio" name="user-activities" id="likedActivities" />喜愛活動
+              <input type="radio" name="user-activities" id="likedActivities" />收藏活動
             </label>
             <label htmlFor="heldActivities" className="o-user-activities__nav-item" onChange={handleActivitiesChange}>
               <input type="radio" name="user-activities" id="heldActivities" />主辦經驗

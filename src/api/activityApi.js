@@ -307,6 +307,35 @@ export const alterActivityAttendance = async(userId, activityId) => {
   }
 }
 
+export const alterActivityLiked = async(userId, activityId) => {
+  try{
+    const userRef = await getUser(userId)
+    const currentLikedActivities = userRef?.likedActivities
+
+    if(!currentLikedActivities?.includes(activityId)){
+      const newLikedActivities = [
+        ...currentLikedActivities,
+        activityId
+      ]
+      await updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+        likedActivities: newLikedActivities
+      })
+      console.log("[收藏活動成功]:", activityId)
+      return {success: true}
+    }else{
+      const newLikedActivities = currentLikedActivities?.filter((activity) => activity !== activityId )
+      await updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+        likedActivities: newLikedActivities
+      })
+      console.log("[取消收藏活動成功]:", activityId)
+      return {success: true}
+    }
+  }catch(error){
+    console.error("[收藏 / 取消收藏活動失敗]:", error)
+    return {success: false}
+  }
+}
+
 export const deleteActivity = async( userId, activity ) => {
   try{
     if(activity?.detail) await deleteDoc(doc(firestoreDB, "activities-details", `${activity?.id}-detail`))

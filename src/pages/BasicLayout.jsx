@@ -40,15 +40,7 @@ const BasicLayout = () => {
       const userAccount = auth.currentUser
       const userInfo = await getUser(userAccount?.uid)
       dispatch(updateUserSlice({
-        uid: userAccount?.uid,
-        email: userAccount?.email,
-        displayName:userAccount?.displayName,
-        photoURL:userAccount?.photoURL,
-        coverURL: userInfo?.coverURL,
-        birth: userInfo?.birth,
-        introduction: userInfo?.introduction,
-        profession: userInfo?.profession,
-        region: userInfo?.region,
+        ...userInfo
       }))
     } else {
       dispatch(resetUser())

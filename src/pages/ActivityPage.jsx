@@ -12,13 +12,14 @@ import StyledActivityUpdateModal from "modals/StyledActivityUpdateModal"
 import StyledActivityTables from "components/tables/StyledActivityTables"
 import StyledActivityAttendance from "components/StyledActivityAttendance"
 
-import { alterActivityAttendance, getActivity } from "api/activityApi"
+import { alterActivityAttendance, alterActivityLiked, getActivity } from "api/activityApi"
 import { transferTimestamp } from "utils/date-fns"
 import { displayLocation } from "utils/location"
 
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
+import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 
 
 const ActivityPage = ({ className }) => {
@@ -36,6 +37,7 @@ const ActivityPage = ({ className }) => {
   const [isAttendanceFull, setIsAttendanceFull] = useState(false)
   const [btnContent, setBtnContent] = useState("報名")
   const [isActivityUpdateModalOpen, setIsActivityUpdateModalOpen] = useState(false)
+  const [isActivityLiked, setIsActivityLiked] = useState(false)
 
   useEffect(()=>{
     const setWindowSize = () => {
@@ -69,6 +71,10 @@ const ActivityPage = ({ className }) => {
       setBtnContent("報名加入")
     }
   },[activity, userId, userAttendance, isAttendanceExpired, isAttendanceFull])
+
+  useEffect(()=>{
+    setIsActivityLiked(user?.likedActivities?.includes(activityId))
+  },[activityId, user])
 
   const handleReturn = () => {
     window.history.back()
@@ -120,7 +126,7 @@ const ActivityPage = ({ className }) => {
           theme: "light",
         })
       }else{
-        toast.success('退出活動成功', {
+        toast.error('退出活動成功', {
           position: "top-right",
           autoClose: 1500,
           hideProgressBar: false,
@@ -141,12 +147,71 @@ const ActivityPage = ({ className }) => {
     document.querySelector('html').classList.add('no-scroll');
   }
 
+  const handleActivityLiked = async() => {
+    const {success} = await alterActivityLiked(userId, activityId)
+    setIsActivityLiked(!isActivityLiked)
+
+    if(!isActivityLiked){
+      if(success){
+        toast.success('收藏活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.error('收藏活動失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
+      }
+    }else{
+      if(success){
+        toast.success('取消收藏活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.error('取消收藏活動失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+    }
+  }
+
   return(
       <div className={className}>
         <div className="l-web-container__main l-activity">
           <div className="l-activity-header">
             <ReturnIcon className="o-activity-header__return" onClick={handleReturn}/>
             <StyledUserInfo user={activity?.holder}/>
+            <div className="o-activity__like">
+              <input id="like" type="checkbox" onChange={handleActivityLiked} checked={isActivityLiked}/>
+              <label htmlFor="like"><HeartIcon /></label>
+            </div>
           </div>
           <div className="l-activity-body">
             <img className="o-activity-cover" src={activity?.coverURL || defaultImageURL?.activityCover} alt="activity-cover" />
@@ -225,6 +290,63 @@ const StyledActivityPage = styled(ActivityPage)`
       margin-right: 1rem;
       fill: ${({theme})=>theme.color.default};
       cursor: pointer;
+    }
+
+    .o-activity__like{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: auto;
+      padding: .25rem .75rem;
+      border-radius: 1rem;
+      background-color: white;
+      border: 1px solid ${({theme})=>theme.color.alert};
+      
+      label{
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        svg{
+          width: 1.5rem;
+          height: 1.5rem;
+          padding: .2rem;
+          fill: transparent;
+          stroke: ${({theme})=>theme.color.alert};
+          stroke-width: 50;
+        }
+
+        &::after{
+          content:"收藏活動";
+          margin-left: .125rem;
+          font-size: .8rem;
+          color: ${({theme})=>theme.color.alert};
+        }
+      }
+
+      input[type="checkbox"]{
+        display: none;
+      }
+
+
+
+      &:has(input:checked){
+        background-color: ${({theme})=>theme.color.alert};
+        label{
+          color: white;
+
+          svg{
+            stroke: white;
+            fill: white;
+          }
+
+          &::after{
+            content:"已收藏";
+            color: white;
+          }
+        }
+
+      }
     }
   }
 

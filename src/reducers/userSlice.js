@@ -12,7 +12,9 @@ const initialProfile = {
     region: "",
     introduction: "",
     role: "user",
-    attendance: [],
+    attendedActivities: [],
+    heldActivities: [],
+    likedActivities: []
 }
 
 const userSlice = createSlice({
@@ -20,7 +22,7 @@ const userSlice = createSlice({
   initialState: initialProfile,
   reducers:{
     updateUserSlice(state,action){
-      const {uid, displayName, photoURL, email, birth, coverURL, introduction, profession, region} = action.payload
+      const {uid, displayName, photoURL, email, birth, coverURL, introduction, profession, region, attendedActivities, heldActivities, likedActivities} = action.payload
       return{
         ...state,
         loggedIn: true,
@@ -32,7 +34,10 @@ const userSlice = createSlice({
         coverURL: coverURL,
         introduction: introduction,
         profession: profession,
-        region: region
+        region: region,
+        attendedActivities: attendedActivities,
+        heldActivities: heldActivities,
+        likedActivities: likedActivities
       }
     },
     resetUser(){

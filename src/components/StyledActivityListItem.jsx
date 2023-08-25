@@ -1,24 +1,84 @@
 import styled, { css } from "styled-components";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import { alterActivityLiked } from "api/activityApi";
+import { transferTimestamp } from "utils/date-fns";
+import { switchDifficulty } from "utils/translation";
+import { displayLocation } from "utils/location";
+import { sliceIntroduction } from "utils/paragraph";
 
 import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
-import { useSelector } from "react-redux";
-import { transferTimestamp } from "utils/date-fns";
-import { switchDifficulty } from "utils/translation";
-import { displayLocation } from "utils/location";
-
 
 const ActivityListItem = ({className, activity, sideUsed}) => {
-  const user = useSelector(state => state.user)
   const defaultImageURL = require('data/defaultImageURL')
+  const user = useSelector(state => state.user)
+  const userId = user?.uid
+  const activityId = activity?.id
+  const [isActivityLiked, setIsActivityLiked] = useState(false)
 
-  const sliceIntroduction = (introduction) => {
-    let introductionSlice = introduction
-    if(introductionSlice?.length > 50) introductionSlice = introduction.slice(0,50)
-    return introductionSlice
+  useEffect(()=>{
+    setIsActivityLiked(user?.likedActivities?.includes(activityId))
+  },[activityId, user])
+
+  const handleActivityLiked = async() => {
+    const {success} = await alterActivityLiked(userId, activityId)
+    setIsActivityLiked(!isActivityLiked)
+
+    if(!isActivityLiked){
+      if(success){
+        toast.success('收藏活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.error('收藏活動失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+    }else{
+      if(success){
+        toast.success('取消收藏活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.error('取消收藏活動失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+    }
   }
   
   return(
@@ -29,11 +89,11 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
           <Link className="o-activity-card__avatar" to={`/user/${activity?.holder?.uid}`} >
             <img  src={activity?.holder?.photoURL} alt="user avatar"/>
           </Link>
-          <Link className="o-activity-card__name" to={`/activity/${activity?.id}`}>
+          <Link className="o-activity-card__name" to={`/activity/${activityId}`}>
             <h3>{activity?.name}</h3>
           </Link>
           {
-            user?.attendedActivities?.includes(activity?.id) &&
+            user?.attendedActivities?.includes(activityId) &&
             <div className="o-activity-card__attendance">
               <CheckIcon/><h4>已參加</h4>
             </div>
@@ -57,20 +117,20 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
         </ul>
 
         <p className="o-activity-card__introduction">
-          {sliceIntroduction(activity?.introduction)} ...<Link to={`/activity/${activity?.id}`}>深入了解</Link>
+          {sliceIntroduction(activity?.introduction, 50)} ...<Link to={`/activity/${activityId}`}>深入了解</Link>
         </p>
 
       </div>
 
       <div className="l-activity-card__cover">
-        <Link to={`/activity/${activity?.id}`}>
+        <Link to={`/activity/${activityId}`}>
           <img className="o-activity__image" src={activity?.coverURL || defaultImageURL.activityCover} alt="activity cover" />
         </Link>
       </div>
       
       <div className="o-activity-card__like">
-        <input id="like" type="checkbox"/>
-        <label htmlFor="like"><HeartIcon /></label>
+        <input id={`${activityId}-like`} type="checkbox" checked={isActivityLiked} onChange={handleActivityLiked}/>
+        <label htmlFor={`${activityId}-like`}><HeartIcon /></label>
       </div>
       
     </div>

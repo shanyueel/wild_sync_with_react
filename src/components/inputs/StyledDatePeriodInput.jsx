@@ -16,7 +16,7 @@ const DatePeriodInput = ({className, title, inputId, formContent, onFormChange, 
       return
     }else{
       setWarningContent("")
-      const newPeriod = {start:newDateStamp, end:period?.end}
+      const newPeriod = {start:newDateStamp, end:period?.end || newDateStamp + 86399000}
       const newForm = {
         ...formContent,
         [inputId]: newPeriod
@@ -27,7 +27,7 @@ const DatePeriodInput = ({className, title, inputId, formContent, onFormChange, 
   }
 
   const handleEndInput = (newDate) => {
-    const newDateStamp = Number(Date.parse(newDate)) + 86399999
+    const newDateStamp = Number(Date.parse(newDate)) + 86399000
 
     if(period?.start && newDateStamp < period?.start){
       setWarningContent("結束時間不可在開始時間之前")
@@ -36,7 +36,7 @@ const DatePeriodInput = ({className, title, inputId, formContent, onFormChange, 
       return
     }else{
       setWarningContent("")
-      const newPeriod = {start:period?.start, end:newDateStamp}
+      const newPeriod = {start:period?.start || newDateStamp - 86399000, end:newDateStamp}
       const newForm = {
         ...formContent,
         [inputId]: newPeriod

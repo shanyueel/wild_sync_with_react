@@ -21,19 +21,25 @@ import StyledAccountSettingModal from "modals/StyledAccountSettingModal"
 const Navbar = ({ className }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const searchbarRef = useRef(null)
   const navIconsRef = useRef([])
   const [isActivityCreateModalOpen, setIsActivityCreateModalOpen] = useState(false)
   const [isAccountSettingModalOpen, setIsAccountSettingModalOpen] = useState(false)
   const user = useSelector((state)=> state.user)
 
-  const handleSearch = () => {
-    navigate(`/activity/search`)
+  const handleSearch = (e) => {
+    e.preventDefault()
+    if(searchbarRef.current.value.length === 0) return
+    navIconsRef.current[0].checked = false
+    const keyword = searchbarRef.current.value
+    navigate(`/activity/search?keyword=${keyword}`)
+    searchbarRef.current.value = ""
   }
   
-  const handleNavbarIconChange = (event) => {
+  const handleNavbarIconChange = (e) => {
     const checkboxes = document.getElementsByName("navbar-icons")
     checkboxes.forEach((checkbox) => {
-      if (checkbox !== event.target) {
+      if (checkbox !== e.target) {
         checkbox.checked = false
       }
     })
@@ -94,7 +100,7 @@ const Navbar = ({ className }) => {
           <h1 className="o-navbar__brand">Wild Sync</h1>
         </Link>
         <div className="o-navbar__searchbar">
-          <input type='search' placeholder="登山路線、營地、潛水處"/>
+          <input type='search' placeholder="登山路線、營地、潛水處" ref={searchbarRef}/>
           <button onClick={handleSearch}><SearchIcon /></button>
         </div>
         <ul className="c-navbar__list">

@@ -64,7 +64,6 @@ const StyledCheckboxInput = styled(CheckboxInput)`
     justify-content: space-between;
     gap: 1rem;
     width: 100%;
-    margin-top: .5rem;
 
     .c-checkbox-option{
       display: flex;

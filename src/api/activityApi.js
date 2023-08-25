@@ -153,6 +153,25 @@ export const getActivitiesByFilters = async(filters) => {
       filteredActivitiesIdList = filteredActivitiesIdList?.filter(id => difficultyFilteredIdList?.includes(id))
     }
 
+    if(filters?.keyword){
+      const newFilteredActivitiesIdList = []
+
+      await asyncForEach(filteredActivitiesIdList, async(activityId)=>{
+        const name = (await getDoc(doc(firestoreDB, "activities", activityId)))?.data()?.name?.toLowerCase()
+        const detail = (await getDoc(doc(firestoreDB, "activities-details",  `${activityId}-detail`)))?.data()
+        const departurePoint = detail?.departurePoint?.detail?.toLowerCase()
+        const belongingPark = detail?.belongingPark?.toLowerCase()
+        const targetFields = `${name} ${departurePoint} ${belongingPark}`
+        
+        if(targetFields?.includes( filters?.keyword?.toLowerCase() )){
+          newFilteredActivitiesIdList?.push(activityId)
+          console.log(newFilteredActivitiesIdList)
+        }
+      })
+
+      filteredActivitiesIdList = newFilteredActivitiesIdList
+    }
+    console.log(filteredActivitiesIdList)
     const filteredActivities = await getActivitiesByIdList(filteredActivitiesIdList)
     return filteredActivities
   }catch(error){

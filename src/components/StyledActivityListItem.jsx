@@ -15,7 +15,7 @@ import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
 
-const ActivityListItem = ({className, activity, sideUsed}) => {
+const ActivityListItem = ({className, activity, sm}) => {
   const defaultImageURL = require('data/defaultImageURL')
   const user = useSelector(state => state.user)
   const userId = user?.uid
@@ -89,8 +89,8 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
           <Link className="o-activity-card__avatar" to={`/user/${activity?.holder?.uid}`} >
             <img  src={activity?.holder?.photoURL} alt="user avatar"/>
           </Link>
-          <Link className="o-activity-card__name" to={`/activity/${activityId}`}>
-            <h3>{activity?.name}</h3>
+          <Link classN4ame="o-activity-card__name" to={`/activity/${activityId}`}>
+            <h3>{sm? `${activity?.name?.slice(0,7)}...`: activity?.name}</h3>
           </Link>
           {
             user?.attendedActivities?.includes(activityId) &&
@@ -105,7 +105,7 @@ const ActivityListItem = ({className, activity, sideUsed}) => {
           <h4 className="o-activity-card__location"><LocationIcon/>{displayLocation(activity?.location)}</h4>
           <h4 className="o-activity-card__date">
             <CalendarIcon/>
-            {transferTimestamp(activity?.time?.start)} - {/* sideUsed && <br/> */}{transferTimestamp(activity?.time?.end)}
+            {transferTimestamp(activity?.time?.start)} - {sm && <br/>}{transferTimestamp(activity?.time?.end)}
           </h4>
         </div>
 
@@ -151,7 +151,6 @@ const StyledActivityListItem = styled(ActivityListItem)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
     height: 100%;
     height: fit-content;
     padding: .75rem;
@@ -169,6 +168,7 @@ const StyledActivityListItem = styled(ActivityListItem)`
       .o-activity-card__name h3{
         margin-left: .25rem;
         font-weight: 700;
+        white-space: nowrap;
       }
 
       .o-activity-card__attendance{
@@ -365,36 +365,50 @@ const StyledActivityListItem = styled(ActivityListItem)`
     }
   }
 
-  /* ${(props)=> props.sideUsed && css`
-    @media screen and (min-width: 1024px) {
+  ${(props)=> props.sm && css`
+    @media screen and (min-width: 1024px){
       height: 7.5rem;
 
-      .o-activity__image{       
-        width: 7.5rem;
-      }
-
       .l-activity-card__info{
-        .o-activity-card{
-          &__title{
-            font-size: 1rem;
-          }
+        width: calc(100% - 7.5rem);
+        padding: .5rem .75rem;
 
-          &__location, &__date{
-            font-size: .75rem;
-          }
+        .l-activity-card__title{
+          gap: .25rem;
+        }
 
-          &__date{
-            margin-top: .25rem;
+        .c-activity-card__brief{
+          flex-direction: column;
+          justify-content: start;
+          gap: 0;
+          
+          .o-activity-card__location,
+          .o-activity-card__date{
+            margin: .125rem;
           }
         }
-        
+
         .c-activity-card__highlights{
+          margin-top: .25rem;
+
+          li{
+            padding: .25rem .375rem;
+            border-radius: 4px;
+
+            span,
+            &:last-child{
+              display: none;
+            }
+          }
+        }
+
+        .o-activity-card__introduction{
           display: none;
         }
       }
-    }  
 
-  `} */
+    }
+  `}
 `
 
 export default StyledActivityListItem

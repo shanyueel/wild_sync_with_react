@@ -17,7 +17,6 @@ import { getUser } from "api/userApi";
 const BasicLayout = () => {
   const dispatch = useDispatch()
   const location = useLocation()
-  const activitiesRef = useRef(null)
   const pathname = location.pathname
   const licenseOnly = (pathname === "/login") || (pathname === "/register")
 
@@ -49,10 +48,9 @@ const BasicLayout = () => {
   
   return(
     <>
-      <StyledNavbar activitiesRef={activitiesRef} />
+      <StyledNavbar />
       <div className={licenseOnly ? "l-web-container--license-only" : "l-web-container scrollbar"}>
         <Outlet />
-      
       </div>
       <StyledFooter/>
       <ToastContainer

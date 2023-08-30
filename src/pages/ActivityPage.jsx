@@ -39,6 +39,7 @@ const ActivityPage = ({ className }) => {
   const [isActivityUpdateModalOpen, setIsActivityUpdateModalOpen] = useState(false)
   const [isActivityLiked, setIsActivityLiked] = useState(false)
 
+
   useEffect(()=>{
     const setWindowSize = () => {
       setIsLargeLayout(windowSize === "large")
@@ -52,7 +53,26 @@ const ActivityPage = ({ className }) => {
       const activity = await getActivity(activityId)
       setActivity(activity)
     }
+
+    const storeBrowseHistory = () => {
+      let currentList = JSON.parse( localStorage.getItem('history') ) || []
+      
+      if(currentList.includes(activityId)){
+        currentList.unshift(activityId)
+        currentList = [...new Set(currentList)]
+      }else{
+        if(currentList.length <= 4){
+          currentList.unshift(activityId)
+        }else{
+          currentList.pop()
+          currentList.unshift(activityId)
+        }
+      }
+
+      localStorage.setItem('history',JSON.stringify(currentList))
+    }
     setCurrentActivity()
+    storeBrowseHistory()
   },[activityId])
 
   useEffect(() => {

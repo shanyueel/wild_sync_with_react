@@ -11,17 +11,22 @@ import StyledSelector from "components/inputs/StyledSelector";
 import {ReactComponent as UpIcon} from "assets/icons/UpIcon.svg"
 import {ReactComponent as DownIcon} from "assets/icons/DownIcon.svg"
 import { getActivitiesByFilters } from "api/activityApi";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ActivitySearchPage = ({ className }) => {
   const activitiesLocationOptions = require('data/taiwanDistricts.json')
   const activitiesDifficultyOptions = require('data/activityDifficultyOptions.json')
   const activitiesOrderOptions = require('data/activitiesOrderOptions.json')
   const searchbarRef = useRef(null)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const keyword = queryParams.get('keyword')
 
   const [isFiltersDisplay, setIsFiltersDisplay] = useState(false)
-  const [filterCache, setFilterCache] = useState({})
+  const [filterCache, setFilterCache] = useState({keyword: keyword})
   const [filteredActivities, setFilteredActivities] = useState([])
-  const [searchFilter, setSearchFilter] = useState({})
+  const [searchFilter, setSearchFilter] = useState({keyword: keyword})
   const [searchOrder, setSearchOrder] = useState({order: "releaseDate"})
 
   useEffect(()=>{
@@ -42,6 +47,7 @@ const ActivitySearchPage = ({ className }) => {
 
   const handleSearch = (e) => {
     e.preventDefault()
+    navigate(`/activity/search?keyword=${filterCache?.keyword}`)
     setSearchFilter(filterCache)
   }
 
@@ -55,6 +61,7 @@ const ActivitySearchPage = ({ className }) => {
               ref={searchbarRef}
               type="text" 
               placeholder="登山路線、露營地、潛水處" 
+              value={filterCache?.keyword}
               onChange={handleSearchbarChange}
               
             />
@@ -125,7 +132,7 @@ const ActivitySearchPage = ({ className }) => {
       </div>
 
       <div className="l-web-container__side">
-        <StyledActivityHistory />
+        <StyledActivityHistory sideUsed/>
       </div>
     </div>
   )

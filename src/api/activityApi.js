@@ -171,12 +171,42 @@ export const getActivitiesByFilters = async(filters) => {
 
       filteredActivitiesIdList = newFilteredActivitiesIdList
     }
-    console.log(filteredActivitiesIdList)
     const filteredActivities = await getActivitiesByIdList(filteredActivitiesIdList)
     return filteredActivities
   }catch(error){
     console.error()
   }
+}
+
+export const getPopularLocations = async() => {
+  try{
+    const taiwanDistricts = require('data/taiwanDistricts.json')
+    const locationsOrdersQuery = query(collection(firestoreDB,"activities"), orderBy("location.county"))
+    const activitiesLocations = (await getDocs(locationsOrdersQuery))?.docs?.map(doc=>doc?.data()?.location?.county)
+    
+    const countiesCounts = activitiesLocations?.reduce((countiesCounts, activityCounty)=>{
+      if(activityCounty in countiesCounts){
+        countiesCounts[activityCounty]++
+      }else{
+        countiesCounts[activityCounty] = 1
+      }
+
+      return countiesCounts
+    },{})
+
+    const countiesCountsArray = Object.entries(countiesCounts)
+    countiesCountsArray?.sort((a,b) =>b[1] - a[1])
+    const countiesCountsResult = countiesCountsArray.map(county=> county[0])
+
+    const popularLocations = countiesCountsResult.map(county=> taiwanDistricts.find(taiwanCounty => taiwanCounty.id === county)).slice(0,6)
+
+    console.log("[取得熱門活動地點成功]:", popularLocations)
+    return popularLocations
+
+  }catch(error){
+    console.error("[取得熱門活動地點失敗]:",error)
+  }
+
 }
 
 export const postActivity = async( activityId, holderReference, activityContent ) => {

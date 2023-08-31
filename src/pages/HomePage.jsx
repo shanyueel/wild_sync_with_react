@@ -10,7 +10,7 @@ import StyledPagination from "components/StyledPagination"
 
 import {ReactComponent as GridIcon} from "assets/icons/GridIcon.svg"
 import {ReactComponent as ListIcon} from "assets/icons/ListIcon.svg"
-import { getActivitiesByFilters } from "api/activityApi"
+import { getActivitiesByFilters, getPopularLocations } from "api/activityApi"
 import clsx from "clsx"
 import StyledSelector from "components/inputs/StyledSelector"
 import StyledCheckboxInput from "components/inputs/StyledCheckboxInput"
@@ -31,13 +31,19 @@ const HomePage = ({className}) => {
   const [activityList, setActivityList] = useState([])
   const [filterCache, setFilterCache] = useState({})
   const [activitiesFilter, setActivitiesFilter] = useState({})
+  const [popularLocations, setPopularLocations] = useState([])
 
   useEffect(()=>{
     const getActivities = async() => {
       const activities= await getActivitiesByFilters(activitiesFilter)
       setActivityList(activities)
     }
+    const getPopularActivitiesLocations = async() => {
+      const popularLocations = await getPopularLocations()
+      setPopularLocations(popularLocations)
+    }
     getActivities()
+    getPopularActivitiesLocations()
   },[activitiesFilter])
 
   const handleDisplayClicked = (e) => {
@@ -73,11 +79,11 @@ const HomePage = ({className}) => {
         <div className="l-popular-places">
           <h1 className="o-popular-places__title">熱門活動地點</h1>
           <div className="l-popular-places__container">
-            {popularPlaces.map((popularPlace)=>{ 
+            {popularLocations.map((popularPlace)=>{ 
               return(
                 <Link to="/activity/search" className="c-popular-place" key={popularPlace.id}>
                   <img className="o-popular-place__circle" src={popularPlace.image} alt={popularPlace.title} />
-                  <h2 className="o-popular-place__name">{popularPlace.title}</h2>
+                  <h2 className="o-popular-place__name">{popularPlace.name}</h2>
                 </Link>
               )})}
           </div>

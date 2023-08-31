@@ -91,6 +91,16 @@ const Navbar = ({ className }) => {
 
     navIconsRef.current[2].checked = false
   }
+
+  const handleActivitiesListClick = () => {
+    if(window.location !== '/'){
+      navigate('/')
+    }
+    setTimeout(()=>{
+      const activitiesList = document.querySelector('.l-activities')
+      activitiesList?.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
+    },500)
+  }
   
   return(
     <div className={className}>
@@ -104,7 +114,7 @@ const Navbar = ({ className }) => {
           <button onClick={handleSearch}><SearchIcon /></button>
         </div>
         <ul className="c-navbar__list">
-          <Link to="/activity/search"><li className="o-navbar__item">活動列表</li></Link>
+          <Link to="/"><li className="o-navbar__item" onClick={handleActivitiesListClick}>活動列表</li></Link>
           <Link to="/guide"><li className="o-navbar__item">新手上路</li></Link>
           <Link to="/about"><li className="o-navbar__item">關於我們</li></Link>
         </ul>
@@ -124,7 +134,7 @@ const Navbar = ({ className }) => {
             <div className="l-navbar__user-dropdown">
               {user.uid?
               <Link to={`/user/${user.uid}`}>
-                <img className="o-navbar__user-avatar" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />
+                <img className="o-navbar__user-avatar" src={user?.photoURL} alt="user-avatar" />
               </Link>
               :<img className="o-navbar__user-avatar not-user" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />}
               <h2 className="o-navbar__user-name">{user.displayName}</h2>

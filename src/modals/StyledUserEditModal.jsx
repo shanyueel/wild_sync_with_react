@@ -10,9 +10,10 @@ import StyledTextArea from 'components/inputs/StyledTextArea';
 import StyledButton from 'components/StyledButton';
 
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
-import { updateUser} from 'api/api';
+import { updateUser} from 'api/userApi';
 import { updateUserSlice } from 'reducers/userSlice';
 import { toast } from 'react-toastify';
+import { uploadImage } from 'api/storageApi';
 
 const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, selectedUser, setSelectedUser}) => {
   const dispatch = useDispatch()
@@ -28,9 +29,26 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, 
   }
 
   const handleUpdate = async() => {
-    const newUser = await updateUser(uid, userContent)
+    let updateCoverURL = userContent?.coverURL
+    let updatePhotoURL = userContent?.photoURL
+    if(userContent?.photoURLFile) updatePhotoURL = await uploadImage("avatars",`${uid}-avatar`, userContent?.photoURLFile)
+    if(userContent?.coverURLFile) updateCoverURL = await uploadImage("user-covers",`${uid}-cover`,userContent?.coverURLFile)
 
-    if(newUser){
+
+    delete userContent?.photoURLFile
+    delete userContent?.coverURLFile
+    URL.revokeObjectURL(userContent?.photoURL)
+    URL.revokeObjectURL(userContent?.coverURL)
+
+    const updateUserContent = {
+      ...userContent,
+      photoURL: updatePhotoURL,
+      coverURL: updateCoverURL
+    }
+
+    const { success, ...newUser } = await updateUser(uid, updateUserContent)
+
+    if(success){
       dispatch(updateUserSlice(newUser))
       toast.success('更新資料成功', {
         position: "top-right",
@@ -58,6 +76,10 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, 
         theme: "light",
       })
     }
+  }
+
+  const handleReset = () => {
+    setUserContent(user)
   }
   
   return(
@@ -134,7 +156,7 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, 
           />
         </form>
         <div className='c-user-edit__summit'>
-          <StyledButton  alert>取消更新</StyledButton>
+          <StyledButton onClick={handleReset} alert>取消更新</StyledButton>
           <StyledButton onClick={handleUpdate}>更新資料</StyledButton>
         </div>
       </div>

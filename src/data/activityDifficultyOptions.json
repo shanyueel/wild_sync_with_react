@@ -1,0 +1,22 @@
+[
+  { 
+    "name": "入門",
+    "id": "beginner"
+  },
+  { 
+    "name": "中等",
+    "id": "medium"
+  },
+  { 
+    "name": "進階",
+    "id": "advanced"
+  },
+  { 
+    "name": "專家",
+    "id": "expert"
+  },
+  { 
+    "name": "大師",
+    "id": "master"
+  }
+]

@@ -1,31 +1,32 @@
 import styled from "styled-components"
-import StyledDateTimeInput from "./inputs/StyledDateTimeInput"
-import StyledTextInput from "./inputs/StyledTextInput"
-import StyledTextArea from "./inputs/StyledTextArea"
+import StyledTextInput from "../inputs/StyledTextInput"
+import StyledTextArea from "../inputs/StyledTextArea"
 import { useEffect, useState } from "react"
 import { transferTimestamp } from "utils/date-fns"
+import StyledDateInput from "../inputs/StyledDateInput"
+import StyledLocationInput from "components/inputs/StyledLocationInput"
+import { displayLocation } from "utils/location"
+import clsx from "clsx"
 
-const AccommodationTable = ({className, inputUsed, accommodationId, accommodationList, onAccommodationListChange}) => {
-  const [accommodationDetail, setAccommodationDetail] = useState(accommodationList[accommodationId])
+const AccommodationTable = ({className, inputUsed, accommodationDay, accommodationIndex, accommodationList, onAccommodationListChange}) => {
+  const [accommodationDetail, setAccommodationDetail] = useState(accommodationDay)
   
   useEffect(()=>{
-    accommodationList.splice(accommodationId,1,accommodationDetail)
-    onAccommodationListChange(accommodationList)
-  },[accommodationDetail])
+    if(accommodationIndex || accommodationList || onAccommodationListChange){
+      accommodationList.splice(accommodationIndex, 1, accommodationDetail)
+      onAccommodationListChange(accommodationList)
+    }
+  },[accommodationDetail, accommodationIndex, accommodationList, onAccommodationListChange])
 
   return(
     <div className={className}>
       <table>
         <tbody>
-          {accommodationId === 0 ?
-           <tr><td className="c-table-key" colSpan={2}>住宿資訊</td></tr> 
-           :<tr className="c-table-divide"></tr>
-          }
           <tr>
-            <td className="c-table-key">住宿日期</td>
+            <td className={clsx("c-table-key",{inputUsed: inputUsed})}>住宿日期</td>
             <td className="o-activity-table__content">
               {inputUsed?
-                <StyledDateTimeInput 
+                <StyledDateInput
                   inputId="date" 
                   formContent={accommodationDetail} 
                   onFormChange={setAccommodationDetail}
@@ -35,7 +36,7 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
             </td>
           </tr>
           <tr>
-              <td className="c-table-key">住宿名稱</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>住宿名稱</td>
               <td className="o-activity-table__content">
                 {inputUsed?
                   <StyledTextInput
@@ -49,21 +50,21 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
               </td>
           </tr>
           <tr>
-            <td className="c-table-key">住宿地點</td>
+            <td className={clsx("c-table-key",{inputUsed: inputUsed})}>住宿地址</td>
             <td className="o-activity-table__content">
               {inputUsed?
-                <StyledTextInput
-                  placeholder="住宿詳細地址"
-                  inputId="address" 
+                <StyledLocationInput
+                  detailed
+                  inputId="address"
                   formContent={accommodationDetail} 
                   onFormChange={setAccommodationDetail}
                 />
-                :accommodationDetail?.address
+                :displayLocation(accommodationDetail?.address)
               }
             </td>
           </tr>
           <tr>
-              <td className="c-table-key">房價資訊</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>房價資訊</td>
               <td className="o-activity-table__content">
                 {inputUsed?
                   <StyledTextArea
@@ -77,7 +78,7 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
               </td>
           </tr>
           <tr>
-              <td className="c-table-key">住宿備註</td>
+              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>住宿備註</td>
               <td className="o-activity-table__content">
                 {inputUsed?
                   <StyledTextArea
@@ -90,6 +91,7 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
                 }
               </td>
           </tr>
+          <tr className="c-table-divide"></tr>
         </tbody>
       </table>
     </div>
@@ -97,18 +99,11 @@ const AccommodationTable = ({className, inputUsed, accommodationId, accommodatio
 }
 
 const StyledAccommodationTable = styled(AccommodationTable)`
+  position: relative;
   width:100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  .c-table-key{
-    text-align: center;
-    width: 9rem;
-    font-weight: 700;
-    color: ${({theme})=> theme.color.default};
-    background-color: ${({theme})=> theme.backgroundColor.default};
-  }
 
   .o-activity-table__content{
     background-color: white;
@@ -118,12 +113,6 @@ const StyledAccommodationTable = styled(AccommodationTable)`
   .o-activity-table__divide{
     height: .5rem;
     padding: 0;
-  }
-
-  @media screen and (min-width: 768px) {
-    .c-table-key{
-      width: 12rem;
-    }
   }
 `
 

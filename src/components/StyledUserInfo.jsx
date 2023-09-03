@@ -12,10 +12,10 @@ const UserInfo = ({className, user, cardUsed, message}) => {
   return(
     <div  className={className}>
       <Link to={`/user/${user?.uid}`}>
-        <img className="o-user-avatar" src={user?.photoURL} alt="holder-avatar"/>
+        <img className="o-user-avatar" src={user?.photoURL} alt="avatar"/>
       </Link>
       <div className="c-user-info">
-        <Link to="/user/1">
+        <Link to={`/user/${user?.uid}`}>
           <h2 className="o-user-info__name">{user?.displayName}</h2> 
         </Link>
         <h4 className="o-user-info__time">3小時前</h4>
@@ -39,6 +39,24 @@ const StyledUserInfo = styled(UserInfo)`
     background-color: ${({theme})=>theme.color.default};
     border-radius: 50%;
     border: 5px solid ${({theme})=>theme.color.default};
+
+    &:not([src]){
+      font-size: 0;
+      position: relative;
+    }
+
+    &:not([src])::after{
+      font-size: 18px;
+      border: 1px solid black;
+      box-sizing: border-box;
+      content: attr(alt);
+      z-index: -1;
+      height: 3rem;
+      width: 3rem;
+      position: absolute;
+      top: 0;
+      left: 0
+    }
   }
 
   .c-user-info{
@@ -109,6 +127,7 @@ const StyledUserInfo = styled(UserInfo)`
       width: 3.5rem;
       height: 3.5rem;
       border: 5px solid ${({theme})=>theme.color.default};
+      overflow: hidden;
     }
 
     .c-user-info{
@@ -120,8 +139,8 @@ const StyledUserInfo = styled(UserInfo)`
         grid-template-columns: auto auto;
         grid-template-rows: 1.25rem;
         grid-template-areas: 
-          "region age"
-          "profession profession";
+          "profession profession"
+          "region age";
         gap: 0 .5rem;
 
         h4:nth-child(2)::after{

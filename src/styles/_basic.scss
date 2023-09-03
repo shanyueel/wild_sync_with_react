@@ -57,6 +57,10 @@ td{
   font-weight: 700;
   color: #3F6F41;
   background-color: #F0F0F0;
+
+  &.inputUsed{
+    width: 7.5rem;
+  }
 }
 
 .c-table-content {
@@ -107,6 +111,29 @@ input{
     }
   }
 
+  &[type="checkbox"]{
+    width: 1rem;
+    height: 1rem;
+    appearance: none;
+    border-radius: .25rem;
+    margin: 0;
+    padding: 0;
+
+    &:checked{
+      position: relative;
+      background-color: #3F6F41;
+      &::after{
+        content: "✔";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-55%, -55%);
+        color: white;
+        font-size: .75rem;
+      }
+    }
+  }
+
 }
 
 textarea{
@@ -124,39 +151,38 @@ select{
   border: 1px solid #3F6F41;
   border-radius: .5rem;
   font-size: 1rem;
-  color: #3F6F41;
+  background-color: white;
   padding: .2rem .75rem;
 }
 
-  .c-input-body__date-picker {
+.c-input-body__date-picker {
+  background-color: white;
+  border-radius: .5rem;
+
+  input {
+    height: 1rem;
+    font-size: 1rem;
+    color: #7B7B7B;
     background-color: white;
+    padding: .6rem 1rem;
     border-radius: .5rem;
 
-    input {
-      height: 1rem;
-      font-size: 1rem;
-      color: #7B7B7B;
-      background-color: white;
-      padding: .6rem 1rem;
-      border-radius: .5rem;
-      max-width: 10rem;
-
-      &:hover,
-      &:focus {
-        border: none;
-      }
+    &:hover,
+    &:focus {
+      border: none;
     }
-
-    button svg{
-      fill: #3F6F41;
-    }
-
-    fieldset {
-      border: 1px solid #3F6F41;
-      border-radius: .5rem;
-    }
-
   }
+
+  button svg{
+    fill: #3F6F41;
+  }
+
+  fieldset {
+    border: 1px solid #3F6F41;
+    border-radius: .5rem;
+  }
+
+}
 
 .c-input-title {
   display: flex;
@@ -173,7 +199,9 @@ select{
 
   .o-input-title__warning {
     color: #D0342C;
-  font-weight: 400;
+    font-weight: 700;
+    font-size: .75rem;
+    align-self: end;
   }
 }
 
@@ -197,9 +225,27 @@ select{
   z-index: 3;
 }
 
+.ReactModal__Content{
+  position: relative;
+  width: 90vw;
+  height: calc(100vh - 9rem);
+  max-width: 640px;
+  margin: 5rem auto 0;
+  border-radius: .5rem;
+  background-color: #F0F0F0;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .2);
+
+  @media screen and (min-width: 768px) {
+    width: 60vw;
+  }
+}
+
 .l-modal__header {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
+  align-items: center;
+  gap: .75rem;
   align-items: center;
   padding: 0 .25rem .75rem;
   border-bottom: 1px solid #7B7B7B;
@@ -207,6 +253,7 @@ select{
   .o-modal__title {
     color: #3F6F41;
     font-weight: 700;
+    margin-right: auto;
   }
 
   .o-modal__close-icon {
@@ -225,7 +272,16 @@ select{
     height: calc(100% - 9rem);
     margin-top: .75rem;
   }
+
+  .l-modal__controls{
+    display: flex;
+    gap: 1rem;
+    padding-top: .5rem;
+    margin-top: 1rem;
+    border-top: 1px solid #ADADAD;
+  }
 }
+
 
 /* ------ scrollbar ------*/
 
@@ -251,6 +307,10 @@ select{
   overflow-x: scroll;
 }
 
+.no-scroll{
+  overflow: hidden;
+}
+
 /* ------ container ------*/
 
 .l-web-container{
@@ -264,6 +324,19 @@ select{
   &::-webkit-scrollbar{
     display: none;
   }
+
+  @media screen and (min-width: 1024px) {
+    .l-web-container {
+      &__main {
+        width: 70%;
+      }
+
+      &__side {
+        width: 27.5%;
+        padding-top: 4rem;
+      }
+    }
+  }
 }
 
 .l-web-container--license-only{
@@ -276,15 +349,3 @@ select{
   padding-bottom: 2rem;
 }
 
-@media screen and (min-width: 1024px) {
-  .l-web-container{
-    &__main {
-        width: 70%;
-      }
-    
-    &__side {
-      width: 27.5%;
-      padding-top: 4rem;
-    }
-  }
-}

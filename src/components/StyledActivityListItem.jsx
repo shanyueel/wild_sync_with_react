@@ -1,56 +1,136 @@
 import styled, { css } from "styled-components";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import { alterActivityLiked } from "api/activityApi";
+import { transferTimestamp } from "utils/date-fns";
+import { switchDifficulty } from "utils/translation";
+import { displayLocation } from "utils/location";
+import { sliceIntroduction } from "utils/paragraph";
 
 import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
 
+const ActivityListItem = ({className, activity, sm}) => {
+  const defaultImageURL = require('data/defaultImageURL')
+  const user = useSelector(state => state.user)
+  const userId = user?.uid
+  const activityId = activity?.id
+  const [isActivityLiked, setIsActivityLiked] = useState(false)
 
-const ActivityListItem = ({className, sideUsed}) => {
+  useEffect(()=>{
+    setIsActivityLiked(user?.likedActivities?.includes(activityId))
+  },[activityId, user])
+
+  const handleActivityLiked = async() => {
+    const {success} = await alterActivityLiked(userId, activityId)
+    setIsActivityLiked(!isActivityLiked)
+
+    if(!isActivityLiked){
+      if(success){
+        toast.success('收藏活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.error('收藏活動失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+    }else{
+      if(success){
+        toast.success('取消收藏活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.error('取消收藏活動失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+    }
+  }
+  
   return(
     <div className={className}>
 
       <div className="l-activity-card__info">
         <div className="l-activity-card__title">
-          <Link className="o-activity-card__avatar" to="/user/1" >
-            <img  src="https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="user avatar"/>
+          <Link className="o-activity-card__avatar" to={`/user/${activity?.holder?.uid}`} >
+            <img  src={activity?.holder?.photoURL} alt="user avatar"/>
           </Link>
-          <Link className="o-activity-card__name" to="/activity/1">
-            <h3>麟趾-鹿林山健行</h3>
+          <Link classN4ame="o-activity-card__name" to={`/activity/${activityId}`}>
+            <h3>{sm? `${activity?.name?.slice(0,7)}...`: activity?.name}</h3>
           </Link>
-          <div className="o-activity-card__attendance">
-            <CheckIcon/><h4>已參加</h4>
-          </div>
+          {
+            user?.attendedActivities?.includes(activityId) &&
+            <div className="o-activity-card__attendance">
+              <CheckIcon/><h4>已參加</h4>
+            </div>
+          }
+          
         </div>
 
         <div className="c-activity-card__brief">
-          <h4 className="o-activity-card__location"><LocationIcon/>南投縣信義鄉</h4>
-          <h4 className="o-activity-card__date"><CalendarIcon/>2023.07.01 08:30 -{sideUsed && <br/>}2023.07.02 18:00</h4>
+          <h4 className="o-activity-card__location"><LocationIcon/>{displayLocation(activity?.location)}</h4>
+          <h4 className="o-activity-card__date">
+            <CalendarIcon/>
+            {transferTimestamp(activity?.time?.start)} - {sm && <br/>}{transferTimestamp(activity?.time?.end)}
+          </h4>
         </div>
 
         <ul className="c-activity-card__highlights">
-          <li><span>難度 : </span>中等</li>
-          <li><span>時長 : </span>5.5hr</li>
-          <li><span>費用 : </span>300-500</li>
-          <li><span>人數 : </span>10 / 12</li>
+          <li><span>難度 : </span>{switchDifficulty(activity?.difficulty)}</li>
+          <li><span>時長 : </span>{activity?.activityTimeLength} hr</li>
+          <li><span>費用 : </span>{activity?.cost?.min} - {activity?.cost?.max}</li>
+          <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
 
         <p className="o-activity-card__introduction">
-          麟趾山、鹿林山、鹿林前山位於自然豐富的地區，是登山愛好者和自然探險家的理想目的地。這些山峰環繞著壯麗... <Link to="/activity/1">深入了解</Link>
+          {sliceIntroduction(activity?.introduction, 50)} ...<Link to={`/activity/${activityId}`}>深入了解</Link>
         </p>
 
       </div>
 
       <div className="l-activity-card__cover">
-        <Link to="/activity/1">
-          <img className="o-activity__image" src="https://clutchpoints.com/_next/image?url=https%3A%2F%2Fwp.clutchpoints.com%2Fwp-content%2Fuploads%2F2023%2F06%2Ffinals.jpg&w=3840&q=75" alt="activity cover" />
+        <Link to={`/activity/${activityId}`}>
+          <img className="o-activity__image" src={activity?.coverURL || defaultImageURL.activityCover} alt="activity cover" />
         </Link>
       </div>
       
       <div className="o-activity-card__like">
-        <input id="like" type="checkbox"/>
-        <label htmlFor="like"><HeartIcon /></label>
+        <input id={`${activityId}-like`} type="checkbox" checked={isActivityLiked} onChange={handleActivityLiked}/>
+        <label htmlFor={`${activityId}-like`}><HeartIcon /></label>
       </div>
       
     </div>
@@ -71,7 +151,6 @@ const StyledActivityListItem = styled(ActivityListItem)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
     height: 100%;
     height: fit-content;
     padding: .75rem;
@@ -89,6 +168,7 @@ const StyledActivityListItem = styled(ActivityListItem)`
       .o-activity-card__name h3{
         margin-left: .25rem;
         font-weight: 700;
+        white-space: nowrap;
       }
 
       .o-activity-card__attendance{
@@ -285,35 +365,49 @@ const StyledActivityListItem = styled(ActivityListItem)`
     }
   }
 
-  ${(props)=> props.sideUsed && css`
-    @media screen and (min-width: 1024px) {
+  ${(props)=> props.sm && css`
+    @media screen and (min-width: 1024px){
       height: 7.5rem;
 
-      .o-activity__image{       
-        width: 7.5rem;
-      }
-
       .l-activity-card__info{
-        .o-activity-card{
-          &__title{
-            font-size: 1rem;
-          }
+        width: calc(100% - 7.5rem);
+        padding: .5rem .75rem;
 
-          &__location, &__date{
-            font-size: .75rem;
-          }
+        .l-activity-card__title{
+          gap: .25rem;
+        }
 
-          &__date{
-            margin-top: .25rem;
+        .c-activity-card__brief{
+          flex-direction: column;
+          justify-content: start;
+          gap: 0;
+          
+          .o-activity-card__location,
+          .o-activity-card__date{
+            margin: .125rem;
           }
         }
-        
+
         .c-activity-card__highlights{
+          margin-top: .25rem;
+
+          li{
+            padding: .25rem .375rem;
+            border-radius: 4px;
+
+            span,
+            &:last-child{
+              display: none;
+            }
+          }
+        }
+
+        .o-activity-card__introduction{
           display: none;
         }
       }
-    }  
 
+    }
   `}
 `
 

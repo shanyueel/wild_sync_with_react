@@ -1,43 +1,59 @@
-import StyledButton from "components/StyledButton"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
-
+import clsx from "clsx"
+import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
+
+import { getPopularUsersList, getUser } from "api/userApi"
+import { getActivitiesByIdList } from "api/activityApi"
+
+import StyledButton from "components/StyledButton"
 import StyledActivityListItem from "components/StyledActivityListItem"
 import StyledUserCard from "components/StyledUserCard"
 import StyledUserEditModal from "modals/StyledUserEditModal"
-import { useEffect, useState } from "react"
-import { getUserInfo } from "api/api"
-import { useSelector } from "react-redux"
-import StyledPagination from "components/StyledPagination"
-import clsx from "clsx"
 
 const UserPage = ({className}) => {
-
-  const selectedUserId = useParams().id
   const user = useSelector(state=> state.user)
   const environmentParams = useSelector(state => state.environment)
   const userId = user.uid
+  const selectedUserId = useParams().userId
   const windowSize = environmentParams.windowSize
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState({})
   const [isLargeLayout, setIsLargeLayout] = useState(false)
+  const [popularUsers, setPopularUsers] = useState([])
+  const [selectedActivityNav, setSelectedActivityNav] = useState("participation")
+  const [activities, setActivities] = useState([])
 
   useEffect(()=>{
    const setWindowSize = () => {
     setIsLargeLayout(windowSize === "large")
    } 
    setWindowSize()
-  })
+  },[windowSize])
 
   useEffect(()=>{
     const getSelectedUser = async(id) => {
-      const user = await getUserInfo(id)
+      const user = await getUser(id)
       setSelectedUser(user)
-      console.log(user)
+      return user
+    }
+    const getPopularUsers = async() => {
+      const popularUsersList = await getPopularUsersList()
+      setPopularUsers(popularUsersList)
     }
     getSelectedUser(selectedUserId)
+    getPopularUsers()
    
   },[selectedUserId])
+
+  useEffect(()=>{
+    const getActivities = async() => {
+      const selectedActivities = await getActivitiesByIdList(selectedUser?.[selectedActivityNav])
+      setActivities(selectedActivities)
+    }
+    getActivities()
+  },[selectedUser,selectedActivityNav])
 
   const handleUserEdit = () => {
     setIsUserEditModalOpen(true)
@@ -49,6 +65,10 @@ const UserPage = ({className}) => {
     const currentTimeStamp = Date.now()
     const age = Math.floor((currentTimeStamp - birthTimeStamp) / (1000 * 60 * 60 * 24 * 365.25))
     return age
+  }
+
+  const handleActivitiesChange = (e) => {
+    setSelectedActivityNav(e.target.id)
   }
 
   return(
@@ -87,29 +107,23 @@ const UserPage = ({className}) => {
         <div className="l-user-activities">
 
           <div className="l-user-activities__navbar">
-            <label htmlFor="participation" className="o-user-activities__nav-item">
-              <input type="radio" name="user-activities" id="participation" defaultChecked />參與紀錄
+            <label htmlFor="attendedActivities" className="o-user-activities__nav-item" onChange={handleActivitiesChange}>
+              <input type="radio" name="user-activities" id="attendedActivities" defaultChecked />參與紀錄
             </label>
-            <label htmlFor="favorite" className="o-user-activities__nav-item">
-              <input type="radio" name="user-activities" id="favorite" />喜愛活動
+            <label htmlFor="likedActivities" className="o-user-activities__nav-item" onChange={handleActivitiesChange}>
+              <input type="radio" name="user-activities" id="likedActivities" />收藏活動
             </label>
-            <label htmlFor="host" className="o-user-activities__nav-item">
-              <input type="radio" name="user-activities" id="host" />主辦經驗
+            <label htmlFor="heldActivities" className="o-user-activities__nav-item" onChange={handleActivitiesChange}>
+              <input type="radio" name="user-activities" id="heldActivities" />主辦經驗
             </label>
           </div>
           
           <div className="l-user-activities__container">
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledActivityListItem />
-            <StyledPagination className="o-user-activities__pagination" lightTheme/>
+            {
+              activities?.length > 0 ?
+              activities?.map(activity=><StyledActivityListItem key={activity?.id} activity={activity}/>)
+              :<h2 className="o-user-activities__empty">目前找不到相關活動</h2>
+            }
           </div>
 
         </div>
@@ -121,12 +135,7 @@ const UserPage = ({className}) => {
         <h2 className="o-holder-recommendation__title">熱門主辦者</h2>
         <div className={clsx("l-holder-recommendation__container",{"scrollbar-x":!isLargeLayout})}>
           <div className="l-holder-recommendation__holders">
-            <StyledUserCard />
-            <StyledUserCard />
-            <StyledUserCard />
-            <StyledUserCard />
-            <StyledUserCard />
-            <StyledUserCard />
+            {popularUsers && popularUsers?.map(user => <StyledUserCard key={user?.uid} user={user} listItem={isLargeLayout}/>)}
           </div>
         </div>
 
@@ -276,6 +285,12 @@ const StyledUserPage = styled(UserPage)`
         background-color: ${({theme})=>theme.color.default};
         margin-bottom: 5rem;
         border-radius: 0 0 .5rem .5rem;
+
+
+        .o-user-activities__empty{
+          color: white;
+          margin: 2.5rem;
+        }
       }
     }
   }

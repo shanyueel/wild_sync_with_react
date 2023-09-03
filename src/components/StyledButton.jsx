@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-const Button = ({className, onClick, children, disabled, outlined, invisible, alert}) =>{
+const Button = ({className, onClick, children, disabled, outlined, invisible, alert, alertOutlined}) =>{
   return(
     <button className={className} disabled={disabled} onClick={onClick}>{children}</button>
   )
@@ -33,8 +33,16 @@ const  StyledButton = styled(Button)`
     }
   }
 
+  ${(props)=> props.sm && css`
+    height: 1.6rem;
+    font-size: .8rem;
+    width: fit-content;
+    padding: 0 .5rem;
+    font-weight: 700;
+  `}
+
   ${(props) => props.outlined && css`
-    background-color: white;
+    background-color: transparent;
     border: 1.5px solid ${({theme})=>theme.color.default};
     color: ${({theme})=>theme.color.default};
 
@@ -42,18 +50,26 @@ const  StyledButton = styled(Button)`
       color: white;
       background-color: ${({theme})=>theme.color.default};
     }
-  `
-  }
+  `}
+
+  ${(props) => props.alert && css`
+    background-color: ${({theme})=>theme.color.alert};
+  `}
+
+  ${(props) => props.alertOutlined && css`
+    background-color: transparent;
+    border: 1.5px solid ${({theme})=>theme.color.alert};
+    color: ${({theme})=>theme.color.alert};
+
+    &:hover{
+      color: white;
+      background-color: ${({theme})=>theme.color.alert};
+    }
+  `}
 
   ${(props) => props.invisible && css`
     visibility: hidden;
-  `
-  }
-  
-    ${(props) => props.alert && css`
-    background-color: ${({theme})=>theme.color.alert};
-  `
-  }
+  `}
 `
 
 export default StyledButton

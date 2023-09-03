@@ -12,12 +12,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { resetUser, updateUserSlice } from "reducers/userSlice";
 import { auth } from "api/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { getUserInfo } from "api/api";
+import { getUser } from "api/userApi";
 
 const BasicLayout = () => {
   const dispatch = useDispatch()
   const location = useLocation()
-  const activitiesRef = useRef(null)
   const pathname = location.pathname
   const licenseOnly = (pathname === "/login") || (pathname === "/register")
 
@@ -38,18 +37,9 @@ const BasicLayout = () => {
   onAuthStateChanged(auth, async(user)=>{
     if (user) {
       const userAccount = auth.currentUser
-      const userInfo = await getUserInfo(userAccount?.uid)
-      console.log(userInfo)
+      const userInfo = await getUser(userAccount?.uid)
       dispatch(updateUserSlice({
-        uid: userAccount?.uid,
-        email: userAccount?.email,
-        displayName:userAccount?.displayName,
-        photoURL:userAccount?.photoURL,
-        coverURL: userInfo?.coverURL,
-        birth: userInfo?.birth,
-        introduction: userInfo?.introduction,
-        profession: userInfo?.profession,
-        region: userInfo?.region,
+        ...userInfo
       }))
     } else {
       dispatch(resetUser())
@@ -58,10 +48,9 @@ const BasicLayout = () => {
   
   return(
     <>
-      <StyledNavbar activitiesRef={activitiesRef} />
+      <StyledNavbar />
       <div className={licenseOnly ? "l-web-container--license-only" : "l-web-container scrollbar"}>
         <Outlet />
-      
       </div>
       <StyledFooter/>
       <ToastContainer

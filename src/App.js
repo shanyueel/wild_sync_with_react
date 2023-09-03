@@ -43,13 +43,13 @@ function App() {
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
               <Route path="activity">
-                <Route path=":id" element={<ActivityPage />} >
+                <Route path=":activityId" element={<ActivityPage />} >
                   <Route index element={<ActivityPageDiscussionListArea />} />
-                  <Route path='chatroom/:id' element={<ActivityPageDiscussionArea />}/>
+                  <Route path='chatroom/:chatroomId' element={<ActivityPageDiscussionArea />}/>
                 </Route>
                 <Route path="search" element={<SearchActivityPage />} />
               </Route>
-              <Route path="user/:id" element={<UserPage />} />
+              <Route path="user/:userId" element={<UserPage />} />
               <Route path="guide"/>
               <Route path="rules"/>
               <Route path="faq"/>

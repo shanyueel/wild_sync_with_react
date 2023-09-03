@@ -2,76 +2,50 @@ import styled from "styled-components";
 import clsx from "clsx";
 
 import StyledImageInput from "components/inputs/StyledImageInput";
-import StyledPeriodInput from "components/inputs/StyledPeriodInput";
+import StyledPeriodInput from "components/inputs/StyledDateTimePeriodInput";
 import StyledRadioInput from "components/inputs/StyledRadioInput";
 import StyledTextInput from "components/inputs/StyledTextInput";
+import StyledLocationInput from "components/inputs/StyledLocationInput";
 
-const typeOptions = [
-  { 
-    name: "type",
-    label: "登山",
-    id: "hiking"
-  },
-  { 
-    name: "type",
-    label: "露營",
-    id: "camping"
-  },
-  { 
-    name: "type",
-    label: "單車",
-    id: "cycling"
-  },
-  { 
-    name: "type",
-    label: "潛水",
-    id: "diving"
-  },
-  { 
-    name: "type",
-    label: "其他",
-    id: "others"
-  }
-]
-
-const activityId = 1
 
 const ActivityCreateStepOne = ({ className, formContent, onFormChange}) => {
+  const defaultImageURL = require('data/defaultImageURL.json')
+  const activityTypeOptions = require('data/activityTypeOptions.json')
+
   return(
     <div className={clsx(className,"scrollbar") }>
       <StyledImageInput
         title="活動封面照片"
         inputId="coverURL"
-        uploadFolder="activity-covers"
-        uploadFilename={`${activityId}-cover`}
-        defaultImgURL="" 
+        defaultImgURL={defaultImageURL.activityCover} 
         formContent={formContent} 
         onFormChange={onFormChange}
       />
       <StyledTextInput 
         title="活動名稱" 
-        placeholder="請輸入活動名稱" 
         inputId="name" 
+        placeholder="請輸入活動名稱 (字數限制: 16字)" 
+        wordLimit={16}
         formContent={formContent} 
         onFormChange={onFormChange} 
         value={ formContent.name || "" }
       />
       <StyledRadioInput 
         title="活動類型" 
+        inputId="type"
+        radioOptions={activityTypeOptions}
         formContent={formContent} 
         onFormChange={onFormChange} 
-        radioOptions={typeOptions}
       />
-      <StyledTextInput 
-        title="活動地點" 
-        placeholder="請輸入活動地點" 
-        inputId="location" 
+      <StyledLocationInput
+        title="活動地點"
+        inputId="location"
         formContent={formContent} 
         onFormChange={onFormChange}
       />
       <StyledPeriodInput 
         title="活動期間" 
-        inputName="time" 
+        inputId="time" 
         formContent={formContent} 
         onFormChange={onFormChange}
       />

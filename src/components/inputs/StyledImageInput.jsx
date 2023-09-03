@@ -2,48 +2,38 @@ import styled, { css } from "styled-components";
 
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
 import {ReactComponent as UploadIcon} from "assets/icons/UploadIcon.svg"
-import { useRef } from "react";
-import { deleteImage, uploadImage } from "api/api";
+import { useRef, useState } from "react";
 
-const ImageInput = ({ className, title, inputId, uploadFolder, uploadFilename, defaultImgURL, formContent, onFormChange, warning, coverUsed, avatarUsed, activityCoverUsed }) => {
+const ImageInput = ({ className, title, inputId, defaultImgURL, formContent, onFormChange, warning, coverUsed, avatarUsed, activityMapUsed }) => {
   const uploadButtonRef = useRef(null)
   const displayImageRef = useRef(null)
+  const [imgSrc, setImgSrc] = useState(formContent[inputId] || defaultImgURL)
 
-  const handleUpload = async (e) => {
+  const handleUpload = async () => {
     const uploadBtn = uploadButtonRef.current
-    const displayImg = displayImageRef.current
     const [ file ] = uploadBtn.files
-    await displayImageFromFile(displayImg, file)
-    const imageURL = await uploadImage(uploadFolder, uploadFilename, file)
-    
+    const imgTempURL = URL.createObjectURL(file)
+    setImgSrc(imgTempURL)
+
     const newForm = {
       ...formContent,
-      [e.target.id]: imageURL
+      [inputId]: imgTempURL,
+      [`${inputId}File`]: file,
     }
     onFormChange(newForm)
-  }
-
-  const displayImageFromFile= async( img, file ) => {
-    try{
-      img.src =  URL.createObjectURL(file)
-      await img.onload
-      URL.revokeObjectURL(img.src)
-      console.log("[暫存照片成功]",img)
-      return img
-    }catch(error){
-      console.error("[暫存照片失敗]:",error)
-    }
   }
 
   const handleReset = async(e) => {
-    const displayImg = displayImageRef.current
-    displayImg.src = defaultImgURL
+    if(formContent[inputId]) URL.revokeObjectURL(formContent[inputId])
+    delete formContent?.[inputId]
+    delete formContent?.[`${inputId}File`]
+
     const newForm = {
-      ...formContent,
-      [e.target.id]: defaultImgURL
+      ...formContent
     }
-    await deleteImage(uploadFolder, uploadFilename)
+
     onFormChange(newForm)
+    setImgSrc(defaultImgURL)
   }
 
   return(
@@ -56,7 +46,7 @@ const ImageInput = ({ className, title, inputId, uploadFolder, uploadFilename, d
         <img 
           className="o-image-input__display" 
           ref={displayImageRef} 
-          src={formContent[inputId]|| require('assets/images/userDefaultCover.jpg')} 
+          src={imgSrc} 
           alt='upload-display'
         />
         <div className='c-image-input__control'>
@@ -162,6 +152,14 @@ const StyledImageInput = styled(ImageInput)`
             height: 1rem;
           }
         }
+      }
+    }
+  `}
+
+  ${props => props.activityMapUsed && css`
+    .c-input-body{
+      .o-image-input__display{
+        width: 100%;
       }
     }
   `}

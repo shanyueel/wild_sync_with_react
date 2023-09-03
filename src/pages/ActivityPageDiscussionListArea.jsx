@@ -68,7 +68,6 @@ const StyledActivityPageDiscussionListArea = styled(ActivityPageDiscussionListAr
     overflow-y: scroll;
     padding: .25rem 0;
     border-radius: .5rem;
-    
   }
 
   .l-activity-discussion__footer{

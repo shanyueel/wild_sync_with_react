@@ -1,29 +1,19 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import StyledUserInfo from "./StyledUserInfo";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { sliceIntroduction } from "utils/paragraph";
 
-const UserCard = ({className}) => {
-  const environmentParams = useSelector(state=>state.environment)
-  const windowSize = environmentParams.windowSize
-  const [isLargeLayout, setIsLargeLayout] = useState(false)
-
-  useEffect(()=>{
-    const setWindowSize = () => {
-      setIsLargeLayout(windowSize === "large")
-    }
-    setWindowSize()
-  })
-
+const UserCard = ({className, user, isHolder, listItem}) => {
   return(
     <div className={className}>
-      <StyledUserInfo cardUsed={!isLargeLayout}/>
-      <p className="o-user-card__introduction">我是一位熱愛登山的夢想家。希望能在這個平台上結交志同道合的夥...</p>
+      <StyledUserInfo cardUsed={!listItem} user={user} />
+      <p className="o-user-card__introduction">{sliceIntroduction(user?.introduction, listItem ? 50 : 30)}</p>
+      {isHolder && <div className="o-user-card__holder-display">HOST</div>}
     </div>
   )
 }
 
 const StyledUserCard = styled(UserCard)`
+  position: relative;
   width: 10rem;
   height: 14rem;
   padding: 1rem .75rem;
@@ -34,13 +24,28 @@ const StyledUserCard = styled(UserCard)`
 
   .o-user-card__introduction{
     margin-top: .5em;
+    line-height: 1.25rem;
   }
 
-  @media screen and (min-width: 1024px) {
+
+
+  ${props=> props.listItem && css`
     width: 100%;
-    height: 7.5rem;
-    padding: 1rem .75rem;
-  }
+    height: fit-content;
+    padding: 1rem 1.25rem;
+
+    .o-user-card__holder-display{
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      padding: .25rem .5rem;
+      border-radius: .25rem;
+      border: 2px solid ${({theme})=>theme.color.default};
+      font-size: .75rem;
+      font-weight: 700;
+      color: ${({theme})=>theme.color.default};
+    }
+  `}
 
 `
 

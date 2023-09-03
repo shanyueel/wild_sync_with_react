@@ -3,7 +3,8 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const CheckboxInput = ({className, title, inputId, checkboxOptions, formContent, onFormChange, warningContent}) => {
-  const [checkedList, setCheckedList] = useState(formContent[inputId] || [])
+  const [checkedList, setCheckedList] = useState(formContent?.[inputId] || [])
+  console.log(checkedList)
 
   const handleCheckboxChange = (e) => {
     let newCheckedList = checkedList
@@ -41,7 +42,7 @@ const CheckboxInput = ({className, title, inputId, checkboxOptions, formContent,
                 name={inputId} 
                 value={checkboxOption.id} 
                 onChange={handleCheckboxChange} 
-                checked={checkedList?.[inputId]?.includes(checkboxOption.id)} 
+                checked={checkedList?.includes(checkboxOption?.id)} 
                 disabled={checkboxOption.disabled} 
               />
               <label htmlFor={checkboxOption.id}>{checkboxOption.name}</label>

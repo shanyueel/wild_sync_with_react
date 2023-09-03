@@ -21,13 +21,22 @@ const ActivitySearchPage = ({ className }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
-  const keyword = queryParams.get('keyword')
+  const keywordParam = queryParams.get('keyword')
+  const locationParam = JSON.parse(queryParams.get('location'))
+  const difficultyParam = JSON.parse(queryParams.get('difficulty'))
+  const timeParam = JSON.parse(queryParams.get('time'))
+
+  const searchFilter = {
+    keyword: keywordParam,
+    location: locationParam,
+    difficulty: difficultyParam,
+    time: timeParam
+  }
 
   const [isFiltersDisplay, setIsFiltersDisplay] = useState(false)
-  const [filterCache, setFilterCache] = useState({keyword: keyword})
-  const [filteredActivities, setFilteredActivities] = useState([])
-  const [searchFilter, setSearchFilter] = useState({keyword: keyword})
+  const [filterCache, setFilterCache] = useState(searchFilter)
   const [searchOrder, setSearchOrder] = useState({order: "releaseDate"})
+  const [filteredActivities, setFilteredActivities] = useState([])
 
   useEffect(()=>{
     const getFilteredActivities = async() => {
@@ -35,7 +44,7 @@ const ActivitySearchPage = ({ className }) => {
       setFilteredActivities(newActivities)
     }
     getFilteredActivities()
-  },[searchFilter])
+  },[])
 
   const handleSearchbarChange = () => {
     const newForm = {
@@ -47,8 +56,21 @@ const ActivitySearchPage = ({ className }) => {
 
   const handleSearch = (e) => {
     e.preventDefault()
-    navigate(`/activity/search?keyword=${filterCache?.keyword}`)
-    setSearchFilter(filterCache)
+    const keywordQuery = filterCache?.keyword 
+      ? `keyword=${filterCache?.keyword}` 
+      : null
+    const locationQuery = filterCache?.location?.length > 0 
+      ? `location=${JSON.stringify(filterCache?.location)}` 
+      : null
+    const difficultyQuery = filterCache?.difficulty?.length > 0 
+      ? `difficulty=${JSON.stringify(filterCache?.difficulty)}` 
+      : null
+    const timeQuery = filterCache?.time 
+      ? `time=${JSON.stringify(filterCache?.time)}` 
+      : null
+
+    const queryParams = [keywordQuery,locationQuery,difficultyQuery,timeQuery]?.filter(Boolean)?.join('&')
+    navigate(`/activity/search?${queryParams}`)
   }
 
   return(
@@ -61,7 +83,7 @@ const ActivitySearchPage = ({ className }) => {
               ref={searchbarRef}
               type="text" 
               placeholder="登山路線、露營地、潛水處" 
-              value={filterCache?.keyword}
+              value={filterCache?.keyword || ""}
               onChange={handleSearchbarChange}
               
             />
@@ -121,8 +143,6 @@ const ActivitySearchPage = ({ className }) => {
             />
           </div>
           
-            
-
           <div className="l-search-results__container">
             {
               filteredActivities?.length > 0 && filteredActivities?.map(activity => <StyledActivityListItem key={activity?.id} activity={activity} />)

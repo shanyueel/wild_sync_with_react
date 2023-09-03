@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 import StyledImageSlider from "components/StyledImageSlider"
@@ -16,6 +15,7 @@ import StyledSelector from "components/inputs/StyledSelector"
 import StyledCheckboxInput from "components/inputs/StyledCheckboxInput"
 import StyledDatePeriodInput from "components/inputs/StyledDatePeriodInput"
 import { toast } from "react-toastify"
+import { Link } from "react-router-dom"
 
 const HomePage = ({className}) => {
   const filterCheckboxRef = useRef(null)
@@ -25,7 +25,6 @@ const HomePage = ({className}) => {
   const activitiesLocationOptions = require('data/taiwanDistricts.json')
   const activitiesDifficultyOptions = require('data/activityDifficultyOptions.json')
   const homePageSliderImages = require('data/homePageSliderImages.json')
-  const popularPlaces = require('dummyDatas/popularPlaces.json')
 
   const [activitiesDisplay, setActivityDisplay] = useState("grid")
   const [activityList, setActivityList] = useState([])
@@ -79,11 +78,11 @@ const HomePage = ({className}) => {
         <div className="l-popular-places">
           <h1 className="o-popular-places__title">熱門活動地點</h1>
           <div className="l-popular-places__container">
-            {popularLocations.map((popularPlace)=>{ 
+            {popularLocations?.map((popularPlace)=>{ 
               return(
-                <Link to="/activity/search" className="c-popular-place" key={popularPlace.id}>
-                  <img className="o-popular-place__circle" src={popularPlace.image} alt={popularPlace.title} />
-                  <h2 className="o-popular-place__name">{popularPlace.name}</h2>
+                <Link to={`/activity/search?location=["${popularPlace?.id}"]`} key={popularPlace?.id} className="c-popular-place">
+                  <img className="o-popular-place__circle" src={popularPlace?.image} alt={popularPlace?.title} />
+                  <h2 className="o-popular-place__name">{popularPlace?.name}</h2>
                 </Link>
               )})}
           </div>

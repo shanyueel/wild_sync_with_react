@@ -14,6 +14,7 @@ import SearchActivityPage from 'pages/ActivitySearchPage';
 import UserPage from 'pages/UserPage'
 import ActivityPageDiscussionListArea from 'pages/ActivityPageDiscussionListArea';
 import ActivityPageDiscussionArea from 'pages/ActivityPageDiscussionArea'
+import ScrollToTop from 'utils/ScrollToTop';
 
 const theme = {
   color:{
@@ -35,6 +36,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Routes>

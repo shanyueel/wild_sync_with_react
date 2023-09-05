@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { toast } from "react-toastify"
 import styled from "styled-components"
@@ -23,6 +23,7 @@ import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 
 
 const ActivityPage = ({ className }) => {
+  const navigate = useNavigate()
   const user = useSelector(state => state.user)
   const environmentParams = useSelector(state => state.environment)
   const userId = user.uid
@@ -51,7 +52,12 @@ const ActivityPage = ({ className }) => {
   useEffect(()=>{
     const setCurrentActivity = async() => {
       const activity = await getActivity(activityId)
-      setActivity(activity)
+      if(activity){
+        setActivity(activity)
+        storeBrowseHistory()
+      }else{
+        navigate('/*')
+      } 
     }
 
     const storeBrowseHistory = () => {
@@ -71,9 +77,9 @@ const ActivityPage = ({ className }) => {
 
       localStorage.setItem('history',JSON.stringify(currentList))
     }
+    
     setCurrentActivity()
-    storeBrowseHistory()
-  },[activityId])
+  },[activityId, navigate])
 
   useEffect(() => {
     const now = new Date()

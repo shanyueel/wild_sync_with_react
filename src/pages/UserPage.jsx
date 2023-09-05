@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import clsx from "clsx"
 import { useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { getPopularUsersList, getUser } from "api/userApi"
 import { getActivitiesByIdList } from "api/activityApi"
@@ -13,6 +13,7 @@ import StyledUserCard from "components/StyledUserCard"
 import StyledUserEditModal from "modals/StyledUserEditModal"
 
 const UserPage = ({className}) => {
+  const navigate = useNavigate()
   const user = useSelector(state=> state.user)
   const environmentParams = useSelector(state => state.environment)
   const userId = user.uid
@@ -35,8 +36,11 @@ const UserPage = ({className}) => {
   useEffect(()=>{
     const getSelectedUser = async(id) => {
       const user = await getUser(id)
-      setSelectedUser(user)
-      return user
+      if(user){
+        setSelectedUser(user)
+      }else{
+        navigate("/*")
+      }
     }
     const getPopularUsers = async() => {
       const popularUsersList = await getPopularUsersList()
@@ -45,7 +49,7 @@ const UserPage = ({className}) => {
     getSelectedUser(selectedUserId)
     getPopularUsers()
    
-  },[selectedUserId])
+  },[selectedUserId, navigate])
 
   useEffect(()=>{
     const getActivities = async() => {

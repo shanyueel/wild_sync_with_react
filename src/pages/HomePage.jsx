@@ -5,7 +5,6 @@ import StyledImageSlider from "components/StyledImageSlider"
 import StyledActivityCardItem from "components/StyledActivityCardItem"
 import StyledActivityListItem from "components/StyledActivityListItem"
 import StyledButton from "components/StyledButton"
-import StyledPagination from "components/StyledPagination"
 
 import {ReactComponent as GridIcon} from "assets/icons/GridIcon.svg"
 import {ReactComponent as ListIcon} from "assets/icons/ListIcon.svg"
@@ -169,8 +168,6 @@ const HomePage = ({className}) => {
               }
             </div>
           </div>
-          
-          <StyledPagination className="c-activities__pagination"/>
 
         </div>
       </div>
@@ -224,7 +221,6 @@ const StyledHomePage = styled(HomePage)`
     flex-direction: column;
     align-items: center;
     margin-top:2.5rem;
-    margin-bottom: 5rem;
     border-top: 2px solid ${({theme})=> theme.backgroundColor.default};
     width: 100%;
     
@@ -413,8 +409,7 @@ const StyledHomePage = styled(HomePage)`
         grid-template-columns: repeat(2, 11rem);
         grid-auto-rows: 18rem;
         width: fit-content;
-        gap: .25rem;
-        margin: 2rem auto 0;
+        gap: .5rem;
       }
 
       &--list{

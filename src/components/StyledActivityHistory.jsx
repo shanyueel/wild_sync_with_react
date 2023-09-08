@@ -5,12 +5,14 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getActivitiesByIdList } from "api/activityApi";
 import StyledActivityListItem from "./StyledActivityListItem";
+import StyledLoading from "./StyledLoading";
 
 const ActivityHistory = ({className, sideUsed}) => {
   const environmentParams = useSelector(state=> state.environment)
   const windowSize = environmentParams.windowSize
   const [isLargeLayout, setIsLargeLayout] = useState(false)
   const [historyActivities, setHistoryActivities] = useState([])
+  const [isHistoryActivitiesLoading, setIsHistoryActivitiesLoading] = useState(true)
 
   useEffect(()=>{
     const setWindowSize = () => {
@@ -21,9 +23,11 @@ const ActivityHistory = ({className, sideUsed}) => {
 
   useEffect(()=>{
     const getHistoryActivities = async() => {
+      setIsHistoryActivitiesLoading(true)
       const historyIdList = JSON.parse(localStorage.getItem('history'))
       const activityList = await getActivitiesByIdList(historyIdList)
       setHistoryActivities(activityList)
+      setIsHistoryActivitiesLoading(false)
     }
     getHistoryActivities()
   },[])
@@ -32,12 +36,18 @@ const ActivityHistory = ({className, sideUsed}) => {
     <div className={className}>
       <h2 className="o-activity-history__title">瀏覽紀錄</h2>
       <div className="l-activity-history__body scrollbar-x">
-        <div className="c-activity-history__cards">
-          { sideUsed && isLargeLayout 
-            ? historyActivities?.map(activity=><StyledActivityListItem sm={isLargeLayout} key={activity?.id} activity={activity}/>)
-            : historyActivities?.map(activity=><StyledActivityCardItem key={activity?.id} activity={activity}/>)
-          }
-        </div>
+        {
+          isHistoryActivitiesLoading
+            ? <StyledLoading title="活動讀取中"/>
+            : (
+                <div className="c-activity-history__cards">
+                  { sideUsed && isLargeLayout 
+                    ? historyActivities?.map(activity=><StyledActivityListItem sm={isLargeLayout} key={activity?.id} activity={activity}/>)
+                    : historyActivities?.map(activity=><StyledActivityCardItem key={activity?.id} activity={activity}/>)
+                  }
+                </div>
+              )
+        }
       </div>
     </div>
   )

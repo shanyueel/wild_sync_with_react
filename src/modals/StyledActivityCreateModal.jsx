@@ -92,7 +92,7 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
     }
 
 
-    const { success } = await postActivity(activityId, doc(firestoreDB, "users", `${uid}-user`), createActivityContent)
+    const { success } = await postActivity(activityId, doc(firestoreDB, "users", `${uid}`), createActivityContent)
 
     if(success){
       toast.success('建立活動成功', {

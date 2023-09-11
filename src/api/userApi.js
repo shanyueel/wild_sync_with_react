@@ -1,13 +1,13 @@
 import { auth } from "api/firebaseConfig"
 import { updateProfile } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc } from "@firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, deleteDoc } from "@firebase/firestore";
 import { firestoreDB } from "./firebaseConfig";
 import { asyncForEach } from "utils/asyncLoop";
 
 export const getUser = async(userId) => {
   try{
-    const userInfo = (await getDoc(doc(firestoreDB, 'users', `${userId}-user`)))?.data()
-    console.log("[取得使用者成功]:",userId)
+    const userInfo = (await getDoc(doc(firestoreDB, 'users', `${userId}`)))?.data()
+    console.log("[取得使用者成功]:",userInfo)
     return userInfo
   }catch(error){
     console.error("[取得使用者失敗]:",error)
@@ -47,7 +47,7 @@ export const getPopularUsersList = async() => {
 
 export const buildUser = async(userId, accountInfo) => {
   try{
-    await setDoc(doc(firestoreDB, 'users', `${userId}-user`),{
+    await setDoc(doc(firestoreDB, 'users', `${userId}`),{
       uid: userId,
       role: "user",
       email: accountInfo?.email,
@@ -73,7 +73,7 @@ export const updateUser = async(userId, updateContent) => {
   try{
     if(userId || updateContent){
       
-      await setDoc(doc(firestoreDB, 'users', `${userId}-user`), {
+      await setDoc(doc(firestoreDB, 'users', `${userId}`), {
         email: updateContent?.email,
         displayName: updateContent?.displayName,
         photoURL: updateContent?.photoURL,
@@ -95,5 +95,19 @@ export const updateUser = async(userId, updateContent) => {
   }catch(error){
     console.error(error)
     return {success: false}
+  }
+}
+
+export const renameUsersDocument = async() => {
+  try{
+    const usersData = (await getDocs(collection(firestoreDB, "users"))).docs.map(doc=> doc.data())
+    await asyncForEach(usersData, async(userData) => {
+      console.log(userData)
+      await setDoc(doc(firestoreDB, "users", `${userData?.uid}`), userData, {merge: true})
+      await deleteDoc(doc(firestoreDB, "users", `${userData?.uid}-user`))
+    })
+    console.log("[使用者檔案更名完成]")
+  }catch(error){
+    console.error("[使用者檔案更名失敗]:",error)
   }
 }

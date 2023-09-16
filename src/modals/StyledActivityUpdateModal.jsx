@@ -182,8 +182,8 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
       })
 
       setTimeout(()=>{
-        document.querySelector('body').classList.remove('no-scroll');
-        document.querySelector('html').classList.remove('no-scroll');
+        document.querySelector('body').classList.remove('no-scroll')
+        document.querySelector('html').classList.remove('no-scroll')
         setIsActivityUpdateModalOpen(false)
         setFormProgress(1)
         setActivity({
@@ -219,11 +219,11 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
         <StyledButton onClick={handleDeleteActivity} sm alertOutlined>刪除活動</StyledButton>
         <StyledConfirmModal
           title="刪除活動"
-          content="確認要刪除嗎?"
           isConfirmModalOpen={isDeleteConfirmModalOpen}
           setIsConfirmModalOpen={setIsDeleteConfirmModalOpen}
           handleConfirmClick={handleConfirmDeleteClick}
-        />
+        >確認要刪除嗎?
+        </StyledConfirmModal>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal}/>
       </div>
 

@@ -72,22 +72,17 @@ export const buildUser = async(userId, accountInfo) => {
 export const updateUser = async(userId, updateContent) => {
   try{
     if(userId || updateContent){
+      const updateDocContent = {}
+      const updateProfileContent= {}
+
+      for(let updateKey in updateContent){
+        updateDocContent[updateKey] = updateContent[updateKey]
+        const updateProfileFilter = ["email", "displayName", "photoURL"]
+        if(updateProfileFilter.includes(updateKey)) updateProfileContent[updateKey] = updateContent[updateContent]
+      }
       
-      await setDoc(doc(firestoreDB, 'users', `${userId}`), {
-        email: updateContent?.email,
-        displayName: updateContent?.displayName,
-        photoURL: updateContent?.photoURL,
-        coverURL: updateContent?.coverURL,
-        profession: updateContent?.profession,
-        birth: updateContent?.birth,
-        region: updateContent?.region,
-        introduction: updateContent?.introduction
-      }, { merge:true })
-      await updateProfile(auth.currentUser,{
-        email: updateContent?.email,
-        displayName: updateContent?.displayName,
-        photoURL: updateContent?.photoURL
-      })
+      await setDoc(doc(firestoreDB, 'users', `${userId}`), updateDocContent, { merge:true })
+      await updateProfile(auth.currentUser, updateProfileContent)
 
       return {success: true, id: userId, ...updateContent}
     }

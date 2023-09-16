@@ -16,7 +16,7 @@ import { ReactComponent as SettingIcon } from "assets/icons/SettingIcon.svg"
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from "api/auth"
 import { resetUser } from "reducers/userSlice"
-import StyledAccountSettingModal from "modals/StyledAccountSettingModal"
+import StyledAccountUpdateModal from "modals/StyledAccountUpdateModal"
 
 const Navbar = ({ className }) => {
   const dispatch = useDispatch()
@@ -24,7 +24,7 @@ const Navbar = ({ className }) => {
   const searchbarRef = useRef(null)
   const navIconsRef = useRef([])
   const [isActivityCreateModalOpen, setIsActivityCreateModalOpen] = useState(false)
-  const [isAccountSettingModalOpen, setIsAccountSettingModalOpen] = useState(false)
+  const [isAccountUpdateModalOpen, setIsAccountUpdateModalOpen] = useState(false)
   const user = useSelector((state)=> state.user)
 
   const handleSearch = (e) => {
@@ -53,7 +53,7 @@ const Navbar = ({ className }) => {
   }
 
   const handleAccountSetting = () => {
-    setIsAccountSettingModalOpen(true)
+    setIsAccountUpdateModalOpen(true)
     navIconsRef.current[2].checked = false
     document.querySelector('body').classList.add('no-scroll');
     document.querySelector('html').classList.add('no-scroll');
@@ -154,7 +154,7 @@ const Navbar = ({ className }) => {
               </ul>
               
               <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
-              <StyledAccountSettingModal isAccountSettingModalOpen={isAccountSettingModalOpen} setIsAccountSettingModalOpen={setIsAccountSettingModalOpen}/>
+              <StyledAccountUpdateModal isAccountUpdateModalOpen={isAccountUpdateModalOpen} setIsAccountUpdateModalOpen={setIsAccountUpdateModalOpen}/>
             </div>
           </div>
 

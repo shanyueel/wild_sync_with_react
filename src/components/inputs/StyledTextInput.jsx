@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import clsx from "clsx"
 import styled,{css} from "styled-components"
 
-const TextInput = ({ className, title, placeholder, unit, inputId, formContent, onFormChange, wordLimit, warning, password, numberUsed }) => {
+const TextInput = ({ className, title, placeholder, unit, inputId, formContent, onFormChange, onBlur, wordLimit, warning, password, numberUsed }) => {
   const [warningContent, setWarningContent] = useState(warning) 
   const textRef = useRef(null)
   const handleTextInput = () => {
@@ -12,6 +12,10 @@ const TextInput = ({ className, title, placeholder, unit, inputId, formContent, 
     }
     onFormChange(newForm)
   }
+
+  useEffect(()=>{
+    setWarningContent(warning)
+  },[warning])
 
   useEffect(()=>{
     if(wordLimit && textRef?.current?.value?.length > wordLimit){
@@ -41,6 +45,7 @@ const TextInput = ({ className, title, placeholder, unit, inputId, formContent, 
           type={clsx({password:password},{text:!password && !numberUsed},{number:numberUsed})} 
           placeholder={placeholder} 
           onChange={ handleTextInput } 
+          onBlur={onBlur}
           value={ formContent?.[inputId] || "" } 
         />
         <span className="o-input-body__unit">{unit}</span>

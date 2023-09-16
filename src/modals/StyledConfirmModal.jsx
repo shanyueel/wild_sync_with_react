@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import StyledButton from 'components/StyledButton';
 
-const ConfirmModal = ({className, title, content, isConfirmModalOpen, setIsConfirmModalOpen, handleConfirmClick}) => {
+const ConfirmModal = ({className, title, children, isConfirmModalOpen, setIsConfirmModalOpen, handleConfirmClick}) => {
 
   const closeModal = () => {
     setIsConfirmModalOpen(false);
@@ -21,7 +21,7 @@ const ConfirmModal = ({className, title, content, isConfirmModalOpen, setIsConfi
       </div>
 
       <div className='l-modal__body'>
-        <p className='o-modal__content'>{content}</p>
+        <div className='o-modal__content'>{children}</div>
         <div className='l-modal__controls'>
           <StyledButton onClick={closeModal}>取消</StyledButton>
           <StyledButton alert onClick={handleConfirmClick}>確認</StyledButton>
@@ -38,7 +38,7 @@ const StyledConfirmModal = styled(ConfirmModal)`
   left: 50%;
   width: 65vw;
   max-width: 320px;
-  height: 25vh;
+  height: fit-content;
   transform: translate(-50%,-50%);
 
   .l-modal__body{
@@ -46,9 +46,13 @@ const StyledConfirmModal = styled(ConfirmModal)`
     flex-direction: column;
     .o-modal__content{
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       flex-grow: 1;
+      gap: .75rem;
+      width: 75%;
+      margin: 0 auto;
       padding-top: 1rem;
     }
   }

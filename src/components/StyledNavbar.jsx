@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 
 import StyledActivityCreateModal from "modals/StyledActivityCreateModal"
@@ -27,6 +27,16 @@ const Navbar = ({ className }) => {
   const [isAccountUpdateModalOpen, setIsAccountUpdateModalOpen] = useState(false)
   const user = useSelector((state)=> state.user)
 
+  useEffect(()=>{
+    if(isActivityCreateModalOpen || isAccountUpdateModalOpen){
+      document.querySelector('body').classList.add('no-scroll')
+      document.querySelector('html').classList.add('no-scroll')
+    }else{
+      document.querySelector('body').classList.remove('no-scroll')
+      document.querySelector('html').classList.remove('no-scroll')
+    }
+  },[isActivityCreateModalOpen, isAccountUpdateModalOpen])
+
   const handleSearch = (e) => {
     e.preventDefault()
     if(searchbarRef.current.value.length === 0) return
@@ -48,15 +58,11 @@ const Navbar = ({ className }) => {
   const handleActivityCreate = () => {
     setIsActivityCreateModalOpen(true)
     navIconsRef.current[2].checked = false
-    document.querySelector('body').classList.add('no-scroll');
-    document.querySelector('html').classList.add('no-scroll');
   }
 
   const handleAccountSetting = () => {
     setIsAccountUpdateModalOpen(true)
     navIconsRef.current[2].checked = false
-    document.querySelector('body').classList.add('no-scroll');
-    document.querySelector('html').classList.add('no-scroll');
   }
   
   const handleLogin = () => {

@@ -40,7 +40,6 @@ const ActivityPage = ({ className }) => {
   const [isActivityUpdateModalOpen, setIsActivityUpdateModalOpen] = useState(false)
   const [isActivityLiked, setIsActivityLiked] = useState(false)
 
-
   useEffect(()=>{
     const setWindowSize = () => {
       setIsLargeLayout(windowSize === "large")
@@ -48,6 +47,16 @@ const ActivityPage = ({ className }) => {
     }
     setWindowSize()
   },[windowSize])
+
+  useEffect(()=>{
+    if(isActivityUpdateModalOpen){
+      document.querySelector('body').classList.add('no-scroll')
+      document.querySelector('html').classList.add('no-scroll')
+    }else{
+      document.querySelector('body').classList.remove('no-scroll')
+      document.querySelector('html').classList.remove('no-scroll')
+    }
+  },[isActivityUpdateModalOpen])
 
   useEffect(()=>{
     const setCurrentActivity = async() => {
@@ -169,8 +178,6 @@ const ActivityPage = ({ className }) => {
 
   const handleActivityUpdate = () => {
     setIsActivityUpdateModalOpen(true)
-    document.querySelector('body').classList.add('no-scroll');
-    document.querySelector('html').classList.add('no-scroll');
   }
 
   const handleActivityLiked = async() => {

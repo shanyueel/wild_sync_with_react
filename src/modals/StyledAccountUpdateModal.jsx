@@ -32,8 +32,6 @@ const AccountUpdateModal = ({className, isAccountUpdateModalOpen, setIsAccountUp
 
   const closeModal = () => {
     setIsAccountUpdateModalOpen(false);
-    document.querySelector('body').classList.remove('no-scroll');
-    document.querySelector('html').classList.remove('no-scroll');
   }
 
   const handlePasswordCheckBlur = () => {
@@ -53,7 +51,9 @@ const AccountUpdateModal = ({className, isAccountUpdateModalOpen, setIsAccountUp
     const reAuthResult = await reAuth(currentPassword)
     
     if(reAuthResult.success){
+      setIsAccountUpdateLoading(true)
       const accountUpdateResult = await accountUpdate(userId, accountContent, currentAccount)
+      setIsAccountUpdateLoading(false)
       
       if(accountUpdateResult.success){
         toast.success('更新帳戶成功', {

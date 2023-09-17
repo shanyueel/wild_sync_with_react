@@ -53,8 +53,6 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
   const closeModal = () => {
     setFormProgress(1)
     setIsActivityUpdateModalOpen(false);
-    document.querySelector('body').classList.remove('no-scroll');
-    document.querySelector('html').classList.remove('no-scroll');
   }
 
   const handleResetData = () => {
@@ -89,8 +87,6 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
       })
 
       setTimeout(()=>{
-        document.querySelector('body').classList.remove('no-scroll');
-        document.querySelector('html').classList.remove('no-scroll');
         setIsDeleteConfirmModalOpen(false)
         setIsActivityUpdateModalOpen(false)
         navigate(`/user/${userId}`)

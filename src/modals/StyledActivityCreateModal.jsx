@@ -52,8 +52,6 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
   const closeModal = async() => {
     setFormProgress(1)
     setIsActivityCreateModalOpen(false)
-    document.querySelector('body').classList.remove('no-scroll')
-    document.querySelector('html').classList.remove('no-scroll')
   }
 
   const handleClearData = async() => {
@@ -109,8 +107,6 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
         setIsActivityCreateModalOpen(false)
         setFormProgress(1)
         setActivityContent({})
-        document.querySelector('body').classList.remove('no-scroll');
-        document.querySelector('html').classList.remove('no-scroll');
         navigate(`activity/${activityId}`)
       }, 1500)
     }else{

@@ -1,13 +1,22 @@
 import styled, { css } from "styled-components";
+import { useEffect, useRef, useState } from "react";
 
 import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
 import {ReactComponent as UploadIcon} from "assets/icons/UploadIcon.svg"
-import { useRef, useState } from "react";
 
 const ImageInput = ({ className, title, inputId, defaultImgURL, formContent, onFormChange, warning, coverUsed, avatarUsed, activityMapUsed }) => {
   const uploadButtonRef = useRef(null)
   const displayImageRef = useRef(null)
-  const [imgSrc, setImgSrc] = useState(formContent[inputId] || defaultImgURL)
+  const [imgSrc, setImgSrc] = useState(formContent?.[inputId] || defaultImgURL)
+  const [warningContent, setWarningContent] = useState(warning)
+
+  useEffect(()=>{
+    setWarningContent(warning)
+  },[warning])
+
+  useEffect(()=>{
+    setImgSrc(formContent?.[inputId] || defaultImgURL)
+  },[formContent, inputId, defaultImgURL])
 
   const handleUpload = async () => {
     const uploadBtn = uploadButtonRef.current
@@ -38,10 +47,14 @@ const ImageInput = ({ className, title, inputId, defaultImgURL, formContent, onF
 
   return(
     <div className={className}>
-      <div className="c-input-title">
-        <label className="o-input-title__name">{title}</label>
-        <label className="o-input-title__warning">{warning}</label>
-      </div>
+      {
+        ( title || warningContent ) &&
+        <div className="c-input-title">
+          <label className="o-input-title__name">{title}</label>
+          <label className="o-input-title__warning">{warningContent}</label>
+        </div>
+      }
+
       <div className="c-input-body">
         <img 
           className="o-image-input__display" 

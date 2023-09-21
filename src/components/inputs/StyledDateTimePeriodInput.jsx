@@ -1,59 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DateTimePicker } from "@mui/x-date-pickers";
 
 const DateTimePeriodInput = ({className, title, inputId, formContent, onFormChange, warning }) => {
-  const [period,setPeriod] = useState(formContent[inputId] || {start: null, end: null})
+  const [period,setPeriod] = useState({start: null, end: null})
   const [warningContent, setWarningContent] = useState(warning)
 
-  const handleStartInput = (newDate) => {
+  useEffect(()=>{
+    setWarningContent(warning)
+  },[warning])
+  
+  useEffect(()=>{
+    setPeriod(formContent?.[inputId] || {start: null, end: null})
+  },[formContent, inputId])
+
+  const handleDateChange = (newDate, field) => {
     const newDateTimeStamp = Number(Date.parse(newDate))
+    const updatedPeriod = {...period, [field]: newDateTimeStamp}
+    const newForm = {...formContent, [inputId]: updatedPeriod}
 
-    if(period?.end && newDateTimeStamp > period?.end){
-      setWarningContent("開始時間不可在結束時間之後")
-      const newPeriod = {start:null, end:period?.end}
-      setPeriod(newPeriod)
-      return
-    }else{
-      setWarningContent("")
-      const newPeriod = {start:newDateTimeStamp, end:period?.end}
-      const newForm = {
-        ...formContent,
-        [inputId]: newPeriod
-      }
-      setPeriod(newPeriod)
-      onFormChange(newForm)
+    if(field === 'start' && updatedPeriod.end && newDateTimeStamp > updatedPeriod.end) {
+      setWarningContent('開始時間不可在結束時間之後')
+      updatedPeriod.start = null
+    } else if (field === 'end' && updatedPeriod.start && newDateTimeStamp < updatedPeriod.start) {
+      setWarningContent('結束時間不可在開始時間之前')
+      updatedPeriod.end = null
+    } else{
+      setWarningContent('')
     }
-  }
 
-  const handleEndInput = (newDate) => {
-    const newDateTimeStamp = Number(Date.parse(newDate))
-
-    if(period?.start && newDateTimeStamp < period?.start){
-     setWarningContent("結束時間不可在開始時間之前")
-      const newPeriod = { start:period?.start, end: null }
-      const newForm = {
-        ...formContent,
-        [inputId]: newPeriod
-      }
-      setPeriod(newPeriod)
-      onFormChange(newForm)
-      return
-    }else{
-      setWarningContent("")
-      const newPeriod = { start: period?.start, end: newDateTimeStamp}
-      const newForm = {
-        ...formContent,
-        [inputId]: newPeriod
-      }
-      setPeriod(newPeriod)
-      onFormChange(newForm)
-    }
+    setPeriod(updatedPeriod)
+    onFormChange(newForm)
   }
 
   return(
     <div className={className}>
-      {title &&
+      {
+        (title || warningContent) &&
         <div className="c-input-title">
           <label className="o-input-title__name">{title}</label>
           <label className="o-input-title__warning">{warningContent}</label>
@@ -63,18 +46,18 @@ const DateTimePeriodInput = ({className, title, inputId, formContent, onFormChan
         <DateTimePicker
           className="c-input-body__date-picker"
           disablePast
-          maxDate={period?.end}
-          value={period?.start} 
-          onChange={handleStartInput}
+          maxDate={period.end}
+          value={period.start} 
+          onChange={(newDate) => handleDateChange(newDate, 'start')}
         />
         <div className="o-input-body__connect-line">-</div>
         
         <DateTimePicker 
           className="c-input-body__date-picker" 
           disablePast
-          minDate={period?.start}
-          value={period?.start} 
-          onChange={handleEndInput}
+          minDate={period.start}
+          value={period.end} 
+          onChange={(newDate) => handleDateChange(newDate, 'end')}
         />
       </div>
     </div>

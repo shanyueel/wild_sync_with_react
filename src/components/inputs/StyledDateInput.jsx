@@ -1,10 +1,16 @@
-import { DatePicker } from "@mui/x-date-pickers";
-import { useState } from "react";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
 
-const DateInput = ({className, title, inputId, formContent, onFormChange, disablePast, disableFuture, warningContent }) => {
+import { DatePicker } from "@mui/x-date-pickers";
+
+const DateInput = ({className, title, inputId, formContent, onFormChange, disablePast, disableFuture, warning }) => {
   const [date, setDate] = useState(formContent?.[inputId] || null)
+  const [warningContent, setWarningContent] = useState(warning)
   
+  useEffect(()=>{
+    setWarningContent(warning)
+  },[warning])
+
   const handleDateInput = (newDate) => {
     const newDateString = Date.parse(newDate)
 
@@ -18,7 +24,7 @@ const DateInput = ({className, title, inputId, formContent, onFormChange, disabl
 
   return(
     <div className={className}>
-      {title &&
+      {( title || warningContent ) &&
         <div className="c-input-title">
           <label className="o-input-title__name">{title}</label>
           <label className="o-input-title__warning">{warningContent}</label>

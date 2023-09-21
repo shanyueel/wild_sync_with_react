@@ -2,37 +2,36 @@ import { useEffect, useRef, useState } from "react"
 import clsx from "clsx"
 import styled,{css} from "styled-components"
 
-const TextInput = ({ className, title, placeholder, unit, inputId, formContent, onFormChange, onBlur, wordLimit, warning, password, numberUsed }) => {
+const TextInput = ({ className, title, placeholder, inputId, formContent, onFormChange, onBlur, wordLimit, warning, password }) => {
   const [warningContent, setWarningContent] = useState(warning) 
-  const textRef = useRef(null)
-  const handleTextInput = () => {
-    const newForm = {
-      ...formContent,
-      [inputId]: textRef?.current?.value
-    }
-    onFormChange(newForm)
-  }
+  const [textCount, setTextCount] = useState(formContent?.[inputId]?.length || 0)
+  const textRef = useRef("")
 
   useEffect(()=>{
     setWarningContent(warning)
   },[warning])
 
-  useEffect(()=>{
-    if(wordLimit && textRef?.current?.value?.length > wordLimit){
-      setWarningContent(`超過字數上限: ${wordLimit}字`)
-      const newForm = {
-        ...formContent,
-        [inputId]: textRef?.current?.value?.slice(0, wordLimit)
-      }
+  const handleInputChange = () => {
+    const inputValue = textRef?.current?.value
+    setTextCount(inputValue?.length)
+
+    if(inputValue?.length === 0){
+      const newForm = {...formContent}
+      delete newForm[inputId]
       onFormChange(newForm)
-    }else{
-      setWarningContent("")
     }
-  },[wordLimit, textRef?.current?.value])
+
+    const newForm = {
+      ...formContent,
+      [inputId]: inputValue
+    }
+    onFormChange(newForm)
+  }
 
   return(
     <div className={className}>
-      {title && 
+      {
+        ( title || warningContent ) && 
         <div className="c-input-title">
           <label className="o-input-title__name">{title}</label>
           <label className="o-input-title__warning">{warningContent}</label>
@@ -42,13 +41,14 @@ const TextInput = ({ className, title, placeholder, unit, inputId, formContent, 
         <input 
           id={inputId}
           ref={textRef}
-          type={clsx({password:password},{text:!password && !numberUsed},{number:numberUsed})} 
+          type={clsx({password:password},{text:!password})} 
           placeholder={placeholder} 
-          onChange={ handleTextInput } 
+          onChange={ handleInputChange } 
           onBlur={onBlur}
           value={ formContent?.[inputId] || "" } 
+          maxLength={wordLimit}
         />
-        <span className="o-input-body__unit">{unit}</span>
+        <span className="o-input-body__count">{`${textCount} / ${wordLimit}`}</span>
       </div>
     </div>
   )
@@ -60,23 +60,29 @@ const StyledTextInput = styled(TextInput)`
   width: 100%;
   
   .c-input-body{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .5rem;
-
-    .o-input-body__unit{
-      display: none;
-
-      ${props=> props.unit && css`
-        display: block;
-        color: ${({theme})=>theme.color.default};
-        font-weight: 700;
-        white-space: nowrap;
-      `}
-    }
-
+    position: relative;
   }
+
+  .o-input-body__count{
+    display: none;
+  }
+
+  ${props=>props.wordLimit && css`
+
+    input:focus{
+      padding-right: 3.25rem;
+
+      & ~ .o-input-body__count{
+        position: absolute;
+        top: 50%;
+        right: .75rem;
+        display: block;
+        font-size: .75rem;
+        color: ${({theme})=>theme.color.grey};
+        transform: translate(0,-50%);
+      }
+    }
+  `}
 
 `
 

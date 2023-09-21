@@ -1,8 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import styled from "styled-components";
+import { doc } from 'firebase/firestore';
 
-import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
+import { getRandomId, postActivity } from 'api/activityApi';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
+import { uploadImage } from 'api/storageApi';
+import { firestoreDB } from 'api/firebaseConfig';
 
 import StyledButton from 'components/StyledButton';
 import StyledActivityCreateStepOne from 'components/formSteps/StyledActivityCreateStepOne';
@@ -10,44 +16,20 @@ import StyledActivityCreateStepTwo from 'components/formSteps/StyledActivityCrea
 import StyledActivityCreateStepThree from 'components/formSteps/StyledActivityCreateStepThree';
 import StyledActivityCreateStepFour from 'components/formSteps/StyledActivityCreateStepFour';
 import StyledActivityCreateStepFive from 'components/formSteps/StyledActivityCreateStepFive';
-import { getRandomId, postActivity } from 'api/activityApi';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
-import { uploadImage } from 'api/storageApi';
-import { doc } from 'firebase/firestore';
-import { firestoreDB } from 'api/firebaseConfig';
+import StyledActivityCreateStepDisplay from 'components/formSteps/StyledActivityCreateStepDisplay';
+import StyledLoading from 'components/StyledLoading';
+
+import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
 
 const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivityCreateModalOpen}) => {
   const navigate = useNavigate()
-  const stepsRef = useRef(null)
+  const missingError = "*此欄位不可為空白"
+  const user = useSelector(state => state.user)
+  const userId = user.uid
   const [activityContent, setActivityContent] = useState({})
   const [formProgress, setFormProgress] = useState(1)
-  const user = useSelector(state => state.user)
-  const uid = user.uid
-
-  useEffect(()=>{
-    const adjustStepDisplay = (currentFormProgress) => {
-      const steps = stepsRef?.current
-
-      let doneSteps = [0,1,2,3,4].slice(0,currentFormProgress-1)
-      let activeStep = currentFormProgress - 1
-      let undoneSteps = [0,1,2,3,4].slice(currentFormProgress,5)
-
-      doneSteps.forEach((doneStep)=>{
-        steps?.children[doneStep]?.firstElementChild?.classList.remove("active")
-        steps?.children[doneStep]?.firstElementChild?.classList.add("done")
-      })
-
-      steps?.children[activeStep]?.firstElementChild?.classList.remove("done")
-      steps?.children[activeStep]?.firstElementChild?.classList.add("active")
-
-      undoneSteps.forEach((undoneStep)=>{
-        steps?.children[undoneStep]?.firstElementChild?.classList.remove("done","active")
-      })
-    }
-    adjustStepDisplay(formProgress)
-  },[formProgress])
+  const [formErrors, setFormErrors] = useState({})
+  const [isActivityCreateLoading, setIsActivityCreateLoading] = useState(false)
 
   const closeModal = async() => {
     setFormProgress(1)
@@ -56,74 +38,201 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
   const handleClearData = async() => {
     setActivityContent({})
+    setFormErrors({})
+    setFormProgress(1)
   }
 
   const handlePreviousPageClick = () => {
     setFormProgress(formProgress - 1)
   }
 
-  const handleNextPageClick = () => {
-    setFormProgress(formProgress + 1)
-    console.log( activityContent)
+  const handleNextPageClick = async() => {
+    if(formProgress === 1){
+      const isStepOneComplete =
+        activityContent?.coverURL &&
+        activityContent?.name &&
+        activityContent?.type &&
+        activityContent?.location &&
+        activityContent?.time
+
+      const newFormErrors = {}
+      if(!activityContent?.coverURL) newFormErrors.coverURL = missingError
+      if(!activityContent?.name) newFormErrors.name = missingError
+      if(!activityContent?.type) newFormErrors.type = missingError
+      if(!activityContent?.location) newFormErrors.location = missingError
+      if(!activityContent?.time?.start || !activityContent?.time?.end) newFormErrors.time = missingError
+      setFormErrors(newFormErrors)
+
+      if(isStepOneComplete) setFormProgress(formProgress + 1)
+    }
+
+    if(formProgress === 2){
+      const isStepTwoComplete =
+        activityContent?.difficulty &&
+        activityContent?.activityTimeLength &&
+        activityContent?.cost &&
+        activityContent?.attendanceLimit &&
+        activityContent?.deadline &&
+        activityContent?.introduction
+
+      const newFormErrors = {}
+      if(!activityContent?.difficulty) newFormErrors.difficulty = missingError
+      if(!activityContent?.activityTimeLength) newFormErrors.activityTimeLength = missingError
+      if(!activityContent?.cost) newFormErrors.cost = missingError
+      if(!activityContent?.attendanceLimit) newFormErrors.attendanceLimit = missingError
+      if(!activityContent?.deadline) newFormErrors.deadline = missingError
+      if(!activityContent?.introduction) newFormErrors.introduction = missingError
+      setFormErrors(newFormErrors)
+
+      if(isStepTwoComplete) setFormProgress(formProgress + 1)
+    }
+
+    if(formProgress === 3){
+      const isStepThreeComplete = activityContent.detail.trackType === "one-way"
+      
+        ? activityContent?.detail?.departurePoint &&
+          activityContent?.detail?.trackType &&
+          activityContent?.detail?.exitPoint &&
+          activityContent?.detail?.trackLength &&
+          activityContent?.detail?.altitude &&
+          activityContent?.detail?.trackCondition &&
+          activityContent?.detail?.belongingPark &&
+          activityContent?.detail?.applicationNeeded &&
+          activityContent?.detail?.trackIntroduction &&
+          activityContent?.detail?.mapURL
+
+        : activityContent?.detail?.departurePoint &&
+          activityContent?.detail?.trackType &&
+          activityContent?.detail?.trackLength &&
+          activityContent?.detail?.altitude &&
+          activityContent?.detail?.trackCondition &&
+          activityContent?.detail?.belongingPark &&
+          activityContent?.detail?.applicationNeeded &&
+          activityContent?.detail?.trackIntroduction &&
+          activityContent?.detail?.mapURL
+
+      const newFormErrors = {}
+      if(!activityContent?.detail?.departurePoint) newFormErrors.departurePoint = missingError
+      if(!activityContent?.detail?.trackType) newFormErrors.trackType = missingError
+      if(!activityContent?.detail?.exitPoint) newFormErrors.exitPoint = missingError
+      if(!activityContent?.detail?.trackLength) newFormErrors.trackLength = missingError
+      if(!activityContent?.detail?.altitude) newFormErrors.altitude = missingError
+      if(!activityContent?.detail?.trackCondition) newFormErrors.trackCondition = missingError
+      if(!activityContent?.detail?.belongingPark) newFormErrors.belongingPark = missingError
+      if(!activityContent?.detail?.applicationNeeded) newFormErrors.applicationNeeded = missingError
+      if(!activityContent?.detail?.trackIntroduction) newFormErrors.trackIntroduction = missingError
+      if(!activityContent?.detail?.mapURL) newFormErrors.mapURL = missingError
+      setFormErrors(newFormErrors)
+
+      if(isStepThreeComplete) setFormProgress(formProgress + 1)
+    }
+
+    if(formProgress === 4){
+      let isStepFourComplete =  
+        activityContent?.transportation?.outbound &&
+        activityContent?.transportation?.inbound 
+
+      const accommodation = activityContent.accommodation
+
+      for(let i = 0; i < accommodation.length; i++){
+        const currentAccommodation = accommodation[i]
+
+        const isCurrentAccommodationComplete = 
+        currentAccommodation.date &&
+        currentAccommodation.name &&
+        currentAccommodation.address &&
+        currentAccommodation.roomDetail &&
+        currentAccommodation.notes
+
+        isStepFourComplete = isStepFourComplete && isCurrentAccommodationComplete 
+      }
+
+      const newFormErrors = {}
+      if(!activityContent?.transportation?.outbound) newFormErrors.outbound = missingError
+      if(!activityContent?.transportation?.inbound) newFormErrors.inbound = missingError
+
+      if (!newFormErrors.accommodation) newFormErrors.accommodation = []
+      for(let i = 0; i < accommodation.length; i++){
+        const currentAccommodation = accommodation[i]
+
+        newFormErrors.accommodation[i] = {};
+        if(!currentAccommodation?.date) newFormErrors.accommodation[i].date= missingError
+        if(!currentAccommodation?.name) newFormErrors.accommodation[i].name = missingError
+        if(!currentAccommodation?.address) newFormErrors.accommodation[i].address = missingError
+        if(!currentAccommodation?.roomDetail) newFormErrors.accommodation[i].roomDetail = missingError
+        if(!currentAccommodation?.notes) newFormErrors.accommodation[i].notes = missingError
+      }
+
+      setFormErrors(newFormErrors)
+      if(isStepFourComplete) setFormProgress(formProgress + 1)
+    }
   }
 
   const handleActivityCreate = async() => {
-    const activityId = await getRandomId()
-    let updateCoverURL = null
-    let updateMapURL = null
+    const isStepFiveComplete = activityContent?.detail?.schedule
 
-    if(activityContent?.coverURLFile) updateCoverURL = await uploadImage("activities-covers",`${activityId}-cover`, activityContent?.coverURLFile)
-    if(activityContent?.detail?.mapURLFile) updateMapURL = await uploadImage("activities-maps", `${activityId}-map`, activityContent?.detail?.mapURLFile)
-    
-    delete activityContent?.coverURLFile
-    delete activityContent?.detail?.mapURLFile
-    URL.revokeObjectURL(activityContent?.coverURL)
-    URL.revokeObjectURL(activityContent?.detail?.mapURL)
+    const newFormErrors = {}
+    if(!activityContent?.detail?.schedule) newFormErrors.schedule = missingError
+    setFormErrors(newFormErrors)
 
-    const createActivityContent = {
-      ...activityContent,
-      coverURL: updateCoverURL,
-      detail:{
-        ...activityContent?.detail,
-        mapURL: updateMapURL,
+    if(isStepFiveComplete) {
+      setIsActivityCreateLoading(true)
+      const activityId = await getRandomId()
+      let updateCoverURL = null
+      let updateMapURL = null
+
+      if(activityContent?.coverURLFile) updateCoverURL = await uploadImage("activities-covers",`${activityId}-cover`, activityContent?.coverURLFile)
+      if(activityContent?.detail?.mapURLFile) updateMapURL = await uploadImage("activities-maps", `${activityId}-map`, activityContent?.detail?.mapURLFile)
+      
+      delete activityContent?.coverURLFile
+      delete activityContent?.detail?.mapURLFile
+      URL.revokeObjectURL(activityContent?.coverURL)
+      URL.revokeObjectURL(activityContent?.detail?.mapURL)
+
+      const createActivityContent = {
+        ...activityContent,
+        coverURL: updateCoverURL,
+        detail:{
+          ...activityContent?.detail,
+          mapURL: updateMapURL,
+        }
+      }
+
+      const { success } = await postActivity(activityId, doc(firestoreDB, "users", `${userId}`), createActivityContent)
+      setIsActivityCreateLoading(false)
+      
+      if(success){
+        setIsActivityCreateModalOpen(false)
+        setFormProgress(1)
+        setFormErrors({})
+        setActivityContent({})
+        navigate(`activity/${activityId}`)
+        toast.success('建立活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        setFormProgress(1)
+        toast.error('建立活動失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
       }
     }
 
 
-    const { success } = await postActivity(activityId, doc(firestoreDB, "users", `${uid}`), createActivityContent)
-
-    if(success){
-      toast.success('建立活動成功', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      setTimeout(()=>{
-        setIsActivityCreateModalOpen(false)
-        setFormProgress(1)
-        setActivityContent({})
-        navigate(`activity/${activityId}`)
-      }, 1500)
-    }else{
-      toast.error('建立活動失敗', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      setTimeout(()=>{
-        setFormProgress(1)
-      }, 1500)
-    }
   }
   
   return(
@@ -141,55 +250,63 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
       <div className='l-modal__body'>
 
-        <div className='l-activity-create__steps' ref={stepsRef}>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle active'></div>
-            <h3 className='o-activity-create__step-title' >基本資訊</h3>
-          </div>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle'></div>
-            <h3 className='o-activity-create__step-title'>重點簡介</h3>
-          </div>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle'></div>
-            <h3 className='o-activity-create__step-title'>活動細節</h3>
-          </div>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle'></div>
-            <h3 className='o-activity-create__step-title'>交通住宿</h3>
-          </div>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle'></div>
-            <h3 className='o-activity-create__step-title'>其他補充</h3>
-          </div>
-        </div>
+        <StyledActivityCreateStepDisplay formProgress={formProgress}/>
 
         <form className='l-modal__form-container'>
-          {formProgress === 1 &&
-            <StyledActivityCreateStepOne formContent={activityContent} onFormChange={setActivityContent} />
+          {
+            (formProgress === 1 && !isActivityCreateLoading) &&
+            <StyledActivityCreateStepOne 
+              formContent={activityContent} 
+              onFormChange={setActivityContent}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
           }
-          {formProgress === 2 && 
-            <StyledActivityCreateStepTwo formContent={activityContent} onFormChange={setActivityContent} />
+          {
+            (formProgress === 2 && !isActivityCreateLoading) &&
+            <StyledActivityCreateStepTwo 
+              formContent={activityContent} 
+              onFormChange={setActivityContent} 
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
           }
-          {formProgress === 3 &&
-            <StyledActivityCreateStepThree formContent={activityContent} onFormChange={setActivityContent} />
+          {
+            (formProgress === 3 && !isActivityCreateLoading) &&
+            <StyledActivityCreateStepThree 
+              formContent={activityContent} 
+              onFormChange={setActivityContent}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
           }
-          {formProgress === 4 &&
-            <StyledActivityCreateStepFour formContent={activityContent} onFormChange={setActivityContent} />
+          {
+            (formProgress === 4 && !isActivityCreateLoading) &&
+            <StyledActivityCreateStepFour 
+              formContent={activityContent} 
+              onFormChange={setActivityContent} 
+              formErrors={formErrors}
+              setFormErrors={setFormErrors} 
+            />
           }
-          {formProgress === 5 &&
-            <StyledActivityCreateStepFive formContent={activityContent} onFormChange={setActivityContent} />
+          {
+            (formProgress === 5 && !isActivityCreateLoading) &&
+            <StyledActivityCreateStepFive 
+              formContent={activityContent} 
+              onFormChange={setActivityContent} 
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
           }
+          { isActivityCreateLoading && <StyledLoading className="o-activity-create__loading" title="活動建立中"/> }
         </form>
 
         <div className='c-activity-create__pagination'>
-          {formProgress === 1 ? 
-            <StyledButton disabled >前一頁</StyledButton>
-            :<StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
-          }
-          {formProgress < 5 ?
-            <StyledButton onClick={handleNextPageClick} >下一頁</StyledButton>
-            :<StyledButton onClick={handleActivityCreate} >建立活動</StyledButton>
+          {formProgress !== 1 && !isActivityCreateLoading && <StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>}
+          {
+            formProgress < 5  && !isActivityCreateLoading
+            ? <StyledButton onClick={handleNextPageClick} >下一頁</StyledButton>
+            : <StyledButton onClick={handleActivityCreate} >建立活動</StyledButton>
           }
         </div>
       </div>
@@ -200,77 +317,9 @@ const ActivityCreateModal = ({className, isActivityCreateModalOpen, setIsActivit
 
 const StyledActivityCreateModal = styled(ActivityCreateModal)`
   .l-modal__body{
-    .l-activity-create__steps {
-      display: flex;
-      justify-content: space-between;
-      padding: .75rem 0;
-      border-bottom: 1px solid #ADADAD;
-
-      .c-activity-create__step {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex-grow: 1;
-        counter-increment: step-counter;
-
-        &::after {
-          content: "";
-          position: absolute;
-          top: 1rem;
-          left: calc(50% + 1.5rem);
-          right: calc(-50% + 1.5rem);
-          height: 2px;
-          background-color: #3F6F41;
-        }
-
-          &:last-child::after {
-            display: none;
-          }
-
-      .o-activity-create__step-circle {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 1.75rem;
-        height: 1.75rem;
-        border-radius: 50%;
-        border: 2px solid #3F6F41;
-        background-color: white;
-
-        &::before {
-          content: counter(step-counter);
-          color: #3F6F41;
-          font-weight: 700;
-        }
-
-        &.done {
-          background-color: #3F6F41;
-
-          ::before {
-            content: "✔";
-            color: white;
-          }
-        }
-
-        &.active {
-          background-color: #3F6F41;
-
-          ::before {
-            color: white;
-          }
-        }
-      }
-
-      .o-activity-create__step-title {
-        font-size: .75rem;
-        margin-top: .25rem;
-        color: #3F6F41;
-      }
-    }
-  }
-
     .l-modal__form-container{
+      display: flex;
+      flex-direction: column;
       width: 100%;
       height: calc(100% - 9rem);
       margin: .75rem 0;
@@ -285,8 +334,12 @@ const StyledActivityCreateModal = styled(ActivityCreateModal)`
       .c-activity-create__altitude{
        input{
         width: 40%;
-
        }
+      }
+
+      .o-activity-create__loading{
+        margin: auto 0;
+        justify-self: center;
       }
     }
 

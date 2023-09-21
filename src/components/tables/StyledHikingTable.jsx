@@ -9,8 +9,9 @@ import StyledRangeInput from "../inputs/StyledRangeInput"
 import StyledTextArea from "../inputs/StyledTextArea"
 import StyledImageInput from "../inputs/StyledImageInput"
 import StyledLocationInput from "../inputs/StyledLocationInput"
+import StyledNumberInput from "components/inputs/StyledNumberInput"
 
-const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
+const HikingTable = ({className, inputUsed, detailContent, onDetailChange, formErrors}) => {
   const defaultImageURL = require('data/defaultImageURL.json')
   const hikingTrackTypeOptions = require('data/hikingTrackTypeOptions.json')
   const hikingApplicationNeededOptions = require('data/hikingApplicationNeededOptions.json')
@@ -27,6 +28,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               inputId="departurePoint" 
               formContent={detailContent} 
               onFormChange={onDetailChange}
+              warning={formErrors?.departurePoint}
               />
               :displayLocation(detailContent?.departurePoint)
             }
@@ -41,6 +43,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               radioOptions={hikingTrackTypeOptions}
               formContent={detailContent} 
               onFormChange={onDetailChange}
+              warning={formErrors?.trackType}
               />
             }
             {(!inputUsed && detailContent?.trackType === "round") && "環狀路線"}
@@ -58,10 +61,11 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
                 <StyledLocationInput
                   detailed
                   inputId="exitPoint" 
-                  formContent={detailContent} 
+                  formContent={detailContent}
                   onFormChange={onDetailChange}
+                  warning={formErrors?.exitPoint}
                 />
-                :detailContent?.exitPoint
+                :displayLocation(detailContent?.exitPoint)
                 }
               </td>
             </tr>
@@ -71,13 +75,14 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
           <td className={clsx("c-table-key",{inputUsed: inputUsed})}>路徑長度</td>
           <td className="c-table-content">
             {inputUsed?
-              <StyledTextInput
-              numberUsed
-              placeholder="路徑長度" 
-              inputId="trackLength"
-              unit="公里" 
-              formContent={detailContent} 
-              onFormChange={onDetailChange}
+              <StyledNumberInput
+                placeholder="路徑長度" 
+                inputId="trackLength"
+                unit="公里" 
+                minLimit={0}
+                formContent={detailContent} 
+                onFormChange={onDetailChange}
+                warning={formErrors?.trackLength}
               />
               :`${detailContent?.trackLength} 公里`
             }
@@ -94,6 +99,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
                 unit="m" 
                 formContent={detailContent} 
                 onFormChange={onDetailChange}
+                warning={formErrors?.altitude}
               />
               :`${detailContent?.altitude?.min} - ${detailContent?.altitude?.max} m`
             }
@@ -104,10 +110,12 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
           <td className="c-table-content">
             {inputUsed?
               <StyledTextInput
-              placeholder="路徑主類 (石階 / 泥土 / 拉繩)" 
-              inputId="trackCondition"
-              formContent={detailContent} 
-              onFormChange={onDetailChange}
+                placeholder="路徑主類 (石階 / 泥土 / 拉繩)" 
+                inputId="trackCondition"
+                wordLimit={20}
+                formContent={detailContent} 
+                onFormChange={onDetailChange}
+                warning={formErrors?.trackCondition}
               />
               :detailContent?.trackCondition
             }
@@ -120,8 +128,10 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               <StyledTextInput
               placeholder="所屬園區( 若沒有，可填無 )"
               inputId="belongingPark"
+              wordLimit={20}
               formContent={detailContent} 
               onFormChange={onDetailChange}
+              warning={formErrors?.belongingPark}
               />
               :detailContent?.belongingPark
             }
@@ -136,6 +146,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
               radioOptions={hikingApplicationNeededOptions}
               formContent={detailContent} 
               onFormChange={onDetailChange}
+              warning={formErrors?.applicationNeeded}
               />
             }
             {(!inputUsed && detailContent?.applicationNeeded === "needed") && "需要"}
@@ -150,9 +161,11 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
             {inputUsed?
               <StyledTextArea
                 placeholder="請輸入路線資訊" 
-                inputId="trackIntroduction" 
+                inputId="trackIntroduction"
+                wordLimit={150}
                 formContent={detailContent}
                 onFormChange={onDetailChange}
+                warning={formErrors?.trackIntroduction}
               />
               :detailContent?.trackIntroduction
             }
@@ -170,6 +183,7 @@ const HikingTable = ({className, inputUsed, detailContent, onDetailChange}) => {
                 defaultImgURL={defaultImageURL.activityMap} 
                 formContent={detailContent} 
                 onFormChange={onDetailChange}
+                warning={formErrors?.mapURL}
               />
               :<img className="o-hiking-table__image" src={detailContent?.mapURL || defaultImageURL.activityMap} alt="hiking map"/>
             }

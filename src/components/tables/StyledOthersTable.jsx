@@ -1,7 +1,8 @@
 import styled from "styled-components"
+
 import StyledTextArea from "../inputs/StyledTextArea"
 
-const OthersTable = ({className, inputUsed, detailContent, onDetailChange }) => {
+const OthersTable = ({className, inputUsed, detailContent, onDetailChange, formErrors }) => {
 
   return(
     <>
@@ -16,8 +17,10 @@ const OthersTable = ({className, inputUsed, detailContent, onDetailChange }) => 
                   <StyledTextArea
                     placeholder="請輸入行程細節" 
                     inputId="schedule" 
+                    wordLimit={500}
                     formContent={detailContent}
                     onFormChange={onDetailChange}
+                    warning={formErrors?.schedule}
                   />
                   :detailContent?.schedule
                 }
@@ -30,8 +33,9 @@ const OthersTable = ({className, inputUsed, detailContent, onDetailChange }) => 
               <td className="o-activity-table__content">
                 {inputUsed?
                     <StyledTextArea
-                      placeholder="請輸入備註(若有需要)" 
+                      placeholder="請輸入備註(非必填)" 
                       inputId="notes" 
+                      wordLimit={250}
                       formContent={detailContent}
                       onFormChange={onDetailChange}
                     />

@@ -253,7 +253,7 @@ export const postActivity = async( activityId, holderReference, activityContent 
     }
 
     await setDoc(doc(firestoreDB, "activities", `${activityId}`), mainActivityContent)   
-    await updateDoc(doc(firestoreDB, "users", `${holder?.uid}-user`),{
+    await updateDoc(doc(firestoreDB, "users", `${holder?.uid}`),{
       heldActivities: [...holder?.heldActivities, activityId]
     })
 

@@ -8,7 +8,7 @@ import StyledUserCard from "components/StyledUserCard";
 import {ReactComponent as GroupIcon} from "assets/icons/GroupIcon.svg"
 import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
 
-const ActivityAttendance = ({className, holder, attendance, isLargeLayout}) => {
+const ActivityAttendance = ({className, activity, setActivity, isHolder, holder, attendance, isLargeLayout}) => {
   const [attendanceList, setAttendanceList]= useState([])
 
   useEffect(()=>{
@@ -30,20 +30,29 @@ const ActivityAttendance = ({className, holder, attendance, isLargeLayout}) => {
       }
 
       <div className="l-activity-attendance">
-        <div className="l-activity-discussion__header">
+        <div className="l-activity-attendance__header">
           { !isLargeLayout && <label htmlFor="activity-attendance"><ReturnIcon className="o-activity-discussion__return-icon"/></label> }
-          <h2 className="o-activity-discussion__title">活動參加者</h2>
+          <h2 className="o-activity-attendance__title">活動參加者</h2>
         </div>
-        <div className="l-activity-discussion__body scrollbar">
-          <StyledUserCard listItem isHolder user={holder} />
-          { attendanceList && attendanceList?.map(user => <StyledUserCard key={user?.uid} listItem user={user} /> ) }
+        <div className="l-activity-attendance__body scrollbar">
+          <StyledUserCard listItem holderUsed user={holder}/>
+          { 
+            attendanceList && attendanceList?.map(user => 
+              <StyledUserCard 
+                key={user?.uid} 
+                listItem 
+                activity={activity} 
+                setActivity={setActivity} 
+                user={user} 
+                isHolder={isHolder} 
+              /> 
+            ) 
+          }
         </div>
       </div>
     </div>
   )
 }
-
-
 
 const StyledActivityAttendance = styled(ActivityAttendance)`
   width: 100%;
@@ -100,7 +109,7 @@ const StyledActivityAttendance = styled(ActivityAttendance)`
     padding: 1rem 1rem 3rem;
     z-index: 1;
 
-    .l-activity-discussion__header{
+    .l-activity-attendance__header{
       display: flex;
 
       .o-activity-discussion__return-icon{
@@ -109,14 +118,14 @@ const StyledActivityAttendance = styled(ActivityAttendance)`
         cursor: pointer;
       }
 
-      .o-activity-discussion__title{
+      .o-activity-attendance__title{
         color: ${({theme})=> theme.color.default};
         font-weight: 700;
         margin-left: .5rem;
       }
     }
 
-    .l-activity-discussion__body{
+    .l-activity-attendance__body{
       display: flex;
       flex-direction: column;
       flex-grow: 1;
@@ -136,7 +145,7 @@ const StyledActivityAttendance = styled(ActivityAttendance)`
       position: static;
       height: calc(100vh - 10rem);
 
-      .l-activity-discussion__body{
+      .l-activity-attendance__body{
         margin: 1rem 0 0;
       }
     }

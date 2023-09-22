@@ -351,8 +351,32 @@ export const alterActivityAttendance = async(userId, activityId) => {
       return {success: true, notes: ""}
     }
   }catch(error){
-    console.log("[加入/退出活動失敗]:", error)
+    console.error("[加入/退出活動失敗]:", error)
     return {success: false}
+  }
+}
+
+export const removeAttendance = async(activity, removeAttendanceId ) => {
+  try{
+    const activityId = activity?.id
+    const userRef = await getUser(removeAttendanceId)
+    const oldAttendance = activity?.attendance
+    const newAttendance = oldAttendance?.filter(attendance=> attendance !== removeAttendanceId)
+    const oldAttendedActivities = userRef?.attendedActivities
+    const newAttendedActivities = oldAttendedActivities?.filter(attendedActivity=> attendedActivity !== activityId)
+
+    await updateDoc(doc(firestoreDB,"activities", activityId),{
+      attendance: newAttendance
+    })
+    await updateDoc(doc(firestoreDB, "users", removeAttendanceId),{
+      attendedActivities: newAttendedActivities
+    })
+    
+    console.log("[移除參與者成功]:",removeAttendanceId)
+    return {success:true, newAttendance: newAttendance}
+  }catch(error){
+    console.error("[移除參與者失敗]:",error)
+    return {success:false}
   }
 }
 

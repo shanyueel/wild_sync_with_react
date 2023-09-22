@@ -21,6 +21,7 @@ import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 
+const defaultImageURL = require('data/defaultImageURL.json')
 
 const ActivityPage = ({ className }) => {
   const navigate = useNavigate()
@@ -29,7 +30,7 @@ const ActivityPage = ({ className }) => {
   const userId = user.uid
   const windowSize = environmentParams.windowSize
   const activityId = useParams().activityId
-  const defaultImageURL = require('data/defaultImageURL.json')
+  const isHolder = user.heldActivities.includes(activityId)
   const [isLargeLayout, setIsLargeLayout] = useState(false)
   const [isMediumLayout, setIsMediumLayout] = useState(false)
   const [activity, setActivity] = useState({})
@@ -302,7 +303,17 @@ const ActivityPage = ({ className }) => {
         </div>
 
         <div className="l-web-container__side">
-          { activity && <StyledActivityAttendance holder={activity?.holder} attendance={activity?.attendance} isLargeLayout={isLargeLayout}/> }
+          { 
+            activity &&
+            <StyledActivityAttendance 
+              activity={activity}
+              setActivity={setActivity}
+              isHolder={isHolder}
+              holder={activity?.holder} 
+              attendance={activity?.attendance} 
+              isLargeLayout={isLargeLayout}
+            /> 
+          }
         </div>
       </div>
   )

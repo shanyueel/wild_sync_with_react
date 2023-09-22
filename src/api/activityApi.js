@@ -331,7 +331,7 @@ export const alterActivityAttendance = async(userId, activityId) => {
       updateDoc(doc(firestoreDB, "activities", `${activityId}`), {
         attendance : newAttendance
       })
-      updateDoc(doc(firestoreDB, "users", `${userId}-user`), {
+      updateDoc(doc(firestoreDB, "users", `${userId}`), {
         attendedActivities: newAttendedActivities
       })
       console.log("[退出活動成功]:",activityId)
@@ -344,7 +344,7 @@ export const alterActivityAttendance = async(userId, activityId) => {
       updateDoc(doc(firestoreDB, "activities", `${activityId}`), {
         attendance : newAttendance
       })
-      updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+      updateDoc(doc(firestoreDB, "users", `${userId}`),{
         attendedActivities: newAttendedActivities
       })
       console.log("[加入活動成功]:",activityId)
@@ -366,14 +366,14 @@ export const alterActivityLiked = async(userId, activityId) => {
         ...currentLikedActivities,
         activityId
       ]
-      await updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+      await updateDoc(doc(firestoreDB, "users", `${userId}`),{
         likedActivities: newLikedActivities
       })
       console.log("[收藏活動成功]:", activityId)
       return {success: true}
     }else{
       const newLikedActivities = currentLikedActivities?.filter((activity) => activity !== activityId )
-      await updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+      await updateDoc(doc(firestoreDB, "users", `${userId}`),{
         likedActivities: newLikedActivities
       })
       console.log("[取消收藏活動成功]:", activityId)

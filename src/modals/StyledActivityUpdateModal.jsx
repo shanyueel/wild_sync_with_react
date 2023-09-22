@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import styled from "styled-components";
 import { toast } from 'react-toastify';
@@ -17,38 +17,24 @@ import {ReactComponent as CrossIcon} from "assets/icons/CrossIcon.svg"
 import StyledConfirmModal from './StyledConfirmModal';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import StyledActivityCreateStepDisplay from 'components/formSteps/StyledActivityCreateStepDisplay';
+import StyledLoading from 'components/StyledLoading';
 
 const ActivityUpdateModal = ({ className, currentActivity, setActivity, activityId, isActivityUpdateModalOpen, setIsActivityUpdateModalOpen }) => {
   const navigate = useNavigate()
-  const stepsRef = useRef(null)
+  const missingError = "*此欄位不可為空白"
   const user = useSelector(state=>state.user)
   const userId = user.uid
-  const [updateContent, setUpdateContent] = useState(currentActivity)
+  const [activityContent, setActivityContent] = useState(currentActivity)
   const [formProgress, setFormProgress] = useState(1)
+  const [formErrors, setFormErrors] = useState({})
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] = useState(false)
+  const [isActivityUpdateLoading, setIsActivityUpdateLoading] = useState(false)
+  const [isActivityDeleteLoading, setIsActivityDeleteLoading] = useState(false)
 
   useEffect(()=>{
-    const adjustStepDisplay = (currentFormProgress) => {
-      const steps = stepsRef?.current
-
-      let doneSteps = [0,1,2,3,4].slice(0,currentFormProgress-1)
-      let activeStep = currentFormProgress - 1
-      let undoneSteps = [0,1,2,3,4].slice(currentFormProgress,5)
-
-      doneSteps.forEach((doneStep)=>{
-        steps?.children[doneStep]?.firstElementChild?.classList.remove("active")
-        steps?.children[doneStep]?.firstElementChild?.classList.add("done")
-      })
-
-      steps?.children[activeStep]?.firstElementChild?.classList.remove("done")
-      steps?.children[activeStep]?.firstElementChild?.classList.add("active")
-
-      undoneSteps.forEach((undoneStep)=>{
-        steps?.children[undoneStep]?.firstElementChild?.classList.remove("done","active")
-      })
-    }
-    adjustStepDisplay(formProgress)
-  },[formProgress])
+    setActivityContent(currentActivity)
+  },[currentActivity])
 
   const closeModal = () => {
     setFormProgress(1)
@@ -56,15 +42,135 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
   }
 
   const handleResetData = () => {
-    setUpdateContent(currentActivity)
+    setActivityContent(currentActivity)
+    setFormErrors({})
+    setFormProgress(1)
   }
 
   const handlePreviousPageClick = () => {
     setFormProgress(formProgress - 1)
   }
 
-  const handleNextPageClick = () => {
-    setFormProgress(formProgress + 1)
+  const handleNextPageClick = async() => {
+    if(formProgress === 1){
+      const isStepOneComplete =
+        activityContent?.coverURL &&
+        activityContent?.name &&
+        activityContent?.type &&
+        activityContent?.location &&
+        activityContent?.time
+
+      const newFormErrors = {}
+      if(!activityContent?.coverURL) newFormErrors.coverURL = missingError
+      if(!activityContent?.name) newFormErrors.name = missingError
+      if(!activityContent?.type) newFormErrors.type = missingError
+      if(!activityContent?.location) newFormErrors.location = missingError
+      if(!activityContent?.time?.start || !activityContent?.time?.end) newFormErrors.time = missingError
+      setFormErrors(newFormErrors)
+
+      if(isStepOneComplete) setFormProgress(formProgress + 1)
+    }
+
+    if(formProgress === 2){
+      const isStepTwoComplete =
+        activityContent?.difficulty &&
+        activityContent?.activityTimeLength &&
+        activityContent?.cost &&
+        activityContent?.attendanceLimit &&
+        activityContent?.deadline &&
+        activityContent?.introduction
+
+      const newFormErrors = {}
+      if(!activityContent?.difficulty) newFormErrors.difficulty = missingError
+      if(!activityContent?.activityTimeLength) newFormErrors.activityTimeLength = missingError
+      if(!activityContent?.cost) newFormErrors.cost = missingError
+      if(!activityContent?.attendanceLimit) newFormErrors.attendanceLimit = missingError
+      if(!activityContent?.deadline) newFormErrors.deadline = missingError
+      if(!activityContent?.introduction) newFormErrors.introduction = missingError
+      setFormErrors(newFormErrors)
+
+      if(isStepTwoComplete) setFormProgress(formProgress + 1)
+    }
+
+    if(formProgress === 3){
+      const isStepThreeComplete = activityContent.detail.trackType === "one-way"
+      
+        ? activityContent?.detail?.departurePoint &&
+          activityContent?.detail?.trackType &&
+          activityContent?.detail?.exitPoint &&
+          activityContent?.detail?.trackLength &&
+          activityContent?.detail?.altitude &&
+          activityContent?.detail?.trackCondition &&
+          activityContent?.detail?.belongingPark &&
+          activityContent?.detail?.applicationNeeded &&
+          activityContent?.detail?.trackIntroduction &&
+          activityContent?.detail?.mapURL
+
+        : activityContent?.detail?.departurePoint &&
+          activityContent?.detail?.trackType &&
+          activityContent?.detail?.trackLength &&
+          activityContent?.detail?.altitude &&
+          activityContent?.detail?.trackCondition &&
+          activityContent?.detail?.belongingPark &&
+          activityContent?.detail?.applicationNeeded &&
+          activityContent?.detail?.trackIntroduction &&
+          activityContent?.detail?.mapURL
+
+      const newFormErrors = {}
+      if(!activityContent?.detail?.departurePoint) newFormErrors.departurePoint = missingError
+      if(!activityContent?.detail?.trackType) newFormErrors.trackType = missingError
+      if(!activityContent?.detail?.exitPoint) newFormErrors.exitPoint = missingError
+      if(!activityContent?.detail?.trackLength) newFormErrors.trackLength = missingError
+      if(!activityContent?.detail?.altitude) newFormErrors.altitude = missingError
+      if(!activityContent?.detail?.trackCondition) newFormErrors.trackCondition = missingError
+      if(!activityContent?.detail?.belongingPark) newFormErrors.belongingPark = missingError
+      if(!activityContent?.detail?.applicationNeeded) newFormErrors.applicationNeeded = missingError
+      if(!activityContent?.detail?.trackIntroduction) newFormErrors.trackIntroduction = missingError
+      if(!activityContent?.detail?.mapURL) newFormErrors.mapURL = missingError
+      setFormErrors(newFormErrors)
+
+      if(isStepThreeComplete) setFormProgress(formProgress + 1)
+    }
+
+    if(formProgress === 4){
+      let isStepFourComplete =  
+        activityContent?.transportation?.outbound &&
+        activityContent?.transportation?.inbound 
+
+      const accommodation = activityContent.accommodation
+
+      for(let i = 0; i < accommodation.length; i++){
+        const currentAccommodation = accommodation[i]
+
+        const isCurrentAccommodationComplete = 
+        currentAccommodation.date &&
+        currentAccommodation.name &&
+        currentAccommodation.address &&
+        currentAccommodation.roomDetail &&
+        currentAccommodation.notes
+
+        isStepFourComplete = isStepFourComplete && isCurrentAccommodationComplete 
+      }
+
+      const newFormErrors = {}
+      if(!activityContent?.transportation?.outbound) newFormErrors.outbound = missingError
+      if(!activityContent?.transportation?.inbound) newFormErrors.inbound = missingError
+
+      if (!newFormErrors.accommodation) newFormErrors.accommodation = []
+      for(let i = 0; i < accommodation.length; i++){
+        const currentAccommodation = accommodation[i]
+
+        newFormErrors.accommodation[i] = {};
+        if(!currentAccommodation?.date) newFormErrors.accommodation[i].date= missingError
+        if(!currentAccommodation?.name) newFormErrors.accommodation[i].name = missingError
+        if(!currentAccommodation?.address) newFormErrors.accommodation[i].address = missingError
+        if(!currentAccommodation?.roomDetail) newFormErrors.accommodation[i].roomDetail = missingError
+        if(!currentAccommodation?.notes) newFormErrors.accommodation[i].notes = missingError
+      }
+
+      setFormErrors(newFormErrors)
+      if(isStepFourComplete) setFormProgress(formProgress + 1)
+    }
   }
 
   const handleDeleteActivity = () => {
@@ -72,9 +178,14 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
   }
 
   const handleConfirmDeleteClick = async() => {
+    setIsActivityDeleteLoading(true)
     const { success } = await deleteActivity( userId, currentActivity )
+    setIsActivityDeleteLoading(false)
 
     if(success){
+      setIsDeleteConfirmModalOpen(false)
+      setIsActivityUpdateModalOpen(false)
+      navigate(`/user/${userId}`)
       toast.success('刪除活動成功', {
         position: "top-right",
         autoClose: 1500,
@@ -85,13 +196,8 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
         progress: undefined,
         theme: "light",
       })
-
-      setTimeout(()=>{
-        setIsDeleteConfirmModalOpen(false)
-        setIsActivityUpdateModalOpen(false)
-        navigate(`/user/${userId}`)
-      },1500)
     }else{
+      setIsActivityUpdateModalOpen(false)
       toast.error('刪除活動失敗', {
         position: "top-right",
         autoClose: 1500,
@@ -133,73 +239,78 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
   }
 
   const handleActivityUpdate = async() => {
-    let updatedActivity = updateContent
-    let updateCoverURL = currentActivity?.coverURL || null
-    let updateMapURL = currentActivity?.detail?.mapURL || null
+    const isStepFiveComplete = activityContent?.detail?.schedule
 
-    if(updatedActivity?.coverURLFile){
-      await deleteImage("activities-covers",`${activityId}-cover`)
-      updateCoverURL = await uploadImage("activities-covers",`${activityId}-cover`, updatedActivity?.coverURLFile)
-      delete updatedActivity?.coverURLFile
-      URL.revokeObjectURL(updatedActivity?.coverURL)
-      updatedActivity={
-        ...updatedActivity,
-        coverURL: updateCoverURL
-      }
-    }
-    if(updatedActivity?.detail?.mapURLFile){
-      await deleteImage("activities-maps", `${activityId}-map`)
-      updateMapURL = await uploadImage("activities-maps", `${activityId}-map`, updatedActivity?.detail?.mapURLFile)
-      delete updatedActivity?.detail?.mapURLFile
-      URL.revokeObjectURL(updatedActivity?.detail?.mapURL)
-      updatedActivity={
-        ...updatedActivity,
-        detail:{
-          ...updatedActivity?.detail,
-          mapURL: updateMapURL
+    const newFormErrors = {}
+    if(!activityContent?.detail?.schedule) newFormErrors.schedule = missingError
+    setFormErrors(newFormErrors)
+
+    if(isStepFiveComplete){
+      setIsActivityUpdateLoading(true)
+      let updatedActivity = activityContent
+      let updateCoverURL = currentActivity?.coverURL || null
+      let updateMapURL = currentActivity?.detail?.mapURL || null
+
+      if(updatedActivity?.coverURLFile){
+        await deleteImage("activities-covers",`${activityId}-cover`)
+        updateCoverURL = await uploadImage("activities-covers",`${activityId}-cover`, updatedActivity?.coverURLFile)
+        delete updatedActivity?.coverURLFile
+        URL.revokeObjectURL(updatedActivity?.coverURL)
+        updatedActivity={
+          ...updatedActivity,
+          coverURL: updateCoverURL
         }
       }
-    }
+      if(updatedActivity?.detail?.mapURLFile){
+        await deleteImage("activities-maps", `${activityId}-map`)
+        updateMapURL = await uploadImage("activities-maps", `${activityId}-map`, updatedActivity?.detail?.mapURLFile)
+        delete updatedActivity?.detail?.mapURLFile
+        URL.revokeObjectURL(updatedActivity?.detail?.mapURL)
+        updatedActivity={
+          ...updatedActivity,
+          detail:{
+            ...updatedActivity?.detail,
+            mapURL: updateMapURL
+          }
+        }
+      }
 
-    const updateData = filterModifiedContent(updatedActivity)
+      const updateData = filterModifiedContent(updatedActivity)
 
-    const { success, updateAt } = await updateActivity(activityId, currentActivity, updateData)
+      const { success, updateAt } = await updateActivity(activityId, currentActivity, updateData)
+      updatedActivity.updateAt = updateAt
+      setIsActivityUpdateLoading(false)
 
-    if(success){
-      toast.success('更新活動成功', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-
-      setTimeout(()=>{
-        document.querySelector('body').classList.remove('no-scroll')
-        document.querySelector('html').classList.remove('no-scroll')
+      if(success){
         setIsActivityUpdateModalOpen(false)
         setFormProgress(1)
-        setActivity({
-          ...updatedActivity,
-          updateAt: updateAt
+        setActivity(updatedActivity)
+        toast.success('更新活動成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
         })
-      },1500)
-
-    }else{
-      toast.error('更新活動失敗', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
+      }else{
+        setIsActivityUpdateModalOpen(false)
+        toast.error('更新活動失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
     }
+
+
   }
   
   return(
@@ -218,66 +329,76 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
           isConfirmModalOpen={isDeleteConfirmModalOpen}
           setIsConfirmModalOpen={setIsDeleteConfirmModalOpen}
           handleConfirmClick={handleConfirmDeleteClick}
-        >確認要刪除嗎?
+        >
+        {
+          isActivityDeleteLoading
+          ? <StyledLoading title="活動刪除中"/>
+          : "確認要刪除嗎?"
+        }
         </StyledConfirmModal>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal}/>
       </div>
 
       <div className='l-modal__body'>
 
-        <div className='l-activity-create__steps' ref={stepsRef}>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle active'></div>
-            <h3 className='o-activity-create__step-title' >基本資訊</h3>
-          </div>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle'></div>
-            <h3 className='o-activity-create__step-title'>重點簡介</h3>
-          </div>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle'></div>
-            <h3 className='o-activity-create__step-title'>活動細節</h3>
-          </div>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle'></div>
-            <h3 className='o-activity-create__step-title'>交通住宿</h3>
-          </div>
-          <div className='c-activity-create__step'>
-            <div className='o-activity-create__step-circle'></div>
-            <h3 className='o-activity-create__step-title'>其他補充</h3>
-          </div>
-        </div>
+        <StyledActivityCreateStepDisplay formProgress={formProgress}/>
 
         <form className='l-modal__form-container'>
-          {formProgress === 1 &&
-            <StyledActivityCreateStepOne formContent={updateContent} onFormChange={setUpdateContent}/>
+          {
+            (formProgress === 1 && !isActivityUpdateLoading) &&
+            <StyledActivityCreateStepOne 
+              formContent={activityContent} 
+              onFormChange={setActivityContent}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
           }
-
-          {formProgress === 2 && 
-            <StyledActivityCreateStepTwo formContent={updateContent} onFormChange={setUpdateContent} />
+          {
+            (formProgress === 2 && !isActivityUpdateLoading) && 
+            <StyledActivityCreateStepTwo 
+              formContent={activityContent} 
+              onFormChange={setActivityContent} 
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
           }
-
-          {formProgress === 3 &&
-            <StyledActivityCreateStepThree activityId={activityId} formContent={updateContent} onFormChange={setUpdateContent}/>
+          {
+            (formProgress === 3 && !isActivityUpdateLoading) &&
+            <StyledActivityCreateStepThree 
+              formContent={activityContent} 
+              onFormChange={setActivityContent}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
           }
-
-          {formProgress === 4 &&
-            <StyledActivityCreateStepFour formContent={updateContent} onFormChange={setUpdateContent}/>
+          {
+            (formProgress === 4 && !isActivityUpdateLoading) &&
+            <StyledActivityCreateStepFour 
+              formContent={activityContent} 
+              onFormChange={setActivityContent}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}      
+            />
           }
-
-          {formProgress === 5 &&
-            <StyledActivityCreateStepFive formContent={updateContent} onFormChange={setUpdateContent}/>
+          {
+            (formProgress === 5 && !isActivityUpdateLoading) &&
+            <StyledActivityCreateStepFive 
+              formContent={activityContent} 
+              onFormChange={setActivityContent}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
           }
+          { isActivityUpdateLoading && <StyledLoading className="o-activity-update__loading" title="活動更新中"/> }
         </form>
-
+        
         <div className='l-modal__controls'>
-          {formProgress === 1 ? 
-            <StyledButton disabled>前一頁</StyledButton>
-            :<StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
+          {formProgress !== 1 && !isActivityUpdateLoading && 
+            <StyledButton onClick={handlePreviousPageClick} >前一頁</StyledButton>
           }
-          {formProgress < 5 ?
-            <StyledButton onClick={handleNextPageClick} >下一頁</StyledButton>
-            :<StyledButton onClick={handleActivityUpdate} >更新活動</StyledButton>
+          {formProgress < 5 && !isActivityUpdateLoading 
+            ? <StyledButton onClick={handleNextPageClick} >下一頁</StyledButton>
+            : <StyledButton onClick={handleActivityUpdate} >更新活動</StyledButton>
           }
         </div>
       </div>
@@ -288,77 +409,9 @@ const ActivityUpdateModal = ({ className, currentActivity, setActivity, activity
 
 const StyledActivityUpdateModal = styled(ActivityUpdateModal)`
   .l-modal__body{
-    .l-activity-create__steps {
-      display: flex;
-      justify-content: space-between;
-      padding: .75rem 0;
-      border-bottom: 1px solid #ADADAD;
-
-      .c-activity-create__step {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex-grow: 1;
-        counter-increment: step-counter;
-
-        &::after {
-          content: "";
-          position: absolute;
-          top: 1rem;
-          left: calc(50% + 1.5rem);
-          right: calc(-50% + 1.5rem);
-          height: 2px;
-          background-color: #3F6F41;
-        }
-
-          &:last-child::after {
-            display: none;
-          }
-
-      .o-activity-create__step-circle {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 1.75rem;
-        height: 1.75rem;
-        border-radius: 50%;
-        border: 2px solid #3F6F41;
-        background-color: white;
-
-        &::before {
-          content: counter(step-counter);
-          color: #3F6F41;
-          font-weight: 700;
-        }
-
-        &.done {
-          background-color: #3F6F41;
-
-          ::before {
-            content: "✔";
-            color: white;
-          }
-        }
-
-        &.active {
-          background-color: #3F6F41;
-
-          ::before {
-            color: white;
-          }
-        }
-      }
-
-      .o-activity-create__step-title {
-        font-size: .75rem;
-        margin-top: .25rem;
-        color: #3F6F41;
-      }
-    }
-  }
-
     .l-modal__form-container{
+      display: flex;
+      flex-direction: column;
       width: 100%;
       height: calc(100% - 9rem);
       margin: .75rem 0;
@@ -375,6 +428,11 @@ const StyledActivityUpdateModal = styled(ActivityUpdateModal)`
         width: 40%;
 
        }
+      }
+
+      .o-activity-update__loading{
+        margin: auto 0;
+        justify-self: center;
       }
     }
   }

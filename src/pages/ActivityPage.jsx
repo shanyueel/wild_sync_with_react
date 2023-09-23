@@ -341,7 +341,7 @@ const StyledActivityPage = styled(ActivityPage)`
       justify-content: center;
       align-items: center;
       margin-left: auto;
-      padding: .25rem .75rem;
+      padding: .25rem;
       border-radius: 1rem;
       background-color: white;
       border: 1px solid ${({theme})=>theme.color.alert};
@@ -359,13 +359,6 @@ const StyledActivityPage = styled(ActivityPage)`
           stroke: ${({theme})=>theme.color.alert};
           stroke-width: 50;
         }
-
-        &::after{
-          content:"收藏活動";
-          margin-left: .125rem;
-          font-size: .8rem;
-          color: ${({theme})=>theme.color.alert};
-        }
       }
 
       input[type="checkbox"]{
@@ -382,11 +375,6 @@ const StyledActivityPage = styled(ActivityPage)`
           svg{
             stroke: white;
             fill: white;
-          }
-
-          &::after{
-            content:"已收藏";
-            color: white;
           }
         }
 
@@ -464,6 +452,25 @@ const StyledActivityPage = styled(ActivityPage)`
         letter-spacing: .1rem;
         color: ${({theme})=>theme.color.default};
         font-weight: 400;
+      }
+    }
+  }
+  @media screen and (min-width: 480px) {
+    .l-activity-header .o-activity__like{
+      padding: .25rem .75rem;
+      
+      label::after{
+        content:"收藏活動";
+        margin-left: .125rem;
+        font-size: .8rem;
+        color: ${({theme})=>theme.color.alert};
+      }
+
+      &:has(input:checked){
+        label::after{
+          content:"已收藏";
+          color: white;
+        }
       }
     }
   }

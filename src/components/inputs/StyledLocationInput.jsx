@@ -101,7 +101,7 @@ const LocationInput = ({className, title, inputId, formContent, onFormChange, wa
             className="o-location-input__address"
             type="text"
             ref={detailRef}
-            placeholder="詳細地址 / 知名地標 / 道路位置"
+            placeholder="詳細地址 / 地標 / 道路"
             id="detail"
             value={locationContent?.detail || ""}
             onChange={handleDetailInput}
@@ -114,11 +114,10 @@ const LocationInput = ({className, title, inputId, formContent, onFormChange, wa
 }
 
 const StyledLocationInput = styled(LocationInput)`
-  display: flex;
-  flex-direction: column;
   width: 100%;
 
   .c-input-body{
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
@@ -143,6 +142,7 @@ const StyledLocationInput = styled(LocationInput)`
 
       &__address{
         grid-area: address;
+        width: 100%;
       }
     }
   }

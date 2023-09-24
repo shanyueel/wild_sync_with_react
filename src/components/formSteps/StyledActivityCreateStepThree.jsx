@@ -36,16 +36,13 @@ const ActivityCreateStepThree = ({ className, formContent, onFormChange, formErr
   },[formContent?.detail])
   
   return(
-    <div className={clsx(className,"scrollbar") }>
-      
-      <StyledHikingTable 
-        inputUsed
-        detailContent={detailContent} 
-        onDetailChange={setDetailContent}
-        formErrors={formErrors}
-      />
-
-    </div>
+    <StyledHikingTable 
+      inputUsed
+      className={clsx(className,"scrollbar")}
+      detailContent={detailContent} 
+      onDetailChange={setDetailContent}
+      formErrors={formErrors}
+    />
   )
 }
 
@@ -55,6 +52,7 @@ const StyledActivityCreateStepThree = styled(ActivityCreateStepThree)`
       gap: .75rem;
       width: 100%;
       height: 100%;
+      overflow-x: hidden;
       overflow-y: scroll;
 `
 

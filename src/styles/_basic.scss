@@ -48,6 +48,14 @@ table{
   width: 100%;
 }
 
+tbody{
+  width: 100%;
+}
+
+tr{
+  width: 100%;
+}
+
 td{
   vertical-align: middle;
   padding: .75rem;
@@ -57,26 +65,30 @@ td{
 
 .c-table-key {
   text-align: center;
-  width: 9rem;
+  width: 7.5rem;
   font-weight: 700;
   color: #3F6F41;
   background-color: #F0F0F0;
 
   &.inputUsed{
-    width: 7.5rem;
+    width: 4.5rem;
   }
 }
 
 .c-table-content {
   background-color: white;
   white-space: pre-wrap;
+
+  &.inputUsed{
+    width: calc(100% - 4.5rem);
+  }
 }
 
 .c-table-divide{
   height: .5rem;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 480px) {
   .c-table-key {
     width: 12rem;
     white-space: nowrap;

@@ -16,6 +16,8 @@ import ActivityPageDiscussionListArea from 'pages/ActivityPageDiscussionListArea
 import ActivityPageDiscussionArea from 'pages/ActivityPageDiscussionArea'
 import ScrollToTop from 'utils/ScrollToTop';
 import NotFoundPage from 'pages/NotFoundPage';
+import GuidePage from 'pages/GuidePage';
+import AboutPage from 'pages/AboutPage';
 
 const theme = {
   color:{
@@ -53,11 +55,8 @@ function App() {
                 <Route path="search" element={<SearchActivityPage />} />
               </Route>
               <Route path="user/:userId" element={<UserPage />} />
-              <Route path="guide"/>
-              <Route path="rules"/>
-              <Route path="faq"/>
-              <Route path="contact"/>
-              <Route path="about"/>
+              <Route path="guide" element={<GuidePage/>}/>
+              <Route path="about" element={<AboutPage/>}/>
               <Route path="*" element={<NotFoundPage />}/>
             </Route>
           </Routes>

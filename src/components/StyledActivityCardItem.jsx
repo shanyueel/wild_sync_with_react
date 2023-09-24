@@ -112,8 +112,8 @@ const ActivityCardItem = ({className, activity}) => {
 
         <ul className="c-activity-card__highlights">
           <li><span>難度 : </span>{switchDifficulty(activity?.difficulty)}</li>
-          <li><span>時長 : </span>{activity?.activityTimeLength}hr</li>
-          <li><span>費用 : </span>{activity?.cost?.min} - {activity?.cost?.max}</li>
+          <li><span>時長 : </span>{activity?.activityTimeLength}h</li>
+          <li><span>費用 : </span>{activity?.cost?.min}-{activity?.cost?.max}</li>
           <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
 

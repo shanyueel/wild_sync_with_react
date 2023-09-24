@@ -89,11 +89,11 @@ const ActivityListItem = ({className, activity, sm}) => {
           <Link className="o-activity-card__avatar" to={`/user/${activity?.holder?.uid}`} >
             <img  src={activity?.holder?.photoURL} alt="user avatar"/>
           </Link>
-          <Link classN4ame="o-activity-card__name" to={`/activity/${activityId}`}>
-            <h3>{sm? `${activity?.name?.slice(0,7)}...`: activity?.name}</h3>
+          <Link className="o-activity-card__name" to={`/activity/${activityId}`}>
+            <h3>{activity?.name}</h3>
           </Link>
           {
-            user?.attendedActivities?.includes(activityId) &&
+            (user?.attendedActivities?.includes(activityId) || user?.heldActivities?.includes(activityId)) &&
             <div className="o-activity-card__attendance">
               <CheckIcon/><h4>已參加</h4>
             </div>
@@ -105,14 +105,14 @@ const ActivityListItem = ({className, activity, sm}) => {
           <h4 className="o-activity-card__location"><LocationIcon/>{displayLocation(activity?.location)}</h4>
           <h4 className="o-activity-card__date">
             <CalendarIcon/>
-            {transferTimestamp(activity?.time?.start)} - {sm && <br/>}{transferTimestamp(activity?.time?.end)}
+            {transferTimestamp(activity?.time?.start)} - <br/>{transferTimestamp(activity?.time?.end)}
           </h4>
         </div>
 
         <ul className="c-activity-card__highlights">
           <li><span>難度 : </span>{switchDifficulty(activity?.difficulty)}</li>
-          <li><span>時長 : </span>{activity?.activityTimeLength} hr</li>
-          <li><span>費用 : </span>{activity?.cost?.min} - {activity?.cost?.max}</li>
+          <li><span>時長 : </span>{activity?.activityTimeLength} h</li>
+          <li><span>費用 : </span>{activity?.cost?.min}-{activity?.cost?.max}</li>
           <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
 
@@ -140,24 +140,25 @@ const ActivityListItem = ({className, activity, sm}) => {
 const StyledActivityListItem = styled(ActivityListItem)`
   position: relative;
   display: flex;
+  justify-content: space-between;
   width: 100%;
   height: 7.5rem;
   border-radius: 1rem;
   background-color: ${({theme})=>theme.backgroundColor.default};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
   overflow: hidden;
 
   .l-activity-card__info{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: calc(100% - 8rem);
     height: 100%;
-    height: fit-content;
     padding: .75rem;
 
     .l-activity-card__title{
       display: flex;
       align-items: center;
+      width: 100%;
 
       .o-activity-card__avatar img{
         width: 1.75rem;
@@ -165,30 +166,39 @@ const StyledActivityListItem = styled(ActivityListItem)`
         border-radius: 1rem;
       }
 
-      .o-activity-card__name h3{
+      .o-activity-card__name{
+        flex-grow: 1;
         margin-left: .25rem;
-        font-weight: 700;
-        white-space: nowrap;
+        width: calc(100% - 3rem);
+        
+        h3{
+          width: 100%;
+          font-weight: 700;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
 
       .o-activity-card__attendance{
-        display: flex;
-        gap: .25rem;
-        margin-left: .25rem;
-        padding: .125rem;
+        position: absolute;
+        right: 3.5rem;
+        top: .75rem;
+        padding: .25rem .5rem;
+        z-index: 1;
+        border: 2px solid white;
         border-radius: .75rem;
-        border: 1px solid ${({theme})=>theme.color.default};
+        background-color: ${({theme})=>theme.color.default};
 
         svg{
-          width: .75rem;
-          height: .75rem;
-          fill: ${({theme})=>theme.color.default};
-        }
-
-        h4{
           display: none;
         }
 
+        h4{
+          display: block;
+          color: white;
+          white-space: nowrap;
+        }
       }
     }
 
@@ -198,12 +208,16 @@ const StyledActivityListItem = styled(ActivityListItem)`
       align-items: center;
 
       svg{
-        display: none;
+        display: block;
+        width: 1rem;
+        height: 1rem;
+        fill: ${({theme})=>theme.color.default};
+        margin-right: .25rem;
       }
     }
     
     .o-activity-card__location{
-      margin-top: .5rem;
+      margin-top: .25rem;
     }
 
     .o-activity-card__date{
@@ -215,14 +229,14 @@ const StyledActivityListItem = styled(ActivityListItem)`
       display: flex;
       flex-wrap: wrap;
       gap: .25rem;
-      margin-top: .5rem;
+      margin-top: .375rem;
 
       li{
-        padding: .25rem .75rem;
-        border-radius: 10px;
-        font-size: .75rem;
+        padding: .25rem .5rem;
+        border-radius: 5px;
         color: white;
         background-color: ${({theme})=>theme.color.default};
+        font-size: .75rem;
 
         span,
         &:last-child{
@@ -295,37 +309,31 @@ const StyledActivityListItem = styled(ActivityListItem)`
       padding: 1rem;
 
       .l-activity-card__title .o-activity-card__attendance{
-        padding: .25rem .5rem;
+        display: flex;
+        gap: .25rem;
 
-        h4{
+        svg{
           display: block;
-          color: ${({theme})=>theme.color.default}
+          width: .75rem;
+          height: .75rem;
+          fill: white;
         }
       }
       
       .o-activity-card__date, 
       .o-activity-card__location{
         align-self: start;
-        
-        svg{
-          display: block;
-          width: 1rem;
-          height: 1rem;
-          fill: ${({theme})=>theme.color.default};
-          margin-right: .25rem;
-        }
+        margin-top: .5rem;
       }
 
-      .o-activity-card__date{
-        margin-top: .5rem;
+      .o-activity-card__date br{
+        display: none;
       }
 
       .c-activity-card__highlights{
         margin-top: .75rem;
 
         li{
-          border-radius: .75rem;
-          padding: .25rem .75rem;
           color: white;
           background-color: ${({theme})=>theme.color.default};
 
@@ -347,14 +355,29 @@ const StyledActivityListItem = styled(ActivityListItem)`
     height: 10rem;
 
     .l-activity-card__info{
+
+      .l-activity-card__title .o-activity-card__attendance{
+        right: 4.5rem;
+      }
+
       .c-activity-card__brief{
         display: flex;
+        margin-top: .5rem;
         gap: .5rem;
+        
+        h4{
+          margin-top: 0;
+        }
       }
 
       .c-activity-card__highlights{
-        li:last-child{
-          display: block;
+        li{
+          border-radius: .75rem;
+          padding: .25rem .75rem;
+
+          &:last-child{
+            display: block;
+          }
         }
       }
 
@@ -366,12 +389,12 @@ const StyledActivityListItem = styled(ActivityListItem)`
   }
 
   ${(props)=> props.sm && css`
-    @media screen and (min-width: 1024px){
+    @media screen and (min-width: 1024px) {
       height: 7.5rem;
 
       .l-activity-card__info{
         width: calc(100% - 7.5rem);
-        padding: .5rem .75rem;
+        padding: .5rem 1rem;
 
         .l-activity-card__title{
           gap: .25rem;
@@ -381,10 +404,15 @@ const StyledActivityListItem = styled(ActivityListItem)`
           flex-direction: column;
           justify-content: start;
           gap: 0;
+          margin-top: 0;
           
           .o-activity-card__location,
           .o-activity-card__date{
             margin: .125rem;
+          }
+
+          .o-activity-card__date br{
+            display: none;
           }
         }
 
@@ -405,8 +433,24 @@ const StyledActivityListItem = styled(ActivityListItem)`
         .o-activity-card__introduction{
           display: none;
         }
-      }
 
+        .l-activity-card__title .o-activity-card__attendance{
+          position: absolute;
+          right: 3.5rem;
+          top: .75rem;
+          border: 2px solid white;
+          z-index: 1;
+          background-color: ${({theme})=>theme.color.default};
+
+          svg{
+            display: none;
+          }
+
+          h4{
+            color: white;
+          }
+        }
+      }
     }
   `}
 `

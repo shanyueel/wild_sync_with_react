@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import clsx from "clsx";
-
-import StyledOthersTable from "components/tables/StyledOthersTable";
 import { useEffect, useState } from "react";
 
-const ActivityCreateStepFive = ({ className, formContent, onFormChange}) => {
+import StyledOthersTable from "components/tables/StyledOthersTable";
+
+const ActivityCreateStepFive = ({ className, formContent, onFormChange, formErrors, setFormErrors}) => {
   const [detailContent, setDetailContent] = useState(formContent?.detail || {})
   
+  const checkIsStepFiveComplete = () => {
+    const updatedFormErrors = {...formErrors}
+    if(formContent?.detail?.schedule) updatedFormErrors.schedule = ""
+    setFormErrors(updatedFormErrors)
+  }
+
   useEffect(()=>{
     const updateForm = () => {
       const newForm = {
@@ -18,6 +24,10 @@ const ActivityCreateStepFive = ({ className, formContent, onFormChange}) => {
     updateForm()
   },[detailContent])
 
+  useEffect(()=>{
+    checkIsStepFiveComplete()
+  },[formContent?.detail])
+
   return(
     <div className={clsx(className,"scrollbar") }>
       
@@ -25,6 +35,7 @@ const ActivityCreateStepFive = ({ className, formContent, onFormChange}) => {
         inputUsed
         detailContent={detailContent}
         onDetailChange={setDetailContent}
+        formErrors={formErrors}
       />
 
     </div>

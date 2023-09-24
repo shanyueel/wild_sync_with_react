@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 import styled from "styled-components";
@@ -14,12 +14,25 @@ import { updateUser} from 'api/userApi';
 import { updateUserSlice } from 'reducers/userSlice';
 import { toast } from 'react-toastify';
 import { uploadImage } from 'api/storageApi';
+const defaultImageURL = require('data/defaultImageURL.json')
 
-const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, selectedUser, setSelectedUser}) => {
+const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, setSelectedUser}) => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  const uid = user.uid
+  const userId = user.uid
+  const emptyError = "*此欄位不可為空白"
   const [userContent, setUserContent] = useState(user)
+  const [formErrors, setFormErrors] = useState({})
+  
+  useEffect(()=>{
+    const updatedErrors = {...formErrors}
+    if(userContent?.displayName) updatedErrors.displayName = ""
+    if(userContent?.birth) updatedErrors.birth = ""
+    if(userContent?.profession) updatedErrors.profession = ""
+    if(userContent?.region) updatedErrors.region = ""
+    if(userContent?.introduction) updatedErrors.introduction = ""
+    setFormErrors(updatedErrors)
+  },[userContent])
 
 
   const closeModal = () => {
@@ -29,57 +42,74 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, 
   }
 
   const handleUpdate = async() => {
-    let updateCoverURL = userContent?.coverURL
-    let updatePhotoURL = userContent?.photoURL
-    if(userContent?.photoURLFile) updatePhotoURL = await uploadImage("avatars",`${uid}-avatar`, userContent?.photoURLFile)
-    if(userContent?.coverURLFile) updateCoverURL = await uploadImage("user-covers",`${uid}-cover`,userContent?.coverURLFile)
+    const isFormComplete = 
+      userContent?.displayName &&
+      userContent?.birth &&
+      userContent?.profession &&
+      userContent?.region &&
+      userContent?.introduction
 
+    const newFormErrors = {}
+    if(!userContent?.displayName) newFormErrors.displayName = emptyError
+    if(!userContent?.birth) newFormErrors.birth = emptyError
+    if(!userContent?.profession) newFormErrors.profession = emptyError
+    if(!userContent?.region) newFormErrors.region = emptyError
+    if(!userContent?.introduction) newFormErrors.introduction = emptyError 
+    setFormErrors(newFormErrors)
+    
+    if(isFormComplete){
+      if(userContent?.photoURLFile){
+        const updatePhotoURL = await uploadImage("avatars",`${userId}-avatar`, userContent?.photoURLFile)
+        delete userContent?.photoURLFile
+        URL.revokeObjectURL(userContent?.photoURL)
+        userContent.photoURL = updatePhotoURL
+      } 
+      if(userContent?.coverURLFile){
+        const updateCoverURL = await uploadImage("user-covers",`${userId}-cover`,userContent?.coverURLFile)
+        delete userContent?.coverURLFile
+        URL.revokeObjectURL(userContent?.coverURL)
+        userContent.coverURL = updateCoverURL
+      } 
 
-    delete userContent?.photoURLFile
-    delete userContent?.coverURLFile
-    URL.revokeObjectURL(userContent?.photoURL)
-    URL.revokeObjectURL(userContent?.coverURL)
+      const updateUserData = {...userContent}
+      for(let contentKey in updateUserData){
+        if(updateUserData?.[contentKey] === user?.[contentKey]) delete updateUserData?.[contentKey]
+      }
 
-    const updateUserContent = {
-      ...userContent,
-      photoURL: updatePhotoURL,
-      coverURL: updateCoverURL
-    }
+      const { success } = await updateUser(userId, updateUserData)
 
-    const { success, ...newUser } = await updateUser(uid, updateUserContent)
-
-    if(success){
-      dispatch(updateUserSlice(newUser))
-      toast.success('更新資料成功', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      setTimeout(()=>{
+      if(success){
+        dispatch(updateUserSlice(userContent))
         setIsUserEditModalOpen(false)
-        setSelectedUser(newUser)
-      },1500)
-    }else{
-      toast.error('更新資料失敗', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
+        setSelectedUser(userContent)
+        toast.success('更新資料成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }else{
+        toast.error('更新資料失敗', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
     }
   }
 
-  const handleReset = () => {
+  const handleCancel = () => {
     setUserContent(user)
+    setIsUserEditModalOpen(false)
   }
   
   return(
@@ -103,8 +133,8 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, 
               title="使用者頭貼 / 封面照片"
               inputId="coverURL" 
               uploadFolder="user-covers"
-              uploadFilename={`${uid}-cover`}
-              defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/covers%2Fdefault-cover.jpg?alt=media&token=9e44c402-706b-4b36-9b27-0d659f52f119"
+              uploadFilename={`${userId}-cover`}
+              defaultImgURL={defaultImageURL.userCover}
               formContent={userContent}
               onFormChange={setUserContent}
             />
@@ -113,18 +143,20 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, 
               avatarUsed
               inputId="photoURL" 
               uploadFolder="avatars"
-              uploadFilename={`${uid}-avatar`}
-              defaultImgURL="https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/avatars%2Fdefault-avatar.png?alt=media&token=d993930e-be86-4f46-9dec-5cec25dd3f4c"
+              uploadFilename={`${userId}-avatar`}
+              defaultImgURL={defaultImageURL.userAvatar}
               formContent={userContent}
               onFormChange={setUserContent}
             />
           </div>
           <StyledTextInput 
-            title="使用者名稱*" 
+            title="使用者名稱" 
+            inputId="displayName"
             placeholder="請輸入使用者名稱"
-            inputId="displayName" 
+            wordLimit={16}
             formContent={userContent}
             onFormChange={setUserContent}
+            warning={formErrors.displayName}
           />
           <StyledDateInput
             disableFuture={true}
@@ -132,31 +164,38 @@ const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, 
             inputId="birth" 
             formContent={userContent} 
             onFormChange={setUserContent}
+            warning={formErrors.birth}
           />
           <StyledTextInput 
             title="使用者職業" 
-            placeholder="請輸入使用者職業"
             inputId="profession" 
+            placeholder="請輸入使用者職業"
+            wordLimit={16}
             formContent={userContent}
             onFormChange={setUserContent}
+            warning={formErrors.profession}
           />
           <StyledTextInput 
             title="使用者地區" 
-            placeholder="請輸入居住地區"
             inputId="region" 
+            wordLimit={16}
+            placeholder="請輸入居住地區"
             formContent={userContent}
             onFormChange={setUserContent}
+            warning={formErrors.region}
           />
           <StyledTextArea
             title="使用者介紹" 
-            placeholder="請輸入自我介紹" 
             inputId="introduction" 
+            wordLimit={150}
+            placeholder="請輸入自我介紹" 
             formContent={userContent} 
             onFormChange={setUserContent}
+            warning={formErrors.introduction}
           />
         </form>
         <div className='c-user-edit__summit'>
-          <StyledButton onClick={handleReset} alert>取消更新</StyledButton>
+          <StyledButton onClick={handleCancel} alert>取消更新</StyledButton>
           <StyledButton onClick={handleUpdate}>更新資料</StyledButton>
         </div>
       </div>

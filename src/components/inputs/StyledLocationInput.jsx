@@ -1,21 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
+const taiwanDistricts = require("data/taiwanDistricts.json")
+
 const LocationInput = ({className, title, inputId, formContent, onFormChange, warning, detailed}) => {
-  const taiwanDistricts = require("data/taiwanDistricts.json")
   const detailRef = useRef(null)
   const defaultCounty = taiwanDistricts?.find(county => county.id === formContent?.[inputId]?.county) || taiwanDistricts?.[0]
-  const [districts, setDistrict] = useState(defaultCounty?.districts)
-  const [locationContent, setLocationContent] = useState({})
+  const [districts, setDistricts] = useState(defaultCounty?.districts)
+  const [locationContent, setLocationContent] = useState(formContent?.[inputId]||{})
+  const [warningContent, setWarningContent] = useState(warning)
 
   useEffect(()=>{
-    const setDistrictOptions = () => {
-      const selectedCounty = taiwanDistricts?.find(county=>county.id === formContent?.[inputId]?.county)
-      setDistrict(selectedCounty?.districts)
-    }
+    setWarningContent(warning)
+  },[warning])
+
+  const setSelectedDistricts = () => {
     setLocationContent(formContent?.[inputId])
-    setDistrictOptions()
-  },[formContent, inputId, taiwanDistricts])
+    const selectedCounty = taiwanDistricts?.find(county=>county.id === formContent?.[inputId]?.county)
+    setDistricts(selectedCounty?.districts)
+  }
+
+  useEffect(()=>{
+    setSelectedDistricts()
+  },[formContent?.[inputId]])
 
   const handleCountySelect = (e) => {
     const selectedCounty = taiwanDistricts?.find(county=>county.id === e.target.value)
@@ -23,12 +30,15 @@ const LocationInput = ({className, title, inputId, formContent, onFormChange, wa
       county: e.target.value,
       district: selectedCounty?.districts?.[0]?.id
     }
-    setLocationContent(newLocation)
-    const newForm = {
-      ...formContent,
-      [inputId]: newLocation
+
+    if(JSON.stringify(newLocation !== JSON.stringify(locationContent))){
+      setLocationContent(newLocation)
+      const newForm = {
+        ...formContent,
+        [inputId]: newLocation
+      }
+      onFormChange(newForm)
     }
-    onFormChange(newForm)
   }
 
   const handleDistrictSelect = (e) => {
@@ -60,10 +70,11 @@ const LocationInput = ({className, title, inputId, formContent, onFormChange, wa
 
   return(
     <div className={className}>
-      {title && 
+      {
+        ( title || warningContent ) && 
         <div className="c-input-title">
           <label className="o-input-title__name">{title}</label>
-          <label className="o-input-title__warning">{warning}</label>
+          <label className="o-input-title__warning">{warningContent}</label>
         </div>
       }
       <div className="c-input-body">

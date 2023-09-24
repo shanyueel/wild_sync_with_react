@@ -253,7 +253,7 @@ export const postActivity = async( activityId, holderReference, activityContent 
     }
 
     await setDoc(doc(firestoreDB, "activities", `${activityId}`), mainActivityContent)   
-    await updateDoc(doc(firestoreDB, "users", `${holder?.uid}-user`),{
+    await updateDoc(doc(firestoreDB, "users", `${holder?.uid}`),{
       heldActivities: [...holder?.heldActivities, activityId]
     })
 
@@ -331,7 +331,7 @@ export const alterActivityAttendance = async(userId, activityId) => {
       updateDoc(doc(firestoreDB, "activities", `${activityId}`), {
         attendance : newAttendance
       })
-      updateDoc(doc(firestoreDB, "users", `${userId}-user`), {
+      updateDoc(doc(firestoreDB, "users", `${userId}`), {
         attendedActivities: newAttendedActivities
       })
       console.log("[退出活動成功]:",activityId)
@@ -344,15 +344,39 @@ export const alterActivityAttendance = async(userId, activityId) => {
       updateDoc(doc(firestoreDB, "activities", `${activityId}`), {
         attendance : newAttendance
       })
-      updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+      updateDoc(doc(firestoreDB, "users", `${userId}`),{
         attendedActivities: newAttendedActivities
       })
       console.log("[加入活動成功]:",activityId)
       return {success: true, notes: ""}
     }
   }catch(error){
-    console.log("[加入/退出活動失敗]:", error)
+    console.error("[加入/退出活動失敗]:", error)
     return {success: false}
+  }
+}
+
+export const removeAttendance = async(activity, removeAttendanceId ) => {
+  try{
+    const activityId = activity?.id
+    const userRef = await getUser(removeAttendanceId)
+    const oldAttendance = activity?.attendance
+    const newAttendance = oldAttendance?.filter(attendance=> attendance !== removeAttendanceId)
+    const oldAttendedActivities = userRef?.attendedActivities
+    const newAttendedActivities = oldAttendedActivities?.filter(attendedActivity=> attendedActivity !== activityId)
+
+    await updateDoc(doc(firestoreDB,"activities", activityId),{
+      attendance: newAttendance
+    })
+    await updateDoc(doc(firestoreDB, "users", removeAttendanceId),{
+      attendedActivities: newAttendedActivities
+    })
+    
+    console.log("[移除參與者成功]:",removeAttendanceId)
+    return {success:true, newAttendance: newAttendance}
+  }catch(error){
+    console.error("[移除參與者失敗]:",error)
+    return {success:false}
   }
 }
 
@@ -366,14 +390,14 @@ export const alterActivityLiked = async(userId, activityId) => {
         ...currentLikedActivities,
         activityId
       ]
-      await updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+      await updateDoc(doc(firestoreDB, "users", `${userId}`),{
         likedActivities: newLikedActivities
       })
       console.log("[收藏活動成功]:", activityId)
       return {success: true}
     }else{
       const newLikedActivities = currentLikedActivities?.filter((activity) => activity !== activityId )
-      await updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+      await updateDoc(doc(firestoreDB, "users", `${userId}`),{
         likedActivities: newLikedActivities
       })
       console.log("[取消收藏活動成功]:", activityId)
@@ -393,7 +417,7 @@ export const deleteActivity = async( userId, activity ) => {
     await deleteDoc(doc(firestoreDB, "activities", `${activity?.id}`))
     const currentHeldActivities = (await getUser(userId))?.heldActivities
     const newHeldActivities = currentHeldActivities?.filter(heldActivity => heldActivity !== activity?.id)
-    await updateDoc(doc(firestoreDB, "users", `${userId}-user`),{
+    await updateDoc(doc(firestoreDB, "users", `${userId}`),{
       heldActivities: newHeldActivities
     })
     console.log("[刪除活動成功]:", activity?.id)

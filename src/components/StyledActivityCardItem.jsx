@@ -87,7 +87,7 @@ const ActivityCardItem = ({className, activity}) => {
           <img className="o-activity__image" src={activity?.coverURL || defaultImageURL.activityCover} alt="activity cover" />
         </Link>
         {
-          user?.attendedActivities?.includes(activityId) &&
+          (user?.attendedActivities?.includes(activityId) || user?.heldActivities?.includes(activityId)) &&
           <div className="o-activity-card__attendance">
             <CheckIcon/><h4>已參加</h4>
           </div>
@@ -134,7 +134,6 @@ const StyledActivityCardItem = styled(ActivityCardItem)`
   height: 18rem;
   border-radius: 1rem;
   background-color: ${({theme})=>theme.backgroundColor.default};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
   overflow: hidden;
 
   .l-activity-card__cover{

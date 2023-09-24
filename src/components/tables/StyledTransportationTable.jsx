@@ -2,7 +2,7 @@ import styled from "styled-components";
 import StyledTextArea from "../inputs/StyledTextArea";
 import clsx from "clsx";
 
-const TransportationTable = ({className, inputUsed, transportationContent, onTransportationContentChange}) => {
+const TransportationTable = ({className, inputUsed, transportationContent, onTransportationContentChange, formErrors}) => {
   return(
     <div className={className}>
 
@@ -18,8 +18,10 @@ const TransportationTable = ({className, inputUsed, transportationContent, onTra
                 <StyledTextArea
                   placeholder="請輸入去程交通方式"
                   inputId="outbound"
+                  wordLimit={150}
                   formContent={transportationContent}
                   onFormChange={onTransportationContentChange}
+                  warning={formErrors.outbound}
                 />
                 :transportationContent?.outbound
               }
@@ -32,12 +34,13 @@ const TransportationTable = ({className, inputUsed, transportationContent, onTra
                 <StyledTextArea
                   placeholder="請輸入回程交通方式"
                   inputId="inbound"
+                  wordLimit={150}
                   formContent={transportationContent}
                   onFormChange={onTransportationContentChange}
+                  warning={formErrors.inbound}
                 />
                 :transportationContent?.inbound
               }
-              
             </td>
           </tr>
         </tbody>

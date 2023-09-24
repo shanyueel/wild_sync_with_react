@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react"
-import styled from "styled-components"
 import clsx from "clsx"
+import styled from "styled-components"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { getPopularUsersList, getUser } from "api/userApi"
 import { getActivitiesByIdList } from "api/activityApi"
+import { calculateAge } from "utils/date-fns"
 
 import StyledButton from "components/StyledButton"
 import StyledActivityListItem from "components/StyledActivityListItem"
 import StyledUserCard from "components/StyledUserCard"
 import StyledUserEditModal from "modals/StyledUserEditModal"
+import StyledLoading from "components/StyledLoading"
 
 const UserPage = ({className}) => {
+  const navigate = useNavigate()
   const user = useSelector(state=> state.user)
   const environmentParams = useSelector(state => state.environment)
   const userId = user.uid
@@ -22,8 +25,10 @@ const UserPage = ({className}) => {
   const [selectedUser, setSelectedUser] = useState({})
   const [isLargeLayout, setIsLargeLayout] = useState(false)
   const [popularUsers, setPopularUsers] = useState([])
-  const [selectedActivityNav, setSelectedActivityNav] = useState("participation")
+  const [isPopularUsersLoading, setIsPopularUsersLoading] = useState(true)
+  const [selectedActivityNav, setSelectedActivityNav] = useState("attendedActivities")
   const [activities, setActivities] = useState([])
+  const [isActivitiesLoading, setIsActivitiesLoading] = useState(true)
 
   useEffect(()=>{
    const setWindowSize = () => {
@@ -35,22 +40,29 @@ const UserPage = ({className}) => {
   useEffect(()=>{
     const getSelectedUser = async(id) => {
       const user = await getUser(id)
-      setSelectedUser(user)
-      return user
+      if(user){
+        setSelectedUser(user)
+      }else{
+        navigate("/*")
+      }
     }
     const getPopularUsers = async() => {
+      setIsPopularUsersLoading(true)
       const popularUsersList = await getPopularUsersList()
       setPopularUsers(popularUsersList)
+      setIsPopularUsersLoading(false)
     }
     getSelectedUser(selectedUserId)
     getPopularUsers()
    
-  },[selectedUserId])
+  },[selectedUserId, navigate])
 
   useEffect(()=>{
     const getActivities = async() => {
+      setIsActivitiesLoading(true)
       const selectedActivities = await getActivitiesByIdList(selectedUser?.[selectedActivityNav])
       setActivities(selectedActivities)
+      setIsActivitiesLoading(false)
     }
     getActivities()
   },[selectedUser,selectedActivityNav])
@@ -59,12 +71,6 @@ const UserPage = ({className}) => {
     setIsUserEditModalOpen(true)
     document.querySelector('body').classList.add('no-scroll');
     document.querySelector('html').classList.add('no-scroll');
-  }
-
-  const calculateAge = (birthTimeStamp) => {
-    const currentTimeStamp = Date.now()
-    const age = Math.floor((currentTimeStamp - birthTimeStamp) / (1000 * 60 * 60 * 24 * 365.25))
-    return age
   }
 
   const handleActivitiesChange = (e) => {
@@ -86,7 +92,7 @@ const UserPage = ({className}) => {
           </div>
           <div className="l-user__brief">
             <h3 className="o-user__region">{selectedUser?.region}</h3>
-            <h3 className="o-user__age">{`${calculateAge(selectedUser?.birth)}歲`}</h3>
+            {selectedUser?.birth && <h3 className="o-user__age">{`${ calculateAge(selectedUser?.birth)}歲`}</h3>}
             <h3 className="o-user__profession">{selectedUser?.profession}</h3>
           </div>
           <p className="o-user__introduction">{selectedUser?.introduction}</p>
@@ -96,7 +102,6 @@ const UserPage = ({className}) => {
               <StyledUserEditModal 
                 isUserEditModalOpen={isUserEditModalOpen} 
                 setIsUserEditModalOpen={setIsUserEditModalOpen}
-                selectedUser={selectedUser}
                 setSelectedUser={setSelectedUser}
               />
             </>
@@ -119,10 +124,12 @@ const UserPage = ({className}) => {
           </div>
           
           <div className="l-user-activities__container">
-            {
-              activities?.length > 0 ?
+            { 
+              isActivitiesLoading
+                ? <StyledLoading title="活動讀取中" white/>
+                : (activities?.length > 0 ?
               activities?.map(activity=><StyledActivityListItem key={activity?.id} activity={activity}/>)
-              :<h2 className="o-user-activities__empty">目前找不到相關活動</h2>
+              :<h2 className="o-user-activities__empty">目前找不到相關活動</h2>)              
             }
           </div>
 
@@ -135,7 +142,11 @@ const UserPage = ({className}) => {
         <h2 className="o-holder-recommendation__title">熱門主辦者</h2>
         <div className={clsx("l-holder-recommendation__container",{"scrollbar-x":!isLargeLayout})}>
           <div className="l-holder-recommendation__holders">
-            {popularUsers && popularUsers?.map(user => <StyledUserCard key={user?.uid} user={user} listItem={isLargeLayout}/>)}
+            { 
+              isPopularUsersLoading
+                ? <StyledLoading title="使用者讀取中"/>
+                : popularUsers && popularUsers?.map(user => <StyledUserCard key={user?.uid} user={user} listItem={isLargeLayout}/>)
+            }
           </div>
         </div>
 
@@ -355,6 +366,7 @@ const StyledUserPage = styled(UserPage)`
       
       .l-holder-recommendation__holders{
         flex-direction: column;
+        align-items: center;
       }
     }
   }

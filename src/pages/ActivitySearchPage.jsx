@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
+import { getActivitiesByFilters } from "api/activityApi";
 
 import StyledButton from "components/StyledButton";
 import StyledActivityListItem from "components/StyledActivityListItem";
@@ -7,69 +10,64 @@ import StyledActivityHistory from "components/StyledActivityHistory";
 import StyledCheckboxInput from "components/inputs/StyledCheckboxInput";
 import StyledDatePeriodInput from "components/inputs/StyledDatePeriodInput";
 import StyledSelector from "components/inputs/StyledSelector";
+import StyledLoading from "components/StyledLoading";
 
 import {ReactComponent as UpIcon} from "assets/icons/UpIcon.svg"
 import {ReactComponent as DownIcon} from "assets/icons/DownIcon.svg"
-import { getActivitiesByFilters } from "api/activityApi";
-import { useLocation, useNavigate } from "react-router-dom";
+
+const activitiesLocationOptions = require('data/taiwanDistricts.json')
+const activitiesDifficultyOptions = require('data/activityDifficultyOptions.json')
+const activitiesOrderOptions = require('data/activitiesOrderOptions.json')
 
 const ActivitySearchPage = ({ className }) => {
-  const activitiesLocationOptions = require('data/taiwanDistricts.json')
-  const activitiesDifficultyOptions = require('data/activityDifficultyOptions.json')
-  const activitiesOrderOptions = require('data/activitiesOrderOptions.json')
   const searchbarRef = useRef(null)
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
-  const keywordParam = queryParams.get('keyword')
-  const locationParam = JSON.parse(queryParams.get('location'))
-  const difficultyParam = JSON.parse(queryParams.get('difficulty'))
-  const timeParam = JSON.parse(queryParams.get('time'))
-
-  const searchFilter = {
-    keyword: keywordParam,
-    location: locationParam,
-    difficulty: difficultyParam,
-    time: timeParam
-  }
 
   const [isFiltersDisplay, setIsFiltersDisplay] = useState(false)
-  const [filterCache, setFilterCache] = useState(searchFilter)
-  const [searchOrder, setSearchOrder] = useState({order: "releaseDate"})
-  const [filteredActivities, setFilteredActivities] = useState([])
+  const [searchOrder, setSearchOrder] = useState({ order: "releaseDate" })
+  const [searchFilter, setSearchFilter] = useState({
+    keyword: queryParams.get('keyword'),
+    location: JSON.parse(queryParams?.get('location')),
+    difficulty: JSON.parse(queryParams?.get('difficulty')),
+    time: JSON.parse(queryParams?.get('time'))
+  })
+
+  const [activities, setActivities] = useState([])
+  const [isActivitiesLoading, setIsActivitiesLoading] = useState(true)
 
   useEffect(()=>{
     const getFilteredActivities = async() => {
+      setIsActivitiesLoading(true)
       const newActivities = await getActivitiesByFilters(searchFilter)
-      setFilteredActivities(newActivities)
-    }
+      setActivities(newActivities)
+      setIsActivitiesLoading(false)
+    } 
     getFilteredActivities()
-  },[])
+  },[location.search])
 
   const handleSearchbarChange = () => {
     const newForm = {
-      ...filterCache,
+      ...searchFilter,
       keyword: searchbarRef.current.value
     }
-    setFilterCache(newForm)
+    setSearchFilter(newForm)
   }
 
   const handleSearch = (e) => {
     e.preventDefault()
-    const keywordQuery = filterCache?.keyword 
-      ? `keyword=${filterCache?.keyword}` 
-      : null
-    const locationQuery = filterCache?.location?.length > 0 
-      ? `location=${JSON.stringify(filterCache?.location)}` 
-      : null
-    const difficultyQuery = filterCache?.difficulty?.length > 0 
-      ? `difficulty=${JSON.stringify(filterCache?.difficulty)}` 
-      : null
-    const timeQuery = filterCache?.time 
-      ? `time=${JSON.stringify(filterCache?.time)}` 
-      : null
+    const { keyword, location, difficulty ,time } = searchFilter
+    
+    const queryParams = [
+      keyword && `keyword=${keyword}`,
+      location && location?.length > 0 && `location=${JSON.stringify(location)}`,
+      difficulty && difficulty?.length > 0 && `difficulty=${JSON.stringify(difficulty)}`,
+      time && `time=${JSON.stringify(time)}` 
+    ]
+      ?.filter(Boolean)
+      ?.join('&')
 
-    const queryParams = [keywordQuery,locationQuery,difficultyQuery,timeQuery]?.filter(Boolean)?.join('&')
     navigate(`/activity/search?${queryParams}`)
   }
 
@@ -83,7 +81,7 @@ const ActivitySearchPage = ({ className }) => {
               ref={searchbarRef}
               type="text" 
               placeholder="登山路線、露營地、潛水處" 
-              value={filterCache?.keyword || ""}
+              value={searchFilter?.keyword || ""}
               onChange={handleSearchbarChange}
               
             />
@@ -97,8 +95,8 @@ const ActivitySearchPage = ({ className }) => {
                   <StyledCheckboxInput
                     inputId="difficulty" 
                     checkboxOptions={activitiesDifficultyOptions} 
-                    formContent={filterCache} 
-                    onFormChange={setFilterCache}
+                    formContent={searchFilter} 
+                    onFormChange={setSearchFilter}
                   />
                 </td>
               </tr>
@@ -107,8 +105,8 @@ const ActivitySearchPage = ({ className }) => {
                 <td className="c-table-content ">
                   <StyledDatePeriodInput
                     inputId="time"
-                    formContent={filterCache}
-                    onFormChange={setFilterCache}
+                    formContent={searchFilter}
+                    onFormChange={setSearchFilter}
                   />
                 </td>
               </tr>
@@ -118,8 +116,8 @@ const ActivitySearchPage = ({ className }) => {
                   <StyledCheckboxInput
                     inputId="location" 
                     checkboxOptions={activitiesLocationOptions} 
-                    formContent={filterCache} 
-                    onFormChange={setFilterCache}
+                    formContent={searchFilter} 
+                    onFormChange={setSearchFilter}
                   />
                 </td>
               </tr>
@@ -144,8 +142,10 @@ const ActivitySearchPage = ({ className }) => {
           </div>
           
           <div className="l-search-results__container">
-            {
-              filteredActivities?.length > 0 && filteredActivities?.map(activity => <StyledActivityListItem key={activity?.id} activity={activity} />)
+            { 
+              isActivitiesLoading
+              ? <StyledLoading title="活動讀取中"/>
+              : activities?.length > 0 && activities?.map(activity => <StyledActivityListItem key={activity?.id} activity={activity} />)
             }
           </div>
         </div>
@@ -159,11 +159,7 @@ const ActivitySearchPage = ({ className }) => {
 }
 
 const StyledActivitySearchPage = styled(ActivitySearchPage)`
-  width: 100%;
-  height: 100%;
-
   .l-web-container__main{
-    
     .l-search-settings{
       margin-top: 1rem;
       padding: 1rem;

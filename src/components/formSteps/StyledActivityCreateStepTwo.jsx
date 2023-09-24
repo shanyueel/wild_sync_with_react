@@ -1,15 +1,30 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import clsx from "clsx";
 
 import StyledRadioInput from "components/inputs/StyledRadioInput";
-import StyledTextInput from "components/inputs/StyledTextInput";
 import StyledRangeInput from "components/inputs/StyledRangeInput";
 import StyledDateTimeInput from "components/inputs/StyledDateTimeInput";
 import StyledTextArea from "components/inputs/StyledTextArea";
+import StyledNumberInput from "components/inputs/StyledNumberInput";
 
-const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
-  const activityDifficultyOptions = require('data/activityDifficultyOptions.json')
+const activityDifficultyOptions = require('data/activityDifficultyOptions.json')
+
+const ActivityCreateStepTwo = ({ className, formContent, onFormChange, formErrors, setFormErrors}) => {
   
+  useEffect(()=>{
+    const updatedErrors = {...formErrors}
+    if(formContent?.difficulty) updatedErrors.difficulty = ""
+    if(formContent?.activityTimeLength) updatedErrors.activityTimeLength = ""
+    if(formContent?.cost) updatedErrors.cost = ""
+    if(formContent?.attendanceLimit) updatedErrors.attendanceLimit = ""
+    if(formContent?.deadline) updatedErrors.deadline = ""
+    if(formContent?.introduction) updatedErrors.introduction = ""
+
+    if(JSON.stringify(updatedErrors) !== JSON.stringify(formErrors)) setFormErrors(updatedErrors)
+
+  },[formContent, formErrors, setFormErrors])
+
   return(
     <div className={clsx(className,"scrollbar") }>
       
@@ -19,15 +34,18 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
         formContent={formContent}
         onFormChange={onFormChange} 
         radioOptions={activityDifficultyOptions}
+        warning={formErrors?.difficulty}
       />
-      <StyledTextInput 
-        numberUsed 
-        title="實際活動時長" 
-        placeholder="實際活動時長 (扣除前後通勤、用餐時間)" 
-        unit="小時" 
-        inputId="activityTimeLength" 
+      <StyledNumberInput
+        title="戶外活動時長"
+        inputId="activityTimeLength"
+        placeholder="請輸入實際進行活動的時長(扣除通勤、用餐、住宿等)" 
+        unit="小時"
+        minLimit={0}
+        step={0.5}
         formContent={formContent} 
         onFormChange={onFormChange}
+        warning={formErrors?.activityTimeLength}
       />
       <StyledRangeInput 
         title="預估費用"
@@ -35,23 +53,27 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
         minPlaceholder="最低費用" 
         maxPlaceholder="最高費用" 
         unit="$" 
+        minLimit={0}
         formContent={formContent}
         onFormChange={onFormChange}
+        warning={formErrors?.cost}
       />
-      <StyledTextInput 
-        numberUsed 
+      <StyledNumberInput
         title="人數限制" 
-        placeholder="報名人數上限 (不含主辦人)" 
-        unit="人" 
         inputId="attendanceLimit" 
+        placeholder="報名人數上限 (不含主辦人)" 
+        unit="人"
+        minLimit={0}
         formContent={formContent} 
         onFormChange={onFormChange}
+        warning={formErrors?.attendanceLimit}
       />
       <StyledDateTimeInput
         title="申請截止時間" 
         inputId="deadline"
         formContent={formContent}
         onFormChange={onFormChange} 
+        warning={formErrors?.deadline}
       />
       <StyledTextArea
         title="活動簡介" 
@@ -60,6 +82,7 @@ const ActivityCreateStepTwo = ({ className, formContent, onFormChange}) => {
         wordLimit={100}
         formContent={formContent} 
         onFormChange={onFormChange} 
+        warning={formErrors?.introduction}
       />
 
     </div>

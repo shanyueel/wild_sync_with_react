@@ -6,55 +6,78 @@ import StyledTextLink from "components/StyledTextLink"
 
 import {ReactComponent as WildSyncLogo} from "assets/icons/WildSyncLogo.svg"
 import RegisterImage from "assets/images/loginImage.png"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { register } from "api/auth"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { buildUser } from "api/userApi"
 
-const LoginPage = ({className})=>{
+const RegisterPage = ({className})=>{
   const navigate = useNavigate()
+  const emptyError = "*此欄位不可為空白"
   const [registerContent, setRegisterContent] = useState({}) 
-  const [passwordCheckError, setPasswordCheckError] = useState("")
+  const [formErrors, setFormErrors] = useState({})
+
+  useEffect(()=>{
+    const updatedErrors = {...formErrors}
+    if(registerContent?.email) updatedErrors.coverURL = ""
+    if(registerContent?.displayName) updatedErrors.displayName = ""
+    if(registerContent?.password) updatedErrors.password = ""
+    if(registerContent?.passwordCheck) updatedErrors.passwordCheck = ""
+    if(registerContent.passwordCheck === registerContent.password) updatedErrors.passwordCheck=""
+    setFormErrors(updatedErrors)
+  },[registerContent])
 
   const handleRegister = async (e) => {
     e.preventDefault()
 
-    if(registerContent.passwordCheck !== registerContent.password) {
-      setPasswordCheckError("兩次密碼不相同")
-      setTimeout(()=>{
-        setPasswordCheckError("")
-      },3000)
-      return
-    }
+    const isRegisterComplete = 
+      registerContent?.email &&
+      registerContent?.displayName &&
+      registerContent?.password &&
+      registerContent?.passwordCheck
 
-    const { uid } = await register({
-      email:registerContent.email,
-      displayName: registerContent.name,
-      password:registerContent.password
-    })
+    const newFormErrors={}
+    if(!registerContent?.email) newFormErrors.email = emptyError
+    if(!registerContent?.displayName) newFormErrors.displayName = emptyError
+    if(!registerContent?.password) newFormErrors.password = emptyError
+    if(!registerContent?.passwordCheck) newFormErrors.passwordCheck = emptyError
+    setFormErrors(newFormErrors)
+    
+    if(isRegisterComplete) {
+      if(registerContent.passwordCheck !== registerContent.password) {
+        setFormErrors({...formErrors, passwordCheck: "兩次密碼不相同"})
+        return
+      }
 
-    const {success} = await buildUser(uid, {
-      email:registerContent.email,
-      displayName: registerContent.name,
-      password:registerContent.password
-    })
+      const { uid } = await register({
+        email:registerContent.email,
+        displayName: registerContent.displayName,
+        password:registerContent.password
+      })
 
-    if(success){      
-      toast.success('註冊成功', {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      const {success} = await buildUser(uid, {
+        email:registerContent.email,
+        displayName: registerContent.displayName,
+        password:registerContent.password
+      })
 
-      setTimeout(()=>{
-        navigate(`/`)
-      },1500)
+      if(success){   
+        toast.success('註冊成功', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        setTimeout(()=>{
+          navigate(`/`)
+        },1500)
+      }
     }
   }
 
@@ -66,10 +89,43 @@ const LoginPage = ({className})=>{
           <h1 className="o-register-area__brand">Wild Sync</h1>
         </div>
         <form className="l-register-area__input">
-          <StyledTextInput title='設定信箱' placeholder="請輸入信箱" inputId="email" formContent={registerContent} onFormChange={setRegisterContent}/>
-          <StyledTextInput title='設定暱稱' placeholder="請輸入暱稱" inputId="name" formContent={registerContent} onFormChange={setRegisterContent}/>
-          <StyledTextInput title='設定密碼' placeholder="請輸入密碼" inputId="password" formContent={registerContent} onFormChange={setRegisterContent} password/>
-          <StyledTextInput title='確認密碼' placeholder="請再次輸入密碼" inputId="passwordCheck" formContent={registerContent} onFormChange={setRegisterContent} warning={passwordCheckError} password/>
+          <StyledTextInput 
+            title='設定信箱' 
+            inputId="email"
+            placeholder="請輸入信箱" 
+            formContent={registerContent} 
+            onFormChange={setRegisterContent}
+            warning={formErrors.email}
+          />
+          <StyledTextInput 
+            title='設定暱稱' 
+            inputId="displayName"
+            placeholder="請輸入暱稱" 
+            wordLimit={16}
+            formContent={registerContent} 
+            onFormChange={setRegisterContent}
+            warning={formErrors.displayName}
+          />
+          <StyledTextInput 
+            password
+            title='設定密碼' 
+            inputId="password"
+            placeholder="請輸入密碼" 
+            wordLimit={16}
+            formContent={registerContent} 
+            onFormChange={setRegisterContent} 
+            warning={formErrors.password}
+          />
+          <StyledTextInput 
+            title='確認密碼' 
+            inputId="passwordCheck" 
+            placeholder="請再次輸入密碼" 
+            wordLimit={16}
+            formContent={registerContent} 
+            onFormChange={setRegisterContent} 
+            warning={formErrors.passwordCheck} 
+            password
+          />
           <StyledButton className="o-register-area__button" onClick={handleRegister}>註冊</StyledButton>
           <StyledTextLink sm className="o-register-area__register-link" text="已經是Wild Sync會員?" destination="/login" />
         </form>
@@ -81,7 +137,7 @@ const LoginPage = ({className})=>{
   )
 }
 
-const StyledLoginPage = styled(LoginPage)`
+const StyledRegisterPage = styled(RegisterPage)`
   position: relative;
   bottom: 1rem;
   width: 90%;
@@ -169,4 +225,4 @@ const StyledLoginPage = styled(LoginPage)`
   }
 `
 
-export default StyledLoginPage
+export default StyledRegisterPage

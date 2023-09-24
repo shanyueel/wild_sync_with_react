@@ -1,22 +1,39 @@
 import styled from "styled-components";
 import clsx from "clsx";
-
-import StyledHikingTable from "components/tables/StyledHikingTable";
 import { useEffect, useState } from "react";
 
-const ActivityCreateStepThree = ({ className, formContent, onFormChange}) => {
+import StyledHikingTable from "components/tables/StyledHikingTable";
+
+const ActivityCreateStepThree = ({ className, formContent, onFormChange, formErrors, setFormErrors}) => {
   const [detailContent, setDetailContent] = useState(formContent?.detail || {})
-  
+
+  const checkIsStepThreeComplete = () => {
+    const updatedFormErrors = {...formErrors}
+    if(formContent?.detail?.departurePoint) updatedFormErrors.departurePoint = ""
+    if(formContent?.detail?.trackType) updatedFormErrors.trackType = ""
+    if(formContent?.detail?.exitPoint) updatedFormErrors.exitPoint = ""
+    if(formContent?.detail?.trackLength) updatedFormErrors.trackLength = ""
+    if(formContent?.detail?.altitude) updatedFormErrors.altitude = ""
+    if(formContent?.detail?.trackCondition) updatedFormErrors.trackCondition = ""
+    if(formContent?.detail?.belongingPark) updatedFormErrors.belongingPark = ""
+    if(formContent?.detail?.applicationNeeded) updatedFormErrors.applicationNeeded = ""
+    if(formContent?.detail?.trackIntroduction) updatedFormErrors.trackIntroduction = ""
+    if(formContent?.detail?.mapURL) updatedFormErrors.mapURL = ""
+    setFormErrors(updatedFormErrors)
+  }
+
   useEffect(()=>{
-    const updateForm = () => {
-      const newForm = {
-        ...formContent,
-        detail: detailContent
-      }
-      onFormChange(newForm)
+    const newForm = {
+      ...formContent,
+      detail: detailContent
     }
-    updateForm()
-  },[detailContent])
+    onFormChange(newForm)
+  },[detailContent]
+  )
+
+  useEffect(()=>{
+    checkIsStepThreeComplete()
+  },[formContent?.detail])
   
   return(
     <div className={clsx(className,"scrollbar") }>
@@ -25,6 +42,7 @@ const ActivityCreateStepThree = ({ className, formContent, onFormChange}) => {
         inputUsed
         detailContent={detailContent} 
         onDetailChange={setDetailContent}
+        formErrors={formErrors}
       />
 
     </div>

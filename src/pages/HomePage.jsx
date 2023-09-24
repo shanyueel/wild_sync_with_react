@@ -5,7 +5,6 @@ import StyledImageSlider from "components/StyledImageSlider"
 import StyledActivityCardItem from "components/StyledActivityCardItem"
 import StyledActivityListItem from "components/StyledActivityListItem"
 import StyledButton from "components/StyledButton"
-import StyledPagination from "components/StyledPagination"
 
 import {ReactComponent as GridIcon} from "assets/icons/GridIcon.svg"
 import {ReactComponent as ListIcon} from "assets/icons/ListIcon.svg"
@@ -16,6 +15,7 @@ import StyledCheckboxInput from "components/inputs/StyledCheckboxInput"
 import StyledDatePeriodInput from "components/inputs/StyledDatePeriodInput"
 import { toast } from "react-toastify"
 import { Link } from "react-router-dom"
+import StyledLoading from "components/StyledLoading"
 
 const HomePage = ({className}) => {
   const filterCheckboxRef = useRef(null)
@@ -28,18 +28,24 @@ const HomePage = ({className}) => {
 
   const [activitiesDisplay, setActivityDisplay] = useState("grid")
   const [activityList, setActivityList] = useState([])
+  const [isActivityListLoading, setIsActivityListLoading] = useState(true)
   const [filterCache, setFilterCache] = useState({})
   const [activitiesFilter, setActivitiesFilter] = useState({})
   const [popularLocations, setPopularLocations] = useState([])
+  const [isPopularLocationsLoading, setIsPopularLocationsLoading] = useState(true)
 
   useEffect(()=>{
     const getActivities = async() => {
+      setIsActivityListLoading(true)
       const activities= await getActivitiesByFilters(activitiesFilter)
       setActivityList(activities)
+      setIsActivityListLoading(false)
     }
     const getPopularActivitiesLocations = async() => {
+      setIsPopularLocationsLoading(true)
       const popularLocations = await getPopularLocations()
       setPopularLocations(popularLocations)
+      setIsPopularLocationsLoading(false)
     }
     getActivities()
     getPopularActivitiesLocations()
@@ -77,15 +83,23 @@ const HomePage = ({className}) => {
 
         <div className="l-popular-places">
           <h1 className="o-popular-places__title">熱門活動地點</h1>
-          <div className="l-popular-places__container">
-            {popularLocations?.map((popularPlace)=>{ 
-              return(
-                <Link to={`/activity/search?location=["${popularPlace?.id}"]`} key={popularPlace?.id} className="c-popular-place">
-                  <img className="o-popular-place__circle" src={popularPlace?.image} alt={popularPlace?.title} />
-                  <h2 className="o-popular-place__name">{popularPlace?.name}</h2>
-                </Link>
-              )})}
-          </div>
+          {
+            isPopularLocationsLoading
+              ? <StyledLoading title="地點讀取中"/>
+              : (
+                  <div className="l-popular-places__container">
+                    {
+                      popularLocations?.map((popularPlace)=>{ 
+                        return(
+                          <Link to={`/activity/search?location=["${popularPlace?.id}"]`} key={popularPlace?.id} className="c-popular-place">
+                            <img className="o-popular-place__circle" src={popularPlace?.image} alt={popularPlace?.title} />
+                            <h2 className="o-popular-place__name">{popularPlace?.name}</h2>
+                          </Link>
+                      )})
+                    }
+                  </div>
+                )
+          }
         </div>
         
         <div className="l-activities">
@@ -161,16 +175,24 @@ const HomePage = ({className}) => {
           </div>
 
           <div className="l-activities__container">
-            <div className={clsx({"l-activities__container--grid":activitiesDisplay === "grid"},{"l-activities__container--list":activitiesDisplay === "list"})}>
-              { 
-                activitiesDisplay === "grid" ? 
-                activityList?.map((activity)=> <StyledActivityCardItem key={activity?.id} activity={activity} /> )
-                : activityList?.map((activity)=> <StyledActivityListItem key={activity?.id} activity={activity} /> )
-              }
-            </div>
+            {
+              isActivityListLoading
+                ? <StyledLoading title="活動讀取中"/>
+                : (
+                    <div className={clsx({"l-activities__container--grid":activitiesDisplay === "grid"},{"l-activities__container--list":activitiesDisplay === "list"})}>
+                      { 
+                        isActivityListLoading 
+                          ? <StyledLoading title="活動讀取中"/>
+                          : (
+                              activitiesDisplay === "grid" 
+                                ? activityList?.map((activity)=> <StyledActivityCardItem key={activity?.id} activity={activity} /> )
+                                : activityList?.map((activity)=> <StyledActivityListItem key={activity?.id} activity={activity} /> )
+                            )
+                      }
+                    </div>
+                  )
+            }
           </div>
-          
-          <StyledPagination className="c-activities__pagination"/>
 
         </div>
       </div>
@@ -197,6 +219,7 @@ const StyledHomePage = styled(HomePage)`
         grid-template-columns: repeat(2,100px);
         grid-template-rows: repeat(3,140px);
         grid-gap: 2.5rem 5rem;
+        justify-content: center;
 
       .c-popular-place{
         display: flex;
@@ -224,7 +247,6 @@ const StyledHomePage = styled(HomePage)`
     flex-direction: column;
     align-items: center;
     margin-top:2.5rem;
-    margin-bottom: 5rem;
     border-top: 2px solid ${({theme})=> theme.backgroundColor.default};
     width: 100%;
     
@@ -412,15 +434,16 @@ const StyledHomePage = styled(HomePage)`
         display: grid;
         grid-template-columns: repeat(2, 11rem);
         grid-auto-rows: 18rem;
-        width: fit-content;
-        gap: .25rem;
-        margin: 2rem auto 0;
+        justify-content: center;
+        width: 100%;
+        gap: .5rem;
       }
 
       &--list{
         width: 100%;
         display: flex;
         flex-direction: column;
+        justify-content: center;
         gap: 1.25rem;
       }
     }

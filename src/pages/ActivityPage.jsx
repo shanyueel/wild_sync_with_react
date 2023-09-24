@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { toast } from "react-toastify"
 import styled from "styled-components"
@@ -21,14 +21,16 @@ import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 
+const defaultImageURL = require('data/defaultImageURL.json')
 
 const ActivityPage = ({ className }) => {
+  const navigate = useNavigate()
   const user = useSelector(state => state.user)
   const environmentParams = useSelector(state => state.environment)
   const userId = user.uid
   const windowSize = environmentParams.windowSize
   const activityId = useParams().activityId
-  const defaultImageURL = require('data/defaultImageURL.json')
+  const isHolder = user.heldActivities.includes(activityId)
   const [isLargeLayout, setIsLargeLayout] = useState(false)
   const [isMediumLayout, setIsMediumLayout] = useState(false)
   const [activity, setActivity] = useState({})
@@ -39,7 +41,6 @@ const ActivityPage = ({ className }) => {
   const [isActivityUpdateModalOpen, setIsActivityUpdateModalOpen] = useState(false)
   const [isActivityLiked, setIsActivityLiked] = useState(false)
 
-
   useEffect(()=>{
     const setWindowSize = () => {
       setIsLargeLayout(windowSize === "large")
@@ -49,9 +50,24 @@ const ActivityPage = ({ className }) => {
   },[windowSize])
 
   useEffect(()=>{
+    if(isActivityUpdateModalOpen){
+      document.querySelector('body').classList.add('no-scroll')
+      document.querySelector('html').classList.add('no-scroll')
+    }else{
+      document.querySelector('body').classList.remove('no-scroll')
+      document.querySelector('html').classList.remove('no-scroll')
+    }
+  },[isActivityUpdateModalOpen])
+
+  useEffect(()=>{
     const setCurrentActivity = async() => {
       const activity = await getActivity(activityId)
-      setActivity(activity)
+      if(activity){
+        setActivity(activity)
+        storeBrowseHistory()
+      }else{
+        navigate('/*')
+      } 
     }
 
     const storeBrowseHistory = () => {
@@ -71,9 +87,9 @@ const ActivityPage = ({ className }) => {
 
       localStorage.setItem('history',JSON.stringify(currentList))
     }
+    
     setCurrentActivity()
-    storeBrowseHistory()
-  },[activityId])
+  },[activityId, navigate])
 
   useEffect(() => {
     const now = new Date()
@@ -163,8 +179,6 @@ const ActivityPage = ({ className }) => {
 
   const handleActivityUpdate = () => {
     setIsActivityUpdateModalOpen(true)
-    document.querySelector('body').classList.add('no-scroll');
-    document.querySelector('html').classList.add('no-scroll');
   }
 
   const handleActivityLiked = async() => {
@@ -289,7 +303,17 @@ const ActivityPage = ({ className }) => {
         </div>
 
         <div className="l-web-container__side">
-          { activity && <StyledActivityAttendance holder={activity?.holder} attendance={activity?.attendance} isLargeLayout={isLargeLayout}/> }
+          { 
+            activity &&
+            <StyledActivityAttendance 
+              activity={activity}
+              setActivity={setActivity}
+              isHolder={isHolder}
+              holder={activity?.holder} 
+              attendance={activity?.attendance} 
+              isLargeLayout={isLargeLayout}
+            /> 
+          }
         </div>
       </div>
   )
@@ -317,7 +341,7 @@ const StyledActivityPage = styled(ActivityPage)`
       justify-content: center;
       align-items: center;
       margin-left: auto;
-      padding: .25rem .75rem;
+      padding: .25rem;
       border-radius: 1rem;
       background-color: white;
       border: 1px solid ${({theme})=>theme.color.alert};
@@ -335,13 +359,6 @@ const StyledActivityPage = styled(ActivityPage)`
           stroke: ${({theme})=>theme.color.alert};
           stroke-width: 50;
         }
-
-        &::after{
-          content:"收藏活動";
-          margin-left: .125rem;
-          font-size: .8rem;
-          color: ${({theme})=>theme.color.alert};
-        }
       }
 
       input[type="checkbox"]{
@@ -358,11 +375,6 @@ const StyledActivityPage = styled(ActivityPage)`
           svg{
             stroke: white;
             fill: white;
-          }
-
-          &::after{
-            content:"已收藏";
-            color: white;
           }
         }
 
@@ -440,6 +452,25 @@ const StyledActivityPage = styled(ActivityPage)`
         letter-spacing: .1rem;
         color: ${({theme})=>theme.color.default};
         font-weight: 400;
+      }
+    }
+  }
+  @media screen and (min-width: 480px) {
+    .l-activity-header .o-activity__like{
+      padding: .25rem .75rem;
+      
+      label::after{
+        content:"收藏活動";
+        margin-left: .125rem;
+        font-size: .8rem;
+        color: ${({theme})=>theme.color.alert};
+      }
+
+      &:has(input:checked){
+        label::after{
+          content:"已收藏";
+          color: white;
+        }
       }
     }
   }

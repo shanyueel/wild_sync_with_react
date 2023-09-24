@@ -1,20 +1,23 @@
 import styled from "styled-components"
+import clsx from "clsx"
+import { useEffect, useState } from "react"
+
+import { transferTimestamp } from "utils/date-fns"
+import { displayLocation } from "utils/location"
+
 import StyledTextInput from "../inputs/StyledTextInput"
 import StyledTextArea from "../inputs/StyledTextArea"
-import { useEffect, useState } from "react"
-import { transferTimestamp } from "utils/date-fns"
 import StyledDateInput from "../inputs/StyledDateInput"
 import StyledLocationInput from "components/inputs/StyledLocationInput"
-import { displayLocation } from "utils/location"
-import clsx from "clsx"
 
-const AccommodationTable = ({className, inputUsed, accommodationDay, accommodationIndex, accommodationList, onAccommodationListChange}) => {
+const AccommodationTable = ({className, inputUsed, accommodationDay, accommodationIndex, accommodationList, onAccommodationListChange, formErrors}) => {
   const [accommodationDetail, setAccommodationDetail] = useState(accommodationDay)
   
   useEffect(()=>{
     if(accommodationIndex || accommodationList || onAccommodationListChange){
       accommodationList.splice(accommodationIndex, 1, accommodationDetail)
-      onAccommodationListChange(accommodationList)
+      const newAccommodationList = [...accommodationList]
+      onAccommodationListChange(newAccommodationList)
     }
   },[accommodationDetail, accommodationIndex, accommodationList, onAccommodationListChange])
 
@@ -30,24 +33,26 @@ const AccommodationTable = ({className, inputUsed, accommodationDay, accommodati
                   inputId="date" 
                   formContent={accommodationDetail} 
                   onFormChange={setAccommodationDetail}
+                  warning={formErrors?.accommodation?.[accommodationIndex]?.date}
                 />
                 :transferTimestamp(accommodationDetail?.date,"yyyy年MM月dd日")
               }
             </td>
           </tr>
           <tr>
-              <td className={clsx("c-table-key",{inputUsed: inputUsed})}>住宿名稱</td>
-              <td className="o-activity-table__content">
-                {inputUsed?
-                  <StyledTextInput
-                    placeholder="民宿 / 飯店 / 山屋 / 營地"
-                    inputId="name" 
-                    formContent={accommodationDetail} 
-                    onFormChange={setAccommodationDetail}
-                  />
-                  :accommodationDetail?.name
-                }
-              </td>
+            <td className={clsx("c-table-key",{inputUsed: inputUsed})}>住宿名稱</td>
+            <td className="o-activity-table__content">
+              {inputUsed?
+                <StyledTextInput
+                  placeholder="民宿 / 飯店 / 山屋 / 營地"
+                  inputId="name" 
+                  formContent={accommodationDetail} 
+                  onFormChange={setAccommodationDetail}
+                  warning={formErrors?.accommodation?.[accommodationIndex]?.name}
+                />
+                :accommodationDetail?.name
+              }
+            </td>
           </tr>
           <tr>
             <td className={clsx("c-table-key",{inputUsed: inputUsed})}>住宿地址</td>
@@ -58,6 +63,7 @@ const AccommodationTable = ({className, inputUsed, accommodationDay, accommodati
                   inputId="address"
                   formContent={accommodationDetail} 
                   onFormChange={setAccommodationDetail}
+                  warning={formErrors?.accommodation?.[accommodationIndex]?.address}
                 />
                 :displayLocation(accommodationDetail?.address)
               }
@@ -70,8 +76,10 @@ const AccommodationTable = ({className, inputUsed, accommodationDay, accommodati
                   <StyledTextArea
                     placeholder="房型價位"
                     inputId="roomDetail" 
+                    wordLimit={150}
                     formContent={accommodationDetail} 
                     onFormChange={setAccommodationDetail}
+                    warning={formErrors?.accommodation?.[accommodationIndex]?.roomDetail}
                   />
                   :accommodationDetail?.roomDetail
                 }
@@ -82,12 +90,14 @@ const AccommodationTable = ({className, inputUsed, accommodationDay, accommodati
               <td className="o-activity-table__content">
                 {inputUsed?
                   <StyledTextArea
-                    placeholder="其他注意事項"
+                    placeholder="其他注意事項(非必填)"
                     inputId="notes" 
+                    wordLimit={100}
                     formContent={accommodationDetail} 
                     onFormChange={setAccommodationDetail}
+                    warning={formErrors?.accommodation?.[accommodationIndex]?.notes}
                   />
-                  :accommodationDetail?.notes
+                  :accommodationDetail?.notes || "-"
                 }
               </td>
           </tr>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
 
 const DatePeriodInput = ({className, title, inputId, formContent, onFormChange, warning}) => {
-  const [period,setPeriod] = useState(formContent[inputId] || {start:null, end:null})
+  const [period,setPeriod] = useState(formContent?.[inputId] || {start:null, end:null})
   const [warningContent, setWarningContent] = useState(warning)
 
   const handleStartInput = (newDate) => {
@@ -58,7 +58,7 @@ const DatePeriodInput = ({className, title, inputId, formContent, onFormChange, 
         <DatePicker
           className="c-input-body__date-picker"
           disablePast
-          maxDate={period?.end ||null}
+          maxDate={period?.end || null}
           value={period?.start || null} 
           onChange={handleStartInput}
         />

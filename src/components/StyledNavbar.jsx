@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { Link, useNavigate } from "react-router-dom"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 
 import StyledActivityCreateModal from "modals/StyledActivityCreateModal"
@@ -8,7 +8,6 @@ import StyledActivityCreateModal from "modals/StyledActivityCreateModal"
 import { ReactComponent as WildSyncLogo } from "assets/icons/WildSyncLogo.svg"
 import { ReactComponent as SearchIcon } from "assets/icons/SearchIcon.svg"
 import { ReactComponent as ListIcon } from "assets/icons/ListIcon.svg"
-import { ReactComponent as UserIcon } from "assets/icons/UserIcon.svg"
 import { ReactComponent as LoginIcon } from "assets/icons/LoginIcon.svg"
 import { ReactComponent as PlusIcon } from "assets/icons/PlusIcon.svg"
 import { ReactComponent as LogoutIcon } from "assets/icons/LogoutIcon.svg"
@@ -16,16 +15,26 @@ import { ReactComponent as SettingIcon } from "assets/icons/SettingIcon.svg"
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from "api/auth"
 import { resetUser } from "reducers/userSlice"
-import StyledAccountSettingModal from "modals/StyledAccountSettingModal"
+import StyledAccountUpdateModal from "modals/StyledAccountUpdateModal"
 
 const Navbar = ({ className }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const searchbarRef = useRef(null)
+  const user = useSelector((state)=> state.user)
   const navIconsRef = useRef([])
   const [isActivityCreateModalOpen, setIsActivityCreateModalOpen] = useState(false)
-  const [isAccountSettingModalOpen, setIsAccountSettingModalOpen] = useState(false)
-  const user = useSelector((state)=> state.user)
+  const [isAccountUpdateModalOpen, setIsAccountUpdateModalOpen] = useState(false)
+
+  useEffect(()=>{
+    if(isActivityCreateModalOpen || isAccountUpdateModalOpen){
+      document.querySelector('body').classList.add('no-scroll')
+      document.querySelector('html').classList.add('no-scroll')
+    }else{
+      document.querySelector('body').classList.remove('no-scroll')
+      document.querySelector('html').classList.remove('no-scroll')
+    }
+  },[isActivityCreateModalOpen, isAccountUpdateModalOpen])
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -45,28 +54,26 @@ const Navbar = ({ className }) => {
     })
   } 
 
-  const handleActivityCreate = () => {
+  const handleActivityCreateClick = () => {
+    navIconsRef.current[0].checked = false
+    navIconsRef.current[1].checked = false
+    navIconsRef.current[3].checked = false
     setIsActivityCreateModalOpen(true)
-    navIconsRef.current[2].checked = false
-    document.querySelector('body').classList.add('no-scroll');
-    document.querySelector('html').classList.add('no-scroll');
   }
 
   const handleAccountSetting = () => {
-    setIsAccountSettingModalOpen(true)
-    navIconsRef.current[2].checked = false
-    document.querySelector('body').classList.add('no-scroll');
-    document.querySelector('html').classList.add('no-scroll');
+    setIsAccountUpdateModalOpen(true)
+    navIconsRef.current[3].checked = false
   }
   
   const handleLogin = () => {
     navigate(`/login`)
-    navIconsRef.current[2].checked = false
+    navIconsRef.current[3].checked = false
   }
 
   const handleRegister = () => {
     navigate(`/register`)
-    navIconsRef.current[2].checked = false
+    navIconsRef.current[3].checked = false
   }
 
   const handleLogout = async () => {
@@ -74,7 +81,6 @@ const Navbar = ({ className }) => {
     
     if(success){
       dispatch(resetUser())
-
       toast.success('已成功登出', {
         position: "top-right",
         autoClose: 1500,
@@ -89,17 +95,7 @@ const Navbar = ({ className }) => {
       window.location.reload()
     }
 
-    navIconsRef.current[2].checked = false
-  }
-
-  const handleActivitiesListClick = () => {
-    if(window.location !== '/'){
-      navigate('/')
-    }
-    setTimeout(()=>{
-      const activitiesList = document.querySelector('.l-activities')
-      activitiesList?.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'})
-    },500)
+    navIconsRef.current[3].checked = false
   }
   
   return(
@@ -114,26 +110,29 @@ const Navbar = ({ className }) => {
           <button onClick={handleSearch}><SearchIcon /></button>
         </div>
         <ul className="c-navbar__list">
-          <Link to="/"><li className="o-navbar__item" onClick={handleActivitiesListClick}>活動列表</li></Link>
-          <Link to="/guide"><li className="o-navbar__item">新手上路</li></Link>
+          <Link to="/activity/search"><li className="o-navbar__item">活動列表</li></Link>
+          <Link to="/guide"><li className="o-navbar__item">使用指南</li></Link>
           <Link to="/about"><li className="o-navbar__item">關於我們</li></Link>
         </ul>
         <div className="c-navbar__icons">
           <div className="o-navbar__icon">
-            <input name="navbar-icons" type="checkbox" id="o-navbar__search-icon" ref={(element)=>navIconsRef.current.push(element)} onChange={handleNavbarIconChange}/>
+            <input name="navbar-icons" type="checkbox" id="o-navbar__search-icon" ref={(element)=>navIconsRef.current[0] = element} onChange={handleNavbarIconChange}/>
             <label htmlFor="o-navbar__search-icon"><SearchIcon /></label>
           </div>
           <div className="o-navbar__icon">
-            <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon" ref={(element)=>navIconsRef.current.push(element)} onChange={handleNavbarIconChange}/>
+            <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon" ref={(element)=>navIconsRef.current[1] = element} onChange={handleNavbarIconChange}/>
             <label htmlFor="o-navbar__list-icon"><ListIcon /></label>
+          </div>
+          <div className="o-navbar__icon">
+            <label><PlusIcon onClick={handleActivityCreateClick}/></label>
           </div>
 
           <div className="o-navbar__icon">
-            <input name="navbar-icons" id="user-icon" type="checkbox" ref={(element)=>navIconsRef.current.push(element)} onChange={handleNavbarIconChange}/>
-            <label htmlFor="user-icon"><UserIcon /></label>
+            <input name="navbar-icons" type="checkbox" id="user-icon" ref={(element)=>navIconsRef.current[3] = element} onChange={handleNavbarIconChange}/>
+            <label htmlFor="user-icon"><img src={user?.photoURL||require('assets/images/userDefaultImage.png')} alt="user-icon"/></label>
             <div className="l-navbar__user-dropdown">
               {user.uid?
-              <Link to={`/user/${user.uid}`}>
+              <Link to={`/user/${user.uid}`} onClick={()=>{navIconsRef.current[3].checked = false}}>
                 <img className="o-navbar__user-avatar" src={user?.photoURL} alt="user-avatar" />
               </Link>
               :<img className="o-navbar__user-avatar not-user" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />}
@@ -142,7 +141,6 @@ const Navbar = ({ className }) => {
               <ul className="l-navbar__user-dropdown-body">
                 {user.loggedIn?
                   <>
-                    <li className="c-navbar__create-account" onClick={handleActivityCreate}><PlusIcon/>建立活動</li>
                     <li className="c-navbar__account-setting" onClick={handleAccountSetting}><SettingIcon/>帳戶設定</li>
                     <li className="c-navbar__logout" onClick={handleLogout}><LogoutIcon/>帳戶登出</li>
                   </>
@@ -154,7 +152,7 @@ const Navbar = ({ className }) => {
               </ul>
               
               <StyledActivityCreateModal isActivityCreateModalOpen={isActivityCreateModalOpen}  setIsActivityCreateModalOpen={setIsActivityCreateModalOpen}/>
-              <StyledAccountSettingModal isAccountSettingModalOpen={isAccountSettingModalOpen} setIsAccountSettingModalOpen={setIsAccountSettingModalOpen}/>
+              <StyledAccountUpdateModal isAccountUpdateModalOpen={isAccountUpdateModalOpen} setIsAccountUpdateModalOpen={setIsAccountUpdateModalOpen}/>
             </div>
           </div>
 
@@ -269,11 +267,11 @@ const StyledNavbar = styled(Navbar)`
         position: relative;
         display: block;
         display: grid;
-        grid-template-columns:repeat(3, 2rem);
+        grid-template-columns:repeat(4, 2rem);
         grid-template-rows: 2rem;
         grid-gap: .5rem;
         justify-content: center;
-        align-content: center;
+        align-items: center;
         
         .o-navbar__icon{
           input{
@@ -285,10 +283,18 @@ const StyledNavbar = styled(Navbar)`
             height: 100%;
             
             svg{
-              width: 1.25rem;
-              height: 1.25rem;
+              width: 1.5rem;
+              height: 1.5rem;
               margin: 0.375rem;
               fill: ${({theme})=> theme.color.default};
+            }
+
+            img{
+              width: 1.75rem;
+              height: 1.75rem;
+              margin: 0.25rem;
+              border: 3px solid ${({theme})=> theme.color.default};
+              border-radius: 50%;
             }
 
             &:hover{
@@ -327,6 +333,7 @@ const StyledNavbar = styled(Navbar)`
               .o-navbar__user-avatar{
                 width: 3rem;
                 height: 3rem;
+                object-fit: cover;
                 border: 5px solid ${({theme})=> theme.color.default};
                 border-radius: 50%;
                 margin-top: .75rem;
@@ -454,7 +461,7 @@ const StyledNavbar = styled(Navbar)`
 
         .c-navbar__icons{
           grid-area: icons;
-          grid-template-columns:repeat(2,2rem);
+          grid-template-columns:repeat(3,2rem);
           
           .o-navbar__icon:first-child{
             display: none;
@@ -472,7 +479,7 @@ const StyledNavbar = styled(Navbar)`
     @media screen and (min-width: 1024px){
       .l-navbar{
         display: grid;
-        grid-template-columns: 10.5rem 16rem 1fr 2rem;
+        grid-template-columns: 10.5rem 16rem 1fr 4.5rem;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 2rem;
@@ -497,7 +504,7 @@ const StyledNavbar = styled(Navbar)`
         }
 
         .c-navbar__icons{
-          grid-template-columns:2rem;
+          grid-template-columns:repeat(2,2rem);
           gap: .75rem;
           
           .o-navbar__icon:nth-child(2){

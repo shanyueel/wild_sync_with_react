@@ -18,9 +18,8 @@ const Footer = ({className}) =>{
         <div className="c-footer__nav-area">
           <ul className="c-footer__nav-list">
             <li className="o-footer__nav-item"><StyledTextLink text="關於Wild Sync" destination="/about" /></li>
-            <li className="o-footer__nav-item"><StyledTextLink text="社群守則" destination="/rules" /></li>
+            <li className="o-footer__nav-item"><StyledTextLink text="註冊帳號" destination="/register" /></li>
             <li className="o-footer__nav-item"><StyledTextLink text="使用指南" destination="/guide" /></li>
-            <li className="o-footer__nav-item"><StyledTextLink text="常見問題" destination="/faq" /></li>
           </ul>
         </div>
 
@@ -30,11 +29,11 @@ const Footer = ({className}) =>{
         </div>
         
         <div className="c-footer__contact-area">
-          <p className="o-footer__contact-title">聯繫我們</p>
+          <p className="o-footer__contact-title">聯繫Wild Sync</p>
           <div className="c-footer__contact-icons">
-            <Link className="o-footer__contact-icon" to="/contact"><MailIcon /></Link>
-            <Link className="o-footer__contact-icon" to="/contact"><LineIcon /></Link>
-            <Link className="o-footer__contact-icon" to="/contact"><LinkedInIcon /></Link>
+            <Link className="o-footer__contact-icon"><MailIcon /></Link>
+            <Link className="o-footer__contact-icon"><LineIcon /></Link>
+            <Link className="o-footer__contact-icon"><LinkedInIcon /></Link>
           </div>
         </div>
       </div>

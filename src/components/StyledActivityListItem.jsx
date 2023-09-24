@@ -151,9 +151,9 @@ const StyledActivityListItem = styled(ActivityListItem)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: calc(100% - 8rem);
+    width: calc(100% - 7.5rem);
     height: 100%;
-    padding: .75rem;
+    padding: .5rem .75rem;
 
     .l-activity-card__title{
       display: flex;

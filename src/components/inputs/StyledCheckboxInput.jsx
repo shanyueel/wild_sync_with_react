@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 const CheckboxInput = ({className, title, inputId, checkboxOptions, formContent, onFormChange, warningContent}) => {
   const [checkedList, setCheckedList] = useState(formContent?.[inputId] || [])
-  console.log(checkedList)
 
   const handleCheckboxChange = (e) => {
     let newCheckedList = checkedList

@@ -149,8 +149,8 @@ const Navbar = ({ className }) => {
                   </>
                   :
                   <>
+                    <li className="c-navbar__login" onClick={handleLogin}><LoginIcon/> 帳號登入</li>
                     <li className="c-navbar__register" onClick={handleRegister}><PlusIcon/> 帳號註冊</li>
-                    <li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>
                   </>}
               </ul>
               

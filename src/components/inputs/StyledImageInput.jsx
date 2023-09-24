@@ -33,16 +33,30 @@ const ImageInput = ({ className, title, inputId, defaultImgURL, formContent, onF
   }
 
   const handleReset = async(e) => {
-    if(formContent[inputId]) URL.revokeObjectURL(formContent[inputId])
-    delete formContent?.[inputId]
-    delete formContent?.[`${inputId}File`]
+    if(formContent?.[`${inputId}File`]){
+      URL.revokeObjectURL(formContent?.[inputId])
+      delete formContent?.[inputId]
+      delete formContent?.[`${inputId}File`]
 
-    const newForm = {
-      ...formContent
+      const newForm = {
+        ...formContent,
+        [inputId]: defaultImgURL
+      }
+
+      onFormChange(newForm)
+      setImgSrc(defaultImgURL)
+    } else{
+      const newForm = {
+        ...formContent,
+        [inputId]: defaultImgURL
+      }
+
+      onFormChange(newForm)
+      setImgSrc(defaultImgURL)
     }
+    
 
-    onFormChange(newForm)
-    setImgSrc(defaultImgURL)
+
   }
 
   return(

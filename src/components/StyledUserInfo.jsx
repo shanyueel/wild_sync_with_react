@@ -8,7 +8,6 @@ const UserInfo = ({className, user, cardUsed, message}) => {
     return age
   }
 
-
   return(
     <div  className={className}>
       <Link to={`/user/${user?.uid}`}>

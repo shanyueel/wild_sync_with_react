@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react"
-import styled from "styled-components"
 import clsx from "clsx"
+import styled from "styled-components"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { getPopularUsersList, getUser } from "api/userApi"
 import { getActivitiesByIdList } from "api/activityApi"
+import { calculateAge } from "utils/date-fns"
 
 import StyledButton from "components/StyledButton"
 import StyledActivityListItem from "components/StyledActivityListItem"
@@ -72,12 +73,6 @@ const UserPage = ({className}) => {
     document.querySelector('html').classList.add('no-scroll');
   }
 
-  const calculateAge = (birthTimeStamp) => {
-    const currentTimeStamp = Date.now()
-    const age = Math.floor((currentTimeStamp - birthTimeStamp) / (1000 * 60 * 60 * 24 * 365.25))
-    return age
-  }
-
   const handleActivitiesChange = (e) => {
     setSelectedActivityNav(e.target.id)
   }
@@ -97,7 +92,7 @@ const UserPage = ({className}) => {
           </div>
           <div className="l-user__brief">
             <h3 className="o-user__region">{selectedUser?.region}</h3>
-            <h3 className="o-user__age">{`${calculateAge(selectedUser?.birth)}歲`}</h3>
+            {selectedUser?.birth && <h3 className="o-user__age">{`${ calculateAge(selectedUser?.birth)}歲`}</h3>}
             <h3 className="o-user__profession">{selectedUser?.profession}</h3>
           </div>
           <p className="o-user__introduction">{selectedUser?.introduction}</p>
@@ -107,7 +102,6 @@ const UserPage = ({className}) => {
               <StyledUserEditModal 
                 isUserEditModalOpen={isUserEditModalOpen} 
                 setIsUserEditModalOpen={setIsUserEditModalOpen}
-                selectedUser={selectedUser}
                 setSelectedUser={setSelectedUser}
               />
             </>
@@ -325,7 +319,7 @@ const StyledUserPage = styled(UserPage)`
 
       .l-holder-recommendation__holders{
         display: flex;
-        width: 100%;
+        width: fit-content;
         gap: .75rem;
       }
     }
@@ -372,6 +366,7 @@ const StyledUserPage = styled(UserPage)`
       
       .l-holder-recommendation__holders{
         flex-direction: column;
+        align-items: center;
       }
     }
   }

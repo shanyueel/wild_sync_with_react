@@ -111,8 +111,8 @@ const ActivityListItem = ({className, activity, sm}) => {
 
         <ul className="c-activity-card__highlights">
           <li><span>難度 : </span>{switchDifficulty(activity?.difficulty)}</li>
-          <li><span>時長 : </span>{activity?.activityTimeLength} hr</li>
-          <li><span>費用 : </span>{activity?.cost?.min} - {activity?.cost?.max}</li>
+          <li><span>時長 : </span>{activity?.activityTimeLength} h</li>
+          <li><span>費用 : </span>{activity?.cost?.min}-{activity?.cost?.max}</li>
           <li><span>人數 : </span>{activity?.attendance?.length} / {activity?.attendanceLimit}</li>
         </ul>
 
@@ -142,7 +142,7 @@ const StyledActivityListItem = styled(ActivityListItem)`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 8rem;
+  height: 7.5rem;
   border-radius: 1rem;
   background-color: ${({theme})=>theme.backgroundColor.default};
   overflow: hidden;
@@ -153,7 +153,7 @@ const StyledActivityListItem = styled(ActivityListItem)`
     justify-content: space-between;
     width: calc(100% - 8rem);
     height: 100%;
-    padding: .75rem 1rem;
+    padding: .75rem;
 
     .l-activity-card__title{
       display: flex;
@@ -334,8 +334,6 @@ const StyledActivityListItem = styled(ActivityListItem)`
         margin-top: .75rem;
 
         li{
-          border-radius: .75rem;
-          padding: .25rem .75rem;
           color: white;
           background-color: ${({theme})=>theme.color.default};
 
@@ -373,8 +371,13 @@ const StyledActivityListItem = styled(ActivityListItem)`
       }
 
       .c-activity-card__highlights{
-        li:last-child{
-          display: block;
+        li{
+          border-radius: .75rem;
+          padding: .25rem .75rem;
+
+          &:last-child{
+            display: block;
+          }
         }
       }
 

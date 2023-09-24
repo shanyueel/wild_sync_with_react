@@ -4,6 +4,8 @@ import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, delete
 import { firestoreDB } from "./firebaseConfig";
 import { asyncForEach } from "utils/asyncLoop";
 
+const defaultImageURL = require('data/defaultImageURL.json')
+
 export const getUser = async(userId) => {
   try{
     const userInfo = (await getDoc(doc(firestoreDB, 'users', `${userId}`)))?.data()
@@ -52,8 +54,8 @@ export const buildUser = async(userId, accountInfo) => {
       role: "user",
       email: accountInfo?.email,
       displayName: accountInfo?.displayName,
-      photoURL: "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/avatars%2Fdefault-avatar.png?alt=media&token=9be55a06-7192-4e2b-b6b5-884cd6fece53",
-      coverURL: "https://firebasestorage.googleapis.com/v0/b/wildsync.appspot.com/o/covers%2Fdefault-cover.png?alt=media&token=bd06bf50-1469-4bcb-9ec5-0e709489b159",
+      photoURL: defaultImageURL?.userAvatar,
+      coverURL: defaultImageURL?.userCover,
       profession: "登山人",
       birth: null,
       region: "以山為家",
@@ -84,7 +86,7 @@ export const updateUser = async(userId, updateContent) => {
       await setDoc(doc(firestoreDB, 'users', `${userId}`), updateDocContent, { merge:true })
       await updateProfile(auth.currentUser, updateProfileContent)
 
-      return {success: true, id: userId, ...updateContent}
+      return {success: true}
     }
     
   }catch(error){

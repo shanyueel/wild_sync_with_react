@@ -27,6 +27,20 @@ const ActivityListItem = ({className, activity, sm}) => {
   },[activityId, user])
 
   const handleActivityLiked = async() => {
+    if(!user.loggedIn){
+      toast.error('請登入以收藏', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      return
+    }
+    
     const {success} = await alterActivityLiked(userId, activityId)
     setIsActivityLiked(!isActivityLiked)
 

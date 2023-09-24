@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { alterActivityLiked } from "api/activityApi";
@@ -15,6 +15,7 @@ import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
 
 const ActivityCardItem = ({className, activity}) => {
+  const navigate = useNavigate()
   const defaultImageURL = require('data/defaultImageURL.json')
   const user = useSelector(state => state.user)
   const userId = user?.uid
@@ -26,6 +27,20 @@ const ActivityCardItem = ({className, activity}) => {
   },[activityId, user])
 
   const handleActivityLiked = async() => {
+    if(!user.loggedIn){
+      toast.error('請登入以收藏', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      return
+    }
+
     const {success} = await alterActivityLiked(userId, activityId)
     setIsActivityLiked(!isActivityLiked)
 

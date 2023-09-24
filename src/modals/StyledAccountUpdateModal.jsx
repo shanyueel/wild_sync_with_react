@@ -112,23 +112,24 @@ const AccountUpdateModal = ({className, isAccountUpdateModalOpen, setIsAccountUp
         <form className='l-modal__form-container scrollbar'>
           <StyledTextInput 
             title="使用者名稱" 
-            placeholder="請輸入使用者名稱"
             inputId="displayName" 
+            placeholder="請輸入使用者名稱"
+            wordLimit={16}
             formContent={accountContent}
             onFormChange={setAccountContent}
           />
           <StyledTextInput 
             title="使用者信箱" 
-            placeholder="請輸入使用者信箱"
             inputId="email" 
+            placeholder="請輸入使用者信箱"
             formContent={accountContent}
             onFormChange={setAccountContent}
           />
           <StyledTextInput
             password
             title="重設使用者密碼" 
-            placeholder="請輸入新的使用者密碼(16字數內)"
             inputId="newPassword" 
+            placeholder="請輸入新的使用者密碼(16字數內)"
             wordLimit={16}
             formContent={accountContent}
             onFormChange={setAccountContent}
@@ -136,8 +137,8 @@ const AccountUpdateModal = ({className, isAccountUpdateModalOpen, setIsAccountUp
           <StyledTextInput 
             password
             title="確認使用者密碼" 
-            placeholder="請確認新的使用者密碼"
             inputId="newPasswordCheck" 
+            placeholder="請確認新的使用者密碼"
             wordLimit={16}
             formContent={accountContent}
             onFormChange={setAccountContent}

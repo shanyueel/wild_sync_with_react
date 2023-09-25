@@ -36,8 +36,11 @@ const Navbar = ({ className }) => {
     }
   },[isActivityCreateModalOpen, isAccountUpdateModalOpen])
 
+  const handleSearchEnter = (e) => {
+    if(e.key === "Enter") handleSearch()
+  }
+
   const handleSearch = (e) => {
-    e.preventDefault()
     if(searchbarRef.current.value.length === 0) return
     navIconsRef.current[0].checked = false
     const keyword = searchbarRef.current.value
@@ -106,7 +109,7 @@ const Navbar = ({ className }) => {
           <h1 className="o-navbar__brand">Wild Sync</h1>
         </Link>
         <div className="o-navbar__searchbar">
-          <input type='search' placeholder="登山路線、營地、潛水處" ref={searchbarRef}/>
+          <input type='search' placeholder="登山路線、營地、潛水處" ref={searchbarRef} onKeyUp={handleSearchEnter}/>
           <button onClick={handleSearch}><SearchIcon /></button>
         </div>
         <ul className="c-navbar__list">

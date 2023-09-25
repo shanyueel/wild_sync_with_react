@@ -24,6 +24,7 @@ const ActivitySearchPage = ({ className }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
+
   const [isFiltersDisplay, setIsFiltersDisplay] = useState(false)
   const [searchOrder, setSearchOrder] = useState({ order: "releaseDate" })
   const [searchFilter, setSearchFilter] = useState({
@@ -33,7 +34,7 @@ const ActivitySearchPage = ({ className }) => {
     time: JSON.parse(queryParams?.get('time'))
   })
   const [searchResultsActivities, setSearchResultsActivities] = useState([])
-  const [orderedActivities, setOrderedActivities] = useState(searchResultsActivities)
+  const [orderedActivities, setOrderedActivities] = useState([])
   const [isActivitiesLoading, setIsActivitiesLoading] = useState(true)
 
   useEffect(()=>{
@@ -44,6 +45,13 @@ const ActivitySearchPage = ({ className }) => {
       setOrderedActivities(searchResultsActivities)
       setIsActivitiesLoading(false)
     } 
+    
+    setSearchFilter({
+      keyword: queryParams.get('keyword'),
+      location: JSON.parse(queryParams?.get('location')),
+      difficulty: JSON.parse(queryParams?.get('difficulty')),
+      time: JSON.parse(queryParams?.get('time'))
+    })
     getFilteredActivities()
   },[location.search])
 

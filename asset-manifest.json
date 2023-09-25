@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/wild_sync_with_react/static/css/main.f539e949.css",
-    "main.js": "/wild_sync_with_react/static/js/main.1adc3ce4.js",
+    "main.js": "/wild_sync_with_react/static/js/main.79dc0394.js",
     "static/js/787.d551fb83.chunk.js": "/wild_sync_with_react/static/js/787.d551fb83.chunk.js",
     "static/media/loginImage.png": "/wild_sync_with_react/static/media/loginImage.a9146be475be82d05ff3.png",
     "static/media/notFoundPageImage.jpg": "/wild_sync_with_react/static/media/notFoundPageImage.226cf785c97decdb4fc8.jpg",
@@ -41,11 +41,11 @@
     "static/media/HeartIcon.svg": "/wild_sync_with_react/static/media/HeartIcon.c92e920e461194c54ddbc9a6db021e19.svg",
     "static/media/SearchIcon.svg": "/wild_sync_with_react/static/media/SearchIcon.4e2b9a9739b2b7ebc9e0fb9424549939.svg",
     "main.f539e949.css.map": "/wild_sync_with_react/static/css/main.f539e949.css.map",
-    "main.1adc3ce4.js.map": "/wild_sync_with_react/static/js/main.1adc3ce4.js.map",
+    "main.79dc0394.js.map": "/wild_sync_with_react/static/js/main.79dc0394.js.map",
     "787.d551fb83.chunk.js.map": "/wild_sync_with_react/static/js/787.d551fb83.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f539e949.css",
-    "static/js/main.1adc3ce4.js"
+    "static/js/main.79dc0394.js"
   ]
 }

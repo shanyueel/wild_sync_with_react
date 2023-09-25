@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/wild_sync_with_react/static/css/main.f539e949.css",
-    "main.js": "/wild_sync_with_react/static/js/main.90c95a72.js",
+    "main.js": "/wild_sync_with_react/static/js/main.cebd6422.js",
     "static/js/787.d551fb83.chunk.js": "/wild_sync_with_react/static/js/787.d551fb83.chunk.js",
     "static/media/loginImage.png": "/wild_sync_with_react/static/media/loginImage.a9146be475be82d05ff3.png",
     "static/media/notFoundPageImage.jpg": "/wild_sync_with_react/static/media/notFoundPageImage.226cf785c97decdb4fc8.jpg",
@@ -16,8 +16,8 @@
     "static/media/SettingIcon.svg": "/wild_sync_with_react/static/media/SettingIcon.b025f2dd6454f62eedb36502ff98e839.svg",
     "static/media/GridIcon.svg": "/wild_sync_with_react/static/media/GridIcon.078114b5db278b7e10ff95fc8451cba2.svg",
     "static/media/WildSyncLogo.svg": "/wild_sync_with_react/static/media/WildSyncLogo.cb9544eef4c43d7d8715a24e5b0a9194.svg",
-    "static/media/CrowdIcon.svg": "/wild_sync_with_react/static/media/CrowdIcon.313a2c7b4df5ec3919c0f23514f6b0fd.svg",
     "index.html": "/wild_sync_with_react/index.html",
+    "static/media/CrowdIcon.svg": "/wild_sync_with_react/static/media/CrowdIcon.313a2c7b4df5ec3919c0f23514f6b0fd.svg",
     "static/media/GroupIcon.svg": "/wild_sync_with_react/static/media/GroupIcon.dd26604c2fc3cf9a1916a37051a0a8f8.svg",
     "static/media/LogoutIcon.svg": "/wild_sync_with_react/static/media/LogoutIcon.489fc3861a23add3de95848cbbdc07ba.svg",
     "static/media/FlameIcon.svg": "/wild_sync_with_react/static/media/FlameIcon.69a7d1dffecc743897b5a29581aa2b1c.svg",
@@ -41,11 +41,11 @@
     "static/media/HeartIcon.svg": "/wild_sync_with_react/static/media/HeartIcon.c92e920e461194c54ddbc9a6db021e19.svg",
     "static/media/SearchIcon.svg": "/wild_sync_with_react/static/media/SearchIcon.4e2b9a9739b2b7ebc9e0fb9424549939.svg",
     "main.f539e949.css.map": "/wild_sync_with_react/static/css/main.f539e949.css.map",
-    "main.90c95a72.js.map": "/wild_sync_with_react/static/js/main.90c95a72.js.map",
+    "main.cebd6422.js.map": "/wild_sync_with_react/static/js/main.cebd6422.js.map",
     "787.d551fb83.chunk.js.map": "/wild_sync_with_react/static/js/787.d551fb83.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f539e949.css",
-    "static/js/main.90c95a72.js"
+    "static/js/main.cebd6422.js"
   ]
 }

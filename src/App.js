@@ -35,11 +35,9 @@ const theme = {
 
 Modal.setAppElement('#root');
 
-const basename = process.env.PUBLIC_URL
-
 function App() {
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter basename="/wild_sync_with_react">
       <ScrollToTop />
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>

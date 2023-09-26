@@ -1,0 +1,38 @@
+[
+  { 
+    "id": 1,
+    "title":"麟趾-鹿林山健行",
+    "location":"南投縣信義鄉",
+    "startTime":"2023.07.01 08:00",
+    "endTime": "2023.07.02 18:00",
+    "attendDeadline": "2023.06.24 18:00",
+    "holder": {
+      "id": 0,
+      "name" : "Daisy"
+
+    },
+    "attendants":[
+      
+    ],
+    "chatroom":[
+      {"id":1,
+        "userId":1,
+        "userName": "Daisy",
+        "content": "請盡快確認是否參加",
+        "createAt": 16981234,
+        "chat":{
+          {"id":1,
+            "createAt": 12341234,
+            "content": "我明天跟你確認",
+            "user": {
+              "userId":1,
+              "userName":"Kevin",
+              "avatar": "https://1234/12314.com"
+            }
+          }
+        }
+      }
+    ]
+
+  }
+]

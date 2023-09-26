@@ -33,19 +33,43 @@ const ActivitySearchPage = ({ className }) => {
     difficulty: JSON.parse(queryParams?.get('difficulty')),
     time: JSON.parse(queryParams?.get('time'))
   })
-
-  const [activities, setActivities] = useState([])
+  const [searchResultsActivities, setSearchResultsActivities] = useState([])
+  const [orderedActivities, setOrderedActivities] = useState([])
   const [isActivitiesLoading, setIsActivitiesLoading] = useState(true)
 
   useEffect(()=>{
     const getFilteredActivities = async() => {
       setIsActivitiesLoading(true)
       const newActivities = await getActivitiesByFilters(searchFilter)
-      setActivities(newActivities)
+      setSearchResultsActivities(newActivities)
+      setOrderedActivities(searchResultsActivities)
       setIsActivitiesLoading(false)
     } 
+    
+    setSearchFilter({
+      keyword: queryParams.get('keyword'),
+      location: JSON.parse(queryParams?.get('location')),
+      difficulty: JSON.parse(queryParams?.get('difficulty')),
+      time: JSON.parse(queryParams?.get('time'))
+    })
     getFilteredActivities()
   },[location.search])
+
+  useEffect(()=>{
+    let orderedActivities = [...searchResultsActivities]
+    if(searchOrder.order === "releaseDate"){
+      orderedActivities.sort((a,b)=> b.createAt - a.createAt)
+    }
+    if(searchOrder.order === "activityDate"){
+      orderedActivities = orderedActivities.filter(activity => activity.time.start > Date.parse(new Date()))
+      orderedActivities.sort((a,b)=> a.time.start - b.time.start)
+    }
+    if(searchOrder.order === "deadlineDate"){
+      orderedActivities = orderedActivities.filter(activity => activity.deadline > Date.parse(new Date()))
+      orderedActivities.sort((a,b)=> a.deadline - b.deadline)
+    }
+    setOrderedActivities(orderedActivities)
+  },[searchOrder,searchResultsActivities])
 
   const handleSearchbarChange = () => {
     const newForm = {
@@ -142,10 +166,14 @@ const ActivitySearchPage = ({ className }) => {
           </div>
           
           <div className="l-search-results__container">
-            { 
-              isActivitiesLoading
-              ? <StyledLoading title="活動讀取中"/>
-              : activities?.length > 0 && activities?.map(activity => <StyledActivityListItem key={activity?.id} activity={activity} />)
+            { isActivitiesLoading && <StyledLoading title="活動讀取中"/> }
+            {
+              !isActivitiesLoading && orderedActivities?.length > 0 &&
+              orderedActivities?.map(activity => <StyledActivityListItem key={activity?.id} activity={activity} />)
+            }
+            {
+              !isActivitiesLoading && orderedActivities?.length === 0 &&
+              <h2 className="o-search-results__empty">找不到相關搜尋結果</h2>
             }
           </div>
         </div>
@@ -254,6 +282,11 @@ const StyledActivitySearchPage = styled(ActivitySearchPage)`
       width:100%;
       margin-top: 1rem;
       
+      .o-search-results__empty{
+        font-weight: 700;
+        color: ${({theme})=> theme.color.default};
+        margin: 5rem 0;
+      }
     }
 
     .l-search-results__header{

@@ -50,12 +50,14 @@ const RadioInput = ({className, title, inputId, radioOptions, formContent, onFor
 }
 
 const StyledRadioInput = styled(RadioInput)`
-  
+  width: 100%;
+
   .l-radio-options{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: .75rem 1.5rem;
     width: 100%;
-    margin-top: .5rem;
 
     .c-radio-option{
       display: flex;
@@ -70,13 +72,6 @@ const StyledRadioInput = styled(RadioInput)`
         opacity: 0.25;
       }
 
-    }
-  }
-
-  @media screen and (min-width: 480px) {
-    .l-radio-options{
-      justify-content: flex-start;
-      gap: 1.5rem;
     }
   }
 

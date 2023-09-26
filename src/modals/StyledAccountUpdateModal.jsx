@@ -179,16 +179,6 @@ const AccountUpdateModal = ({className, isAccountUpdateModalOpen, setIsAccountUp
 }
 
 const StyledAccountUpdateModal = styled(AccountUpdateModal)`
-  position: relative;
-  width: 90vw;
-  height: 100vh;
-  max-width: 896px;
-  max-height: calc(100vh - 8rem);
-  margin: 5rem auto 0;
-  border-radius: .5rem;
-  background-color: ${({theme})=> theme.backgroundColor.default};
-  padding: 1rem;
-
   .l-modal__form-container{
       width: 100%;
       height: calc(100% - 4.5rem);

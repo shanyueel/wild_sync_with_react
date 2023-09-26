@@ -36,8 +36,11 @@ const Navbar = ({ className }) => {
     }
   },[isActivityCreateModalOpen, isAccountUpdateModalOpen])
 
+  const handleSearchEnter = (e) => {
+    if(e.key === "Enter") handleSearch()
+  }
+
   const handleSearch = (e) => {
-    e.preventDefault()
     if(searchbarRef.current.value.length === 0) return
     navIconsRef.current[0].checked = false
     const keyword = searchbarRef.current.value
@@ -106,7 +109,7 @@ const Navbar = ({ className }) => {
           <h1 className="o-navbar__brand">Wild Sync</h1>
         </Link>
         <div className="o-navbar__searchbar">
-          <input type='search' placeholder="登山路線、營地、潛水處" ref={searchbarRef}/>
+          <input type='search' placeholder="登山路線、營地、潛水處" ref={searchbarRef} onKeyUp={handleSearchEnter}/>
           <button onClick={handleSearch}><SearchIcon /></button>
         </div>
         <ul className="c-navbar__list">
@@ -123,9 +126,12 @@ const Navbar = ({ className }) => {
             <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon" ref={(element)=>navIconsRef.current[1] = element} onChange={handleNavbarIconChange}/>
             <label htmlFor="o-navbar__list-icon"><ListIcon /></label>
           </div>
-          <div className="o-navbar__icon">
-            <label><PlusIcon onClick={handleActivityCreateClick}/></label>
-          </div>
+          { user.loggedIn &&
+            <div className="o-navbar__icon">
+              <label><PlusIcon onClick={handleActivityCreateClick}/></label>
+            </div>
+          }
+
 
           <div className="o-navbar__icon">
             <input name="navbar-icons" type="checkbox" id="user-icon" ref={(element)=>navIconsRef.current[3] = element} onChange={handleNavbarIconChange}/>
@@ -146,8 +152,8 @@ const Navbar = ({ className }) => {
                   </>
                   :
                   <>
+                    <li className="c-navbar__login" onClick={handleLogin}><LoginIcon/> 帳號登入</li>
                     <li className="c-navbar__register" onClick={handleRegister}><PlusIcon/> 帳號註冊</li>
-                    <li className="c-navbar__login" onClick={handleLogin}><LoginIcon /> 帳號登入</li>
                   </>}
               </ul>
               
@@ -266,10 +272,9 @@ const StyledNavbar = styled(Navbar)`
       .c-navbar__icons{
         position: relative;
         display: block;
-        display: grid;
-        grid-template-columns:repeat(4, 2rem);
-        grid-template-rows: 2rem;
-        grid-gap: .5rem;
+        display: flex;
+        height: 2rem;
+        gap: .5rem;
         justify-content: center;
         align-items: center;
         
@@ -420,7 +425,7 @@ const StyledNavbar = styled(Navbar)`
       .l-navbar{
         display: grid;
         width: 100%;
-        grid-template-columns: 10.5rem 16rem 1fr 4.5rem;
+        grid-template-columns: 10.5rem 16rem 1fr auto;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 1rem;
@@ -461,7 +466,6 @@ const StyledNavbar = styled(Navbar)`
 
         .c-navbar__icons{
           grid-area: icons;
-          grid-template-columns:repeat(3,2rem);
           
           .o-navbar__icon:first-child{
             display: none;
@@ -479,7 +483,7 @@ const StyledNavbar = styled(Navbar)`
     @media screen and (min-width: 1024px){
       .l-navbar{
         display: grid;
-        grid-template-columns: 10.5rem 16rem 1fr 4.5rem;
+        grid-template-columns: 10.5rem 16rem 1fr auto;
         grid-template-rows: 100%;
         grid-template-areas: 'title searchBar . icons';
         grid-gap: 2rem;
@@ -504,7 +508,6 @@ const StyledNavbar = styled(Navbar)`
         }
 
         .c-navbar__icons{
-          grid-template-columns:repeat(2,2rem);
           gap: .75rem;
           
           .o-navbar__icon:nth-child(2){

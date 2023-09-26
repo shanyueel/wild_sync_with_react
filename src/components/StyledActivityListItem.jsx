@@ -27,6 +27,20 @@ const ActivityListItem = ({className, activity, sm}) => {
   },[activityId, user])
 
   const handleActivityLiked = async() => {
+    if(!user.loggedIn){
+      toast.error('請登入以收藏', {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
+      return
+    }
+    
     const {success} = await alterActivityLiked(userId, activityId)
     setIsActivityLiked(!isActivityLiked)
 
@@ -151,9 +165,9 @@ const StyledActivityListItem = styled(ActivityListItem)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: calc(100% - 8rem);
+    width: calc(100% - 7.5rem);
     height: 100%;
-    padding: .75rem;
+    padding: .5rem .75rem;
 
     .l-activity-card__title{
       display: flex;

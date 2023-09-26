@@ -77,6 +77,17 @@ const RegisterPage = ({className})=>{
         setTimeout(()=>{
           navigate(`/`)
         },1500)
+      }else{
+        toast.error('註冊失敗，請重新嘗試', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }
   }

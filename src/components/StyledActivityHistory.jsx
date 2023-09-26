@@ -83,8 +83,6 @@ const StyledActivityHistory = styled(ActivityHistory)`
 
   ${props=>props.sideUsed && css`
     @media screen and (min-width: 1024px){
-      height: 7.5rem;
-
       .l-activity-history__body .c-activity-history__cards{
         width: 100%;
         flex-direction: column;

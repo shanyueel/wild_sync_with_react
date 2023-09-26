@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -35,10 +35,11 @@ const theme = {
 
 Modal.setAppElement('#root');
 
-function App() {
+const basename = process.env.PUBLIC_URL
 
+function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <ScrollToTop />
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -63,7 +64,6 @@ function App() {
         </LocalizationProvider>
       </ThemeProvider>
     </BrowserRouter>
-      
   );
 }
 

@@ -15,9 +15,9 @@ import StyledLoading from "components/StyledLoading";
 import {ReactComponent as UpIcon} from "assets/icons/UpIcon.svg"
 import {ReactComponent as DownIcon} from "assets/icons/DownIcon.svg"
 
-const activitiesLocationOptions = require('data/taiwanDistricts.json')
-const activitiesDifficultyOptions = require('data/activityDifficultyOptions.json')
-const activitiesOrderOptions = require('data/activitiesOrderOptions.json')
+import activitiesLocationOptions from "data/taiwanDistricts.json"
+import activitiesDifficultyOptions from "data/activityDifficultyOptions.json"
+import activitiesOrderOptions from "data/activitiesOrderOptions.json"
 
 const ActivitySearchPage = ({ className }) => {
   const searchbarRef = useRef(null)

@@ -17,6 +17,8 @@ import { logout } from "api/auth"
 import { resetUser } from "reducers/userSlice"
 import StyledAccountUpdateModal from "modals/StyledAccountUpdateModal"
 
+import userDefaultImage from "assets/images/userDefaultImage.png"
+
 const Navbar = ({ className }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -135,13 +137,13 @@ const Navbar = ({ className }) => {
 
           <div className="o-navbar__icon">
             <input name="navbar-icons" type="checkbox" id="user-icon" ref={(element)=>navIconsRef.current[3] = element} onChange={handleNavbarIconChange}/>
-            <label htmlFor="user-icon"><img src={user?.photoURL||require('assets/images/userDefaultImage.png')} alt="user-icon"/></label>
+            <label htmlFor="user-icon"><img src={user?.photoURL||userDefaultImage} alt="user-icon"/></label>
             <div className="l-navbar__user-dropdown">
               {user.uid?
               <Link to={`/user/${user.uid}`} onClick={()=>{navIconsRef.current[3].checked = false}}>
                 <img className="o-navbar__user-avatar" src={user?.photoURL} alt="user-avatar" />
               </Link>
-              :<img className="o-navbar__user-avatar not-user" src={require("assets/images/userDefaultImage.png")} alt="user-avatar" />}
+              :<img className="o-navbar__user-avatar not-user" src={userDefaultImage} alt="user-avatar" />}
               <h2 className="o-navbar__user-name">{user.displayName}</h2>
               
               <ul className="l-navbar__user-dropdown-body">

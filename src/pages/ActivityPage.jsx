@@ -21,7 +21,7 @@ import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as HeartIcon} from "assets/icons/HeartIcon.svg"
 
-const defaultImageURL = require('data/defaultImageURL.json')
+import defaultImageURL from 'data/defaultImageURL.json'
 
 const ActivityPage = ({ className }) => {
   const navigate = useNavigate()

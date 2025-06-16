@@ -8,7 +8,7 @@ import StyledDateTimeInput from "components/inputs/StyledDateTimeInput";
 import StyledTextArea from "components/inputs/StyledTextArea";
 import StyledNumberInput from "components/inputs/StyledNumberInput";
 
-const activityDifficultyOptions = require('data/activityDifficultyOptions.json')
+import activityDifficultyOptions from 'data/activityDifficultyOptions.json'
 
 const ActivityCreateStepTwo = ({ className, formContent, onFormChange, formErrors, setFormErrors}) => {
   

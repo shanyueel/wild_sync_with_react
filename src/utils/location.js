@@ -1,6 +1,7 @@
+import taiwanDistricts from 'data/taiwanDistricts.json'
+
 export const displayLocation = ( location ) => {
   const districtsWithThreeWords = ["605", "849", "901", "963"]
-  const taiwanDistricts = require('data/taiwanDistricts.json')
   const locationCounty = taiwanDistricts?.find(county=>county?.id === location?.county)
   const locationDistrict = locationCounty?.districts?.find(district=> district?.id === location?.district)
 
@@ -14,7 +15,6 @@ export const displayLocation = ( location ) => {
 }
 
 export const displayRegion = ( location ) => {
-  const taiwanDistricts = require('data/taiwanDistricts.json')
   const locationCounty = taiwanDistricts?.find(county=>county?.id === location?.county)
   const locationDistrict = locationCounty?.districts?.find(district=> district?.id === location?.district)
 

@@ -14,7 +14,8 @@ import { updateUser} from 'api/userApi';
 import { updateUserSlice } from 'reducers/userSlice';
 import { toast } from 'react-toastify';
 import { uploadImage } from 'api/storageApi';
-const defaultImageURL = require('data/defaultImageURL.json')
+
+import defaultImageURL from 'data/defaultImageURL.json';
 
 const UserEditModal = ({className, isUserEditModalOpen, setIsUserEditModalOpen, setSelectedUser}) => {
   const dispatch = useDispatch()

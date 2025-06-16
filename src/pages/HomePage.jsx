@@ -17,14 +17,14 @@ import { toast } from "react-toastify"
 import { Link } from "react-router-dom"
 import StyledLoading from "components/StyledLoading"
 
+import activityTypeOptions from 'data/activityTypeOptions.json'
+import activitiesOrderOptions from 'data/activitiesOrderOptions.json'
+import activitiesLocationOptions from 'data/taiwanDistricts.json'
+import activitiesDifficultyOptions from 'data/activityDifficultyOptions.json'
+import homePageSliderImages from 'data/homePageSliderImages.json'
+
 const HomePage = ({className}) => {
   const filterCheckboxRef = useRef(null)
-
-  const activityTypeOptions = require('data/activityTypeOptions.json') 
-  const activitiesOrderOptions = require('data/activitiesOrderOptions.json')
-  const activitiesLocationOptions = require('data/taiwanDistricts.json')
-  const activitiesDifficultyOptions = require('data/activityDifficultyOptions.json')
-  const homePageSliderImages = require('data/homePageSliderImages.json')
 
   const [activitiesDisplay, setActivityDisplay] = useState("grid")
   const [activityList, setActivityList] = useState([])

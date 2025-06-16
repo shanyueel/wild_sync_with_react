@@ -8,10 +8,10 @@ import StyledRadioInput from "components/inputs/StyledRadioInput";
 import StyledTextInput from "components/inputs/StyledTextInput";
 import StyledLocationInput from "components/inputs/StyledLocationInput";
 
+import defaultImageURL from "data/defaultImageURL.json";
+import activityTypeOptions from "data/activityTypeOptions.json";
+
 const ActivityCreateStepOne = ({ className, formContent, onFormChange, formErrors, setFormErrors}) => {
-  const defaultImageURL = require('data/defaultImageURL.json')
-  const activityTypeOptions = require('data/activityTypeOptions.json')
-  
   useEffect(()=>{
     const updatedErrors = {...formErrors}
     if(formContent?.coverURL) updatedErrors.coverURL = ""

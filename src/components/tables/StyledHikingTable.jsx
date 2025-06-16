@@ -11,11 +11,11 @@ import StyledImageInput from "../inputs/StyledImageInput"
 import StyledLocationInput from "../inputs/StyledLocationInput"
 import StyledNumberInput from "components/inputs/StyledNumberInput"
 
-const HikingTable = ({className, inputUsed, detailContent, onDetailChange, formErrors}) => {
-  const defaultImageURL = require('data/defaultImageURL.json')
-  const hikingTrackTypeOptions = require('data/hikingTrackTypeOptions.json')
-  const hikingApplicationNeededOptions = require('data/hikingApplicationNeededOptions.json')
+import defaultImageURL from "data/defaultImageURL.json"
+import hikingTrackTypeOptions from "data/hikingTrackTypeOptions.json"
+import hikingApplicationNeededOptions from "data/hikingApplicationNeededOptions.json"
 
+const HikingTable = ({className, inputUsed, detailContent, onDetailChange, formErrors}) => {
   return(
     <table className={className}>
       <tbody>

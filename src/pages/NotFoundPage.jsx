@@ -2,6 +2,8 @@ import StyledButton from "components/StyledButton";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import notFoundImage from "assets/images/notFoundPageImage.jpg";
+
 const NotFoundPage = ({className}) => {
   const navigate = useNavigate()
 
@@ -11,7 +13,7 @@ const NotFoundPage = ({className}) => {
 
   return(
     <div className={className}>
-      <img src={require('assets/images/notFoundPageImage.jpg')} alt="not found"></img>
+      <img src={notFoundImage} alt="not found"></img>
       <h2>找不到此頁面</h2>
       <StyledButton className="o-not-found__button" onClick={handleButtonClick}>返回首頁</StyledButton>
     </div>

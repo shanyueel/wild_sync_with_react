@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-
-const taiwanDistricts = require("data/taiwanDistricts.json")
+import taiwanDistricts from "data/taiwanDistricts.json";
 
 const LocationInput = ({className, title, inputId, formContent, onFormChange, warning, detailed}) => {
   const detailRef = useRef(null)

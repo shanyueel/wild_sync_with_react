@@ -3,8 +3,7 @@ import { updateProfile } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, deleteDoc } from "@firebase/firestore";
 import { firestoreDB } from "./firebaseConfig";
 import { asyncForEach } from "utils/asyncLoop";
-
-const defaultImageURL = require('data/defaultImageURL.json')
+import defaultImageURL from 'data/defaultImageURL.json'
 
 export const getUser = async(userId) => {
   try{

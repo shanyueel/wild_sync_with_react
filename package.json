@@ -25,7 +25,6 @@
     "react-modal": "^3.16.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.2",
-    "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
     "react-toastify": "^9.1.3",
     "redux-persist": "^6.0.0",
@@ -35,12 +34,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "vite",
+    "build": "vite build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "dev": "vite"
   },
   "eslintConfig": {
     "extends": [
@@ -61,6 +61,12 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }

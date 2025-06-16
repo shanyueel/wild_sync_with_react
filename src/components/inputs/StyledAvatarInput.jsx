@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 import {ReactComponent as UploadIcon} from "assets/icons/UploadIcon.svg"
 
+import userDefaultImage from "assets/images/userDefaultImage.png"
+
 const AvatarInput = ({className, title, warning}) => {
   return(
     <div className={className}>
@@ -10,12 +12,11 @@ const AvatarInput = ({className, title, warning}) => {
         <label className="o-input-title__warning">{warning}</label>
       </div>
       <div className="c-input-body">
-        <img className="o-avatar-input__display" src={require('assets/images/userDefaultImage.png')} alt='activity-cover'/>
+        <img className="o-avatar-input__display" src={userDefaultImage} alt='activity-cover'/>
         <div className='c-avatar-input__control'>
           <div className='o-avatar-input__control-upload'><UploadIcon/></div>
         </div>
       </div>
-
     </div>
   )
 }

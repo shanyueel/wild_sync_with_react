@@ -3,6 +3,8 @@ import { firestoreDB } from "./firebaseConfig"
 import { getUser } from "./userApi"
 import { asyncForEach } from "utils/asyncLoop"
 
+import taiwanDistricts from 'data/taiwanDistricts.json'
+
 export const getRandomId = async() => {
   try{
     const docRef = await addDoc(collection(firestoreDB, "activities"),{
@@ -180,7 +182,6 @@ export const getActivitiesByFilters = async(filters) => {
 
 export const getPopularLocations = async() => {
   try{
-    const taiwanDistricts = require('data/taiwanDistricts.json')
     const locationsOrdersQuery = query(collection(firestoreDB,"activities"), orderBy("location.county"))
     const activitiesLocations = (await getDocs(locationsOrdersQuery))?.docs?.map(doc=>doc?.data()?.location?.county)
     

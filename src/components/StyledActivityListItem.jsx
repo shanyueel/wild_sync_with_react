@@ -15,8 +15,9 @@ import {ReactComponent as LocationIcon} from "assets/icons/LocationIcon.svg"
 import {ReactComponent as CalendarIcon} from "assets/icons/CalendarIcon.svg"
 import {ReactComponent as CheckIcon} from "assets/icons/CheckIcon.svg"
 
+import defaultImageURL from "data/defaultImageURL.json";
+
 const ActivityListItem = ({className, activity, sm}) => {
-  const defaultImageURL = require('data/defaultImageURL')
   const user = useSelector(state => state.user)
   const userId = user?.uid
   const activityId = activity?.id

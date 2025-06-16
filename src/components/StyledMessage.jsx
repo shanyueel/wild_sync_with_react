@@ -1,10 +1,12 @@
 import styled from "styled-components"
 import clsx from "clsx"
 
+import userDefaultImage from "assets/images/userDefaultImage.png"
+
 const Message = ({className,isSelf}) => {
   return(
     <div className={clsx(className,{"--others":!isSelf},{"--self":isSelf})} >
-      <img className="o-activity-discussion__message-avatar" src={require("assets/images/userDefaultImage.png")} alt="user-avatar"/>
+      <img className="o-activity-discussion__message-avatar" src={userDefaultImage} alt="user-avatar"/>
       <p className="o-activity-discussion__message-content">
         我臨時有些事情需要處理，想要取消，謝謝！
       </p>

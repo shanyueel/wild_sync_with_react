@@ -18,6 +18,7 @@ import { resetUser } from "reducers/userSlice"
 import StyledAccountUpdateModal from "modals/StyledAccountUpdateModal"
 
 import userDefaultImage from "assets/images/userDefaultImage.png"
+import StyledLanguageToggle from "./StyledLanguageToggle"
 
 const Navbar = ({ className }) => {
   const dispatch = useDispatch()
@@ -127,6 +128,9 @@ const Navbar = ({ className }) => {
           <div className="o-navbar__icon">
             <input name="navbar-icons" type="checkbox" id="o-navbar__list-icon" ref={(element)=>navIconsRef.current[1] = element} onChange={handleNavbarIconChange}/>
             <label htmlFor="o-navbar__list-icon"><ListIcon /></label>
+          </div>
+          <div className="o-navbar__icon">
+            <StyledLanguageToggle />
           </div>
           { user.loggedIn &&
             <div className="o-navbar__icon">

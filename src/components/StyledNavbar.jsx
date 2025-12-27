@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import StyledActivityCreateModal from 'modals/StyledActivityCreateModal';
 
@@ -21,6 +22,10 @@ import userDefaultImage from 'assets/images/userDefaultImage.png';
 import StyledLanguageToggle from './StyledLanguageToggle';
 
 const Navbar = ({ className }) => {
+  const { t } = useTranslation(['layout']);
+
+  const translatedVisitor = useMemo(() => t('layout:visitor'), [t]);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const searchbarRef = useRef(null);
@@ -116,7 +121,7 @@ const Navbar = ({ className }) => {
         <div className="o-navbar__searchbar">
           <input
             type="search"
-            placeholder="登山路線、營地、潛水處"
+            placeholder={t('common:searchPlaceholder')}
             ref={searchbarRef}
             onKeyUp={handleSearchEnter}
           />
@@ -126,13 +131,13 @@ const Navbar = ({ className }) => {
         </div>
         <ul className="c-navbar__list">
           <Link to="/activity/search">
-            <li className="o-navbar__item">活動列表</li>
+            <li className="o-navbar__item">{t('layout:activities')}</li>
           </Link>
           <Link to="/guide">
-            <li className="o-navbar__item">使用指南</li>
+            <li className="o-navbar__item">{t('layout:guidance')}</li>
           </Link>
           <Link to="/about">
-            <li className="o-navbar__item">關於我們</li>
+            <li className="o-navbar__item">{t('layout:about')}</li>
           </Link>
         </ul>
         <div className="c-navbar__icons">
@@ -203,7 +208,9 @@ const Navbar = ({ className }) => {
                   alt="user-avatar"
                 />
               )}
-              <h2 className="o-navbar__user-name">{user.displayName}</h2>
+              <h2 className="o-navbar__user-name">
+                {user.displayName || translatedVisitor}
+              </h2>
 
               <ul className="l-navbar__user-dropdown-body">
                 {user.loggedIn ? (
@@ -213,20 +220,20 @@ const Navbar = ({ className }) => {
                       onClick={handleAccountSetting}
                     >
                       <SettingIcon />
-                      帳戶設定
+                      {t('layout:settings')}
                     </li>
                     <li className="c-navbar__logout" onClick={handleLogout}>
                       <LogoutIcon />
-                      帳戶登出
+                      {t('layout:logout')}
                     </li>
                   </>
                 ) : (
                   <>
                     <li className="c-navbar__login" onClick={handleLogin}>
-                      <LoginIcon /> 帳號登入
+                      <LoginIcon /> {t('layout:login')}
                     </li>
                     <li className="c-navbar__register" onClick={handleRegister}>
-                      <PlusIcon /> 帳號註冊
+                      <PlusIcon /> {t('layout:register')}
                     </li>
                   </>
                 )}

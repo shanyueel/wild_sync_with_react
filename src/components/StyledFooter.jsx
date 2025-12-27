@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import styled from 'styled-components';
 import StyledTextLink from './StyledTextLink';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as WildSyncLogo } from 'assets/icons/WildSyncLogo.svg';
 import { ReactComponent as LineIcon } from 'assets/icons/LineIcon.svg';
@@ -9,6 +10,8 @@ import { ReactComponent as MailIcon } from 'assets/icons/MailIcon.svg';
 import { ReactComponent as LinkedInIcon } from 'assets/icons/LinkedInIcon.svg';
 
 const Footer = ({ className }) => {
+  const { t } = useTranslation();
+
   const location = useLocation();
   const pathname = location.pathname;
 
@@ -22,13 +25,22 @@ const Footer = ({ className }) => {
         <div className="c-footer__nav-area">
           <ul className="c-footer__nav-list">
             <li className="o-footer__nav-item">
-              <StyledTextLink text="關於Wild Sync" destination="/about" />
+              <StyledTextLink
+                text={t('layout:aboutWildSync')}
+                destination="/about"
+              />
             </li>
             <li className="o-footer__nav-item">
-              <StyledTextLink text="註冊帳號" destination="/register" />
+              <StyledTextLink
+                text={t('layout:register')}
+                destination="/register"
+              />
             </li>
             <li className="o-footer__nav-item">
-              <StyledTextLink text="使用指南" destination="/guide" />
+              <StyledTextLink
+                text={t('layout:guidance')}
+                destination="/guide"
+              />
             </li>
           </ul>
         </div>
@@ -39,7 +51,7 @@ const Footer = ({ className }) => {
         </div>
 
         <div className="c-footer__contact-area">
-          <p className="o-footer__contact-title">聯繫Wild Sync</p>
+          <p className="o-footer__contact-title">{t('layout:contactUs')}</p>
           <div className="c-footer__contact-icons">
             <Link className="o-footer__contact-icon">
               <MailIcon />

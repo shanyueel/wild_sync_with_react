@@ -4,7 +4,7 @@ const initialProfile = {
   loggedIn: false,
   uid: null,
   email: '',
-  displayName: '訪客',
+  displayName: '',
   photoURL: '',
   coverURL: '',
   profession: '',

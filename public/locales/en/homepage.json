@@ -1,0 +1,34 @@
+{
+  "popularLocations": "Popular Locations",
+  "activityList": "Activity List",
+  "all": "All",
+  "filter": "Filter",
+  "sortBy": "Sort By",
+  "difficulty": "Difficulty",
+  "time": "Time",
+  "location": "Location",
+  "filterButton": "Filter",
+  "displayMode": "Display Mode",
+
+  "loadingLocations": "Loading Locations...",
+  "noFilterChanged": "No conditions changed",
+  "activityTypes": {
+    "hiking": "Hiking",
+    "camping": "Camping",
+    "cycling": "Cycling",
+    "diving": "Diving",
+    "others": "Others"
+  },
+  "orderOptions": {
+    "releaseDate": "Latest Release",
+    "activityDate": "Activity Date",
+    "deadlineDate": "Deadline Approaching"
+  },
+  "difficultyOptions": {
+    "beginner": "Beginner",
+    "medium": "Medium",
+    "advanced": "Advanced",
+    "expert": "Expert",
+    "master": "Master"
+  }
+}

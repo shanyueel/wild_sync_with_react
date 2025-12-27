@@ -1,0 +1,33 @@
+{
+  "popularLocations": "熱門活動地點",
+  "activityList": "活動列表",
+  "all": "不限",
+  "filter": "篩選器",
+  "sortBy": "排序方式",
+  "difficulty": "活動難度",
+  "time": "活動時間",
+  "location": "活動地點",
+  "filterButton": "篩選",
+  "displayMode": "顯示方式",
+  "loadingLocations": "地點讀取中",
+  "noFilterChanged": "未更改任何條件",
+  "activityTypes": {
+    "hiking": "登山",
+    "camping": "露營",
+    "cycling": "單車",
+    "diving": "潛水",
+    "others": "其他"
+  },
+  "orderOptions": {
+    "releaseDate": "最新發布",
+    "activityDate": "活動時間",
+    "deadlineDate": "即將截止"
+  },
+  "difficultyOptions": {
+    "beginner": "入門",
+    "medium": "中等",
+    "advanced": "進階",
+    "expert": "專家",
+    "master": "大師"
+  }
+}

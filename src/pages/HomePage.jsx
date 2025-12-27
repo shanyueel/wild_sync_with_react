@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledImageSlider from 'components/StyledImageSlider';
 import StyledActivityCardItem from 'components/StyledActivityCardItem';
@@ -24,6 +25,7 @@ import activitiesDifficultyOptions from 'data/activityDifficultyOptions.json';
 import homePageSliderImages from 'data/homePageSliderImages.json';
 
 const HomePage = ({ className }) => {
+  const { t } = useTranslation(['common', 'homepage']);
   const filterCheckboxRef = useRef(null);
 
   const [activitiesDisplay, setActivityDisplay] = useState('grid');
@@ -34,6 +36,43 @@ const HomePage = ({ className }) => {
   const [popularLocations, setPopularLocations] = useState([]);
   const [isPopularLocationsLoading, setIsPopularLocationsLoading] =
     useState(true);
+
+  const translatedPopularLocations = useMemo(() => {
+    if (popularLocations.length === 0) return [];
+
+    return popularLocations.map((location) => ({
+      ...location,
+      name: t(`common:location.${location.id}`),
+    }));
+  }, [t, popularLocations]);
+
+  const translatedActivityTypeOptions = useMemo(() => {
+    return activityTypeOptions.map((option) => ({
+      ...option,
+      name: t(`homepage:activityTypes.${option.id}`),
+    }));
+  }, [t]);
+
+  const translatedOrderOptions = useMemo(() => {
+    return activitiesOrderOptions.map((option) => ({
+      ...option,
+      name: t(`homepage:orderOptions.${option.id}`),
+    }));
+  }, [t]);
+
+  const translatedDifficultyOptions = useMemo(() => {
+    return activitiesDifficultyOptions.map((option) => ({
+      ...option,
+      name: t(`homepage:difficultyOptions.${option.id}`),
+    }));
+  }, [t]);
+
+  const translatedLocationOptions = useMemo(() => {
+    return activitiesLocationOptions.map((option) => ({
+      ...option,
+      name: t(`common:location.${option.id}`),
+    }));
+  }, [t]);
 
   useEffect(() => {
     const getActivities = async () => {
@@ -60,7 +99,7 @@ const HomePage = ({ className }) => {
   const handleActivitiesFilter = async (e) => {
     e.preventDefault();
     if (Object.keys(filterCache).length === 0) {
-      toast.error('未更改任何條件', {
+      toast.error(t('homepage:noFilterChanged'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -85,12 +124,14 @@ const HomePage = ({ className }) => {
       <StyledImageSlider sliderImages={homePageSliderImages} />
 
       <div className="l-popular-places">
-        <h1 className="o-popular-places__title">熱門活動地點</h1>
+        <h1 className="o-popular-places__title">
+          {t('homepage:popularLocations')}
+        </h1>
         {isPopularLocationsLoading ? (
-          <StyledLoading title="地點讀取中" />
+          <StyledLoading title={t('homepage:loadingLocations')} />
         ) : (
           <div className="l-popular-places__container">
-            {popularLocations?.map((popularPlace) => {
+            {translatedPopularLocations?.map((popularPlace) => {
               return (
                 <Link
                   to={`/activity/search?location=["${popularPlace?.id}"]`}
@@ -113,7 +154,7 @@ const HomePage = ({ className }) => {
       </div>
 
       <div className="l-activities">
-        <h1 className="o-activities__title">活動列表</h1>
+        <h1 className="o-activities__title">{t('homepage:activityList')}</h1>
         <ul className="c-activities__types-options">
           <li className="o-activities__type">
             <input
@@ -122,9 +163,9 @@ const HomePage = ({ className }) => {
               id="all-type"
               defaultChecked
             />
-            <label htmlFor="all-type">不限</label>
+            <label htmlFor="all-type">{t('homepage:all')}</label>
           </li>
-          {activityTypeOptions?.map((activityType) => {
+          {translatedActivityTypeOptions?.map((activityType) => {
             return (
               <li className="o-activities__type" key={activityType.id}>
                 <input
@@ -146,35 +187,37 @@ const HomePage = ({ className }) => {
               ref={filterCheckboxRef}
               type="checkbox"
             />
-            <label htmlFor="o-activities-filter__checkbox">▼ 篩選器</label>
+            <label htmlFor="o-activities-filter__checkbox">
+              ▼ {t('homepage:filter')}
+            </label>
             <form className="l-activities-filters__dropdown">
               <StyledSelector
-                title="排序方式"
+                title={t('homepage:sortBy')}
                 selectorId="order"
-                optionList={activitiesOrderOptions}
+                optionList={translatedOrderOptions}
                 formContent={filterCache}
                 onFormChange={setFilterCache}
               />
 
               <StyledCheckboxInput
-                title="活動難度"
+                title={t('homepage:difficulty')}
                 inputId="difficulty"
-                checkboxOptions={activitiesDifficultyOptions}
+                checkboxOptions={translatedDifficultyOptions}
                 formContent={filterCache}
                 onFormChange={setFilterCache}
               />
 
               <StyledDatePeriodInput
-                title="活動時間"
+                title={t('homepage:time')}
                 inputId="time"
                 formContent={filterCache}
                 onFormChange={setFilterCache}
               />
 
               <StyledCheckboxInput
-                title="活動地點"
+                title={t('homepage:location')}
                 inputId="location"
-                checkboxOptions={activitiesLocationOptions}
+                checkboxOptions={translatedLocationOptions}
                 formContent={filterCache}
                 onFormChange={setFilterCache}
               />
@@ -183,14 +226,17 @@ const HomePage = ({ className }) => {
                 className="o-activities-filters__button"
                 onClick={handleActivitiesFilter}
               >
-                篩選
+                {t('homepage:filterButton')}
               </StyledButton>
             </form>
           </div>
 
           <div className="c-activities-display">
-            <h3 className="o-activities-display__title">顯示方式</h3>
+            <h3 className="o-activities-display__title">
+              {t('homepage:displayMode')}
+            </h3>
             <div className="c-activities-display__option">
+              {' '}
               <input
                 type="radio"
                 name="activities-display"
@@ -218,7 +264,7 @@ const HomePage = ({ className }) => {
 
         <div className="l-activities__container">
           {isActivityListLoading ? (
-            <StyledLoading title="活動讀取中" />
+            <StyledLoading title={t('common:loadingActivities')} />
           ) : (
             <div
               className={clsx(
@@ -231,7 +277,7 @@ const HomePage = ({ className }) => {
               )}
             >
               {isActivityListLoading ? (
-                <StyledLoading title="活動讀取中" />
+                <StyledLoading title={t('common:loadingActivities')} />
               ) : activitiesDisplay === 'grid' ? (
                 activityList?.map((activity) => (
                   <StyledActivityCardItem
@@ -292,7 +338,9 @@ const StyledHomePage = styled(HomePage)`
 
         .o-popular-place__name {
           margin-top: 1rem;
+          font-size: 1rem;
           font-weight: 700;
+          white-space: nowrap;
         }
       }
     }

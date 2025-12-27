@@ -1,3 +1,28 @@
 {
-  "searchPlaceholder": "Hiking trails, campsites, diving spots..."
+  "searchPlaceholder": "Hiking trails, campsites, diving spots...",
+  "loadingActivities": "Loading Activities...",
+  "location": {
+    "TPE": "Taipei City",
+    "TPH": "New Taipei City",
+    "KLU": "Keelung City",
+    "TYC": "Taoyuan City",
+    "HSC": "Hsinchu City",
+    "HSH": "Hsinchu County",
+    "MAL": "Miaoli County",
+    "TXG": "Taichung City",
+    "NTO": "Nantou County",
+    "CWH": "Changhua County",
+    "CYI": "Chiayi City",
+    "CHY": "Chiayi County",
+    "YLH": "Yunlin County",
+    "TNN": "Tainan City",
+    "KHH": "Kaohsiung City",
+    "IUH": "Pingtung County",
+    "ILN": "Yilan County",
+    "HWA": "Hualien County",
+    "TTT": "Taitung County",
+    "PEH": "Penghu County",
+    "KMN": "Kinmen County",
+    "LNN": "Lienchiang County"
+  }
 }

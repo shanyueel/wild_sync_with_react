@@ -1,80 +1,89 @@
-import clsx from "clsx";
-import styled from "styled-components";
-import { useEffect, useState } from "react";
+import clsx from 'clsx';
+import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 
-const RadioInput = ({className, title, inputId, radioOptions, formContent, onFormChange, warning}) => {
-  const [warningContent, setWarningContent] = useState(warning) 
+const RadioInput = ({
+  className,
+  title,
+  inputId,
+  radioOptions,
+  formContent,
+  onFormChange,
+  warning,
+}) => {
+  const [warningContent, setWarningContent] = useState(warning);
 
-  useEffect(()=>{
-    setWarningContent(warning)
-  },[warning])
+  useEffect(() => {
+    setWarningContent(warning);
+  }, [warning]);
 
   const handleRadioChange = (e) => {
     const newForm = {
       ...formContent,
-      [inputId]: e.target.value
-    }
-    onFormChange(newForm)
-  }
+      [inputId]: e.target.value,
+    };
+    onFormChange(newForm);
+  };
 
-  return(
+  return (
     <div className={className}>
-      {
-        ( title || warningContent ) && 
+      {(title || warningContent) && (
         <div className="c-input-title">
           <label className="o-input-title__name">{title}</label>
           <label className="o-input-title__warning">{warningContent}</label>
         </div>
-      }
+      )}
       <div className="l-radio-options">
-        {radioOptions.map(radioOption =>{
-          return(
-            <div key={radioOption.id} className={clsx("c-radio-option",{"--disabled":radioOption.disabled}) }>
+        {radioOptions.map((radioOption) => {
+          return (
+            <div
+              key={radioOption.id}
+              className={clsx('c-radio-option', {
+                '--disabled': radioOption.disabled,
+              })}
+            >
               <input
                 id={radioOption.id}
-                type="radio" 
+                type="radio"
                 name={inputId}
-                value={radioOption.id}  
-                onChange={handleRadioChange} 
-                checked={radioOption.id===formContent?.[inputId]} 
-                disabled={radioOption.disabled} 
+                value={radioOption.id}
+                onChange={handleRadioChange}
+                checked={radioOption.id === formContent?.[inputId]}
+                disabled={radioOption.disabled}
               />
               <label htmlFor={radioOption.id}>{radioOption.name}</label>
             </div>
-          )
+          );
         })}
       </div>
-
     </div>
-  )
-}
+  );
+};
 
 const StyledRadioInput = styled(RadioInput)`
   width: 100%;
 
-  .l-radio-options{
+  .l-radio-options {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-    gap: .75rem 1.5rem;
+    gap: 0.75rem 1.5rem;
     width: 100%;
 
-    .c-radio-option{
+    .c-radio-option {
       display: flex;
       align-items: center;
 
-      label{
+      label {
         white-space: nowrap;
-        margin-left: .25rem;
+        margin-left: 0.25rem;
       }
 
-      &.--disabled{
+      &.--disabled {
         opacity: 0.25;
       }
-
     }
   }
+`;
 
-`
-
-export default StyledRadioInput
+export default StyledRadioInput;

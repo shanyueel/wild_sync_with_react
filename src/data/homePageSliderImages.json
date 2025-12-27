@@ -1,14 +1,14 @@
 [
-    {
-      "title": "picture1",
-      "image": "https://www.rei.com/dam/parrish_091412_0679_main_lg.jpg"
-    },
-    {
-      "title": "picture2",
-      "image": "https://lp-cms-production.imgix.net/2021-12/GettyImages-1288356010.jpg?auto=format&w=1440&h=810&fit=crop&q=75"
-    },
-    {
-      "title": "picture3",
-      "image": "https://dsgmedia.blob.core.windows.net/pub/2020/03/10-Best-Outdoor-Activities-to-do-with-Kids2.jpg"
-    }
-  ]
+  {
+    "title": "picture1",
+    "image": "https://www.rei.com/dam/parrish_091412_0679_main_lg.jpg"
+  },
+  {
+    "title": "picture2",
+    "image": "https://lp-cms-production.imgix.net/2021-12/GettyImages-1288356010.jpg?auto=format&w=1440&h=810&fit=crop&q=75"
+  },
+  {
+    "title": "picture3",
+    "image": "https://dsgmedia.blob.core.windows.net/pub/2020/03/10-Best-Outdoor-Activities-to-do-with-Kids2.jpg"
+  }
+]

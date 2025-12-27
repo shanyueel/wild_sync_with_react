@@ -13,9 +13,17 @@ const LanguageToggle = ({ className }) => {
 
   return (
     <div className={className} onClick={toggleLanguage}>
-      <div className={`c-language-toggle toggle-bg ${isEn ? 'c-language-toggle--left' : 'c-language-toggle--right'}`} />
-      <span className={`c-language-toggle__lang-text ${isEn ? 'active' : ''}`}>EN</span>
-      <span className={`c-language-toggle__lang-text ${!isEn ? 'active' : ''}`}>ZH</span>
+      <div
+        className={`c-language-toggle toggle-bg ${
+          isEn ? 'c-language-toggle--left' : 'c-language-toggle--right'
+        }`}
+      />
+      <span className={`c-language-toggle__lang-text ${isEn ? 'active' : ''}`}>
+        EN
+      </span>
+      <span className={`c-language-toggle__lang-text ${!isEn ? 'active' : ''}`}>
+        ZH
+      </span>
     </div>
   );
 };

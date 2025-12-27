@@ -1,9 +1,9 @@
 [
-  { 
+  {
     "name": "需要",
     "id": "needed"
   },
-  { 
+  {
     "name": "不需要",
     "id": "unNeeded"
   }

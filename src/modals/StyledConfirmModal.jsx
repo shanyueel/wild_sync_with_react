@@ -1,36 +1,43 @@
 import Modal from 'react-modal';
-import styled from "styled-components";
+import styled from 'styled-components';
 
 import StyledButton from 'components/StyledButton';
 
-const ConfirmModal = ({className, title, children, isConfirmModalOpen, setIsConfirmModalOpen, handleConfirmClick}) => {
-
+const ConfirmModal = ({
+  className,
+  title,
+  children,
+  isConfirmModalOpen,
+  setIsConfirmModalOpen,
+  handleConfirmClick,
+}) => {
   const closeModal = () => {
     setIsConfirmModalOpen(false);
-  }
-  
-  return(
+  };
+
+  return (
     <Modal
       className={className}
       isOpen={isConfirmModalOpen}
       onRequestClose={closeModal}
       contentLabel="Activity Create Modal"
     >
-      <div className='l-modal__header'>
-        <h2 className='o-modal__title'>{title}</h2>
+      <div className="l-modal__header">
+        <h2 className="o-modal__title">{title}</h2>
       </div>
 
-      <div className='l-modal__body'>
-        <div className='o-modal__content'>{children}</div>
-        <div className='l-modal__controls'>
+      <div className="l-modal__body">
+        <div className="o-modal__content">{children}</div>
+        <div className="l-modal__controls">
           <StyledButton onClick={closeModal}>取消</StyledButton>
-          <StyledButton alert onClick={handleConfirmClick}>確認</StyledButton>
+          <StyledButton alert onClick={handleConfirmClick}>
+            確認
+          </StyledButton>
         </div>
       </div>
-
     </Modal>
-  )
-}
+  );
+};
 
 const StyledConfirmModal = styled(ConfirmModal)`
   position: fixed;
@@ -39,23 +46,23 @@ const StyledConfirmModal = styled(ConfirmModal)`
   width: 65vw;
   max-width: 320px;
   height: fit-content;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 
-  .l-modal__body{
+  .l-modal__body {
     display: flex;
     flex-direction: column;
-    .o-modal__content{
+    .o-modal__content {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       flex-grow: 1;
-      gap: .75rem;
+      gap: 0.75rem;
       width: 75%;
       margin: 0 auto;
       padding-top: 1rem;
     }
   }
-`
+`;
 
-export default StyledConfirmModal
+export default StyledConfirmModal;

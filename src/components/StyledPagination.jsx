@@ -1,40 +1,60 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
-import {ReactComponent as ReturnIcon} from "assets/icons/ReturnIcon.svg"
-import {ReactComponent as NextIcon} from "assets/icons/NextIcon.svg"
+import { ReactComponent as ReturnIcon } from 'assets/icons/ReturnIcon.svg';
+import { ReactComponent as NextIcon } from 'assets/icons/NextIcon.svg';
 
-const Pagination = ({className, lightTheme}) => {
-  return(
+const Pagination = ({ className, lightTheme }) => {
+  return (
     <div className={className}>
-      <ReturnIcon/>
-        <ul>
-          <li><input type="radio" name="activities-pagination" id="page-1" defaultChecked/><label htmlFor="page-1">1</label></li>
-          <li><input type="radio" name="activities-pagination" id="page-2" /><label htmlFor="page-2">2</label></li>
-          <li><input type="radio" name="activities-pagination" id="page-3" /><label htmlFor="page-3">3</label></li>
-          <li><input type="radio" name="activities-pagination" id="page-4" /><label htmlFor="page-4">4</label></li>
-          <li><input type="radio" name="activities-pagination" id="page-5" /><label htmlFor="page-5">5</label></li>
-        </ul>
-      <NextIcon/>
+      <ReturnIcon />
+      <ul>
+        <li>
+          <input
+            type="radio"
+            name="activities-pagination"
+            id="page-1"
+            defaultChecked
+          />
+          <label htmlFor="page-1">1</label>
+        </li>
+        <li>
+          <input type="radio" name="activities-pagination" id="page-2" />
+          <label htmlFor="page-2">2</label>
+        </li>
+        <li>
+          <input type="radio" name="activities-pagination" id="page-3" />
+          <label htmlFor="page-3">3</label>
+        </li>
+        <li>
+          <input type="radio" name="activities-pagination" id="page-4" />
+          <label htmlFor="page-4">4</label>
+        </li>
+        <li>
+          <input type="radio" name="activities-pagination" id="page-5" />
+          <label htmlFor="page-5">5</label>
+        </li>
+      </ul>
+      <NextIcon />
     </div>
-  )
-}
+  );
+};
 
 const StyledPagination = styled(Pagination)`
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
   margin: 1rem 0;
 
-  svg{
+  svg {
     width: 1rem;
     height: 1rem;
   }
 
-  ul{
+  ul {
     display: flex;
-    gap: .5rem;
+    gap: 0.5rem;
 
-    li{
+    li {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -42,47 +62,46 @@ const StyledPagination = styled(Pagination)`
       height: 1.5rem;
       border-radius: 50%;
 
-      input{
+      input {
         display: none;
       }
 
-      label{
+      label {
         font-weight: 500;
         cursor: pointer;
       }
 
-      &:has(input:checked){
-        background-color: ${({theme})=>theme.color.default};
+      &:has(input:checked) {
+        background-color: ${({ theme }) => theme.color.default};
 
-        label{
+        label {
           color: white;
         }
       }
     }
   }
 
-  ${props=> props.lightTheme && css`
-    svg{
-      fill: white;
-    }
-
-    ul li{
-
-      label{
-        color: white;
+  ${(props) =>
+    props.lightTheme &&
+    css`
+      svg {
+        fill: white;
       }
 
-      &:has(input:checked){
-        background-color: ${({theme})=>theme.backgroundColor.default};
+      ul li {
+        label {
+          color: white;
+        }
 
-        label{
-          color: ${({theme})=>theme.color.default};
+        &:has(input:checked) {
+          background-color: ${({ theme }) => theme.backgroundColor.default};
+
+          label {
+            color: ${({ theme }) => theme.color.default};
+          }
         }
       }
-      
-    }
+    `}
+`;
 
-  `}
-`
-
-export default StyledPagination
+export default StyledPagination;

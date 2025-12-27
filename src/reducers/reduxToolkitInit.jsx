@@ -10,20 +10,20 @@ import thunk from 'redux-thunk';
 const reducers = combineReducers({
   user: userSlice,
   environment: environmentSlice,
-})
+});
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist:['page404']
-}
+  blacklist: ['page404'],
+};
 
-const persistedReducers = persistReducer(persistConfig, reducers)
+const persistedReducers = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
-  reducer:  persistedReducers,
+  reducer: persistedReducers,
   devTools: process.env.NODE_ENV !== 'production',
-  middleware: [thunk]
-})
+  middleware: [thunk],
+});
 
-export default store
+export default store;

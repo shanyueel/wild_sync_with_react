@@ -1,25 +1,25 @@
 [
-  { 
+  {
     "name": "登山",
     "id": "hiking",
     "disabled": false
   },
-  { 
+  {
     "name": "露營",
     "id": "camping",
     "disabled": true
   },
-  { 
+  {
     "name": "單車",
     "id": "cycling",
     "disabled": true
   },
-  { 
+  {
     "name": "潛水",
     "id": "diving",
     "disabled": true
   },
-  { 
+  {
     "name": "其他",
     "id": "others",
     "disabled": true

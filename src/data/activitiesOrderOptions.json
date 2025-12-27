@@ -1,14 +1,14 @@
 [
-    {
-      "id": "releaseDate",
-      "name": "最新發布"
-    },
-    {
-      "id": "activityDate",
-      "name": "活動時間"
-    },
-    {
-      "id": "deadlineDate",
-      "name": "即將截止"
-    }
-  ]
+  {
+    "id": "releaseDate",
+    "name": "最新發布"
+  },
+  {
+    "id": "activityDate",
+    "name": "活動時間"
+  },
+  {
+    "id": "deadlineDate",
+    "name": "即將截止"
+  }
+]

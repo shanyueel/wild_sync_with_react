@@ -1,7 +1,7 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Modal from 'react-modal';
 import './App.css';
 
@@ -11,27 +11,27 @@ import HomePage from 'pages/HomePage';
 import RegisterPage from 'pages/RegisterPage';
 import ActivityPage from 'pages/ActivityPage';
 import SearchActivityPage from 'pages/ActivitySearchPage';
-import UserPage from 'pages/UserPage'
+import UserPage from 'pages/UserPage';
 import ActivityPageDiscussionListArea from 'pages/ActivityPageDiscussionListArea';
-import ActivityPageDiscussionArea from 'pages/ActivityPageDiscussionArea'
+import ActivityPageDiscussionArea from 'pages/ActivityPageDiscussionArea';
 import ScrollToTop from 'utils/ScrollToTop';
 import NotFoundPage from 'pages/NotFoundPage';
 import GuidePage from 'pages/GuidePage';
 import AboutPage from 'pages/AboutPage';
 
 const theme = {
-  color:{
-    default: "#3F6F41",
-    secondary: "#6FAE71",
-    grey: "#7B7B7B",
-    black: "#272727",
-    alert: "#D0342C"
+  color: {
+    default: '#3F6F41',
+    secondary: '#6FAE71',
+    grey: '#7B7B7B',
+    black: '#272727',
+    alert: '#D0342C',
   },
-  backgroundColor:{
+  backgroundColor: {
     default: '#F0F0F0',
-    secondary: '#ADADAD'
-  }
-}
+    secondary: '#ADADAD',
+  },
+};
 
 Modal.setAppElement('#root');
 
@@ -47,16 +47,19 @@ function App() {
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
               <Route path="activity">
-                <Route path=":activityId" element={<ActivityPage />} >
+                <Route path=":activityId" element={<ActivityPage />}>
                   <Route index element={<ActivityPageDiscussionListArea />} />
-                  <Route path='chatroom/:chatroomId' element={<ActivityPageDiscussionArea />}/>
+                  <Route
+                    path="chatroom/:chatroomId"
+                    element={<ActivityPageDiscussionArea />}
+                  />
                 </Route>
                 <Route path="search" element={<SearchActivityPage />} />
               </Route>
               <Route path="user/:userId" element={<UserPage />} />
-              <Route path="guide" element={<GuidePage/>}/>
-              <Route path="about" element={<AboutPage/>}/>
-              <Route path="*" element={<NotFoundPage />}/>
+              <Route path="guide" element={<GuidePage />} />
+              <Route path="about" element={<AboutPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
         </LocalizationProvider>

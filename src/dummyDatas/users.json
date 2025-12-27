@@ -1,17 +1,16 @@
-
 {
-    "id": 168,
-    "email": "user1@example.com",
-    "name": "user1",
-    "avatar": "https://loremflickr.com/320/240/avatar/?random=73.40385738232375",
-    "age": "26",
-    "profession": "工程師",
-    "birth": 866044800,
-    "region": "台中",
-    "introduction": "我是一位熱愛登山的夢想家。希望能在這個平台上結交志同道合的夥伴，一同征服大自然的奇妙，共享挑戰與成就。期待與你們相遇，共創難忘的登山冒險！",
-    "role": "user",
-    "attendance":[1001,1005],
-    "image": "https://i.imgur.com/gerdVUX.png",
-    "createdAt": "2023-03-30T03:45:44.000Z",
-    "updatedAt": "2023-03-30T03:45:44.000Z"
-}  
+  "id": 168,
+  "email": "user1@example.com",
+  "name": "user1",
+  "avatar": "https://loremflickr.com/320/240/avatar/?random=73.40385738232375",
+  "age": "26",
+  "profession": "工程師",
+  "birth": 866044800,
+  "region": "台中",
+  "introduction": "我是一位熱愛登山的夢想家。希望能在這個平台上結交志同道合的夥伴，一同征服大自然的奇妙，共享挑戰與成就。期待與你們相遇，共創難忘的登山冒險！",
+  "role": "user",
+  "attendance": [1001, 1005],
+  "image": "https://i.imgur.com/gerdVUX.png",
+  "createdAt": "2023-03-30T03:45:44.000Z",
+  "updatedAt": "2023-03-30T03:45:44.000Z"
+}

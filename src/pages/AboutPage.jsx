@@ -1,29 +1,28 @@
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const AboutPage = ({ className }) => {
+  const { t } = useTranslation('aboutPage');
+
   return (
     <div className={className}>
-      <h1 className="o-about__title">關於Wild Sync</h1>
+      <h1 className="o-about__title">{t('title')}</h1>
       <div className="l-about__content">
         <p>
-          <h3>連結自然，觸動人心</h3>
-          生活在忙碌的現代社會中，往往忽略了大自然的寶貴資源以及與他人接觸的機會。Wild
-          Sync希望能讓人們回歸自然，同時建立更強的社群連結。無論您是想要參加活動還是組織一個活動，Wild
-          Sync都能滿足您的需求:
+          <h3>{t('subtitle1')}</h3>
+          {t('description1')}
           <br />
           <br />
-          <h3>-多樣性的活動</h3>
-          我們的平台上有各種各樣的戶外活動，無論您是一位業餘愛好者還是經驗豐富的探險家，都能找到適合您的活動。
+          <h3>{t('subtitle2')}</h3>
+          {t('description2')}
           <br />
           <br />
-          <h3>-社群連結</h3>
-          您可以輕鬆地在Wild
-          Sync找到志同道合的登山夥伴。您可以創建個人資料、舉辦自己的活動或加入其他人的行程。
+          <h3>{t('subtitle3')}</h3>
+          {t('description3')}
           <br />
           <br />
-          <h3>-環保理念</h3>
-          Wild Sync 強調環保理念，我們鼓勵參與者遵守 Leave No Trace
-          原則，確保活動不對自然環境造成損害。我們希望通過參與戶外活動來教育人們如何保護我們的星球。
+          <h3>{t('subtitle4')}</h3>
+          {t('description4')}
           <br />
         </p>
         <img

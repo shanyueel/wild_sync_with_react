@@ -412,5 +412,17 @@
     "300-3": "Xiangshan Dist.",
     "600-1": "West Dist.",
     "600-2": "East Dist."
+  },
+  "orderOptions": {
+    "releaseDate": "Latest Release",
+    "activityDate": "Activity Date",
+    "deadlineDate": "Deadline Approaching"
+  },
+  "difficultyOptions": {
+    "beginner": "Beginner",
+    "medium": "Medium",
+    "advanced": "Advanced",
+    "expert": "Expert",
+    "master": "Master"
   }
 }

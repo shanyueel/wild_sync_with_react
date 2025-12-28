@@ -17,17 +17,5 @@
     "cycling": "單車",
     "diving": "潛水",
     "others": "其他"
-  },
-  "orderOptions": {
-    "releaseDate": "最新發布",
-    "activityDate": "活動時間",
-    "deadlineDate": "即將截止"
-  },
-  "difficultyOptions": {
-    "beginner": "入門",
-    "medium": "中等",
-    "advanced": "進階",
-    "expert": "專家",
-    "master": "大師"
   }
 }

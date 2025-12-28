@@ -18,17 +18,5 @@
     "cycling": "Cycling",
     "diving": "Diving",
     "others": "Others"
-  },
-  "orderOptions": {
-    "releaseDate": "Latest Release",
-    "activityDate": "Activity Date",
-    "deadlineDate": "Deadline Approaching"
-  },
-  "difficultyOptions": {
-    "beginner": "Beginner",
-    "medium": "Medium",
-    "advanced": "Advanced",
-    "expert": "Expert",
-    "master": "Master"
   }
 }

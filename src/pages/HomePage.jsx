@@ -56,14 +56,14 @@ const HomePage = ({ className }) => {
   const translatedOrderOptions = useMemo(() => {
     return activitiesOrderOptions.map((option) => ({
       ...option,
-      name: t(`homepage:orderOptions.${option.id}`),
+      name: t(`common:orderOptions.${option.id}`),
     }));
   }, [t]);
 
   const translatedDifficultyOptions = useMemo(() => {
     return activitiesDifficultyOptions.map((option) => ({
       ...option,
-      name: t(`homepage:difficultyOptions.${option.id}`),
+      name: t(`common:difficultyOptions.${option.id}`),
     }));
   }, [t]);
 

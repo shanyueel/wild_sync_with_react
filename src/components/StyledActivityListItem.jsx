@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import { alterActivityLiked } from 'api/activityApi';
 import { transferTimestamp } from 'utils/date-fns';
@@ -18,6 +19,8 @@ import { ReactComponent as CheckIcon } from 'assets/icons/CheckIcon.svg';
 import defaultImageURL from 'data/defaultImageURL.json';
 
 const ActivityListItem = ({ className, activity, sm }) => {
+  const { t } = useTranslation(['common']);
+
   const user = useSelector((state) => state.user);
   const userId = user?.uid;
   const activityId = activity?.id;
@@ -29,7 +32,7 @@ const ActivityListItem = ({ className, activity, sm }) => {
 
   const handleActivityLiked = async () => {
     if (!user.loggedIn) {
-      toast.error('請登入以收藏', {
+      toast.error(t('common:loginToLiked'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -47,7 +50,7 @@ const ActivityListItem = ({ className, activity, sm }) => {
 
     if (!isActivityLiked) {
       if (success) {
-        toast.success('收藏活動成功', {
+        toast.success(t('common:likedSuccessfully'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -58,7 +61,7 @@ const ActivityListItem = ({ className, activity, sm }) => {
           theme: 'light',
         });
       } else {
-        toast.error('收藏活動失敗', {
+        toast.error(t('common:likedFailed'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -71,7 +74,7 @@ const ActivityListItem = ({ className, activity, sm }) => {
       }
     } else {
       if (success) {
-        toast.success('取消收藏活動成功', {
+        toast.success(t('common:removeSuccessfully'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -82,7 +85,7 @@ const ActivityListItem = ({ className, activity, sm }) => {
           theme: 'light',
         });
       } else {
-        toast.error('取消收藏活動失敗', {
+        toast.error(t('common:removeFailed'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -135,26 +138,26 @@ const ActivityListItem = ({ className, activity, sm }) => {
 
         <ul className="c-activity-card__highlights">
           <li>
-            <span>難度 : </span>
+            <span>{t('common:difficulty')} : </span>
             {switchDifficulty(activity?.difficulty)}
           </li>
           <li>
-            <span>時長 : </span>
+            <span>{t('common:timeLength')} : </span>
             {activity?.activityTimeLength} h
           </li>
           <li>
-            <span>費用 : </span>
+            <span>{t('common:charge')} : </span>
             {activity?.cost?.min}-{activity?.cost?.max}
           </li>
           <li>
-            <span>人數 : </span>
+            <span>{t('common:attendance')} : </span>
             {activity?.attendance?.length} / {activity?.attendanceLimit}
           </li>
         </ul>
 
         <p className="o-activity-card__introduction">
           {sliceIntroduction(activity?.introduction, 50)} ...
-          <Link to={`/activity/${activityId}`}>深入了解</Link>
+          <Link to={`/activity/${activityId}`}>{t('common:learnMore')}</Link>
         </p>
       </div>
 

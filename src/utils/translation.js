@@ -1,16 +1,29 @@
-export const switchDifficulty = (difficulty) => {
+import { useTranslation } from 'react-i18next';
+
+export const switchDifficulty = (difficulty, abbrev = false) => {
+  const { t } = useTranslation(['common']);
+
+  let difficultyText = '';
+
   switch (difficulty) {
     case 'beginner':
-      return '入門';
+      difficultyText = t('common:difficulties.beginner');
+      break;
     case 'medium':
-      return '中等';
+      difficultyText = t('common:difficulties.medium');
+      break;
     case 'advanced':
-      return '進階';
+      difficultyText = t('common:difficulties.advanced');
+      break;
     case 'expert':
-      return '專家';
+      difficultyText = t('common:difficulties.expert');
+      break;
     case 'master':
-      return '大師';
+      difficultyText = t('common:difficulties.master');
+      break;
     default:
-      return;
+      break;
   }
+
+  return abbrev ? difficultyText.slice(0, 3) + '.' : difficultyText;
 };

@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { getActivitiesByFilters } from 'api/activityApi';
 
@@ -20,6 +21,29 @@ import activitiesDifficultyOptions from 'data/activityDifficultyOptions.json';
 import activitiesOrderOptions from 'data/activitiesOrderOptions.json';
 
 const ActivitySearchPage = ({ className }) => {
+  const { t } = useTranslation(['searchPage', 'common']);
+
+  const translatedDifficultyOptions = useMemo(() => {
+    return activitiesDifficultyOptions.map((option) => ({
+      ...option,
+      name: t(`common:difficultyOptions.${option.id}`),
+    }));
+  }, [t]);
+
+  const translatedLocationOptions = useMemo(() => {
+    return activitiesLocationOptions.map((option) => ({
+      ...option,
+      name: t(`common:locations.${option.id}`),
+    }));
+  }, [t]);
+
+  const translatedOrderOptions = useMemo(() => {
+    return activitiesOrderOptions.map((option) => ({
+      ...option,
+      name: t(`common:orderOptions.${option.id}`),
+    }));
+  }, [t]);
+
   const searchbarRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -112,11 +136,13 @@ const ActivitySearchPage = ({ className }) => {
               id="keyword"
               ref={searchbarRef}
               type="text"
-              placeholder="登山路線、露營地、潛水處"
+              placeholder={t('common:searchPlaceholder')}
               value={searchFilter?.keyword || ''}
               onChange={handleSearchbarChange}
             />
-            <StyledButton onClick={handleSearch}>搜尋</StyledButton>
+            <StyledButton onClick={handleSearch}>
+              {t('common:search')}
+            </StyledButton>
           </div>
           <table
             className="l-search-settings__options"
@@ -124,18 +150,18 @@ const ActivitySearchPage = ({ className }) => {
           >
             <tbody>
               <tr>
-                <td className="c-table-key">難度</td>
+                <td className="c-table-key">{t('common:difficulty')}</td>
                 <td className="c-table-content">
                   <StyledCheckboxInput
                     inputId="difficulty"
-                    checkboxOptions={activitiesDifficultyOptions}
+                    checkboxOptions={translatedDifficultyOptions}
                     formContent={searchFilter}
                     onFormChange={setSearchFilter}
                   />
                 </td>
               </tr>
               <tr>
-                <td className="c-table-key">時間</td>
+                <td className="c-table-key">{t('common:date')}</td>
                 <td className="c-table-content ">
                   <StyledDatePeriodInput
                     inputId="time"
@@ -145,11 +171,11 @@ const ActivitySearchPage = ({ className }) => {
                 </td>
               </tr>
               <tr>
-                <td className="c-table-key">地區</td>
+                <td className="c-table-key">{t('common:location')}</td>
                 <td className="c-table-content">
                   <StyledCheckboxInput
                     inputId="location"
-                    checkboxOptions={activitiesLocationOptions}
+                    checkboxOptions={translatedLocationOptions}
                     formContent={searchFilter}
                     onFormChange={setSearchFilter}
                   />
@@ -171,12 +197,12 @@ const ActivitySearchPage = ({ className }) => {
             {isFiltersDisplay ? (
               <>
                 <UpIcon />
-                收起搜尋選項
+                {t('searchPage:hideSearchOptions')}
               </>
             ) : (
               <>
                 <DownIcon />
-                展開搜尋選項
+                {t('searchPage:expandSearchOptions')}
               </>
             )}
           </label>
@@ -184,18 +210,20 @@ const ActivitySearchPage = ({ className }) => {
 
         <div className="l-search-results">
           <div className="l-search-results__header">
-            <h2 className="o-search-results__title">搜尋結果</h2>
+            <h2 className="o-search-results__title">
+              {t('searchPage:searchResults')}
+            </h2>
             <StyledSelector
               className="o-search-results__order"
               selectorId="order"
-              optionList={activitiesOrderOptions}
+              optionList={translatedOrderOptions}
               formContent={searchOrder}
               onFormChange={setSearchOrder}
             />
           </div>
 
           <div className="l-search-results__container">
-            {isActivitiesLoading && <StyledLoading title="活動讀取中" />}
+            {isActivitiesLoading && <StyledLoading title={t('common:loadingActivities')} />}
             {!isActivitiesLoading &&
               orderedActivities?.length > 0 &&
               orderedActivities?.map((activity) => (
@@ -205,7 +233,9 @@ const ActivitySearchPage = ({ className }) => {
                 />
               ))}
             {!isActivitiesLoading && orderedActivities?.length === 0 && (
-              <h2 className="o-search-results__empty">找不到相關搜尋結果</h2>
+              <h2 className="o-search-results__empty">
+                {t('searchPage:NoRelevantActivities')}
+              </h2>
             )}
           </div>
         </div>
@@ -332,7 +362,7 @@ const StyledActivitySearchPage = styled(ActivitySearchPage)`
       }
 
       .o-search-results__order {
-        width: 7.5rem;
+        width: fit-content;
         select {
           border-radius: 0;
           border: none;

@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledActivityCardItem from './StyledActivityCardItem';
 import { useSelector } from 'react-redux';
@@ -9,6 +10,8 @@ import StyledLoading from './StyledLoading';
 import { asyncForEach } from 'utils/asyncLoop';
 
 const ActivityHistory = ({ className, sideUsed }) => {
+  const { t } = useTranslation();
+
   const environmentParams = useSelector((state) => state.environment);
   const windowSize = environmentParams.windowSize;
   const [isLargeLayout, setIsLargeLayout] = useState(false);
@@ -42,10 +45,12 @@ const ActivityHistory = ({ className, sideUsed }) => {
     <div className={className}>
       {historyActivities.length > 0 && (
         <>
-          <h2 className="o-activity-history__title">瀏覽紀錄</h2>
+          <h2 className="o-activity-history__title">
+            {t('common:browseHistory')}
+          </h2>
           <div className="l-activity-history__body scrollbar-x">
             {isHistoryActivitiesLoading ? (
-              <StyledLoading title="活動讀取中" />
+              <StyledLoading title={t('common:loadingActivities')} />
             ) : (
               <div className="c-activity-history__cards">
                 {sideUsed && isLargeLayout

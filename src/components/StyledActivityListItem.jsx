@@ -119,7 +119,7 @@ const ActivityListItem = ({ className, activity, sm }) => {
             user?.heldActivities?.includes(activityId)) && (
             <div className="o-activity-card__attendance">
               <CheckIcon />
-              <h4>已參加</h4>
+              <h4>{t('common:joined')}</h4>
             </div>
           )}
         </div>

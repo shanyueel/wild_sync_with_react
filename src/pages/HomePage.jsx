@@ -42,7 +42,7 @@ const HomePage = ({ className }) => {
 
     return popularLocations.map((location) => ({
       ...location,
-      name: t(`common:location.${location.id}`),
+      name: t(`common:locations.${location.id}`),
     }));
   }, [t, popularLocations]);
 
@@ -70,7 +70,7 @@ const HomePage = ({ className }) => {
   const translatedLocationOptions = useMemo(() => {
     return activitiesLocationOptions.map((option) => ({
       ...option,
-      name: t(`common:location.${option.id}`),
+      name: t(`common:locations.${option.id}`),
     }));
   }, [t]);
 

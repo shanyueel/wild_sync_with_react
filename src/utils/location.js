@@ -9,7 +9,7 @@ export const displayLocation = (location) => {
 
   let locationNameArr = null;
 
-  const locationCounty = t(`common:location.${location?.county}`);
+  const locationCounty = t(`common:locations.${location?.county}`);
   const locationDistrict = t(`common:district.${location?.district}`);
 
   const hasDetailed = location?.detail;

@@ -1,7 +1,10 @@
 {
+  "search": "Search",
   "searchPlaceholder": "Hiking trails, campsites, diving spots...",
   "difficulty": "Difficulty",
+  "date": "Date",
   "timeLength": "Time Length",
+  "location": "Location",
   "charge": "Charge",
   "attendance": "Attendance",
   "loginToLiked": "Please login to liked.",
@@ -10,6 +13,8 @@
   "removeSuccessfully": "Removed successfully.",
   "removeFailed": "Failed to remove.",
   "learnMore": "Learn More",
+  "browseHistory": "Browse History",
+  "joined": "Joined",
   "difficulties": {
     "beginner": "Beginner",
     "medium": "Medium",
@@ -18,7 +23,7 @@
     "master": "Master"
   },
   "loadingActivities": "Loading Activities...",
-  "location": {
+  "locations": {
     "TPE": "Taipei City",
     "TPH": "New Taipei City",
     "KLU": "Keelung City",
@@ -416,7 +421,7 @@
   "orderOptions": {
     "releaseDate": "Latest Release",
     "activityDate": "Activity Date",
-    "deadlineDate": "Deadline Approaching"
+    "deadlineDate": "Near Deadline"
   },
   "difficultyOptions": {
     "beginner": "Beginner",

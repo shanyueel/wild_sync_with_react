@@ -8,5 +8,6 @@
   "register": "註冊帳號",
   "settings": "帳號設定",
   "visitor": "訪客",
-  "contactUs": "聯繫我們"
+  "contactUs": "聯繫我們",
+  "logoutSuccess": "已成功登出"
 }

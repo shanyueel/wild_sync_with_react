@@ -11,12 +11,5 @@
   "displayMode": "Display Mode",
 
   "loadingLocations": "Loading Locations...",
-  "noFilterChanged": "No conditions changed",
-  "activityTypes": {
-    "hiking": "Hiking",
-    "camping": "Camping",
-    "cycling": "Cycling",
-    "diving": "Diving",
-    "others": "Others"
-  }
+  "noFilterChanged": "No conditions changed"
 }

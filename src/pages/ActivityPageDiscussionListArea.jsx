@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledMessageCard from 'components/StyledDiscussionCard';
 import StyledMessageReply from 'components/StyledDiscussionCreate';
@@ -6,22 +7,25 @@ import StyledMessageReply from 'components/StyledDiscussionCreate';
 import { ReactComponent as ReturnIcon } from 'assets/icons/ReturnIcon.svg';
 
 const ActivityPageDiscussionListArea = ({ className }) => {
+  const { t } = useTranslation('activityPage');
   return (
     <div className={className}>
       <div className="l-activity-discussion__header">
         <label htmlFor="activity-discussion">
           <ReturnIcon className="o-activity-discussion__return-icon" />
         </label>
-        <h2 className="o-activity-discussion__title">活動討論串</h2>
+        <h2 className="o-activity-discussion__title">
+          {t('discussion.title')}
+        </h2>
       </div>
 
       <div className="l-activity-discussion-list__body scrollbar">
-        <StyledMessageCard message="如有任何狀況請提前告知" />
-        <StyledMessageCard message="器材準備事宜" />
-        <StyledMessageCard message="活動備案討論" />
-        <StyledMessageCard message="如有任何狀況請提前告知" />
-        <StyledMessageCard message="器材準備事宜" />
-        <StyledMessageCard message="活動備案討論" />
+        <StyledMessageCard message={t('discussion.notice')} />
+        <StyledMessageCard message={t('discussion.equipment')} />
+        <StyledMessageCard message={t('discussion.backupPlan')} />
+        <StyledMessageCard message={t('discussion.notice')} />
+        <StyledMessageCard message={t('discussion.equipment')} />
+        <StyledMessageCard message={t('discussion.backupPlan')} />
       </div>
 
       <div className="l-activity-discussion__footer">

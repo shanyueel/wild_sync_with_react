@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import StyledTextArea from '../inputs/StyledTextArea';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 const TransportationTable = ({
   className,
@@ -9,6 +10,7 @@ const TransportationTable = ({
   onTransportationContentChange,
   formErrors,
 }) => {
+  const { t } = useTranslation('tables');
   return (
     <div className={className}>
       <table>
@@ -18,17 +20,17 @@ const TransportationTable = ({
               className={clsx('c-table-key', { inputUsed: inputUsed })}
               colSpan={2}
             >
-              交通方式
+              {t('transportation')}
             </td>
           </tr>
           <tr>
             <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-              去程交通
+              {t('outbound')}
             </td>
             <td className="c-table-content">
               {inputUsed ? (
                 <StyledTextArea
-                  placeholder="請輸入去程交通方式"
+                  placeholder={t('enterOutbound')}
                   inputId="outbound"
                   wordLimit={150}
                   formContent={transportationContent}
@@ -42,12 +44,12 @@ const TransportationTable = ({
           </tr>
           <tr>
             <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-              回程交通
+              {t('inbound')}
             </td>
             <td className="c-table-content">
               {inputUsed ? (
                 <StyledTextArea
-                  placeholder="請輸入回程交通方式"
+                  placeholder={t('enterInbound')}
                   inputId="inbound"
                   wordLimit={150}
                   formContent={transportationContent}

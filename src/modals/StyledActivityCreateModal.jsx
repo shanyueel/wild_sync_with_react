@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import { uploadImage } from 'api/storageApi';
 import { firestoreDB } from 'api/firebaseConfig';
+import { useTranslation } from 'react-i18next';
 
 import StyledButton from 'components/StyledButton';
 import StyledActivityCreateStepOne from 'components/formSteps/StyledActivityCreateStepOne';
@@ -27,7 +28,8 @@ const ActivityCreateModal = ({
   setIsActivityCreateModalOpen,
 }) => {
   const navigate = useNavigate();
-  const missingError = '*此欄位不可為空白';
+  const { t } = useTranslation(['activityPage', 'common']);
+  const missingError = t('common:emptyError');
   const user = useSelector((state) => state.user);
   const userId = user.uid;
   const [activityContent, setActivityContent] = useState({});
@@ -246,7 +248,7 @@ const ActivityCreateModal = ({
         setFormErrors({});
         setActivityContent({});
         navigate(`activity/${activityId}`);
-        toast.success('建立活動成功', {
+        toast.success(t('createSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -258,7 +260,7 @@ const ActivityCreateModal = ({
         });
       } else {
         setFormProgress(1);
-        toast.error('建立活動失敗', {
+        toast.error(t('createFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -280,9 +282,9 @@ const ActivityCreateModal = ({
       contentLabel="Activity Create Modal"
     >
       <div className="l-modal__header">
-        <h2 className="o-modal__title">建立活動</h2>
-        <StyledButton onClick={handleClearData} alertOutlined sm>
-          清空填入資料
+        <h2 className="o-modal__title">{t('createActivity')}</h2>
+        <StyledButton onClick={handleClearData} sm outlined>
+          {t('clearData')}
         </StyledButton>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal} />
       </div>
@@ -334,7 +336,7 @@ const ActivityCreateModal = ({
           {isActivityCreateLoading && (
             <StyledLoading
               className="o-activity-create__loading"
-              title="活動建立中"
+              title={t('creatingActivity')}
             />
           )}
         </form>
@@ -342,13 +344,17 @@ const ActivityCreateModal = ({
         <div className="c-activity-create__pagination">
           {formProgress !== 1 && !isActivityCreateLoading && (
             <StyledButton onClick={handlePreviousPageClick}>
-              前一頁
+              {t('common:prevPage')}
             </StyledButton>
           )}
           {formProgress < 5 && !isActivityCreateLoading ? (
-            <StyledButton onClick={handleNextPageClick}>下一頁</StyledButton>
+            <StyledButton onClick={handleNextPageClick}>
+              {t('common:nextPage')}
+            </StyledButton>
           ) : (
-            <StyledButton onClick={handleActivityCreate}>建立活動</StyledButton>
+            <StyledButton onClick={handleActivityCreate}>
+              {t('createActivity')}
+            </StyledButton>
           )}
         </div>
       </div>

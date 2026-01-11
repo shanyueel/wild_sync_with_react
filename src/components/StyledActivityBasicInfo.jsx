@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { switchDifficulty } from 'utils/translation';
 
@@ -8,32 +9,40 @@ import { ReactComponent as PaymentIcon } from 'assets/icons/PaymentIcon.svg';
 import { ReactComponent as CrowdIcon } from 'assets/icons/CrowdIcon.svg';
 
 const ActivityBasicInfo = ({ className, activityContent }) => {
+  const { t } = useTranslation('activityPage');
+
   return (
     <div className={className}>
       <div className="c-activity-info-card">
         <FlameIcon className="o-activity-info-card__icon" />
-        <h3 className="o-activity-info-card__title">難易程度</h3>
+        <h3 className="o-activity-info-card__title">
+          {t('basicInfo.difficulty')}
+        </h3>
         <h3 className="o-activity-info-card__value">
           {switchDifficulty(activityContent?.difficulty)}
         </h3>
       </div>
       <div className="c-activity-info-card">
         <ClockIcon className="o-activity-info-card__icon" />
-        <h3 className="o-activity-info-card__title">活動時長</h3>
+        <h3 className="o-activity-info-card__title">
+          {t('basicInfo.duration')}
+        </h3>
         <h3 className="o-activity-info-card__value">
           {activityContent?.activityTimeLength} hr
         </h3>
       </div>
       <div className="c-activity-info-card">
         <PaymentIcon className="o-activity-info-card__icon" />
-        <h3 className="o-activity-info-card__title">活動費用</h3>
+        <h3 className="o-activity-info-card__title">{t('basicInfo.cost')}</h3>
         <h3 className="o-activity-info-card__value">
           {activityContent?.cost?.min} - {activityContent?.cost?.max}
         </h3>
       </div>
       <div className="c-activity-info-card">
         <CrowdIcon className="o-activity-info-card__icon" />
-        <h3 className="o-activity-info-card__title">人數限制</h3>
+        <h3 className="o-activity-info-card__title">
+          {t('basicInfo.attendanceLimit')}
+        </h3>
         <h3 className="o-activity-info-card__value">
           {activityContent?.attendance?.length} /{' '}
           {activityContent?.attendanceLimit}

@@ -10,12 +10,5 @@
   "filterButton": "篩選",
   "displayMode": "顯示方式",
   "loadingLocations": "地點讀取中",
-  "noFilterChanged": "未更改任何條件",
-  "activityTypes": {
-    "hiking": "登山",
-    "camping": "露營",
-    "cycling": "單車",
-    "diving": "潛水",
-    "others": "其他"
-  }
+  "noFilterChanged": "未更改任何條件"
 }

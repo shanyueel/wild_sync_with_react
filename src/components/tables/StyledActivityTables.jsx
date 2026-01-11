@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledHikingTable from 'components/tables/StyledHikingTable';
 import StyledTransportationTable from 'components/tables/StyledTransportationTable';
@@ -7,6 +8,7 @@ import StyledAccommodationTable from 'components/tables/StyledAccommodationTable
 import StyledOthersTable from 'components/tables/StyledOthersTable';
 
 const ActivityTables = ({ className, activity }) => {
+  const { t } = useTranslation('tables');
   const [ActiveTable, setActiveTable] = useState('detail');
 
   const handleTableNavbarClick = (e) => {
@@ -37,7 +39,7 @@ const ActivityTables = ({ className, activity }) => {
             type="radio"
             defaultChecked
           />
-          活動細節
+          {t('activityDetails')}
         </label>
         <label
           htmlFor="activity-residence-and-transportation"
@@ -48,7 +50,7 @@ const ActivityTables = ({ className, activity }) => {
             id="activity-residence-and-transportation"
             type="radio"
           />
-          交通 / 住宿
+          {t('TransportAndStay')}
         </label>
         <label
           htmlFor="activity-others"
@@ -59,7 +61,7 @@ const ActivityTables = ({ className, activity }) => {
             id="activity-others"
             type="radio"
           />
-          行程 & 其他
+          {t('itineraryOthers')}
         </label>
       </div>
       <div className="l-activity-tables__container">
@@ -80,7 +82,7 @@ const ActivityTables = ({ className, activity }) => {
                   <tbody>
                     <tr>
                       <td className="c-table-key" colSpan={2}>
-                        住宿資訊
+                        {t('accommodationInfo')}
                       </td>
                     </tr>
                   </tbody>

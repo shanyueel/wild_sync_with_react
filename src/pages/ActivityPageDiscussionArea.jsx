@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledUserInfo from 'components/StyledUserInfo';
 
@@ -8,6 +9,7 @@ import StyledMessage from 'components/StyledMessage';
 import StyledButton from 'components/StyledButton';
 
 const ActivityPageDiscussionArea = ({ className }) => {
+  const { t } = useTranslation('activityPage');
   const handleReturn = () => {
     window.history.back();
   };
@@ -19,7 +21,9 @@ const ActivityPageDiscussionArea = ({ className }) => {
           className="o-activity-discussion__return-icon"
           onClick={handleReturn}
         />
-        <h2 className="o-activity-discussion__title">聊天室</h2>
+        <h2 className="o-activity-discussion__title">
+          {t('discussion.chatRoom')}
+        </h2>
       </div>
       <div className="l-activity-discussion__body">
         <StyledUserInfo className="c-activity-discussion__user-info" />
@@ -30,35 +34,35 @@ const ActivityPageDiscussionArea = ({ className }) => {
           </label>
         </div>
         <p className="o-activity-discussion__content">
-          住宿需要再一周前確認，如有任何狀況請提前告知。
+          {t('discussion.accommodationNotice')}
         </p>
         <div className="l-activity-discussion__chatroom scrollbar">
           <p className="o-activity-discussion__date-divide">
-            <span>2023年7月7日</span>
+            <span>{t('discussion.date1')}</span>
           </p>
           <StyledMessage isSelf={false} />
           <StyledMessage isSelf={true} />
           <StyledMessage isSelf={true} />
           <p className="o-activity-discussion__date-divide">
-            <span>2023年7月8日</span>
+            <span>{t('discussion.date2')}</span>
           </p>
           <StyledMessage isSelf={false} />
           <StyledMessage isSelf={true} />
           <p className="o-activity-discussion__date-divide">
-            <span>2023年7月7日</span>
+            <span>{t('discussion.date1')}</span>
           </p>
           <StyledMessage isSelf={false} />
           <StyledMessage isSelf={true} />
           <StyledMessage isSelf={true} />
           <p className="o-activity-discussion__date-divide">
-            <span>2023年7月8日</span>
+            <span>{t('discussion.date2')}</span>
           </p>
           <StyledMessage isSelf={false} />
           <StyledMessage isSelf={true} />
         </div>
         <div className="l-activity-discussion__chat-input">
           <textarea />
-          <StyledButton>傳送</StyledButton>
+          <StyledButton>{t('send')}</StyledButton>
         </div>
       </div>
     </div>

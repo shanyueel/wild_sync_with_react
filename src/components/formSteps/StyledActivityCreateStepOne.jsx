@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import clsx from 'clsx';
 
@@ -18,6 +19,17 @@ const ActivityCreateStepOne = ({
   formErrors,
   setFormErrors,
 }) => {
+  const { t } = useTranslation(['activityPage', 'common']);
+
+  const translatedActivityTypeOptions = useMemo(
+    () =>
+      activityTypeOptions.map((option) => ({
+        ...option,
+        name: t(`common:activityTypes.${option.id}`),
+      })),
+    [t]
+  );
+
   useEffect(() => {
     const updatedErrors = { ...formErrors };
     if (formContent?.coverURL) updatedErrors.coverURL = '';
@@ -32,7 +44,7 @@ const ActivityCreateStepOne = ({
   return (
     <div className={clsx(className, 'scrollbar')}>
       <StyledImageInput
-        title="活動封面照片"
+        title={t('create.coverPhoto')}
         inputId="coverURL"
         defaultImgURL={defaultImageURL.activityCover}
         formContent={formContent}
@@ -40,9 +52,9 @@ const ActivityCreateStepOne = ({
         warning={formErrors?.coverURL}
       />
       <StyledTextInput
-        title="活動名稱"
+        title={t('create.activityName')}
         inputId="name"
-        placeholder="請輸入活動名稱 (字數限制: 16字)"
+        placeholder={t('create.activityNamePlaceholder')}
         wordLimit={16}
         formContent={formContent}
         onFormChange={onFormChange}
@@ -50,22 +62,22 @@ const ActivityCreateStepOne = ({
         warning={formErrors?.name}
       />
       <StyledRadioInput
-        title="活動類型"
+        title={t('create.activityType')}
         inputId="type"
-        radioOptions={activityTypeOptions}
+        radioOptions={translatedActivityTypeOptions}
         formContent={formContent}
         onFormChange={onFormChange}
         warning={formErrors?.type}
       />
       <StyledLocationInput
-        title="活動地點"
+        title={t('create.activityLocation')}
         inputId="location"
         formContent={formContent}
         onFormChange={onFormChange}
         warning={formErrors?.location}
       />
       <StyledPeriodInput
-        title="活動期間"
+        title={t('create.activityPeriod')}
         inputId="time"
         formContent={formContent}
         onFormChange={onFormChange}

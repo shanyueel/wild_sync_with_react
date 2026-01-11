@@ -1,0 +1,10 @@
+{
+  "loginSuccess": "登入成功",
+  "loginFail": "登入失敗，請重新嘗試",
+  "email": "信箱",
+  "enterEmail": "請輸入信箱",
+  "password": "密碼",
+  "enterPassword": "請輸入密碼",
+  "login": "登入",
+  "notRegistered": "尚未註冊?"
+}

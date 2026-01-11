@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { login } from 'api/auth';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import StyledTextInput from 'components/inputs/StyledTextInput';
 import StyledButton from 'components/StyledButton';
@@ -12,6 +13,7 @@ import { ReactComponent as WildSyncLogo } from 'assets/icons/WildSyncLogo.svg';
 import loginImage from 'assets/images/loginImage.png';
 
 const LoginPage = ({ className }) => {
+  const { t } = useTranslation('loginPage');
   const navigate = useNavigate();
   const [loginContent, setLoginContent] = useState({});
 
@@ -24,7 +26,7 @@ const LoginPage = ({ className }) => {
     });
 
     if (success) {
-      toast.success('登入成功', {
+      toast.success(t('loginSuccess'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: true,
@@ -39,7 +41,7 @@ const LoginPage = ({ className }) => {
         navigate(`/`);
       }, 1500);
     } else {
-      toast.error('登入失敗，請重新嘗試', {
+      toast.error(t('loginFail'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: true,
@@ -61,27 +63,27 @@ const LoginPage = ({ className }) => {
         </div>
         <form className="l-login-area__input">
           <StyledTextInput
-            title="信箱"
-            placeholder="請輸入信箱"
+            title={t('email')}
+            placeholder={t('enterEmail')}
             inputId="email"
             formContent={loginContent}
             onFormChange={setLoginContent}
           />
           <StyledTextInput
-            title="密碼"
-            placeholder="請輸入密碼"
+            title={t('password')}
+            placeholder={t('enterPassword')}
             inputId="password"
             formContent={loginContent}
             onFormChange={setLoginContent}
             password
           />
           <StyledButton className="o-login-area__button" onClick={handleLogin}>
-            登入
+            {t('login')}
           </StyledButton>
           <StyledTextLink
             sm
             className="o-login-area__register-link"
-            text="尚未註冊?"
+            text={t('notRegistered')}
             destination="/register"
           />
         </form>

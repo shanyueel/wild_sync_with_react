@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { accountUpdate, reAuth } from 'api/auth';
 
@@ -20,6 +21,7 @@ const AccountUpdateModal = ({
   setIsAccountUpdateModalOpen,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation(['userPage', 'common']);
   const user = useSelector((state) => state.user);
   const userId = user.uid;
   const currentAccount = {
@@ -40,7 +42,7 @@ const AccountUpdateModal = ({
 
   const handlePasswordCheckBlur = () => {
     if (accountContent?.newPasswordCheck !== accountContent?.newPassword) {
-      setPasswordCheckError('兩次密碼不相同');
+      setPasswordCheckError(t('passwordMismatch'));
     } else {
       setPasswordCheckError('');
     }
@@ -64,7 +66,7 @@ const AccountUpdateModal = ({
       setIsAccountUpdateLoading(false);
 
       if (accountUpdateResult.success) {
-        toast.success('更新帳戶成功', {
+        toast.success(t('updateAccountSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -79,7 +81,7 @@ const AccountUpdateModal = ({
         setIsAccountUpdateModalOpen(false);
         navigate('/login');
       } else {
-        toast.error('更新帳戶失敗', {
+        toast.error(t('updateAccountFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -91,7 +93,7 @@ const AccountUpdateModal = ({
         });
       }
     } else {
-      toast.error('密碼輸入錯誤', {
+      toast.error(t('wrongPassword'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -112,41 +114,41 @@ const AccountUpdateModal = ({
       contentLabel="Activity Create Modal"
     >
       <div className="l-modal__header">
-        <h2 className="o-modal__title">編輯帳戶資料</h2>
+        <h2 className="o-modal__title">{t('editAccount')}</h2>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal} />
       </div>
 
       <div className="l-modal__body">
         <form className="l-modal__form-container scrollbar">
           <StyledTextInput
-            title="使用者名稱"
+            title={t('name')}
             inputId="displayName"
-            placeholder="請輸入使用者名稱"
+            placeholder={t('namePlaceholder')}
             wordLimit={16}
             formContent={accountContent}
             onFormChange={setAccountContent}
           />
           <StyledTextInput
-            title="使用者信箱"
+            title={t('email')}
             inputId="email"
-            placeholder="請輸入使用者信箱"
+            placeholder={t('emailPlaceholder')}
             formContent={accountContent}
             onFormChange={setAccountContent}
           />
           <StyledTextInput
             password
-            title="重設使用者密碼"
+            title={t('resetPassword')}
             inputId="newPassword"
-            placeholder="請輸入新的使用者密碼(16字數內)"
+            placeholder={t('newPasswordPlaceholder')}
             wordLimit={16}
             formContent={accountContent}
             onFormChange={setAccountContent}
           />
           <StyledTextInput
             password
-            title="確認使用者密碼"
+            title={t('confirmPassword')}
             inputId="newPasswordCheck"
-            placeholder="請確認新的使用者密碼"
+            placeholder={t('confirmPasswordPlaceholder')}
             wordLimit={16}
             formContent={accountContent}
             onFormChange={setAccountContent}
@@ -155,7 +157,7 @@ const AccountUpdateModal = ({
           />
         </form>
         <div className="c-account-setting__summit">
-          <StyledButton alert>取消更新</StyledButton>
+          <StyledButton alert>{t('cancelUpdate')}</StyledButton>
           <StyledButton
             onClick={handleAccountUpdate}
             disabled={
@@ -163,22 +165,22 @@ const AccountUpdateModal = ({
               accountContent?.newPasswordCheck !== accountContent?.newPassword
             }
           >
-            更新帳戶
+            {t('updateAccount')}
           </StyledButton>
 
           <StyledConfirmModal
-            title="更新帳戶"
+            title={t('updateAccount')}
             isConfirmModalOpen={isConfirmModalOpen}
             setIsConfirmModalOpen={setIsConfirmModalOpen}
             handleConfirmClick={handleUpdateConfirm}
           >
             {isAccountUpdateLoading ? (
-              <StyledLoading title="帳戶更新中" />
+              <StyledLoading title={t('updatingAccount')} />
             ) : (
               <>
-                <p>請輸入原密碼以確認更新：</p>
+                <p>{t('confirmUpdatePassword')}</p>
                 <input type="password" ref={confirmPasswordRef} />
-                <h5>注意：更新後須重新登入</h5>
+                <h5>{t('updateWarning')}</h5>
               </>
             )}
           </StyledConfirmModal>

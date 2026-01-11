@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import taiwanDistricts from 'data/taiwanDistricts.json';
 
 const LocationInput = ({
@@ -11,12 +12,33 @@ const LocationInput = ({
   warning,
   detailed,
 }) => {
+  const { t } = useTranslation('common');
+
   const detailRef = useRef(null);
   const defaultCounty =
     taiwanDistricts?.find(
       (county) => county.id === formContent?.[inputId]?.county
     ) || taiwanDistricts?.[0];
   const [districts, setDistricts] = useState(defaultCounty?.districts);
+
+  const translatedLocations = useMemo(
+    () =>
+      taiwanDistricts.map((county) => ({
+        ...county,
+        name: t(`common:locations.${county.id}`),
+      })),
+    [t]
+  );
+
+  const translatedDistricts = useMemo(
+    () =>
+      districts?.map((district) => ({
+        ...district,
+        name: t(`common:district.${district.id}`),
+      })),
+    [districts, t]
+  );
+
   const [locationContent, setLocationContent] = useState(
     formContent?.[inputId] || {}
   );
@@ -98,9 +120,9 @@ const LocationInput = ({
           value={locationContent?.['county'] || 'default'}
         >
           <option value="default" disabled>
-            縣市
+            {t('locationInput.city')}
           </option>
-          {taiwanDistricts?.map((county) => (
+          {translatedLocations?.map((county) => (
             <option key={county?.id} value={county?.id}>
               {county?.name}
             </option>
@@ -113,10 +135,10 @@ const LocationInput = ({
           value={locationContent?.['district'] || 'default'}
         >
           <option value="default" disabled>
-            區域
+            {t('locationInput.district')}
           </option>
-          {districts &&
-            districts?.map((district) => (
+          {translatedDistricts &&
+            translatedDistricts?.map((district) => (
               <option key={district?.id} value={district?.id}>
                 {district?.name}
               </option>
@@ -127,7 +149,7 @@ const LocationInput = ({
             className="o-location-input__address"
             type="text"
             ref={detailRef}
-            placeholder="詳細地址 / 地標 / 道路"
+            placeholder={t('locationInput.placeholder')}
             id="detail"
             value={locationContent?.detail || ''}
             onChange={handleDetailInput}
@@ -168,19 +190,6 @@ const StyledLocationInput = styled(LocationInput)`
       &__address {
         grid-area: address;
         width: 100%;
-      }
-    }
-  }
-
-  @media screen and (min-width: 1024px) {
-    .c-input-body {
-      display: flex;
-
-      .o-location-input {
-        &__county,
-        &__district {
-          width: 5rem;
-        }
       }
     }
   }

@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const ActivityCreateStepDisplay = ({ className, formProgress }) => {
+  const { t } = useTranslation('activityPage');
   const stepsRef = useRef(null);
 
   useEffect(() => {
@@ -36,23 +38,23 @@ const ActivityCreateStepDisplay = ({ className, formProgress }) => {
     <div className={className} ref={stepsRef}>
       <div className="c-activity-create__step">
         <div className="o-activity-create__step-circle active"></div>
-        <h3 className="o-activity-create__step-title">基本資訊</h3>
+        <h3 className="o-activity-create__step-title">{t('create.step1')}</h3>
       </div>
       <div className="c-activity-create__step">
         <div className="o-activity-create__step-circle"></div>
-        <h3 className="o-activity-create__step-title">重點簡介</h3>
+        <h3 className="o-activity-create__step-title">{t('create.step2')}</h3>
       </div>
       <div className="c-activity-create__step">
         <div className="o-activity-create__step-circle"></div>
-        <h3 className="o-activity-create__step-title">活動細節</h3>
+        <h3 className="o-activity-create__step-title">{t('create.step3')}</h3>
       </div>
       <div className="c-activity-create__step">
         <div className="o-activity-create__step-circle"></div>
-        <h3 className="o-activity-create__step-title">交通住宿</h3>
+        <h3 className="o-activity-create__step-title">{t('create.step4')}</h3>
       </div>
       <div className="c-activity-create__step">
         <div className="o-activity-create__step-circle"></div>
-        <h3 className="o-activity-create__step-title">其他補充</h3>
+        <h3 className="o-activity-create__step-title">{t('create.note')}</h3>
       </div>
     </div>
   );

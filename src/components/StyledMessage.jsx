@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 import userDefaultImage from 'assets/images/userDefaultImage.png';
 
 const Message = ({ className, isSelf }) => {
+  const { t } = useTranslation('common');
   return (
     <div
       className={clsx(className, { '--others': !isSelf }, { '--self': isSelf })}
@@ -14,7 +16,7 @@ const Message = ({ className, isSelf }) => {
         alt="user-avatar"
       />
       <p className="o-activity-discussion__message-content">
-        我臨時有些事情需要處理，想要取消，謝謝！
+        {t('dummyMessage')}
       </p>
       <h4 className="o-activity-discussion__message-time">12:59</h4>
     </div>

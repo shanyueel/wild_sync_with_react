@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
 import { getUsersByIdList } from 'api/userApi';
@@ -17,6 +18,7 @@ const ActivityAttendance = ({
   attendance,
   isLargeLayout,
 }) => {
+  const { t } = useTranslation('activityPage');
   const [attendanceList, setAttendanceList] = useState([]);
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const ActivityAttendance = ({
               <ReturnIcon className="o-activity-discussion__return-icon" />
             </label>
           )}
-          <h2 className="o-activity-attendance__title">活動參加者</h2>
+          <h2 className="o-activity-attendance__title">{t('participants')}</h2>
         </div>
         <div className="l-activity-attendance__body scrollbar">
           <StyledUserCard listItem holderUsed user={holder} />

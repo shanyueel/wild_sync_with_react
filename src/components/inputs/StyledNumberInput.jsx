@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const NumberInput = ({
   className,
@@ -14,6 +15,7 @@ const NumberInput = ({
   onFormChange,
   warning,
 }) => {
+  const { t } = useTranslation('common');
   const numberRef = useRef(null);
   const [warningContent, setWarningContent] = useState(warning);
 
@@ -24,11 +26,14 @@ const NumberInput = ({
     let rangeLimitWarning = '';
     if (currentValue < minLimit || currentValue > maxLimit) {
       if (typeof minLimit !== 'undefined' && typeof maxLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該介於： ${minLimit} - ${maxLimit}`;
+        rangeLimitWarning = t('rangeInput.between', {
+          min: minLimit,
+          max: maxLimit,
+        });
       } else if (typeof minLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該大於${minLimit}`;
+        rangeLimitWarning = t('rangeInput.greaterThan', { min: minLimit });
       } else if (typeof maxLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該小於${maxLimit}`;
+        rangeLimitWarning = t('rangeInput.lessThan', { max: maxLimit });
       }
     } else {
       rangeLimitWarning = '';

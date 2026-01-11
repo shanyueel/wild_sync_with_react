@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const RangeInput = ({
   className,
@@ -14,6 +15,7 @@ const RangeInput = ({
   onFormChange,
   warning,
 }) => {
+  const { t } = useTranslation('common');
   const minRef = useRef(null);
   const maxRef = useRef(null);
   const [range, setRange] = useState(
@@ -32,14 +34,17 @@ const RangeInput = ({
     let rangeLimitWarning = '';
     if (minValue !== null && (minValue < minLimit || minValue > maxLimit)) {
       if (typeof minLimit !== 'undefined' && typeof maxLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該介於： ${minLimit} - ${maxLimit}`;
+        rangeLimitWarning = t('rangeInput.between', {
+          min: minLimit,
+          max: maxLimit,
+        });
       } else if (typeof minLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該大於${minLimit}`;
+        rangeLimitWarning = t('rangeInput.greaterThan', { min: minLimit });
       } else if (typeof maxLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該小於${maxLimit}`;
+        rangeLimitWarning = t('rangeInput.lessThan', { max: maxLimit });
       }
     } else if (minValue !== null && minValue > range?.max) {
-      rangeLimitWarning = '最低值不可大於最高值';
+      rangeLimitWarning = t('rangeInput.minMaxError');
     } else {
       rangeLimitWarning = '';
     }
@@ -61,14 +66,17 @@ const RangeInput = ({
     let rangeLimitWarning = '';
     if (maxValue !== null && (maxValue < minLimit || maxValue > maxLimit)) {
       if (typeof minLimit !== 'undefined' && typeof maxLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該介於： ${minLimit} - ${maxLimit}`;
+        rangeLimitWarning = t('rangeInput.between', {
+          min: minLimit,
+          max: maxLimit,
+        });
       } else if (typeof minLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該大於${minLimit}`;
+        rangeLimitWarning = t('rangeInput.greaterThan', { min: minLimit });
       } else if (typeof maxLimit !== 'undefined') {
-        rangeLimitWarning = `輸入數值應該小於${maxLimit}`;
+        rangeLimitWarning = t('rangeInput.lessThan', { max: maxLimit });
       }
     } else if (maxValue !== null && maxValue < range?.min) {
-      rangeLimitWarning = '最高值不可小於最低值';
+      rangeLimitWarning = t('rangeInput.maxMinError');
     } else {
       rangeLimitWarning = '';
     }

@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const UserInfo = ({ className, user, cardUsed, message }) => {
+  const { t } = useTranslation('common');
   const calculateAge = (birthTimeStamp) => {
     const currentTimeStamp = Date.now();
     const age = Math.floor(
@@ -19,10 +21,13 @@ const UserInfo = ({ className, user, cardUsed, message }) => {
         <Link to={`/user/${user?.uid}`}>
           <h2 className="o-user-info__name">{user?.displayName}</h2>
         </Link>
-        <h4 className="o-user-info__time">3小時前</h4>
+        <h4 className="o-user-info__time">{t('threeHoursAgo')}</h4>
         <div className="c-user-info__brief">
           <h4 className="o-user-info__region">{user?.region}</h4>
-          <h4 className="o-user-info__age">{calculateAge(user?.birth)}歲</h4>
+          <h4 className="o-user-info__age">
+            {calculateAge(user?.birth)}
+            {t('ageSuffix')}
+          </h4>
           <h4 className="o-user-info__profession">{user?.profession}</h4>
         </div>
       </div>

@@ -1,5 +1,22 @@
 {
+  "emptyError": "*This field cannot be empty",
+  "updateProfileSuccess": "Profile updated successfully",
+  "updateProfileFail": "Failed to update profile",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "prevPage": "Previous Page",
+  "nextPage": "Next Page",
   "search": "Search",
+  "pageNotFound": "Page not found",
+  "backToHome": "Back to Home",
+  "ageSuffix": "years old",
+  "removeParticipantSuccess": "Successfully removed participant",
+  "removeParticipantFail": "Failed to remove participant",
+  "remove": "Remove",
+  "removeParticipant": "Remove Participant",
+  "confirmRemoveParticipant": "Are you sure you want to remove {{name}}?",
+  "threeHoursAgo": "3 hours ago",
+  "dummyMessage": "I have something urgent to deal with, I want to cancel, thank you!",
   "searchPlaceholder": "Hiking trails, campsites, diving spots...",
   "difficulty": "Difficulty",
   "date": "Date",
@@ -15,6 +32,17 @@
   "learnMore": "Learn More",
   "browseHistory": "Browse History",
   "joined": "Joined",
+  "requirement": {
+    "needed": "Needed",
+    "unNeeded": "UnNeeded"
+  },
+  "activityTypes": {
+    "hiking": "Hiking",
+    "camping": "Camping",
+    "cycling": "Cycling",
+    "diving": "Diving",
+    "others": "Others"
+  },
   "difficulties": {
     "beginner": "Beginner",
     "medium": "Medium",
@@ -429,5 +457,36 @@
     "advanced": "Advanced",
     "expert": "Expert",
     "master": "Master"
+  },
+  "trailTypes": {
+    "round": "Round",
+    "backtrack": "Backtrack",
+    "one-way": "One-way"
+  },
+  "discussion": {
+    "placeholder": "Please enter content",
+    "start": "Start Discussion"
+  },
+  "rangeInput": {
+    "between": "Input value should be between: {{min}} - {{max}}",
+    "greaterThan": "Input value should be greater than {{min}}",
+    "lessThan": "Input value should be less than {{max}}",
+    "minMaxError": "Minimum value cannot be greater than maximum value",
+    "maxMinError": "Maximum value cannot be less than minimum value"
+  },
+  "send": "Send",
+  "locationInput": {
+    "city": "City/County",
+    "district": "District",
+    "placeholder": "Detailed address / Landmark / Road"
+  },
+  "dateTimeInput": {
+    "errorStart": "Start time cannot be after end time",
+    "errorEnd": "End time cannot be before start time",
+    "pastError": "Input time cannot be in the past"
+  },
+  "unit": {
+    "hours": "Hours",
+    "people": "People"
   }
 }

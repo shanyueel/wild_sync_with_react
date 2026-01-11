@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import StyledAccommodationTable from 'components/tables/StyledAccommodationTable';
 import StyledTransportationTable from 'components/tables/StyledTransportationTable';
@@ -15,6 +16,7 @@ const ActivityCreateStepFour = ({
   formErrors,
   setFormErrors,
 }) => {
+  const { t } = useTranslation('activityPage');
   const [transportationContent, setTransportationContent] = useState(
     formContent?.transportation || {}
   );
@@ -115,7 +117,7 @@ const ActivityCreateStepFour = ({
             <tbody>
               <tr>
                 <td className="c-table-key" colSpan={2}>
-                  住宿資訊
+                  {t('create.accommodationInfo')}
                 </td>
               </tr>
             </tbody>
@@ -144,7 +146,7 @@ const ActivityCreateStepFour = ({
             onClick={handleAccommodationRemove}
           >
             <MinusIcon />
-            移除住宿
+            {t('create.removeAccommodation')}
           </div>
         )}
         <div
@@ -152,7 +154,7 @@ const ActivityCreateStepFour = ({
           onClick={handleAccommodationAdd}
         >
           <PlusIcon />
-          新增住宿
+          {t('create.addAccommodation')}
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledButton from 'components/StyledButton';
 import StyledUserInfo from 'components/StyledUserInfo';
@@ -28,6 +29,7 @@ import { ReactComponent as HeartIcon } from 'assets/icons/HeartIcon.svg';
 import defaultImageURL from 'data/defaultImageURL.json';
 
 const ActivityPage = ({ className }) => {
+  const { t } = useTranslation('activityPage');
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const environmentParams = useSelector((state) => state.environment);
@@ -41,7 +43,7 @@ const ActivityPage = ({ className }) => {
   const [userAttendance, setUserAttendance] = useState(false);
   const [isAttendanceExpired, setIsAttendanceExpired] = useState(false);
   const [isAttendanceFull, setIsAttendanceFull] = useState(false);
-  const [btnContent, setBtnContent] = useState('報名');
+  const [btnContent, setBtnContent] = useState(t('join'));
   const [isActivityUpdateModalOpen, setIsActivityUpdateModalOpen] =
     useState(false);
   const [isActivityLiked, setIsActivityLiked] = useState(false);
@@ -105,15 +107,22 @@ const ActivityPage = ({ className }) => {
     );
 
     if (userAttendance) {
-      setBtnContent('已成功報名 ( 再次點擊退出 )');
+      setBtnContent(t('registered'));
     } else if (isAttendanceExpired) {
-      setBtnContent('報名已截止');
+      setBtnContent(t('registrationClosed'));
     } else if (isAttendanceFull) {
-      setBtnContent('報名已額滿');
+      setBtnContent(t('registrationFull'));
     } else {
-      setBtnContent('報名加入');
+      setBtnContent(t('join'));
     }
-  }, [activity, userId, userAttendance, isAttendanceExpired, isAttendanceFull]);
+  }, [
+    activity,
+    userId,
+    userAttendance,
+    isAttendanceExpired,
+    isAttendanceFull,
+    t,
+  ]);
 
   useEffect(() => {
     setIsActivityLiked(user?.likedActivities?.includes(activityId));
@@ -127,7 +136,7 @@ const ActivityPage = ({ className }) => {
     if (isAttendanceExpired || (isAttendanceFull && !userAttendance)) return;
 
     if (!user.loggedIn) {
-      toast.error('請登入以報名', {
+      toast.error(t('loginToRegister'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -147,7 +156,7 @@ const ActivityPage = ({ className }) => {
 
     if (!userAttendance) {
       if (success) {
-        toast.success('參加活動成功', {
+        toast.success(t('joinSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -158,7 +167,7 @@ const ActivityPage = ({ className }) => {
           theme: 'light',
         });
       } else {
-        toast.error('參加活動失敗', {
+        toast.error(t('joinFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -171,7 +180,7 @@ const ActivityPage = ({ className }) => {
       }
     } else {
       if (success) {
-        toast.success('退出活動成功', {
+        toast.success(t('leaveSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -182,7 +191,7 @@ const ActivityPage = ({ className }) => {
           theme: 'light',
         });
       } else {
-        toast.error('退出活動成功', {
+        toast.error(t('leaveFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -202,7 +211,7 @@ const ActivityPage = ({ className }) => {
 
   const handleActivityLiked = async () => {
     if (!user.loggedIn) {
-      toast.error('請登入以收藏', {
+      toast.error(t('loginToLike'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -220,7 +229,7 @@ const ActivityPage = ({ className }) => {
 
     if (!isActivityLiked) {
       if (success) {
-        toast.success('收藏活動成功', {
+        toast.success(t('likeSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -231,7 +240,7 @@ const ActivityPage = ({ className }) => {
           theme: 'light',
         });
       } else {
-        toast.error('收藏活動失敗', {
+        toast.error(t('likeFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -244,7 +253,7 @@ const ActivityPage = ({ className }) => {
       }
     } else {
       if (success) {
-        toast.success('取消收藏活動成功', {
+        toast.success(t('unlikeSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -255,7 +264,7 @@ const ActivityPage = ({ className }) => {
           theme: 'light',
         });
       } else {
-        toast.error('取消收藏活動失敗', {
+        toast.error(t('unlikeFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -287,6 +296,7 @@ const ActivityPage = ({ className }) => {
             />
             <label htmlFor="like">
               <HeartIcon />
+              <span>{isActivityLiked ? t('liked') : t('likeActivity')}</span>
             </label>
           </div>
         </div>
@@ -301,7 +311,7 @@ const ActivityPage = ({ className }) => {
             {!isMediumLayout && <br />}
             <span className="o-activity-title__update-time">
               {' '}
-              ( 最後更新於:{' '}
+              ( {t('lastUpdated')}{' '}
               {transferTimestamp(activity?.updateAt) ||
                 transferTimestamp(activity?.createAt)}{' '}
               )
@@ -325,7 +335,7 @@ const ActivityPage = ({ className }) => {
             {activity?.holder?.uid === userId ? (
               <>
                 <StyledButton outlined onClick={handleActivityUpdate}>
-                  更新活動
+                  {t('updateActivity')}
                 </StyledButton>
                 <StyledActivityUpdateModal
                   activityId={activityId}
@@ -348,8 +358,8 @@ const ActivityPage = ({ className }) => {
             )}
 
             <h4 className="o-activity-deadline">
-              - 報名截止日:{' '}
-              {transferTimestamp(activity?.deadline, 'yyyy年MM月dd日 HH:mm')} -
+              - {t('registrationDeadline')}{' '}
+              {transferTimestamp(activity?.deadline, 'yyyy/MM/dd HH:mm')} -
             </h4>
           </div>
 
@@ -417,6 +427,10 @@ const StyledActivityPage = styled(ActivityPage)`
         display: flex;
         align-items: center;
         cursor: pointer;
+
+        span {
+          display: none;
+        }
 
         svg {
           width: 1.5rem;
@@ -522,16 +536,15 @@ const StyledActivityPage = styled(ActivityPage)`
     .l-activity-header .o-activity__like {
       padding: 0.25rem 0.75rem;
 
-      label::after {
-        content: '收藏活動';
+      label span {
+        display: inline-block;
         margin-left: 0.125rem;
         font-size: 0.8rem;
         color: ${({ theme }) => theme.color.alert};
       }
 
       &:has(input:checked) {
-        label::after {
-          content: '已收藏';
+        label span {
           color: white;
         }
       }

@@ -10,11 +10,13 @@ import { useEffect, useState } from 'react';
 import { register } from 'api/auth';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { buildUser } from 'api/userApi';
 
 const RegisterPage = ({ className }) => {
+  const { t } = useTranslation('registerPage');
   const navigate = useNavigate();
-  const emptyError = '*此欄位不可為空白';
+  const emptyError = t('emptyError');
   const [registerContent, setRegisterContent] = useState({});
   const [formErrors, setFormErrors] = useState({});
 
@@ -48,7 +50,7 @@ const RegisterPage = ({ className }) => {
 
     if (isRegisterComplete) {
       if (registerContent.passwordCheck !== registerContent.password) {
-        setFormErrors({ ...formErrors, passwordCheck: '兩次密碼不相同' });
+        setFormErrors({ ...formErrors, passwordCheck: t('passwordMismatch') });
         return;
       }
 
@@ -65,7 +67,7 @@ const RegisterPage = ({ className }) => {
       });
 
       if (success) {
-        toast.success('註冊成功', {
+        toast.success(t('registerSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: true,
@@ -80,7 +82,7 @@ const RegisterPage = ({ className }) => {
           navigate(`/`);
         }, 1500);
       } else {
-        toast.error('註冊失敗，請重新嘗試', {
+        toast.error(t('registerFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: true,
@@ -103,17 +105,17 @@ const RegisterPage = ({ className }) => {
         </div>
         <form className="l-register-area__input">
           <StyledTextInput
-            title="設定信箱"
+            title={t('setEmail')}
             inputId="email"
-            placeholder="請輸入信箱"
+            placeholder={t('enterEmail')}
             formContent={registerContent}
             onFormChange={setRegisterContent}
             warning={formErrors.email}
           />
           <StyledTextInput
-            title="設定暱稱"
+            title={t('setNickname')}
             inputId="displayName"
-            placeholder="請輸入暱稱"
+            placeholder={t('enterNickname')}
             wordLimit={16}
             formContent={registerContent}
             onFormChange={setRegisterContent}
@@ -121,18 +123,18 @@ const RegisterPage = ({ className }) => {
           />
           <StyledTextInput
             password
-            title="設定密碼"
+            title={t('setPassword')}
             inputId="password"
-            placeholder="請輸入密碼"
+            placeholder={t('enterPassword')}
             wordLimit={16}
             formContent={registerContent}
             onFormChange={setRegisterContent}
             warning={formErrors.password}
           />
           <StyledTextInput
-            title="確認密碼"
+            title={t('confirmPassword')}
             inputId="passwordCheck"
-            placeholder="請再次輸入密碼"
+            placeholder={t('enterPasswordAgain')}
             wordLimit={16}
             formContent={registerContent}
             onFormChange={setRegisterContent}
@@ -143,12 +145,12 @@ const RegisterPage = ({ className }) => {
             className="o-register-area__button"
             onClick={handleRegister}
           >
-            註冊
+            {t('register')}
           </StyledButton>
           <StyledTextLink
             sm
             className="o-register-area__register-link"
-            text="已經是Wild Sync會員?"
+            text={t('alreadyMember')}
             destination="/login"
           />
         </form>

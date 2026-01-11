@@ -1,0 +1,16 @@
+{
+  "emptyError": "*此欄位不可為空白",
+  "passwordMismatch": "兩次密碼不相同",
+  "registerSuccess": "註冊成功",
+  "registerFail": "註冊失敗，請重新嘗試",
+  "setEmail": "設定信箱",
+  "enterEmail": "請輸入信箱",
+  "setNickname": "設定暱稱",
+  "enterNickname": "請輸入暱稱",
+  "setPassword": "設定密碼",
+  "enterPassword": "請輸入密碼",
+  "confirmPassword": "確認密碼",
+  "enterPasswordAgain": "請再次輸入密碼",
+  "register": "註冊",
+  "alreadyMember": "已經是Wild Sync會員?"
+}

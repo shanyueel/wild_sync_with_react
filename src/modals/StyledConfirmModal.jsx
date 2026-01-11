@@ -1,5 +1,6 @@
 import Modal from 'react-modal';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledButton from 'components/StyledButton';
 
@@ -11,6 +12,7 @@ const ConfirmModal = ({
   setIsConfirmModalOpen,
   handleConfirmClick,
 }) => {
+  const { t } = useTranslation('common');
   const closeModal = () => {
     setIsConfirmModalOpen(false);
   };
@@ -29,9 +31,9 @@ const ConfirmModal = ({
       <div className="l-modal__body">
         <div className="o-modal__content">{children}</div>
         <div className="l-modal__controls">
-          <StyledButton onClick={closeModal}>取消</StyledButton>
+          <StyledButton onClick={closeModal}>{t('cancel')}</StyledButton>
           <StyledButton alert onClick={handleConfirmClick}>
-            確認
+            {t('confirm')}
           </StyledButton>
         </div>
       </div>

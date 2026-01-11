@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import StyledConfirmModal from 'modals/StyledConfirmModal';
 import { removeAttendance } from 'api/activityApi';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const UserCard = ({
   className,
@@ -18,6 +19,7 @@ const UserCard = ({
   listItem,
   isHolder,
 }) => {
+  const { t } = useTranslation('common');
   const userId = user?.uid;
   const [isRemoveConfirmModalOpen, setIsRemoveConfirmModalOpen] =
     useState(false);
@@ -46,7 +48,7 @@ const UserCard = ({
         attendance: newAttendance,
       };
       setActivity(newActivity);
-      toast.success('移除參與者成功', {
+      toast.success(t('removeParticipantSuccess'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -57,7 +59,7 @@ const UserCard = ({
         theme: 'light',
       });
     } else {
-      toast.error('移除參與者失敗', {
+      toast.error(t('removeParticipantFail'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -85,16 +87,16 @@ const UserCard = ({
           onClick={handleRemoveBtnClick}
         >
           <CrossIcon />
-          移除
+          {t('remove')}
         </StyledButton>
       )}
       <StyledConfirmModal
-        title="移除參與者"
+        title={t('removeParticipant')}
         isConfirmModalOpen={isRemoveConfirmModalOpen}
         setIsConfirmModalOpen={setIsRemoveConfirmModalOpen}
         handleConfirmClick={handleRemoveConfirmClick}
       >
-        確定要移除{user?.displayName}嗎?
+        {t('confirmRemoveParticipant', { name: user?.displayName })}
       </StyledConfirmModal>
     </div>
   );

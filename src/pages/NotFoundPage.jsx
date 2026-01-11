@@ -1,10 +1,12 @@
 import StyledButton from 'components/StyledButton';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import notFoundImage from 'assets/images/notFoundPageImage.jpg';
 
 const NotFoundPage = ({ className }) => {
+  const { t } = useTranslation('common');
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -14,9 +16,9 @@ const NotFoundPage = ({ className }) => {
   return (
     <div className={className}>
       <img src={notFoundImage} alt="not found"></img>
-      <h2>找不到此頁面</h2>
+      <h2>{t('pageNotFound')}</h2>
       <StyledButton className="o-not-found__button" onClick={handleButtonClick}>
-        返回首頁
+        {t('backToHome')}
       </StyledButton>
     </div>
   );

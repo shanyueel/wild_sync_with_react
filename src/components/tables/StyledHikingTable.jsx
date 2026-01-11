@@ -1,5 +1,7 @@
+import { useMemo } from 'react';
 import styled from 'styled-components';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 import { displayLocation } from 'utils/location';
 
@@ -22,12 +24,32 @@ const HikingTable = ({
   onDetailChange,
   formErrors,
 }) => {
+  const { t } = useTranslation(['tables', 'common']);
+
+  const translatedTrackTypes = useMemo(
+    () =>
+      hikingTrackTypeOptions.map((option) => ({
+        ...option,
+        name: t(`common:trailTypes.${option.id}`),
+      })),
+    [t]
+  );
+
+  const translatedRequirement = useMemo(
+    () =>
+      hikingApplicationNeededOptions.map((option) => ({
+        ...option,
+        name: t(`common:requirement.${option.id}`),
+      })),
+    [t]
+  );
+
   return (
     <table className={className}>
       <tbody>
         <tr>
           <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-            出發地點
+            {t('departurePoint')}
           </td>
           <td className="c-table-content">
             {inputUsed ? (
@@ -45,30 +67,34 @@ const HikingTable = ({
         </tr>
         <tr>
           <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-            步道類型
+            {t('trailType')}
           </td>
           <td className="c-table-content">
             {inputUsed && (
               <StyledRadioInput
                 inputId="trackType"
-                radioOptions={hikingTrackTypeOptions}
+                radioOptions={translatedTrackTypes}
                 formContent={detailContent}
                 onFormChange={onDetailChange}
                 warning={formErrors?.trackType}
               />
             )}
-            {!inputUsed && detailContent?.trackType === 'round' && '環狀路線'}
+            {!inputUsed &&
+              detailContent?.trackType === 'round' &&
+              t('common:trailTypes.loop')}
             {!inputUsed &&
               detailContent?.trackType === 'backtrack' &&
-              '原路折返'}
-            {!inputUsed && detailContent?.trackType === 'one-way' && '雙向進出'}
+              t('common:trailTypes.outAndBack')}
+            {!inputUsed &&
+              detailContent?.trackType === 'one-way' &&
+              t('common:trailTypes.pointToPoint')}
           </td>
         </tr>
         {detailContent?.trackType === 'one-way' && (
           <>
             <tr>
               <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-                登出地點
+                {t('exitPoint')}
               </td>
               <td className="c-table-content">
                 {inputUsed ? (
@@ -88,34 +114,34 @@ const HikingTable = ({
         )}
         <tr>
           <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-            路徑長度
+            {t('trailLength')}
           </td>
           <td className="c-table-content">
             {inputUsed ? (
               <StyledNumberInput
-                placeholder="路徑長度"
+                placeholder={t('trailLength')}
                 inputId="trackLength"
-                unit="公里"
+                unit={t('km')}
                 minLimit={0}
                 formContent={detailContent}
                 onFormChange={onDetailChange}
                 warning={formErrors?.trackLength}
               />
             ) : (
-              `${detailContent?.trackLength} 公里`
+              `${detailContent?.trackLength} ${t('km')}`
             )}
           </td>
         </tr>
         <tr>
           <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-            海拔高度
+            {t('altitude')}
           </td>
           <td className="c-table-content">
             {inputUsed ? (
               <StyledRangeInput
                 inputId="altitude"
-                minPlaceholder="最低海拔"
-                maxPlaceholder="最高海拔"
+                minPlaceholder={t('minAltitude')}
+                maxPlaceholder={t('maxAltitude')}
                 unit="m"
                 formContent={detailContent}
                 onFormChange={onDetailChange}
@@ -128,12 +154,12 @@ const HikingTable = ({
         </tr>
         <tr>
           <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-            路面種類
+            {t('pavementType')}
           </td>
           <td className="c-table-content">
             {inputUsed ? (
               <StyledTextInput
-                placeholder="路徑主類 (石階 / 泥土 / 拉繩)"
+                placeholder={t('pavementPlaceholder')}
                 inputId="trackCondition"
                 wordLimit={20}
                 formContent={detailContent}
@@ -147,12 +173,12 @@ const HikingTable = ({
         </tr>
         <tr>
           <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-            所屬園區
+            {t('park')}
           </td>
           <td className="c-table-content">
             {inputUsed ? (
               <StyledTextInput
-                placeholder="所屬園區( 若沒有，可填無 )"
+                placeholder={t('parkPlaceholder')}
                 inputId="belongingPark"
                 wordLimit={20}
                 formContent={detailContent}
@@ -166,13 +192,13 @@ const HikingTable = ({
         </tr>
         <tr>
           <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-            入園申請
+            {t('permit')}
           </td>
           <td className="c-table-content">
             {inputUsed && (
               <StyledRadioInput
                 inputId="applicationNeeded"
-                radioOptions={hikingApplicationNeededOptions}
+                radioOptions={translatedRequirement}
                 formContent={detailContent}
                 onFormChange={onDetailChange}
                 warning={formErrors?.applicationNeeded}
@@ -180,10 +206,10 @@ const HikingTable = ({
             )}
             {!inputUsed &&
               detailContent?.applicationNeeded === 'needed' &&
-              '需要'}
+              t('common:requirement.needed')}
             {!inputUsed &&
               detailContent?.applicationNeeded === 'unNeeded' &&
-              '不需要'}
+              t('common:requirement.unNeeded')}
           </td>
         </tr>
         <tr>
@@ -191,14 +217,14 @@ const HikingTable = ({
             className={clsx('c-table-key', { inputUsed: inputUsed })}
             colSpan={2}
           >
-            路線資訊
+            {t('routeInfo')}
           </td>
         </tr>
         <tr>
           <td className="c-table-content" colSpan={2}>
             {inputUsed ? (
               <StyledTextArea
-                placeholder="請輸入路線資訊"
+                placeholder={t('enterRouteInfo')}
                 inputId="trackIntroduction"
                 wordLimit={150}
                 formContent={detailContent}
@@ -215,7 +241,7 @@ const HikingTable = ({
             className={clsx('c-table-key', { inputUsed: inputUsed })}
             colSpan={2}
           >
-            路徑地圖
+            {t('trailMap')}
           </td>
         </tr>
         <tr>

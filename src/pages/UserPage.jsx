@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { getPopularUsersList, getUser } from 'api/userApi';
 import { getActivitiesByIdList } from 'api/activityApi';
@@ -15,6 +16,7 @@ import StyledUserEditModal from 'modals/StyledUserEditModal';
 import StyledLoading from 'components/StyledLoading';
 
 const UserPage = ({ className }) => {
+  const { t } = useTranslation('userPage');
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const environmentParams = useSelector((state) => state.environment);
@@ -102,9 +104,9 @@ const UserPage = ({ className }) => {
           <div className="l-user__brief">
             <h3 className="o-user__region">{selectedUser?.region}</h3>
             {selectedUser?.birth && (
-              <h3 className="o-user__age">{`${calculateAge(
-                selectedUser?.birth
-              )}歲`}</h3>
+              <h3 className="o-user__age">
+                {t('age', { val: calculateAge(selectedUser?.birth) })}
+              </h3>
             )}
             <h3 className="o-user__profession">{selectedUser?.profession}</h3>
           </div>
@@ -116,7 +118,7 @@ const UserPage = ({ className }) => {
                 onClick={handleUserEdit}
                 outlined
               >
-                更新資料
+                {t('updateProfile')}
               </StyledButton>
               <StyledUserEditModal
                 isUserEditModalOpen={isUserEditModalOpen}
@@ -140,7 +142,7 @@ const UserPage = ({ className }) => {
                 id="attendedActivities"
                 defaultChecked
               />
-              參與紀錄
+              {t('attendedActivities')}
             </label>
             <label
               htmlFor="likedActivities"
@@ -148,7 +150,7 @@ const UserPage = ({ className }) => {
               onChange={handleActivitiesChange}
             >
               <input type="radio" name="user-activities" id="likedActivities" />
-              收藏活動
+              {t('likedActivities')}
             </label>
             <label
               htmlFor="heldActivities"
@@ -156,13 +158,13 @@ const UserPage = ({ className }) => {
               onChange={handleActivitiesChange}
             >
               <input type="radio" name="user-activities" id="heldActivities" />
-              主辦經驗
+              {t('heldActivities')}
             </label>
           </div>
 
           <div className="l-user-activities__container">
             {isActivitiesLoading ? (
-              <StyledLoading title="活動讀取中" white />
+              <StyledLoading title={t('loadingActivities')} white />
             ) : activities?.length > 0 ? (
               activities?.map((activity) => (
                 <StyledActivityListItem
@@ -171,14 +173,16 @@ const UserPage = ({ className }) => {
                 />
               ))
             ) : (
-              <h2 className="o-user-activities__empty">目前找不到相關活動</h2>
+              <h2 className="o-user-activities__empty">
+                {t('noActivitiesFound')}
+              </h2>
             )}
           </div>
         </div>
       </div>
 
       <div className="l-web-container__side l-holder-recommendation">
-        <h2 className="o-holder-recommendation__title">熱門主辦者</h2>
+        <h2 className="o-holder-recommendation__title">{t('popularHosts')}</h2>
         <div
           className={clsx('l-holder-recommendation__container', {
             'scrollbar-x': !isLargeLayout,
@@ -186,7 +190,7 @@ const UserPage = ({ className }) => {
         >
           <div className="l-holder-recommendation__holders">
             {isPopularUsersLoading ? (
-              <StyledLoading title="使用者讀取中" />
+              <StyledLoading title={t('loadingUsers')} />
             ) : (
               popularUsers &&
               popularUsers?.map((user) => (

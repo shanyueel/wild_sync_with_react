@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import { deleteActivity, updateActivity } from 'api/activityApi';
 import { deleteImage, uploadImage } from 'api/storageApi';
@@ -28,8 +29,10 @@ const ActivityUpdateModal = ({
   isActivityUpdateModalOpen,
   setIsActivityUpdateModalOpen,
 }) => {
+  const { t } = useTranslation(['activityPage', 'common']);
+
   const navigate = useNavigate();
-  const missingError = '*此欄位不可為空白';
+  const missingError = t('common:emptyError');
   const user = useSelector((state) => state.user);
   const userId = user.uid;
   const [activityContent, setActivityContent] = useState(currentActivity);
@@ -214,7 +217,7 @@ const ActivityUpdateModal = ({
       setIsDeleteConfirmModalOpen(false);
       setIsActivityUpdateModalOpen(false);
       navigate(`/user/${userId}`);
-      toast.success('刪除活動成功', {
+      toast.success(t('deleteSuccess'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -226,7 +229,7 @@ const ActivityUpdateModal = ({
       });
     } else {
       setIsActivityUpdateModalOpen(false);
-      toast.error('刪除活動失敗', {
+      toast.error(t('deleteFail'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -332,7 +335,7 @@ const ActivityUpdateModal = ({
         setIsActivityUpdateModalOpen(false);
         setFormProgress(1);
         setActivity(updatedActivity);
-        toast.success('更新活動成功', {
+        toast.success(t('updateSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -344,7 +347,7 @@ const ActivityUpdateModal = ({
         });
       } else {
         setIsActivityUpdateModalOpen(false);
-        toast.error('更新活動失敗', {
+        toast.error(t('updateFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -366,23 +369,23 @@ const ActivityUpdateModal = ({
       contentLabel="Activity Create Modal"
     >
       <div className="l-modal__header">
-        <h2 className="o-modal__title">更新活動</h2>
+        <h2 className="o-modal__title">{t('updateActivity')}</h2>
         <StyledButton onClick={handleResetData} sm outlined>
-          還原變更
+          {t('resetChanges')}
         </StyledButton>
         <StyledButton onClick={handleDeleteActivity} sm alertOutlined>
-          刪除活動
+          {t('deleteActivity')}
         </StyledButton>
         <StyledConfirmModal
-          title="刪除活動"
+          title={t('deleteActivity')}
           isConfirmModalOpen={isDeleteConfirmModalOpen}
           setIsConfirmModalOpen={setIsDeleteConfirmModalOpen}
           handleConfirmClick={handleConfirmDeleteClick}
         >
           {isActivityDeleteLoading ? (
-            <StyledLoading title="活動刪除中" />
+            <StyledLoading title={t('deletingActivity')} />
           ) : (
-            '確認要刪除嗎?'
+            t('confirmDelete')
           )}
         </StyledConfirmModal>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal} />
@@ -435,7 +438,7 @@ const ActivityUpdateModal = ({
           {isActivityUpdateLoading && (
             <StyledLoading
               className="o-activity-update__loading"
-              title="活動更新中"
+              title={t('updatingActivity')}
             />
           )}
         </form>
@@ -443,13 +446,17 @@ const ActivityUpdateModal = ({
         <div className="l-modal__controls">
           {formProgress !== 1 && !isActivityUpdateLoading && (
             <StyledButton onClick={handlePreviousPageClick}>
-              前一頁
+              {t('common:prevPage')}
             </StyledButton>
           )}
           {formProgress < 5 && !isActivityUpdateLoading ? (
-            <StyledButton onClick={handleNextPageClick}>下一頁</StyledButton>
+            <StyledButton onClick={handleNextPageClick}>
+              {t('common:nextPage')}
+            </StyledButton>
           ) : (
-            <StyledButton onClick={handleActivityUpdate}>更新活動</StyledButton>
+            <StyledButton onClick={handleActivityUpdate}>
+              {t('updateActivity')}
+            </StyledButton>
           )}
         </div>
       </div>

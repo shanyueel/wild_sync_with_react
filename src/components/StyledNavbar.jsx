@@ -94,7 +94,7 @@ const Navbar = ({ className }) => {
 
     if (success) {
       dispatch(resetUser());
-      toast.success('已成功登出', {
+      toast.success(t('layout:logoutSuccess'), {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: true,

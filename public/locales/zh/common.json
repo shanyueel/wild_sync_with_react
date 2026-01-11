@@ -1,5 +1,22 @@
 {
+  "emptyError": "*此欄位不可為空白",
+  "updateProfileSuccess": "更新資料成功",
+  "updateProfileFail": "更新資料失敗",
+  "cancel": "取消",
+  "confirm": "確認",
+  "prevPage": "前一頁",
+  "nextPage": "下一頁",
   "search": "搜尋",
+  "pageNotFound": "找不到此頁面",
+  "backToHome": "返回首頁",
+  "ageSuffix": "歲",
+  "removeParticipantSuccess": "移除參與者成功",
+  "removeParticipantFail": "移除參與者失敗",
+  "remove": "移除",
+  "removeParticipant": "移除參與者",
+  "confirmRemoveParticipant": "確定要移除{{name}}嗎?",
+  "threeHoursAgo": "3小時前",
+  "dummyMessage": "我臨時有些事情需要處理，想要取消，謝謝！",
   "searchPlaceholder": "登山路線、營地、潛水處...",
   "difficulty": "難度",
   "date": "時間",
@@ -15,6 +32,17 @@
   "learnMore": "了解更多",
   "browseHistory": "瀏覽紀錄",
   "joined": "已參加",
+  "requirement": {
+    "needed": "需要",
+    "unNeeded": "不需要"
+  },
+  "activityTypes": {
+    "hiking": "登山",
+    "camping": "露營",
+    "cycling": "單車",
+    "diving": "潛水",
+    "others": "其他"
+  },
   "difficulties": {
     "beginner": "入門",
     "medium": "中等",
@@ -429,5 +457,36 @@
     "advanced": "進階",
     "expert": "專家",
     "master": "大師"
+  },
+  "trailTypes": {
+    "round": "環狀路線",
+    "backtrack": "原路折返",
+    "one-way": "甲進乙出"
+  },
+  "discussion": {
+    "placeholder": "請輸入內文",
+    "start": "開啟討論"
+  },
+  "rangeInput": {
+    "between": "輸入數值應該介於： {{min}} - {{max}}",
+    "greaterThan": "輸入數值應該大於{{min}}",
+    "lessThan": "輸入數值應該小於{{max}}",
+    "minMaxError": "最低值不可大於最高值",
+    "maxMinError": "最高值不可小於最低值"
+  },
+  "send": "傳送",
+  "locationInput": {
+    "city": "縣市",
+    "district": "區域",
+    "placeholder": "詳細地址 / 地標 / 道路"
+  },
+  "dateTimeInput": {
+    "errorStart": "開始時間不可在結束時間之後",
+    "errorEnd": "結束時間不可在開始時間之前",
+    "pastError": "輸入時間不可為過去時間"
+  },
+  "unit": {
+    "hours": "小時",
+    "people": "人"
   }
 }

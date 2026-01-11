@@ -1,6 +1,7 @@
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const DateTimeInput = ({
   className,
@@ -10,6 +11,7 @@ const DateTimeInput = ({
   onFormChange,
   warning,
 }) => {
+  const { t } = useTranslation('common');
   const [date, setDate] = useState(formContent?.[inputId] || null);
   const [warningContent, setWarningContent] = useState(warning);
 
@@ -24,7 +26,7 @@ const DateTimeInput = ({
   const handleDateTimeInput = (newDate) => {
     const newDateTimeString = Date.parse(newDate);
     if (newDateTimeString <= Date.parse(new Date())) {
-      setWarningContent('輸入時間不可為過去時間');
+      setWarningContent(t('dateTimeInput.pastError'));
     } else {
       setWarningContent('');
     }

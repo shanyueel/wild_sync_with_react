@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { transferTimestamp } from 'utils/date-fns';
 import { displayLocation } from 'utils/location';
@@ -19,6 +20,7 @@ const AccommodationTable = ({
   onAccommodationListChange,
   formErrors,
 }) => {
+  const { t } = useTranslation('tables');
   const [accommodationDetail, setAccommodationDetail] =
     useState(accommodationDay);
 
@@ -41,7 +43,7 @@ const AccommodationTable = ({
         <tbody>
           <tr>
             <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-              住宿日期
+              {t('accommodationDate')}
             </td>
             <td className="o-activity-table__content">
               {inputUsed ? (
@@ -54,18 +56,18 @@ const AccommodationTable = ({
                   }
                 />
               ) : (
-                transferTimestamp(accommodationDetail?.date, 'yyyy年MM月dd日')
+                transferTimestamp(accommodationDetail?.date, t('dateFormat'))
               )}
             </td>
           </tr>
           <tr>
             <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-              住宿名稱
+              {t('accommodationName')}
             </td>
             <td className="o-activity-table__content">
               {inputUsed ? (
                 <StyledTextInput
-                  placeholder="民宿 / 飯店 / 山屋 / 營地"
+                  placeholder={t('accommodationPlaceholder')}
                   inputId="name"
                   formContent={accommodationDetail}
                   onFormChange={setAccommodationDetail}
@@ -80,7 +82,7 @@ const AccommodationTable = ({
           </tr>
           <tr>
             <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-              住宿地址
+              {t('accommodationAddress')}
             </td>
             <td className="o-activity-table__content">
               {inputUsed ? (
@@ -100,12 +102,12 @@ const AccommodationTable = ({
           </tr>
           <tr>
             <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-              房價資訊
+              {t('roomPriceInfo')}
             </td>
             <td className="o-activity-table__content">
               {inputUsed ? (
                 <StyledTextArea
-                  placeholder="房型價位"
+                  placeholder={t('roomTypePrice')}
                   inputId="roomDetail"
                   wordLimit={150}
                   formContent={accommodationDetail}
@@ -121,12 +123,12 @@ const AccommodationTable = ({
           </tr>
           <tr>
             <td className={clsx('c-table-key', { inputUsed: inputUsed })}>
-              住宿備註
+              {t('accommodationNotes')}
             </td>
             <td className="o-activity-table__content">
               {inputUsed ? (
                 <StyledTextArea
-                  placeholder="其他注意事項(非必填)"
+                  placeholder={t('otherNotes')}
                   inputId="notes"
                   wordLimit={100}
                   formContent={accommodationDetail}

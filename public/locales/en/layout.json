@@ -8,5 +8,6 @@
   "register": "Register",
   "settings": "Settings",
   "visitor": "Visitor",
-  "contactUs": "Contact Us"
+  "contactUs": "Contact Us",
+  "logoutSuccess": "Successfully logged out"
 }

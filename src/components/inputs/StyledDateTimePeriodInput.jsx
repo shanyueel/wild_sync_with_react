@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { DateTimePicker } from '@mui/x-date-pickers';
 
 const DateTimePeriodInput = ({
@@ -10,6 +11,8 @@ const DateTimePeriodInput = ({
   onFormChange,
   warning,
 }) => {
+  const { t } = useTranslation('common');
+
   const [period, setPeriod] = useState({ start: null, end: null });
   const [warningContent, setWarningContent] = useState(warning);
 
@@ -31,14 +34,14 @@ const DateTimePeriodInput = ({
       updatedPeriod.end &&
       newDateTimeStamp > updatedPeriod.end
     ) {
-      setWarningContent('開始時間不可在結束時間之後');
+      setWarningContent(t('dateTimeInput.errorStart'));
       updatedPeriod.start = null;
     } else if (
       field === 'end' &&
       updatedPeriod.start &&
       newDateTimeStamp < updatedPeriod.start
     ) {
-      setWarningContent('結束時間不可在開始時間之前');
+      setWarningContent(t('dateTimeInput.errorEnd'));
       updatedPeriod.end = null;
     } else {
       setWarningContent('');

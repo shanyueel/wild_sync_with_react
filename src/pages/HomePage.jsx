@@ -49,7 +49,7 @@ const HomePage = ({ className }) => {
   const translatedActivityTypeOptions = useMemo(() => {
     return activityTypeOptions.map((option) => ({
       ...option,
-      name: t(`homepage:activityTypes.${option.id}`),
+      name: t(`common:activityTypes.${option.id}`),
     }));
   }, [t]);
 

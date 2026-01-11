@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 import StyledRadioInput from 'components/inputs/StyledRadioInput';
 import StyledRangeInput from 'components/inputs/StyledRangeInput';
@@ -17,6 +18,17 @@ const ActivityCreateStepTwo = ({
   formErrors,
   setFormErrors,
 }) => {
+  const { t } = useTranslation(['activityPage', 'common']);
+
+  const translatedDifficultyOptions = useMemo(
+    () =>
+      activityDifficultyOptions.map((option) => ({
+        ...option,
+        name: t(`common:difficulties.${option.id}`),
+      })),
+    [t]
+  );
+
   useEffect(() => {
     const updatedErrors = { ...formErrors };
     if (formContent?.difficulty) updatedErrors.difficulty = '';
@@ -33,18 +45,18 @@ const ActivityCreateStepTwo = ({
   return (
     <div className={clsx(className, 'scrollbar')}>
       <StyledRadioInput
-        title="難易程度"
+        title={t('create.difficulty')}
         inputId="difficulty"
         formContent={formContent}
         onFormChange={onFormChange}
-        radioOptions={activityDifficultyOptions}
+        radioOptions={translatedDifficultyOptions}
         warning={formErrors?.difficulty}
       />
       <StyledNumberInput
-        title="戶外活動時長"
+        title={t('create.outdoorDuration')}
         inputId="activityTimeLength"
-        placeholder="請輸入實際進行活動的時長(扣除通勤、用餐、住宿等)"
-        unit="小時"
+        placeholder={t('create.outdoorDurationPlaceholder')}
+        unit={t('common:unit.hours')}
         minLimit={0}
         step={0.5}
         formContent={formContent}
@@ -52,10 +64,10 @@ const ActivityCreateStepTwo = ({
         warning={formErrors?.activityTimeLength}
       />
       <StyledRangeInput
-        title="預估費用"
+        title={t('create.estimatedCost')}
         inputId="cost"
-        minPlaceholder="最低費用"
-        maxPlaceholder="最高費用"
+        minPlaceholder={t('create.minCost')}
+        maxPlaceholder={t('create.maxCost')}
         unit="$"
         minLimit={0}
         formContent={formContent}
@@ -63,25 +75,25 @@ const ActivityCreateStepTwo = ({
         warning={formErrors?.cost}
       />
       <StyledNumberInput
-        title="人數限制"
+        title={t('create.attendanceLimit')}
         inputId="attendanceLimit"
-        placeholder="報名人數上限 (不含主辦人)"
-        unit="人"
+        placeholder={t('create.registrationLimitPlaceholder')}
+        unit={t('common:unit.people')}
         minLimit={0}
         formContent={formContent}
         onFormChange={onFormChange}
         warning={formErrors?.attendanceLimit}
       />
       <StyledDateTimeInput
-        title="申請截止時間"
+        title={t('create.deadline')}
         inputId="deadline"
         formContent={formContent}
         onFormChange={onFormChange}
         warning={formErrors?.deadline}
       />
       <StyledTextArea
-        title="活動簡介"
-        placeholder="請簡單介紹活動內容 (字數限制: 100字)"
+        title={t('create.introduction')}
+        placeholder={t('create.introductionPlaceholder')}
         inputId="introduction"
         wordLimit={100}
         formContent={formContent}

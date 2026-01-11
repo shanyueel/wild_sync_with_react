@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledImageInput from 'components/inputs/StyledImageInput';
 import StyledTextInput from 'components/inputs/StyledTextInput';
@@ -24,9 +25,10 @@ const UserEditModal = ({
   setSelectedUser,
 }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation(['userPage', 'common']);
   const user = useSelector((state) => state.user);
   const userId = user.uid;
-  const emptyError = '*此欄位不可為空白';
+  const emptyError = t('common:emptyError');
   const [userContent, setUserContent] = useState(user);
   const [formErrors, setFormErrors] = useState({});
 
@@ -96,7 +98,7 @@ const UserEditModal = ({
         dispatch(updateUserSlice(userContent));
         setIsUserEditModalOpen(false);
         setSelectedUser(userContent);
-        toast.success('更新資料成功', {
+        toast.success(t('common:updateProfileSuccess'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -107,7 +109,7 @@ const UserEditModal = ({
           theme: 'light',
         });
       } else {
-        toast.error('更新資料失敗', {
+        toast.error(t('common:updateProfileFail'), {
           position: 'top-right',
           autoClose: 1500,
           hideProgressBar: false,
@@ -134,7 +136,7 @@ const UserEditModal = ({
       contentLabel="Activity Create Modal"
     >
       <div className="l-modal__header">
-        <h2 className="o-modal__title">編輯使用者資料</h2>
+        <h2 className="o-modal__title">{t('editProfile')}</h2>
         <CrossIcon className="o-modal__close-icon" onClick={closeModal} />
       </div>
 
@@ -144,7 +146,7 @@ const UserEditModal = ({
             <StyledImageInput
               className="o-user-edit__cover"
               coverUsed
-              title="使用者頭貼 / 封面照片"
+              title={t('photoCover')}
               inputId="coverURL"
               uploadFolder="user-covers"
               uploadFilename={`${userId}-cover`}
@@ -164,9 +166,9 @@ const UserEditModal = ({
             />
           </div>
           <StyledTextInput
-            title="使用者名稱"
+            title={t('name')}
             inputId="displayName"
-            placeholder="請輸入使用者名稱"
+            placeholder={t('namePlaceholder')}
             wordLimit={16}
             formContent={userContent}
             onFormChange={setUserContent}
@@ -174,35 +176,35 @@ const UserEditModal = ({
           />
           <StyledDateInput
             disableFuture={true}
-            title="使用者生日"
+            title={t('birth')}
             inputId="birth"
             formContent={userContent}
             onFormChange={setUserContent}
             warning={formErrors.birth}
           />
           <StyledTextInput
-            title="使用者職業"
+            title={t('profession')}
             inputId="profession"
-            placeholder="請輸入使用者職業"
+            placeholder={t('professionPlaceholder')}
             wordLimit={16}
             formContent={userContent}
             onFormChange={setUserContent}
             warning={formErrors.profession}
           />
           <StyledTextInput
-            title="使用者地區"
+            title={t('region')}
             inputId="region"
             wordLimit={16}
-            placeholder="請輸入居住地區"
+            placeholder={t('regionPlaceholder')}
             formContent={userContent}
             onFormChange={setUserContent}
             warning={formErrors.region}
           />
           <StyledTextArea
-            title="使用者介紹"
+            title={t('introduction')}
             inputId="introduction"
             wordLimit={150}
-            placeholder="請輸入自我介紹"
+            placeholder={t('introductionPlaceholder')}
             formContent={userContent}
             onFormChange={setUserContent}
             warning={formErrors.introduction}
@@ -210,9 +212,11 @@ const UserEditModal = ({
         </form>
         <div className="c-user-edit__summit">
           <StyledButton onClick={handleCancel} alert>
-            取消更新
+            {t('cancelUpdate')}
           </StyledButton>
-          <StyledButton onClick={handleUpdate}>更新資料</StyledButton>
+          <StyledButton onClick={handleUpdate}>
+            {t('updateProfile')}
+          </StyledButton>
         </div>
       </div>
     </Modal>

@@ -1,14 +1,21 @@
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledUserInfo from './StyledUserInfo';
 import StyledButton from './StyledButton';
 
 const DiscussionCreate = ({ className }) => {
+  const { t } = useTranslation('common');
   return (
     <div className={className}>
       <StyledUserInfo className="o-message-reply__user-info" />
-      <textarea className="o-message-reply__input" placeholder="請輸入內文" />
-      <StyledButton className="o-message-reply__button">開啟討論</StyledButton>
+      <textarea
+        className="o-message-reply__input"
+        placeholder={t('discussion.placeholder')}
+      />
+      <StyledButton className="o-message-reply__button">
+        {t('discussion.start')}
+      </StyledButton>
     </div>
   );
 };

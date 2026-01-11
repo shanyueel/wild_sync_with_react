@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import StyledTextArea from '../inputs/StyledTextArea';
 
@@ -9,18 +10,19 @@ const OthersTable = ({
   onDetailChange,
   formErrors,
 }) => {
+  const { t } = useTranslation('tables');
   return (
     <>
       <table className={className}>
         <tbody>
           <tr>
-            <td className="o-activity-table__key">行程細節</td>
+            <td className="o-activity-table__key">{t('itineraryDetails')}</td>
           </tr>
           <tr>
             <td className="o-activity-table__content">
               {inputUsed ? (
                 <StyledTextArea
-                  placeholder="請輸入行程細節"
+                  placeholder={t('enterItinerary')}
                   inputId="schedule"
                   wordLimit={500}
                   formContent={detailContent}
@@ -33,13 +35,13 @@ const OthersTable = ({
             </td>
           </tr>
           <tr>
-            <td className="o-activity-table__key">備註</td>
+            <td className="o-activity-table__key">{t('notes')}</td>
           </tr>
           <tr>
             <td className="o-activity-table__content">
               {inputUsed ? (
                 <StyledTextArea
-                  placeholder="請輸入備註(非必填)"
+                  placeholder={t('enterNotes')}
                   inputId="notes"
                   wordLimit={250}
                   formContent={detailContent}

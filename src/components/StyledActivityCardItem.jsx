@@ -18,7 +18,7 @@ import { ReactComponent as CheckIcon } from 'assets/icons/CheckIcon.svg';
 import defaultImageURL from 'data/defaultImageURL.json';
 
 const ActivityCardItem = ({ className, activity }) => {
-  const { t } = useTranslation(['common']);
+  const { t, i18n } = useTranslation(['common']);
 
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -140,7 +140,7 @@ const ActivityCardItem = ({ className, activity }) => {
         <div className="c-activity-card__brief">
           <h4 className="o-activity-card__location">
             <LocationIcon />
-            {displayLocation(activity?.location)}
+            {displayLocation(activity?.location, t, i18n)}
           </h4>
           <h4 className="o-activity-card__date">
             <CalendarIcon />

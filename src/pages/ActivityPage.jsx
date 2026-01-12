@@ -29,7 +29,7 @@ import { ReactComponent as HeartIcon } from 'assets/icons/HeartIcon.svg';
 import defaultImageURL from 'data/defaultImageURL.json';
 
 const ActivityPage = ({ className }) => {
-  const { t } = useTranslation('activityPage');
+  const { t, i18n } = useTranslation(['activityPage', 'common']);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const environmentParams = useSelector((state) => state.environment);
@@ -319,7 +319,7 @@ const ActivityPage = ({ className }) => {
           </h2>
           <div className="l-activity-location">
             <LocationIcon />
-            <h3>{displayLocation(activity?.location)}</h3>
+            <h3>{displayLocation(activity?.location, t, i18n)}</h3>
           </div>
           <div className="l-activity-time">
             <CalendarIcon />

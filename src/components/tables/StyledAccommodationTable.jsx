@@ -20,7 +20,7 @@ const AccommodationTable = ({
   onAccommodationListChange,
   formErrors,
 }) => {
-  const { t } = useTranslation('tables');
+  const { t, i18n } = useTranslation(['tables', 'common']);
   const [accommodationDetail, setAccommodationDetail] =
     useState(accommodationDay);
 
@@ -96,7 +96,7 @@ const AccommodationTable = ({
                   }
                 />
               ) : (
-                displayLocation(accommodationDetail?.address)
+                displayLocation(accommodationDetail?.address, t, i18n)
               )}
             </td>
           </tr>

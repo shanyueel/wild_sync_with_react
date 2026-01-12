@@ -1,8 +1,5 @@
 import taiwanDistricts from 'data/taiwanDistricts.json';
-import { useTranslation } from 'react-i18next';
-
-export const displayLocation = (location) => {
-  const { i18n, t } = useTranslation('common');
+export const displayLocation = (location, t, i18n) => {
   const isEn = i18n.language.startsWith('en');
 
   const districtsWithThreeWords = ['605', '849', '901', '963'];

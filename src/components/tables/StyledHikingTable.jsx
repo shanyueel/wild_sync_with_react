@@ -24,7 +24,7 @@ const HikingTable = ({
   onDetailChange,
   formErrors,
 }) => {
-  const { t } = useTranslation(['tables', 'common']);
+  const { t, i18n } = useTranslation(['tables', 'common']);
 
   const translatedTrackTypes = useMemo(
     () =>
@@ -61,7 +61,7 @@ const HikingTable = ({
                 warning={formErrors?.departurePoint}
               />
             ) : (
-              displayLocation(detailContent?.departurePoint)
+              displayLocation(detailContent?.departurePoint, t, i18n)
             )}
           </td>
         </tr>
@@ -106,7 +106,7 @@ const HikingTable = ({
                     warning={formErrors?.exitPoint}
                   />
                 ) : (
-                  displayLocation(detailContent?.exitPoint)
+                  displayLocation(detailContent?.exitPoint, t, i18n)
                 )}
               </td>
             </tr>

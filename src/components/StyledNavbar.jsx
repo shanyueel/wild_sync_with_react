@@ -284,9 +284,7 @@ const StyledNavbar = styled(Navbar)`
       }
 
       .o-navbar__brand {
-        margin-left: 0.5rem;
-        color: ${({ theme }) => theme.color.default};
-        font-weight: 500;
+        display: none;
       }
     }
 
@@ -518,6 +516,13 @@ const StyledNavbar = styled(Navbar)`
 
       .c-navbar__title {
         grid-area: title;
+
+        .o-navbar__brand {
+          display: inline;
+          margin-left: 0.5rem;
+          color: ${({ theme }) => theme.color.default};
+          font-weight: 500;
+        }
       }
 
       .o-navbar__searchbar {

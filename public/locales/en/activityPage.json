@@ -23,8 +23,8 @@
   "clearData": "Clear Data",
   "updateSuccess": "Activity updated successfully",
   "updateFail": "Failed to update activity",
-  "resetChanges": "Reset Changes",
-  "deleteActivity": "Delete Activity",
+  "resetChanges": "Reset",
+  "deleteActivity": "Delete",
   "deletingActivity": "Deleting Activity...",
   "confirmDelete": "Are you sure you want to delete?",
   "updatingActivity": "Updating Activity...",
@@ -32,10 +32,10 @@
   "updateActivity": "Update Activity",
   "registrationDeadline": "Registration Deadline:",
   "basicInfo": {
-    "difficulty": "Difficulty Level",
+    "difficulty": "Difficulty",
     "duration": "Duration",
     "cost": "Cost",
-    "attendanceLimit": "Attendance Limit"
+    "attendanceLimit": "Capacity"
   },
   "participants": "Activity Participants",
   "discussion": {
@@ -71,10 +71,10 @@
     "accommodationInfo": "Accommodation Info",
     "removeAccommodation": "Remove Accommodation",
     "addAccommodation": "Add Accommodation",
-    "step1": "Basic Info",
-    "step2": "Key Introduction",
-    "step3": "Activity Details",
-    "step4": "Transport & Stay",
-    "note": "Additional Notes"
+    "step1": "Basic",
+    "step2": "Intro",
+    "step3": "Details",
+    "step4": "Travel",
+    "note": "Notes"
   }
 }

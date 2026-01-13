@@ -1,9 +1,9 @@
 {
   "age": "{{val}} years old",
-  "updateProfile": "Update Profile",
-  "attendedActivities": "Attended Activities",
-  "likedActivities": "Liked Activities",
-  "heldActivities": "Held Activities",
+  "updateProfile": "Update",
+  "attendedActivities": "Attended",
+  "likedActivities": "Liked",
+  "heldActivities": "Held",
   "loadingActivities": "Loading Activities",
   "noActivitiesFound": "No activities found",
   "popularHosts": "Popular Hosts",

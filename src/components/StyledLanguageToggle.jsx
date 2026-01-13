@@ -31,10 +31,10 @@ const LanguageToggle = ({ className }) => {
 const StyledLanguageToggle = styled(LanguageToggle)`
   position: relative;
   display: flex;
-  width: 64px;
+  width: 54px;
   height: 28px;
   border: 1.5px solid ${({ theme }) => theme.color.default};
-  border-radius: 20px;
+  border-radius: 0.25rem;
   background-color: white;
   overflow: hidden;
   user-select: none;
@@ -76,6 +76,11 @@ const StyledLanguageToggle = styled(LanguageToggle)`
         color: white;
       }
     }
+  }
+
+  @media (min-width: 768px) {
+    width: 64px;
+    border-radius: 20px;
   }
 `;
 

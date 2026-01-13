@@ -125,6 +125,7 @@ const StyledActivityTables = styled(ActivityTables)`
       font-size: 1rem;
       font-weight: 700;
       border-radius: 0.25rem 0.25rem 0 0;
+      text-align: center;
       color: ${({ theme }) => theme.color.default};
       background-color: ${({ theme }) => theme.backgroundColor.default};
       cursor: pointer;

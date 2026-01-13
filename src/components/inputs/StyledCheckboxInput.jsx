@@ -72,14 +72,16 @@ const StyledCheckboxInput = styled(CheckboxInput)`
     display: flex;
     flex-wrap: wrap;
     padding: 0.25rem;
-    justify-content: space-between;
     gap: 1rem;
     width: 100%;
 
     .c-checkbox-option {
       display: flex;
       align-items: center;
-      width: fit-content label {
+      gap: 0.125rem;
+      width: fit-content;
+
+      label {
         white-space: nowrap;
         margin-left: 0.25rem;
       }
@@ -96,7 +98,6 @@ const StyledCheckboxInput = styled(CheckboxInput)`
 
   @media screen and (min-width: 480px) {
     .l-checkbox-options {
-      justify-content: flex-start;
       gap: 1.5rem;
     }
   }

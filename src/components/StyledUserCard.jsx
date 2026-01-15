@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import StyledUserInfo from './StyledUserInfo';
-import { sliceIntroduction } from 'utils/paragraph';
 import StyledButton from './StyledButton';
 
 import { ReactComponent as CrossIcon } from 'assets/icons/CrossIcon.svg';
@@ -74,10 +73,12 @@ const UserCard = ({
 
   return (
     <div className={className}>
-      <StyledUserInfo cardUsed={!listItem} user={user} />
-      <p className="o-user-card__introduction">
-        {sliceIntroduction(user?.introduction, listItem ? 50 : 30)}
-      </p>
+      <StyledUserInfo
+        className="o-user-card__info"
+        cardUsed={!listItem}
+        user={user}
+      />
+      <p className="o-user-card__introduction">{user?.introduction}</p>
       {holderUsed && <div className="o-user-card__holder-display">HOST</div>}
       {isHolder && (
         <StyledButton
@@ -104,15 +105,29 @@ const UserCard = ({
 
 const StyledUserCard = styled(UserCard)`
   position: relative;
-  width: 10rem;
-  height: 14rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 12rem;
+  height: 16.5rem;
   padding: 1rem 0.75rem;
   border-radius: 0.5rem;
   background-color: ${({ theme }) => theme.backgroundColor.default};
 
+  .o-user-card__info {
+    align-self: start;
+    margin: auto;
+  }
+
   .o-user-card__introduction {
-    margin-top: 0.5em;
+    flex: 1;
+    display: -webkit-box;
+    margin-top: 0.75em;
     line-height: 1.25rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+    white-space: normal;
   }
 
   .o-user-card__remove-attendance {
@@ -126,6 +141,16 @@ const StyledUserCard = styled(UserCard)`
     svg {
       height: 1rem;
       fill: white;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .o-user-card__info {
+      align-self: start;
+    }
+
+    .o-user-card__introduction {
+      -webkit-line-clamp: 2;
     }
   }
 

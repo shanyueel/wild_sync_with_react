@@ -537,11 +537,11 @@ const StyledHomePage = styled(HomePage)`
 
       &--grid {
         display: grid;
-        grid-template-columns: repeat(2, 11rem);
-        grid-auto-rows: 18rem;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: auto;
         justify-content: center;
         width: 100%;
-        gap: 0.5rem;
+        gap: 1.5rem;
       }
 
       &--list {
@@ -558,13 +558,6 @@ const StyledHomePage = styled(HomePage)`
     }
   }
 
-  @media screen and (min-width: 540px) {
-    .l-activities .l-activities__container--grid {
-      grid-template-columns: repeat(3, 11rem);
-      gap: 0.5rem;
-    }
-  }
-
   @media screen and (min-width: 768px) {
     .l-popular-places {
       margin-top: 28rem;
@@ -574,33 +567,12 @@ const StyledHomePage = styled(HomePage)`
         grid-template-rows: repeat(2, 140px);
       }
     }
-
-    .l-activities .l-activities__container--grid {
-      grid-template-columns: repeat(4, 11rem);
-    }
   }
 
-  @media screen and (min-width: 900px) {
-  }
-
-  @media screen and (min-width: 1024px) {
-    .l-popular-places {
-      .l-popular-places__container {
-        grid-template-columns: repeat(6, 100px);
-        grid-template-rows: 140px;
-        gap: 6rem;
-      }
-    }
-
+  @media screen and (min-width: 992px) {
     .l-activities .l-activities__container--grid {
-      gap: 0.75rem;
-    }
-  }
-
-  @media screen and (min-width: 1200px) {
-    .l-activities .l-activities__container--grid {
-      grid-template-columns: repeat(6, 11rem);
-      gap: 0.75rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
     }
   }
 `;

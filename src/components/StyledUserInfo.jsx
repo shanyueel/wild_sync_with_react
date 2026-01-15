@@ -19,7 +19,10 @@ const UserInfo = ({ className, user, cardUsed, message }) => {
       </Link>
       <div className="c-user-info">
         <Link to={`/user/${user?.uid}`}>
-          <h2 className="o-user-info__name">{user?.displayName}</h2>
+          <h2 className="o-user-info__name">
+            <span>{user?.displayName}</span>
+            <span className="o-user-info__profession">{user?.profession}</span>
+          </h2>
         </Link>
         <h4 className="o-user-info__time">{t('threeHoursAgo')}</h4>
         <div className="c-user-info__brief">
@@ -28,7 +31,6 @@ const UserInfo = ({ className, user, cardUsed, message }) => {
             {calculateAge(user?.birth)}
             {t('ageSuffix')}
           </h4>
-          <h4 className="o-user-info__profession">{user?.profession}</h4>
         </div>
       </div>
     </div>
@@ -79,7 +81,16 @@ const StyledUserInfo = styled(UserInfo)`
     }
 
     .o-user-info__name {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       color: ${({ theme }) => theme.color.default};
+    }
+
+    .o-user-info__profession {
+      font-size: 0.875rem;
+      color: ${({ theme }) => theme.color.grey};
+      font-weight: 500;
     }
 
     .c-user-info__brief {
@@ -89,7 +100,7 @@ const StyledUserInfo = styled(UserInfo)`
       h4 {
         position: relative;
         color: ${({ theme }) => theme.color.grey};
-        font-weight: 500;
+        font-weight: 400;
         white-space: nowrap;
 
         &:after {
@@ -144,29 +155,22 @@ const StyledUserInfo = styled(UserInfo)`
         margin-left: 0;
         height: auto;
 
+        .o-user-info__name {
+          flex-direction: column;
+        }
+
         .c-user-info__brief {
-          display: grid;
-          grid-template-columns: auto auto;
-          grid-template-rows: 1.25rem;
-          grid-template-areas:
-            'profession profession'
-            'region age';
-          gap: 0 0.5rem;
+          display: flex;
+          flex-direction: column-reverse;
+          gap: 0.25rem;
+          margin-top: 0.5rem;
 
           h4:nth-child(2)::after {
             display: none;
           }
 
           .o-user-info__region {
-            grid-area: region;
-          }
-
-          .o-user-info__age {
-            grid-area: age;
-          }
-
-          .o-user-info__profession {
-            grid-area: profession;
+            display: none;
           }
         }
       }

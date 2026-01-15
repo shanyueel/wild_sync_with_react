@@ -129,11 +129,7 @@ const ActivityCardItem = ({ className, activity }) => {
             className="o-activity-card__name"
             to={`/activity/${activity?.id}`}
           >
-            <h3>
-              {activity?.name?.length > 8
-                ? activity?.name?.slice(0, 7) + '...'
-                : activity?.name}
-            </h3>
+            <h3>{activity?.name}</h3>
           </Link>
         </div>
 
@@ -186,8 +182,9 @@ const ActivityCardItem = ({ className, activity }) => {
 
 const StyledActivityCardItem = styled(ActivityCardItem)`
   position: relative;
-  width: 11rem;
-  height: 18rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.backgroundColor.default};
   overflow: hidden;
@@ -229,9 +226,11 @@ const StyledActivityCardItem = styled(ActivityCardItem)`
   }
 
   .l-activity-card__info {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: start;
+    gap: 0.5rem;
     width: 100%;
     height: fit-content;
     padding: 0.75rem 0.5rem;
@@ -239,6 +238,7 @@ const StyledActivityCardItem = styled(ActivityCardItem)`
     .l-activity-card__title {
       display: flex;
       align-items: center;
+      overflow: hidden;
 
       .o-activity-card__avatar img {
         width: 1.75rem;
@@ -246,9 +246,16 @@ const StyledActivityCardItem = styled(ActivityCardItem)`
         border-radius: 1rem;
       }
 
-      .o-activity-card__name h3 {
-        margin-left: 0.25rem;
-        font-weight: 700;
+      .o-activity-card__name {
+        overflow: hidden;
+
+        h3 {
+          margin-left: 0.25rem;
+          font-weight: 700;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
       }
     }
 
@@ -267,12 +274,11 @@ const StyledActivityCardItem = styled(ActivityCardItem)`
     }
 
     .o-activity-card__location {
-      margin-top: 0.5rem;
       margin-left: 0.25rem;
     }
 
     .o-activity-card__date {
-      margin-top: 0.25rem;
+      margin-top: 0.5rem;
       margin-left: 0.25rem;
       font-weight: 400;
     }
@@ -281,7 +287,7 @@ const StyledActivityCardItem = styled(ActivityCardItem)`
       display: flex;
       flex-wrap: wrap;
       gap: 0.25rem;
-      margin-top: 0.5rem;
+      margin-top: auto;
       margin-left: 0.25rem;
 
       li {

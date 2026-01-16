@@ -1,0 +1,10 @@
+{
+  "loginSuccess": "Login successful",
+  "loginFail": "Login failed, please try again",
+  "email": "Email",
+  "enterEmail": "Please enter email",
+  "password": "Password",
+  "enterPassword": "Please enter password",
+  "login": "Login",
+  "notRegistered": "Not registered yet?"
+}

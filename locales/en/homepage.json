@@ -1,0 +1,15 @@
+{
+  "popularLocations": "Popular Locations",
+  "activityList": "Activity List",
+  "all": "All",
+  "filter": "Filter",
+  "sortBy": "Sort By",
+  "difficulty": "Difficulty",
+  "time": "Time",
+  "location": "Location",
+  "filterButton": "Filter",
+  "displayMode": "Display Mode",
+
+  "loadingLocations": "Loading Locations...",
+  "noFilterChanged": "No conditions changed"
+}

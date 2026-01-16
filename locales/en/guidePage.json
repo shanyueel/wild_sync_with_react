@@ -1,0 +1,67 @@
+{
+  "title": "Wild Sync Feature Guide",
+  "sections": {
+    "auth": {
+      "title": "- Register / Login -",
+      "step1": "Visitors can select 'Login' or 'Register' from the user dropdown menu in the navigation bar.",
+      "step2": "Enter email, nickname, and repeat the password to register. After registration, you will be redirected to the home page.",
+      "step3": "If you have already registered, you can log in directly with your email and password. After logging in, you will be redirected to the home page."
+    },
+    "home": {
+      "title": "Home Page Browsing",
+      "desc1": "Popular activity locations will recommend the top six city areas based on the number of activities.",
+      "desc2": "The activity list will show all activities. You can use the filters in the top left to sort by method, difficulty, time, and location.",
+      "desc3": "The display mode in the top right offers both card and list views.",
+      "desc4": "Currently, only 'Hiking' is available. Other activity options are not yet implemented."
+    },
+    "search": {
+      "title": "Search Function",
+      "desc1": "You can enter the search page through the search bar in the navigation bar or the 'Activity List'.",
+      "desc2": "The search page allows keyword searches and filtering by sort order, difficulty, time, and location.",
+      "desc3": "The right side of the search page lists the five most recently viewed activities."
+    },
+    "activity": {
+      "title": "Browsing Activity Information",
+      "desc1": "The top half of the activity information page shows important details, including time, location, introduction, difficulty, duration, estimated cost, and participant limits.",
+      "desc2": "The 'Activity Participants' section on the right shows the current host and participants.",
+      "desc3": "If logged in, you can use the favorite and join features. Joined activities can be viewed on your user profile page.",
+      "desc4": "The bottom half of the activity information page provides details on outdoor specifics, transportation, accommodation, and itinerary.",
+      "desc5": "The end of the activity page also features a browsing history section for users to see their five most recent activities."
+    },
+    "user": {
+      "title": "Browsing User Information",
+      "desc1": "The user page displays basic information for a specific user, including email, region, age, occupation, and bio.",
+      "desc2": "Below that, you can view lists of activities the user has participated in, favorited, or hosted.",
+      "desc3": "The 'Popular Hosts' section on the right recommends the top 10 users who have hosted the most activities."
+    },
+    "create": {
+      "title": "Creating an Activity (Login Required)",
+      "desc1": "After logging in, click the '+' symbol next to the user icon in the top right of the navigation bar to open the activity creation window.",
+      "desc2": "Currently, all fields are required. If any are left blank, a warning will appear and prevent you from proceeding.",
+      "desc3": "To prevent accidental closing, data is preserved when the window is closed. You can clear it using 'Clear Data' in the top right of the window.",
+      "desc4": "Once all five steps are completed, you will be automatically redirected to the newly created activity page."
+    },
+    "update": {
+      "title": "Updating Activities and Removing Participants (Login Required)",
+      "desc1": "On an activity page you hosted, use the 'Update Activity' button below the introduction to open the update window.",
+      "desc2": "The usage is similar to the creation window. You can also use 'Restore Changes' in the top right to revert information.",
+      "desc3": "To delete an activity, use 'Delete Activity' in the top right. A confirmation popup will appear.",
+      "desc4": "As a host, you will see a remove button on participant cards to remove other users."
+    },
+    "editUser": {
+      "title": "Updating Public User Info (Login Required)",
+      "desc1": "On your own user page, click 'Update Info' to enter the 'Edit User Profile' window.",
+      "desc2": "You can update your public cover photo, avatar, name, birthday, occupation, region, and bio.",
+      "desc3": "If you don't want to update, use 'Cancel Update' in the bottom right to discard changes and close the window."
+    },
+    "account": {
+      "title": "Updating Account Info (Login Required)",
+      "desc1": "Select 'Account Settings' from the user dropdown in the navigation bar to enter the 'Edit Account Info' window.",
+      "desc2": "Here you can reset your username, email, and password. Since this involves sensitive info, you'll need to enter your current password to update."
+    },
+    "logout": {
+      "title": "Logout (Login Required)",
+      "desc1": "Select 'Logout' from the user dropdown in the navigation bar to log out and reset the current view."
+    }
+  }
+}

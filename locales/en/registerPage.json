@@ -1,0 +1,16 @@
+{
+  "emptyError": "*This field cannot be empty",
+  "passwordMismatch": "Passwords do not match",
+  "registerSuccess": "Registration successful",
+  "registerFail": "Registration failed, please try again",
+  "setEmail": "Set Email",
+  "enterEmail": "Please enter email",
+  "setNickname": "Set Nickname",
+  "enterNickname": "Please enter nickname",
+  "setPassword": "Set Password",
+  "enterPassword": "Please enter password",
+  "confirmPassword": "Confirm Password",
+  "enterPasswordAgain": "Please enter password again",
+  "register": "Register",
+  "alreadyMember": "Already a Wild Sync member?"
+}

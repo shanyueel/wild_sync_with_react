@@ -1,0 +1,13 @@
+{
+  "activities": "活動列表",
+  "guidance": "使用指南",
+  "about": "關於我們",
+  "aboutWildSync": "關於 Wild Sync",
+  "login": "帳號登入",
+  "logout": "帳號登出",
+  "register": "註冊帳號",
+  "settings": "帳號設定",
+  "visitor": "訪客",
+  "contactUs": "聯繫我們",
+  "logoutSuccess": "已成功登出"
+}
